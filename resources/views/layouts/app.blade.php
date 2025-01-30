@@ -89,14 +89,16 @@
 <!-- Cabeçalho -->
     <header class="container-fluid">
         <div class="container d-flex justify-content-between align-items-center">
-            <div class="logo">Minha Logo</div>
+            <div class="logo">
+                <a href="/" class="logo" style="text-decoration: none; color: inherit;">Minha Logo </a>
+            </div>
             <nav class="d-flex">
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
                         Sou Paciente
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuCliente">
-                        <li><a class="dropdown-item" href="em-construcao">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="/login-paciente">Fazer Login</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
@@ -108,7 +110,7 @@
                         Sou Profissional de saúde
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuProfissional">
-                        <li><a class="dropdown-item" href="em-construcao">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="/login-clinica">Fazer Login</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
