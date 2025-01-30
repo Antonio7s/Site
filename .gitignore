@@ -28,6 +28,7 @@ public_html/hot
 
 storage/*.key
 .env
+env
 Homestead.yaml
 Homestead.json
 /.vagrant
@@ -79,3 +80,26 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/laravel,composer,visualstudiocode,windows
+
+# Arquivos e diretórios do sistema
+.env
+*.log
+*.tmp
+.DS_Store
+
+# Diretórios de dependências
+node_modules/
+vendor/
+
+# Diretórios de cache
+storage/*
+bootstrap/cache/*
+
+# Arquivos de configuração
+.idea/*
+*.phpstorm
+
+# Outros
+*.swp
+*~
+
