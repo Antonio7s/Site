@@ -156,7 +156,7 @@
 
             <!-- Exemplo 1 -->
             <div class="person-box">
-                <img src="../img/img1.jpg" alt="Foto do Médico" class="person-photo">
+                <img src="{{ asset('images/medico-1.jpg') }}" alt="Foto do Médico" class="person-photo">
                 <div class="person-info">
                     <h2>João Silva</h2>
                     <p class="specialty"><strong>Especialidade:</strong> Cardiologia</p>
@@ -185,7 +185,7 @@
 
             <!-- Exemplo 2 -->
             <div class="person-box">
-                <img src="../img/img2.jpg" alt="Foto do Médico" class="person-photo">
+                <img src="{{ asset('images/medico-2.jpg') }}" alt="Foto do Médico" class="person-photo">
                 <div class="person-info">
                     <h2>Maria Oliveira</h2>
                     <p class="specialty"><strong>Especialidade:</strong> Dermatologia</p>
@@ -213,7 +213,7 @@
 
             <!-- Exemplo 3 -->
             <div class="person-box">
-                <img src="../img/img3.jpg" alt="Foto do Médico" class="person-photo">
+                <img src="{{ asset('images/medico-3.jpg') }}" alt="Foto do Médico" class="person-photo">
                 <div class="person-info">
                     <h2>Pedro Santos</h2>
                     <p class="specialty"><strong>Especialidade:</strong> Ortopedia</p>
@@ -241,7 +241,7 @@
 
             <!-- Exemplo 4 -->
             <div class="person-box">
-                <img src="../img/img4.jpg" alt="Foto do Médico" class="person-photo">
+                <img src="{{ asset('images/medico-4.jpg') }}" alt="Foto do Médico" class="person-photo">
                 <div class="person-info">
                     <h2>Carla Souza</h2>
                     <p class="specialty"><strong>Especialidade:</strong> Pediatria</p>
@@ -268,7 +268,7 @@
 
             <!-- Exemplo 5 -->
             <div class="person-box">
-                <img src="../img/img5.webp" alt="Foto do Médico" class="person-photo">
+                <img src="{{ asset('images/medico-5.jpg') }}" alt="Foto do Médico" class="person-photo">
                 <div class="person-info">
                     <h2>Ana Lima</h2>
                     <p class="specialty"><strong>Especialidade:</strong> Ginecologia</p>

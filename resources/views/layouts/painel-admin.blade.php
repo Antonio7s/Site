@@ -242,7 +242,7 @@
           </div>
         </div>
         <div class="profile" onclick="toggleDropdown('profile')">
-          <img src="../img/icon-people.png" alt="User Avatar">
+          <img src="{{ asset('images/icone-usuario.png') }}" alt="User Avatar">
           <span>João Silva</span>
           <div class="dropdown-menu" id="profile-dropdown">
             <ul>

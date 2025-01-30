@@ -106,7 +106,7 @@
     <div class="header">
         <span>Bem-vindo ao Painel</span>
         <div class="user-info">
-            <img src="https://via.placeholder.com/40" alt="Foto da Clínica">
+            <img src="{{ asset('images/icone-usuario.png') }}" alt="Foto da Clínica">
             <span>Clínica Logada</span>
         </div>
     </div>
