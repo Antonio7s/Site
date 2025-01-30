@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fale Conosco</title>
+@extends('layouts.app')
+
+@section('title', 'Fale Conosco')
+
+@push('styles')
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,7 +89,6 @@
             color: #777;
         }
 
-        /* Garantir o ajuste em dispositivos móveis */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -127,15 +125,17 @@
             }
         }
     </style>
-</head>
-<body>
+@endpush
 
+@section('content')
     <div class="container">
         <h2>Fale Conosco</h2>
 
         <p>Se você tiver alguma dúvida ou sugestão, entre em contato conosco preenchendo o formulário abaixo. Responderemos o mais breve possível.</p>
 
-        <form action="enviar_email.php" method="post">
+        <form action="{{ route('contato.enviar') }}" method="POST">
+            @csrf
+
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" required>
 
@@ -152,9 +152,8 @@
         </form>
 
         <div class="footer">
-            Ou entre em contato conosco diretamente pelo e-mail <a href="mailto:contato@medexame.com">contato@medexame.com</a>.
+            Ou entre em contato conosco diretamente pelo e-mail 
+            <a href="mailto:contato@medexame.com">contato@medexame.com</a>.
         </div>
     </div>
-
-</body>
-</html>
+@endsection
