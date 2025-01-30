@@ -96,9 +96,10 @@
                         Sou Paciente
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuCliente">
-                        <li><a class="dropdown-item" href="#">Consulta</a></li>
-                        <li><a class="dropdown-item" href="#">Exames</a></li>
-                        <li><a class="dropdown-item" href="#">Médicos</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
                 </div>
@@ -107,14 +108,15 @@
                         Sou Profissional de saúde
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuProfissional">
-                        <li><a class="dropdown-item" href="#">Fazer Login</a></li>
-                        <li><a class="dropdown-item" href="#">Quero ser Parceiro</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
                 </div>
                 <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
                 <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
             </nav>
+
 
             <!-- Exibir o estado selecionado -->
             <div>
@@ -123,12 +125,14 @@
                 <a href="cadastro" class="btn btn-light btn-sm">Cadastro</a>
 
                 <!-- Ícone do carrinho (antigo) -->
-                <a href="#" class="btn btn-outline-light btn-sm">
+                <a href="em-construcao" class="btn btn-outline-light btn-sm">
                     <i class="fas fa-shopping-cart"></i> Carrinho
                 </a>
             </div>
         </div>
     </header>
+
+
 
     <!-- Modal de Seleção de Estado -->
     <div class="modal fade" id="estadoModal" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">

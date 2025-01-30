@@ -138,6 +138,9 @@ Route::get('/busca', function () {
     return view('/busca/busca');
 });
 
+Route::get('/em-construcao', function () {
+    return view('em-construcao');
+});
 
 
 
