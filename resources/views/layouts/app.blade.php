@@ -177,16 +177,35 @@
     </div>
 
     <script>
-        // Exibir o modal assim que a página carregar
+        // Verificar se há um estado armazenado ao carregar a página
         window.onload = function() {
-            var myModal = new bootstrap.Modal(document.getElementById('estadoModal'));
-            myModal.show();
+            const estadoArmazenado = localStorage.getItem('estadoSelecionado');
+
+            if (!estadoArmazenado) {
+                // Se não houver estado armazenado, abrir o modal
+                var myModal = new bootstrap.Modal(document.getElementById('estadoModal'));
+                myModal.show();
+            } else {
+                // Se houver estado armazenado, exibir no cabeçalho
+                document.getElementById('estadoSelecionado').textContent = 'Estado: ' + estadoArmazenado;
+            }
+
+            // Adicionar evento de clique no estado exibido no cabeçalho
+            document.getElementById('estadoSelecionado').addEventListener('click', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('estadoModal'));
+                myModal.show();
+            });
         };
 
-        // Função para mostrar o estado selecionado no cabeçalho e fechar o modal
+        // Função para mostrar o estado selecionado no cabeçalho, armazenar no localStorage e fechar o modal
         function mostrarEstado() {
             const estado = document.getElementById('estado').value;
             const estadoTexto = estado ? estado : 'Não Selecionado';
+
+            // Armazenar o estado no localStorage
+            localStorage.setItem('estadoSelecionado', estadoTexto);
+
+            // Exibir o estado no cabeçalho
             document.getElementById('estadoSelecionado').textContent = 'Estado: ' + estadoTexto;
 
             // Fechar o modal após selecionar o estado
