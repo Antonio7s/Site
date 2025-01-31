@@ -86,13 +86,27 @@ Route::get('/admin/especialidades', function () {
     return view('/admin/sub-diretorios/especialidades');
 });
 
+    Route::get('/admin/especialidades2', function () {
+        return view('/admin/sub-diretorios/especialidades-add');
+    });
+
 Route::get('/admin/classes', function () {
     return view('/admin/sub-diretorios/classes');
 });
 
+    Route::get('/admin/classes2', function () {
+        return view('/admin/sub-diretorios/classes-add');
+    });
+
+
 Route::get('/admin/procedimentos', function () {
     return view('/admin/sub-diretorios/procedimentos');
 });
+
+    Route::get('/admin/procedimentos2', function () {
+        return view('/admin/sub-diretorios/procedimentos-add');
+    });
+
 
 Route::get('/admin/relatorios', function () {
     return view('/admin/sub-diretorios/relatorios');
@@ -118,9 +132,9 @@ Route::get('/admin/servicos-diferenciados1', function () {
     return view('/admin/sub-diretorios/servicos-diferenciados/visualizar');
 });
 
-Route::get('/admin/servicos-diferenciados2', function () {
-    return view('/admin/sub-diretorios/servicos-diferenciados/adicionar');
-});
+    Route::get('/admin/servicos-diferenciados2', function () {
+        return view('/admin/sub-diretorios/servicos-diferenciados/adicionar');
+    });
 
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {

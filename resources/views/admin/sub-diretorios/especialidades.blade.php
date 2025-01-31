@@ -4,7 +4,7 @@
         
         <!-- Botão "Adicionar" -->
         <div class="mb-3">
-          <button type="button" class="btn btn-primary mb-3">Adicionar</button>
+          <a href="especialidades2" class="btn btn-primary mb-3">Adicionar</a>
         </div>
         <hr>
         <!-- CORPO -->
