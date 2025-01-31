@@ -1,56 +1,58 @@
-@extends('layouts.app') <!-- Referencia o layout 'app.blade.php' -->
+@extends('layouts.app')
 
 @section('content')
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f4f6f9;">
+    <div class="card shadow p-4 text-center" style="width: 400px; border-radius: 12px;">
+        <h3 class="fw-bold text-primary mb-3">Login</h3>
 
-  <!doctype html>
-  <html lang="en">
-    <head>
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Formulário de Login -->
+        <form>
+            <div class="mb-3">
+                <input type="email" class="form-control py-2" placeholder="E-mail" style="border-radius: 8px;">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control py-2" placeholder="Senha" style="border-radius: 8px;">
+                <!-- Link "Esqueci a senha" -->
+                <div class="text-end mt-2">
+                    <a href="#" class="text-decoration-none" style="font-size: 0.8rem;">Esqueci a senha</a>
+                </div>
+            </div>
 
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            <!-- reCAPTCHA (Sou robô) -->
+            <div class="mb-3">
+                <div class="g-recaptcha" data-sitekey="SUA_CHAVE_DO_RECAPTCHA_AQUI"></div>
+            </div>
 
-      <title>LOGIN - REDIRECIONAMENTO</title>
-    </head>
-    <body>
+            <!-- Botão "Acessar" -->
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary w-100 py-2" style="border-radius: 8px;">
+                    Acessar
+                </button>
+            </div>
 
-  <div class="d-flex justify-content-center align-items-center" style="height: 100vh;  margin-top: -50px;">
-      <div class="card" style="width: 20rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-          <div class="card-body">
-              <h3>Login - Clinica </h1>
-              <form>
-              <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-              </div>
-              <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-              </div>
-              <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-              </div>
-              <a href="/admin-clinica" type="submit" class="btn btn-primary">Submit</a>
-          </form>
-          </div>
-      </div>
-  </div>
+            <!-- Divisor -->
+            <div class="position-relative my-4">
+                <hr>
+                <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted">ou</span>
+            </div>
 
-          <!-- Bootstrap Icons -->
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+            <!-- Botão "Entrar com Google" -->
+            <div class="mb-3">
+                <button type="button" class="btn btn-outline-danger w-100 py-2" style="border-radius: 8px;">
+                    <i class="bi bi-google me-2"></i> Entrar com Google
+                </button>
+            </div>
 
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+            <!-- Botão "Entrar com Facebook" -->
+            <div class="mb-3">
+                <button type="button" class="btn btn-outline-primary w-100 py-2" style="border-radius: 8px;">
+                    <i class="bi bi-facebook me-2"></i> Entrar com Facebook
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
-
-    </body>
-  </html>
+<!-- Script do reCAPTCHA do Google -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endsection
-

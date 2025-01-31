@@ -1,4 +1,4 @@
-@extends('layouts.app') <!-- Referencia o layout 'app.blade.php' -->
+@extends('layouts.app')
 
 @section('content')
 
@@ -66,6 +66,10 @@
                     <input type="email" class="form-control" id="emailPaciente" placeholder="Digite seu email" required>
                 </div>
                 <div class="mb-3">
+                    <label for="senhaPaciente" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="senhaPaciente" placeholder="Digite sua senha" required>
+                </div>
+                <div class="mb-3">
                     <label for="estadoPaciente" class="form-label">Estado</label>
                     <select class="form-control" id="estadoPaciente" required>
                         <option value="">Selecione seu estado</option>
@@ -131,6 +135,10 @@
                 <div class="mb-3">
                     <label for="nomeInstituicao" class="form-label">Nome da Clínica</label>
                     <input type="text" class="form-control" id="nomeInstituicao" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senhaClinica" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="senhaClinica" placeholder="Digite sua senha" required>
                 </div>
                 <a href="cadastro/analise" type="submit" class="btn btn-success">Cadastrar Clínica</a>
             </form>
