@@ -81,7 +81,7 @@
             background-color: #004080;
         }
 
-        /* Ajustes para o formulário de Funcionários */
+        /* Ajustes para o formulário de Médicos Associados */
         .form-select {
             width: 100%;
             border-radius: 5px;
@@ -140,7 +140,7 @@
             <a href="#servicos" class="nav-link" data-bs-toggle="tab" role="tab">Serviços</a>
             <a href="#sobre-clinica" class="nav-link" data-bs-toggle="tab" role="tab">Sobre a Clínica</a>
             <a href="#localizacao" class="nav-link" data-bs-toggle="tab" role="tab">Localização</a>
-            <a href="#funcionarios" class="nav-link active" data-bs-toggle="tab" role="tab">Funcionários</a>
+            <a href="#medicos-associados" class="nav-link active" data-bs-toggle="tab" role="tab">Médicos Associados</a>
             <a href="#lista-funcionarios" class="nav-link" data-bs-toggle="tab" role="tab">Lista de Funcionários</a>
         </div>
     </div>
@@ -167,8 +167,12 @@
                         <input type="text" id="serviceName" class="form-control" placeholder="Digite o nome do serviço" required>
                     </div>
                     <div class="mb-3">
-                        <label for="serviceDescription" class="form-label">Descrição do Serviço</label>
-                        <textarea id="serviceDescription" class="form-control" rows="4" placeholder="Descreva o serviço" required></textarea>
+                        <label for="serviceSpecialty" class="form-label">Especialidade</label>
+                        <input type="text" id="serviceSpecialty" class="form-control" placeholder="Digite a especialidade" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="servicePrice" class="form-label">Preço</label>
+                        <input type="number" id="servicePrice" class="form-control" placeholder="Digite o preço" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Adicionar Serviço</button>
                 </form>
@@ -210,25 +214,25 @@
                 </form>
             </div>
 
-            <!-- Funcionários -->
-            <div id="funcionarios" class="tab-pane fade show active" role="tabpanel">
-                <h3>Adicionar Funcionário</h3>
+            <!-- Médicos Associados -->
+            <div id="medicos-associados" class="tab-pane fade show active" role="tabpanel">
+                <h3>Adicionar Médicos Associados</h3>
                 <form>
                     <div class="mb-3">
-                        <label for="employeeName" class="form-label">Nome do Funcionário</label>
-                        <input type="text" id="employeeName" class="form-control" placeholder="Nome do funcionário" required>
+                        <label for="employeeName" class="form-label">Nome do Médico</label>
+                        <input type="text" id="employeeName" class="form-control" placeholder="Nome do médico" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeRole" class="form-label">Função</label>
-                        <input type="text" id="employeeRole" class="form-control" placeholder="Função do funcionário" required>
+                        <input type="text" id="employeeRole" class="form-control" placeholder="Função do médico" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label">E-mail</label>
-                        <input type="email" id="employeeEmail" class="form-control" placeholder="E-mail do funcionário" required>
+                        <input type="email" id="employeeEmail" class="form-control" placeholder="E-mail do médico" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label">Telefone</label>
-                        <input type="tel" id="employeePhone" class="form-control" placeholder="Telefone do funcionário" required>
+                        <input type="tel" id="employeePhone" class="form-control" placeholder="Telefone do médico" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhoto" class="form-label">Foto</label>
@@ -236,14 +240,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="employeeCRM" class="form-label">CRM</label>
-                        <input type="text" id="employeeCRM" class="form-control" placeholder="CRM do funcionário" required>
+                        <input type="text" id="employeeCRM" class="form-control" placeholder="CRM do médico" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeSpecialties" class="form-label">Especialidades</label>
                         <button type="button" class="btn btn-secondary" onclick="openSpecialtyModal()">Escolher Especialidades</button>
                         <div id="selectedSpecialties" class="mt-2"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Funcionário</button>
+                    <button type="submit" class="btn btn-primary">Adicionar Médico</button>
                 </form>
             </div>
 
