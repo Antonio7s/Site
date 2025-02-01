@@ -8,14 +8,14 @@ class AuthController extends Controller
 {
     public function verificarLogin(Request $request)
     {
-        // Validação dos dados enviados (garante que email e password foram informados)
+        // Validação dos dados enviados (garante que email e password foram informados), CASO NÃO SEJA REDIRECIONAR AO HOME
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required'
         ]);
 
         // Credenciais fixas (hardcoded)
-        $emailChumbado    = 'admin';
+        $emailChumbado    = 'admin@medexame.com';
         $passwordChumbado = '123'; // Em produção, nunca armazene senha em texto plano!
 
         // Verifica se os dados enviados são iguais aos valores fixos
