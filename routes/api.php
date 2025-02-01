@@ -8,3 +8,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('posts',PostController::class)->except(['create','show','edit']);
+
+use App\Http\Controllers\AuthController;
+
+Route::post('/verificar-login', [AuthController::class, 'verificarLogin']);
