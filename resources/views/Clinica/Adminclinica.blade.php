@@ -1,7 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -81,7 +77,7 @@
             background-color: #004080;
         }
 
-        /* Ajustes para o formulário de Médicos Associados */
+        /* Ajustes para o formulário de Profissionais Associados */
         .form-select {
             width: 100%;
             border-radius: 5px;
@@ -129,23 +125,39 @@
         .specialty-modal .modal-footer button {
             margin-left: 10px;
         }
+
+        /* Estilo para a tabela de procedimentos */
+        #procedimentosTable table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #procedimentosTable th, #procedimentosTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #procedimentosTable th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h1>Painel Adm Clínica</h1>
-        <div class="nav flex-column" role="tablist">
-            <a href="#servicos" class="nav-link" data-bs-toggle="tab" role="tab">Serviços</a>
-            <a href="#sobre-clinica" class="nav-link" data-bs-toggle="tab" role="tab">Sobre a Clínica</a>
-            <a href="#localizacao" class="nav-link" data-bs-toggle="tab" role="tab">Localização</a>
-            <a href="#medicos-associados" class="nav-link active" data-bs-toggle="tab" role="tab">Médicos Associados</a>
-            <a href="#lista-funcionarios" class="nav-link" data-bs-toggle="tab" role="tab">Lista de Funcionários</a>
-        </div>
+   <!-- Sidebar -->
+   <div class="sidebar">
+    <h1>Painel Adm Clínica</h1>
+    <div class="nav flex-column" role="tablist">
+      <a href="#servicos" class="nav-link" data-bs-toggle="tab" role="tab">Serviços</a>
+      <a href="#sobre-clinica" class="nav-link" data-bs-toggle="tab" role="tab">Sobre a Clínica</a>
+      <a href="#localizacao" class="nav-link" data-bs-toggle="tab" role="tab">Localização</a>
+      <a href="#profissionais-associados" class="nav-link active" data-bs-toggle="tab" role="tab">Profissionais Associados</a>
+      <a href="#procedimentos" class="nav-link" data-bs-toggle="tab" role="tab">Procedimentos</a>
+      <a href="#lista-profissionais" class="nav-link" data-bs-toggle="tab" role="tab">Lista de Profissionais</a>
     </div>
-
-    <!-- Header -->
+  </div>
+ <!-- Header -->
     <div class="header">
         <span>Bem-vindo ao Painel</span>
         <div class="user-info">
@@ -154,11 +166,11 @@
         </div>
     </div>
 
-    <!-- Content -->
-    <div class="content">
-        <div class="tab-content">
+<!-- Content -->
+<div class="content">
+    <div class="tab-content">
 
-            <!-- Serviços -->
+         <!-- Serviços -->
             <div id="servicos" class="tab-pane fade" role="tabpanel">
                 <h3>Serviços</h3>
                 <form>
@@ -214,310 +226,207 @@
                 </form>
             </div>
 
-            <!-- Médicos Associados -->
-            <div id="medicos-associados" class="tab-pane fade show active" role="tabpanel">
-                <h3>Adicionar Médicos Associados</h3>
-                <form>
+
+            <!-- Profissionais Associados -->
+            <div id="profissionais-associados" class="tab-pane fade" role="tabpanel">
+                <h3>Profissionais Associados</h3>
+                <form id="formProfissional">
                     <div class="mb-3">
-                        <label for="employeeName" class="form-label">Nome do Médico</label>
-                        <input type="text" id="employeeName" class="form-control" placeholder="Nome do médico" required>
+                        <label for="employeeName" class="form-label">Nome do Profissional</label>
+                        <input type="text" id="employeeName" class="form-control" placeholder="Nome do profissional" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeRole" class="form-label">Função</label>
-                        <input type="text" id="employeeRole" class="form-control" placeholder="Função do médico" required>
+                        <input type="text" id="employeeRole" class="form-control" placeholder="Função do profissional" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeeEmail" class="form-label">E-mail</label>
-                        <input type="email" id="employeeEmail" class="form-control" placeholder="E-mail do médico" required>
+                        <input type="email" id="employeeEmail" class="form-control" placeholder="E-mail do profissional" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhone" class="form-label">Telefone</label>
-                        <input type="tel" id="employeePhone" class="form-control" placeholder="Telefone do médico" required>
+                        <input type="tel" id="employeePhone" class="form-control" placeholder="Telefone do profissional" required>
                     </div>
                     <div class="mb-3">
                         <label for="employeePhoto" class="form-label">Foto</label>
-                        <input type="file" id="employeePhoto" class="form-control photo-input" accept="image/*">
+                        <input type="file" id="employeePhoto" class="form-control" accept="image/*">
                     </div>
                     <div class="mb-3">
-                        <label for="employeeCRM" class="form-label">CRM</label>
-                        <input type="text" id="employeeCRM" class="form-control" placeholder="CRM do médico" required>
+                        <label for="employeeCouncil" class="form-label">Registro do Conselho</label>
+                        <select id="employeeCouncil" class="form-select" required>
+                            <option value="">Selecione o Conselho</option>
+                            <option value="CRM">CRM</option>
+                            <option value="CRO">CRO</option>
+                            <option value="CRP">CRP</option>
+                            <option value="CRN">CRN</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeCouncilNumber" class="form-label">Número do Conselho/UF</label>
+                        <input type="text" id="employeeCouncilNumber" class="form-control" placeholder="Número do Conselho/UF" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="employeeReturnConsultation" class="form-label">Consulta de Retorno</label>
+                        <select id="employeeReturnConsultation" class="form-select" required>
+                            <option value="">Selecione</option>
+                            <option value="sim">Sim</option>
+                            <option value="nao">Não</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="returnDaysField" style="display: none;">
+                        <label for="employeeReturnDays" class="form-label">Dias para Retorno</label>
+                        <input type="number" id="employeeReturnDays" class="form-control" placeholder="Informe os dias para retorno">
                     </div>
                     <div class="mb-3">
                         <label for="employeeSpecialties" class="form-label">Especialidades</label>
                         <button type="button" class="btn btn-secondary" onclick="openSpecialtyModal()">Escolher Especialidades</button>
                         <div id="selectedSpecialties" class="mt-2"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Médico</button>
+                    <button type="submit" class="btn btn-primary">Adicionar Profissional</button>
                 </form>
             </div>
 
-            <!-- Lista de Funcionários -->
-            <div id="lista-funcionarios" class="tab-pane fade" role="tabpanel">
-                <h3>Lista de Funcionários</h3>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Função</th>
-                            <th>E-mail</th>
-                            <th>Telefone</th>
-                            <th>Foto</th>
-                            <th>CRM</th>
-                            <th>Especialidades</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>João Silva</td>
-                            <td>Médico</td>
-                            <td>joao@clinica.com</td>
-                            <td>(31) 99999-9999</td>
-                            <td><img src="{{ asset('images/joao.jpg') }}" alt="João" width="50"></td>
-                            <td>12345</td>
-                            <td>Cardiologia, Dermatologia</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm">Editar</button>
-                                <button class="btn btn-danger btn-sm">Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ana Souza</td>
-                            <td>Enfermeira</td>
-                            <td>ana@clinica.com</td>
-                            <td>(31) 98888-8888</td>
-                            <td><img src="{{ asset('images/ana.jpg') }}" alt="Ana" width="50"></td>
-                            <td>54321</td>
-                            <td>Endocrinologia, Ginecologia</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm">Editar</button>
-                                <button class="btn btn-danger btn-sm">Excluir</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Procedimentos -->
+            <div id="procedimentos" class="tab-pane fade" role="tabpanel">
+                <h3>Procedimentos</h3>
+                <form id="procedimentosForm">
+                    <div class="mb-3">
+                        <label for="procedimentoFile" class="form-label">Upload de Tabela de Procedimentos (Excel)</label>
+                        <input type="file" id="procedimentoFile" class="form-control" accept=".xlsx, .xls" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Tabela</button>
+                </form>
+                <div id="procedimentosTable" class="mt-4"></div>
             </div>
 
+                  <!-- Lista de Profissionais -->
+      <div id="lista-profissionais" class="tab-pane fade" role="tabpanel">
+        <h3>Lista de Profissionais Associados</h3>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Função</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Conselho</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="profissionaisList"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+   <!-- Modal de Especialidades -->
+<div id="specialtyModal" class="specialty-modal">
+    <div class="modal-content">
+        <h4>Escolha as Especialidades</h4>
+        <div id="specialtyList">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Alergia e imunologia" id="specialty1">
+                <label class="form-check-label" for="specialty1">Alergia e imunologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Anestesiologia" id="specialty2">
+                <label class="form-check-label" for="specialty2">Anestesiologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Angiologia" id="specialty3">
+                <label class="form-check-label" for="specialty3">Angiologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cardiologia" id="specialty4">
+                <label class="form-check-label" for="specialty4">Cardiologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia cardiovascular" id="specialty5">
+                <label class="form-check-label" for="specialty5">Cirurgia cardiovascular</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia da mão" id="specialty6">
+                <label class="form-check-label" for="specialty6">Cirurgia da mão</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia de cabeça e pescoço" id="specialty7">
+                <label class="form-check-label" for="specialty7">Cirurgia de cabeça e pescoço</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia do aparelho digestivo" id="specialty8">
+                <label class="form-check-label" for="specialty8">Cirurgia do aparelho digestivo</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia geral" id="specialty9">
+                <label class="form-check-label" for="specialty9">Cirurgia geral</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia oncológica" id="specialty10">
+                <label class="form-check-label" for="specialty10">Cirurgia oncológica</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia pediátrica" id="specialty11">
+                <label class="form-check-label" for="specialty11">Cirurgia pediátrica</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia plástica" id="specialty12">
+                <label class="form-check-label" for="specialty12">Cirurgia plástica</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia torácica" id="specialty13">
+                <label class="form-check-label" for="specialty13">Cirurgia torácica</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Cirurgia vascular" id="specialty14">
+                <label class="form-check-label" for="specialty14">Cirurgia vascular</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Clínica médica" id="specialty15">
+                <label class="form-check-label" for="specialty15">Clínica médica</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Coloproctologia" id="specialty16">
+                <label class="form-check-label" for="specialty16">Coloproctologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Dermatologia" id="specialty17">
+                <label class="form-check-label" for="specialty17">Dermatologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Endocrinologia e metabologia" id="specialty18">
+                <label class="form-check-label" for="specialty18">Endocrinologia e metabologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Endoscopia" id="specialty19">
+                <label class="form-check-label" for="specialty19">Endoscopia</label>
+            </div>
+                        <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Dermatologia" id="specialty7">
+                <label class="form-check-label" for="specialty7">Dermatologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Endocrinologia" id="specialty8">
+                <label class="form-check-label" for="specialty8">Endocrinologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Ginecologia" id="specialty9">
+                <label class="form-check-label" for="specialty9">Ginecologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Neurologia" id="specialty10">
+                <label class="form-check-label" for="specialty10">Neurologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Oftalmologia" id="specialty11">
+                <label class="form-check-label" for="specialty11">Oftalmologia</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="Ortopedia" id="specialty12">
+                <label class="form-check-label" for="specialty12">Ortopedia</label>
+            </div>
         </div>
     </div>
-
-    <!-- Modal de Especialidades -->
-    <div id="specialtyModal" class="specialty-modal">
-        <div class="modal-content">
-            <h4>Escolha as Especialidades</h4>
-            <div id="specialtyList">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Alergia e imunologia" id="specialty1">
-                    <label class="form-check-label" for="specialty1">Alergia e imunologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Anestesiologia" id="specialty2">
-                    <label class="form-check-label" for="specialty2">Anestesiologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Angiologia" id="specialty3">
-                    <label class="form-check-label" for="specialty3">Angiologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cardiologia" id="specialty4">
-                    <label class="form-check-label" for="specialty4">Cardiologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia cardiovascular" id="specialty5">
-                    <label class="form-check-label" for="specialty5">Cirurgia cardiovascular</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia da mão" id="specialty6">
-                    <label class="form-check-label" for="specialty6">Cirurgia da mão</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia de cabeça e pescoço" id="specialty7">
-                    <label class="form-check-label" for="specialty7">Cirurgia de cabeça e pescoço</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia do aparelho digestivo" id="specialty8">
-                    <label class="form-check-label" for="specialty8">Cirurgia do aparelho digestivo</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia geral" id="specialty9">
-                    <label class="form-check-label" for="specialty9">Cirurgia geral</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia oncológica" id="specialty10">
-                    <label class="form-check-label" for="specialty10">Cirurgia oncológica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia pediátrica" id="specialty11">
-                    <label class="form-check-label" for="specialty11">Cirurgia pediátrica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia plástica" id="specialty12">
-                    <label class="form-check-label" for="specialty12">Cirurgia plástica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia torácica" id="specialty13">
-                    <label class="form-check-label" for="specialty13">Cirurgia torácica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Cirurgia vascular" id="specialty14">
-                    <label class="form-check-label" for="specialty14">Cirurgia vascular</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Clínica médica" id="specialty15">
-                    <label class="form-check-label" for="specialty15">Clínica médica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Coloproctologia" id="specialty16">
-                    <label class="form-check-label" for="specialty16">Coloproctologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Dermatologia" id="specialty17">
-                    <label class="form-check-label" for="specialty17">Dermatologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Endocrinologia e metabologia" id="specialty18">
-                    <label class="form-check-label" for="specialty18">Endocrinologia e metabologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Endoscopia" id="specialty19">
-                    <label class="form-check-label" for="specialty19">Endoscopia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Gastroenterologia" id="specialty20">
-                    <label class="form-check-label" for="specialty20">Gastroenterologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Genética médica" id="specialty21">
-                    <label class="form-check-label" for="specialty21">Genética médica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Geriatria" id="specialty22">
-                    <label class="form-check-label" for="specialty22">Geriatria</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Ginecologia e obstetrícia" id="specialty23">
-                    <label class="form-check-label" for="specialty23">Ginecologia e obstetrícia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Hematologia e hemoterapia" id="specialty24">
-                    <label class="form-check-label" for="specialty24">Hematologia e hemoterapia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Homeopatia" id="specialty25">
-                    <label class="form-check-label" for="specialty25">Homeopatia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Infectologia" id="specialty26">
-                    <label class="form-check-label" for="specialty26">Infectologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Mastologia" id="specialty27">
-                    <label class="form-check-label" for="specialty27">Mastologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina de emergência" id="specialty28">
-                    <label class="form-check-label" for="specialty28">Medicina de emergência</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina de família e comunidade" id="specialty29">
-                    <label class="form-check-label" for="specialty29">Medicina de família e comunidade</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina do trabalho" id="specialty30">
-                    <label class="form-check-label" for="specialty30">Medicina do trabalho</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina do tráfego" id="specialty31">
-                    <label class="form-check-label" for="specialty31">Medicina do tráfego</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina esportiva" id="specialty32">
-                    <label class="form-check-label" for="specialty32">Medicina esportiva</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina física e reabilitação" id="specialty33">
-                    <label class="form-check-label" for="specialty33">Medicina física e reabilitação</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina intensiva" id="specialty34">
-                    <label class="form-check-label" for="specialty34">Medicina intensiva</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina legal e perícia médica" id="specialty35">
-                    <label class="form-check-label" for="specialty35">Medicina legal e perícia médica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Medicina preventiva e social" id="specialty36">
-                    <label class="form-check-label" for="specialty36">Medicina preventiva e social</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Nefrologia" id="specialty37">
-                    <label class="form-check-label" for="specialty37">Nefrologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Neurocirurgia" id="specialty38">
-                    <label class="form-check-label" for="specialty38">Neurocirurgia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Neurologia" id="specialty39">
-                    <label class="form-check-label" for="specialty39">Neurologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Nutrologia" id="specialty40">
-                    <label class="form-check-label" for="specialty40">Nutrologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Oftalmologia" id="specialty41">
-                    <label class="form-check-label" for="specialty41">Oftalmologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Oncologia clínica" id="specialty42">
-                    <label class="form-check-label" for="specialty42">Oncologia clínica</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Ortopedia e traumatologia" id="specialty43">
-                    <label class="form-check-label" for="specialty43">Ortopedia e traumatologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Otorrinolaringologia" id="specialty44">
-                    <label class="form-check-label" for="specialty44">Otorrinolaringologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Patologia" id="specialty45">
-                    <label class="form-check-label" for="specialty45">Patologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Patologia clínica/medicina laboratorial" id="specialty46">
-                    <label class="form-check-label" for="specialty46">Patologia clínica/medicina laboratorial</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Pediatria" id="specialty47">
-                    <label class="form-check-label" for="specialty47">Pediatria</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Pneumologia" id="specialty48">
-                    <label class="form-check-label" for="specialty48">Pneumologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Psiquiatria" id="specialty49">
-                    <label class="form-check-label" for="specialty49">Psiquiatria</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Radiologia e diagnóstico por imagem" id="specialty50">
-                    <label class="form-check-label" for="specialty50">Radiologia e diagnóstico por imagem</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Radioterapia" id="specialty51">
-                    <label class="form-check-label" for="specialty51">Radioterapia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Reumatologia" id="specialty52">
-                    <label class="form-check-label" for="specialty52">Reumatologia</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Urologia" id="specialty53">
-                    <label class="form-check-label" for="specialty53">Urologia</label>
-                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -526,8 +435,9 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+           <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <script>
         // Função para abrir o modal de especialidades
         function openSpecialtyModal() {
@@ -549,7 +459,141 @@
             document.getElementById('selectedSpecialties').innerText = selectedSpecialties.join(', ');
             closeSpecialtyModal();
         }
+
+        // Função para exibir/ocultar campo de dias para retorno
+        document.getElementById('employeeReturnConsultation').addEventListener('change', function() {
+            const returnDaysField = document.getElementById('returnDaysField');
+            if (this.value === 'sim') {
+                returnDaysField.style.display = 'block';
+            } else {
+                returnDaysField.style.display = 'none';
+            }
+        });
+
+        // Array para armazenar os profissionais com um exemplo já incluído
+        const profissionais = [
+            {
+                nome: "João Silva",
+                funcao: "Médico",
+                email: "joao@clinica.com",
+                telefone: "(31) 99999-9999",
+                conselho: "CRM"
+            }
+        ];
+
+        // Função para listar os profissionais na tabela
+        function listarProfissionais() {
+            const tbody = document.getElementById('profissionaisList');
+            tbody.innerHTML = '';
+            profissionais.forEach((p, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        ${p.nome}
+                        <button class="btn btn-info btn-sm" onclick="verDetalhes(${index})" style="margin-left: 5px;">Detalhes</button>
+                    </td>
+                    <td>${p.funcao}</td>
+                    <td>${p.email}</td>
+                    <td>${p.telefone}</td>
+                    <td>${p.conselho}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="excluirProfissional(${index})">Deletar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Função para exibir os detalhes do profissional
+        function verDetalhes(index) {
+            const p = profissionais[index];
+            alert(
+                `Nome: ${p.nome}\n` +
+                `Função: ${p.funcao}\n` +
+                `E-mail: ${p.email}\n` +
+                `Telefone: ${p.telefone}\n` +
+                `Conselho: ${p.conselho}`
+            );
+        }
+
+        // Função para excluir um profissional
+        function excluirProfissional(index) {
+            if (confirm("Tem certeza que deseja deletar este profissional?")) {
+                profissionais.splice(index, 1);
+                listarProfissionais();
+            }
+        }
+
+        // Evento de submissão do formulário de Profissionais Associados
+        document.getElementById('formProfissional').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const novoProfissional = {
+                nome: document.getElementById('employeeName').value,
+                funcao: document.getElementById('employeeRole').value,
+                email: document.getElementById('employeeEmail').value,
+                telefone: document.getElementById('employeePhone').value,
+                conselho: document.getElementById('employeeCouncil').value,
+            };
+            profissionais.push(novoProfissional);
+            listarProfissionais();
+            this.reset();
+            document.getElementById('selectedSpecialties').innerText = '';
+            document.getElementById('returnDaysField').style.display = 'none';
+        });
+
+        window.onload = function() {
+            listarProfissionais();
+        }
+
+        // Função para processar o arquivo Excel de procedimentos
+        document.getElementById('procedimentosForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const file = document.getElementById('procedimentoFile').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    // Exibir os dados na tabela
+                    const table = document.createElement('table');
+                    table.className = 'table table-bordered';
+                    const thead = document.createElement('thead');
+                    const tbody = document.createElement('tbody');
+
+                    // Cabeçalho da tabela
+                    const headerRow = document.createElement('tr');
+                    json[0].forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    });
+                    thead.appendChild(headerRow);
+                    table.appendChild(thead);
+
+                    // Corpo da tabela
+                    json.slice(1).forEach(row => {
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell;
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                    table.appendChild(tbody);
+
+                    // Exibir a tabela na div
+                    const procedimentosTable = document.getElementById('procedimentosTable');
+                    procedimentosTable.innerHTML = '';
+                    procedimentosTable.appendChild(table);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
     </script>
 </body>
 </html>
-@endsection
