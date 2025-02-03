@@ -12,6 +12,7 @@
     <style>
         /* MENU E FOOTER */
             body {
+                overflow-x: hidden; /* */
                 font-family: Arial, sans-serif;
                 background-color: #f0f8ff;
                 color: #333;
@@ -126,10 +127,6 @@
                 <a href="redirecionar-login" class="btn btn-outline-light btn-sm">Login</a>
                 <a href="cadastro" class="btn btn-light btn-sm">Cadastro</a>
 
-                <!-- Ícone do carrinho (antigo) -->
-                <a href="em-construcao" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-shopping-cart"></i> Carrinho
-                </a>
             </div>
         </div>
     </header>

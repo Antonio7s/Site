@@ -191,75 +191,67 @@
             }
         </style>
 
-        <!-- CSS CARDS-->
+            <!--CSS CARDS -->
         <style>
-            /* Modificando os cards diretamente */
-            .custom-card {
-                width: 167px;  /* Ajusta a largura dos cards para compensar o espaço da letra 'u' */
-                height: 130px;  /* Ajusta a altura dos cards */
-                padding: 12px;  /* Ajusta o padding interno */
-                text-align: center;  /* Centraliza o texto */
-                font-size: 0.9rem;  /* Ajusta o tamanho da fonte */
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                border-radius: 8px;  /* Deixa as bordas arredondadas */
-            }
-
-            /* Ajustando o tamanho do ícone */
-            .custom-card .icon {
-                font-size: 30px;  /* Ajusta o tamanho do ícone */
-                margin-bottom: 10px;
-            }
-
-            /* Ajustando os títulos dentro do card */
-            .custom-card h5, .custom-card h6 {
-                font-size: 0.9rem;  /* Ajusta o tamanho dos títulos */
-                margin: 5px 0;
-            }
-
-            /* Garantindo que os cards fiquem na mesma linha sem quebra */
-            .info-section .row {
-                display: flex;
-                flex-wrap: nowrap;  /* Isso garante que os cards não quebrem para a próxima linha */
-                justify-content: flex-start;
-                gap: 10px;  /* Reduz o espaço entre os cards */
-            }
-
-            /* Ajusta as colunas para que se ajustem bem nas telas */
-            .info-section .col-md-4, .info-section .col-lg-2 {
-                flex: 0 0 auto;  /* Faz com que cada card fique na linha sem quebra */
-                max-width: 167px;  /* Limita a largura dos cards */
-            }
-
-            /* Contêiner de rolagem infinita */
-            .infinite-scroll-container {
-                display: flex;
+            .servicos-clinica {
+                background-color: #f8f9fa;
+                padding: 2rem 0;
+                border-radius: 15px;
                 overflow: hidden;
-                position: relative;
             }
 
-            /* Animação para rolagem infinita */
-            .infinite-scroll {
+            .scroll-horizontal {
                 display: flex;
-                animation: scroll 30s linear infinite; /* A animação vai durar 30 segundos e será infinita */
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 1rem; /* Espaço para scrollbar */
+                scroll-behavior: smooth; /* Scroll suave */
+                -webkit-overflow-scrolling: touch; /* Melhora scroll em mobile */
             }
 
-            /* Definindo a animação para mover os cards */
-            @keyframes scroll {
-                0% {
-                    transform: translateX(0);
-                }
-                100% {
-                    transform: translateX(-100%); /* Move os cards para a esquerda */
-                }
+            .servico-item {
+                background: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 1.5rem;
+                min-width: 80px; /* Largura fixa para os itens */
+                margin: 0 8px;
+                transition: all 0.3s ease;
+                flex-shrink: 0; /* Impede que os itens encolham */
+                text-align: center;
+                color: #2a3f54;
+            }
+
+            .servico-item:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 4px 15px rgba(42, 63, 84, 0.1);
+                border-color: #007bff;
+            }
+
+            /* Estilização da scrollbar */
+            .scroll-horizontal::-webkit-scrollbar {
+                height: 8px;
+                background: #f1f1f1;
+            }
+
+            .scroll-horizontal::-webkit-scrollbar-thumb {
+                background: #007bff;
+                border-radius: 4px;
+            }
+
+            /* Ícones */
+            .servico-item i {
+                font-size: 1.8rem;
+                color: #007bff;
+                margin-bottom: 0.8rem;
+                display: block;
             }
         </style>
         
     </head>
     <body>
         <!-- Banner -->
-        <div class="banner container text-center p-0" style="width: 1200px; height: 300px;">
+        <div class="banner container text-center p-0" style="width: 1200px; min-height: 300px;">
             <img src="https://i.postimg.cc/mgnYdk30/banner-site-JPG.png" alt="banner-site-JPG" style="width: 100%; height: 100%; object-fit: cover; object-position: 0 -60px;" class="rounded-2">
         </div>
 
@@ -268,142 +260,39 @@
             <h2>Informações Básicas</h2>
             <p>Aqui você pode adicionar informações sobre o site, descrição de serviços ou qualquer outro conteúdo relevante.</p>
             
-            <!-- Cards com flexbox para garantir que fiquem na mesma linha -->
-            <div class="row justify-content-start infinite-scroll-container" style="width: 100%; overflow: hidden;">
-
-                <!-- Cards (Repetidos para criar rolagem infinita) -->
-                <div class="infinite-scroll">
-                    <!-- Consultas presenciais -->
-                    <div class="col-md-4 col-lg-2" style="flex: 0 0 165px;">
-                        <div class="card bg-light text-primary custom-card">
-                            <div class="icon">👨‍⚕️</div>
-                            <h6>Agendar</h6>
-                            <h5>Consultas presenciais</h5>
-                        </div>
+            <div class="container servicos-clinica mt-5">
+                <div class="scroll-horizontal">
+                    <div class="servico-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <h5 class="mb-0 mt-2">Agendar <br> Consultas</h5>
                     </div>
-
-                    <!-- Exames -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-danger custom-card">
-                            <div class="icon">🧪</div>
-                            <h6>Agendar</h6>
-                            <h5>Exames</h5>
-                        </div>
+                    <div class="servico-item">
+                        <i class="fas fa-microscope"></i>
+                        <h5 class="mb-0 mt-2">Agendar <br> Exames</h5>
                     </div>
-
-                    <!-- Odontologia -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-purple custom-card">
-                            <div class="icon">🦷</div>
-                            <h6>Agendar</h6>
-                            <h5>Odontologia</h5>
-                        </div>
+                    <div class="servico-item">
+                        <i class="fas fa-syringe"></i>
+                        <h5 class="mb-0 mt-2">Agendar <br> Vacinas</h5>
                     </div>
-
-                    <!-- Vacinas -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-success custom-card">
-                            <div class="icon">💉</div>
-                            <h6>Agendar</h6>
-                            <h5>Vacinas</h5>
-                        </div>
+                    <div class="servico-item">
+                        <i class="fas fa-tooth"></i>
+                        <h5 class="mb-0 mt-2">Odontologia</h5>
                     </div>
-
-                    <!-- Check-ups -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-danger custom-card">
-                            <div class="icon">❤️</div>
-                            <h6>Agendar</h6>
-                            <h5>Check-ups</h5>
-                        </div>
+                    <div class="servico-item">
+                        <i class="fas fa-procedures"></i>
+                        <h5 class="mb-0 mt-2">Cirurgias</h5>
                     </div>
-
-                    <!-- Cirurgias -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-warning custom-card">
-                            <div class="icon">✂️</div>
-                            <h6>Agendar</h6>
-                            <h5>Cirurgias</h5>
-                        </div>
+                    <div class="servico-item">
+                        <i class="fas fa-stethoscope"></i>
+                        <h5 class="mb-0 mt-2">Check-up <br> Completo</h5>
                     </div>
-
-                    <!-- Novo quadrinho -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-info custom-card">
-                            <div class="icon">📅</div>
-                            <h6>Agendar</h6>
-                            <h5>Consultas online</h5>
-                        </div>
+                    <div class="servico-item">
+                        <i class="fas fa-video"></i>
+                        <h5 class="mb-0 mt-2">Atendimento <br> Online</h5>
                     </div>
                 </div>
-
-                <!-- Repetição dos Cards -->
-                <div class="infinite-scroll">
-                    <!-- Consultas presenciais -->
-                    <div class="col-md-4 col-lg-2" style="flex: 0 0 165px;">
-                        <div class="card bg-light text-primary custom-card">
-                            <div class="icon">👨‍⚕️</div>
-                            <h6>Agendar</h6>
-                            <h5>Consultas presenciais</h5>
-                        </div>
-                    </div>
-
-                    <!-- Exames -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-danger custom-card">
-                            <div class="icon">🧪</div>
-                            <h6>Agendar</h6>
-                            <h5>Exames</h5>
-                        </div>
-                    </div>
-
-                    <!-- Odontologia -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-purple custom-card">
-                            <div class="icon">🦷</div>
-                            <h6>Agendar</h6>
-                            <h5>Odontologia</h5>
-                        </div>
-                    </div>
-
-                    <!-- Vacinas -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-success custom-card">
-                            <div class="icon">💉</div>
-                            <h6>Agendar</h6>
-                            <h5>Vacinas</h5>
-                        </div>
-                    </div>
-
-                    <!-- Check-ups -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-danger custom-card">
-                            <div class="icon">❤️</div>
-                            <h6>Agendar</h6>
-                            <h5>Check-ups</h5>
-                        </div>
-                    </div>
-
-                    <!-- Cirurgias -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-warning custom-card">
-                            <div class="icon">✂️</div>
-                            <h6>Agendar</h6>
-                            <h5>Cirurgias</h5>
-                        </div>
-                    </div>
-
-                    <!-- Novo quadrinho -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="card bg-light text-info custom-card">
-                            <div class="icon">📅</div>
-                            <h6>Agendar</h6>
-                            <h5>Consultas online</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+
 
         
     </body>
