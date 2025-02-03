@@ -93,11 +93,11 @@
 
             /* Estilos para a foto do médico */
             .person-photo {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
+                width: 120px;
+                height: 120px;
+                margin:10px;
                 object-fit: cover;
-                margin-right: 20px;
+                
             }
 
             /* Informações extras */
@@ -116,30 +116,55 @@
                 text-decoration: underline;
             }
 
-            /* Estilos da agenda */
-            .agenda {
-                max-width: 35%;
+            
+        </style>
+
+        <style>
+            /* Estilização geral */
+            .agenda h3 {
+                font-size: 24px;
+                margin-bottom: 10px;
             }
-            .agenda table {
-                width: 100%;
-                border-collapse: collapse;
+
+            .agenda p {
+                font-size: 16px;
+                margin: 5px 0;
             }
-            .agenda table th, .agenda table td {
-                padding: 10px;
+
+            /* Estilo para o layout dos horários */
+            .schedule {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            .column {
+                width: 23%; /* Para dividir igualmente a largura da área */
+            }
+
+            /* Estilo para cada horário */
+            .hour {
+                background-color:rgb(145, 222, 245);
+                padding: 12px;
                 text-align: center;
-                border: 1px solid #ddd;
+                margin-bottom: 8px;
+                border-radius: 4px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
             }
-            .agenda table th {
-                background-color: #f4f4f9;
-            }
-            .agenda table td.booked {
-                background-color: #e0e0e0;
-                color: #888;
-            }
-            .agenda table td:hover:not(.booked) {
-                background-color: #007bff;
+
+            /* Efeito ao passar o mouse sobre os horários */
+            .hour:hover {
+                background-color: #4CAF50;
                 color: white;
                 cursor: pointer;
+                transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+            }
+
+
+            /* Efeito de hover em cada horário */
+            .hour:hover {
+                background-color:rgb(58, 119, 177);
+                transform: scale(1.05);
             }
         </style>
     </head>
@@ -152,7 +177,7 @@
             </div>
 
             <h1>Resultados da Busca</h1>
-            <p>Buscando por: <strong>João</strong></p>
+            <p>Buscando por: <strong>Dermatologista</strong></p>
 
             <!-- Exemplo 1 -->
             <div class="person-box">
@@ -167,19 +192,43 @@
                     <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐ (4.5/5)</p>
                 </div>
                 <div class="agenda">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>08:00 - 09:00</td></tr>
-                            <tr><td class="booked">09:00 - 10:00 (Indisponível)</td></tr>
-                            <tr><td>10:00 - 11:00</td></tr>
-                            <tr><td>11:00 - 12:00</td></tr>
-                        </tbody>
-                    </table>
+                    <h3>Horário</h3>                    
+                    <div class="date-picker">
+                        <button id="prev-date" class="navigate-button">&#8249;</button>
+                        <p id="date-display"><strong>Data:</strong> 03/02/2025</p>
+                        <button id="next-date" class="navigate-button">&#8250;</button>
+                    </div>
+
+                    <div class="schedule">
+                        <div class="column">
+                            <div class="hour">08:00</div>
+                            <div class="hour">09:00</div>
+                            <div class="hour">10:00</div>
+                            <div class="hour">11:00</div>
+                            <div class="hour">12:00</div>
+                        </div>
+                        <div class="column">
+                            <div class="hour">10:00</div>
+                            <div class="hour">11:00</div>
+                            <div class="hour">12:00</div>
+                            <div class="hour">13:00</div>
+                            <div class="hour">14:00</div>
+                        </div>
+                        <div class="column">
+                            <div class="hour">11:00</div>
+                            <div class="hour">12:00</div>
+                            <div class="hour">13:00</div>
+                            <div class="hour">14:00</div>
+                            <div class="hour">15:00</div>
+                        </div>
+                        <div class="column">
+                            <div class="hour">13:00</div>
+                            <div class="hour">14:00</div>
+                            <div class="hour">15:00</div>
+                            <div class="hour">16:00</div>
+                            <div class="hour">17:00</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
