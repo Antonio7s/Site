@@ -49,7 +49,7 @@
                         <i class="bi bi-person-circle"></i> Paciente
                     </button>
                     <button class="btn btn-outline-success choice-btn" id="btnClinica">
-                        <i class="bi bi-hospital"></i> Clínica Médica
+                        <i class="bi bi-hospital"></i> Parceiro Medexame
                     </button>
                 </div>
             </div>
@@ -108,22 +108,75 @@
                     <ul id="cidadeSugestoes" class="list-group mt-2"></ul>
                 </div>
                 <div class="mb-3">
-                    <p>Você deseja:</p>
-                    <div>
-                        <input type="radio" id="consulta" name="tipoServico" value="consulta" required>
-                        <label for="consulta">Consulta</label>
-                    </div>
-                    <div>
-                        <input type="radio" id="exame" name="tipoServico" value="exame" required>
-                        <label for="exame">Exame</label>
-                    </div>
+                    <button type="button" class="btn btn-outline-info" id="btnConsultaMenor">Consulta para menor de idade</button>
                 </div>
                 <button type="submit" class="btn btn-primary">Cadastrar Paciente</button>
             </form>
 
-            <!-- Formulário para Clínica Médica -->
+            <!-- Formulário para Consulta de Menor de Idade -->
+            <form id="formConsultaMenor" class="hidden">
+                <h3>Consulta para Menor de Idade</h3>
+                <div class="mb-3">
+                    <label for="nomeMenor" class="form-label">Nome do Menor</label>
+                    <input type="text" class="form-control" id="nomeMenor" placeholder="Digite o nome do menor" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="dataNascimento" required>
+                </div>
+                <div class="mb-3">
+                    <label for="estadoMenor" class="form-label">Estado</label>
+                    <select class="form-control" id="estadoMenor" required>
+                        <option value="">Selecione o estado</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="cidadeMenor" class="form-label">Cidade</label>
+                    <input type="text" class="form-control" id="cidadeMenor" placeholder="Digite a cidade" required>
+                    <ul id="cidadeSugestoesMenor" class="list-group mt-2"></ul>
+                </div>
+                <div class="mb-3">
+                    <label for="emailResponsavel" class="form-label">Email do Responsável</label>
+                    <input type="email" class="form-control" id="emailResponsavel" placeholder="Digite o email do responsável" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senhaResponsavel" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="senhaResponsavel" placeholder="Digite sua senha" required>
+                </div>
+                <button type="button" class="btn btn-secondary" id="btnVoltarPaciente">Voltar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar Menor</button>
+            </form>
+
+            <!-- Formulário para Parceiro Medexame -->
             <form id="formClinica" class="hidden">
-                <h3>Cadastro de Clínica Médica</h3>
+                <h3>Cadastro de Parceiro Medexame</h3>
                 <div class="mb-3">
                     <label for="nomeClinica" class="form-label">Nome Completo</label>
                     <input type="text" class="form-control" id="nomeClinica" required>
@@ -133,14 +186,18 @@
                     <input type="text" class="form-control" id="cpfClinica" required>
                 </div>
                 <div class="mb-3">
-                    <label for="nomeInstituicao" class="form-label">Nome da Clínica</label>
-                    <input type="text" class="form-control" id="nomeInstituicao" required>
+                    <label for="razaoSocial" class="form-label">Razão Social</label>
+                    <input type="text" class="form-control" id="razaoSocial" required>
+                </div>
+                <div class="mb-3">
+                    <label for="nomeFantasia" class="form-label">Nome Fantasia (Nome para divulgação)</label>
+                    <input type="text" class="form-control" id="nomeFantasia" required>
                 </div>
                 <div class="mb-3">
                     <label for="senhaClinica" class="form-label">Senha</label>
                     <input type="password" class="form-control" id="senhaClinica" placeholder="Digite sua senha" required>
                 </div>
-                <a href="cadastro/analise" type="submit" class="btn btn-success">Cadastrar Clínica</a>
+                <a href="cadastro/analise" type="submit" class="btn btn-success">Cadastrar Parceiro</a>
             </form>
         </div>
 
@@ -155,11 +212,17 @@
                 const btnPaciente = document.getElementById("btnPaciente");
                 const btnClinica = document.getElementById("btnClinica");
                 const formPaciente = document.getElementById("formPaciente");
+                const formConsultaMenor = document.getElementById("formConsultaMenor");
                 const formClinica = document.getElementById("formClinica");
                 const selecao = document.getElementById("selecao");
                 const estadoSelect = document.getElementById("estadoPaciente");
                 const cidadeInput = document.getElementById("cidadePaciente");
                 const sugestoesContainer = document.getElementById("cidadeSugestoes");
+                const btnConsultaMenor = document.getElementById("btnConsultaMenor");
+                const btnVoltarPaciente = document.getElementById("btnVoltarPaciente");
+                const estadoMenor = document.getElementById("estadoMenor");
+                const cidadeMenor = document.getElementById("cidadeMenor");
+                const sugestoesContainerMenor = document.getElementById("cidadeSugestoesMenor");
 
                 let cidadesPorEstado = {};
 
@@ -182,13 +245,25 @@
                     formPaciente.classList.remove("hidden");
                 });
 
-                // Mostrar formulário de Clínica Médica
+                // Mostrar formulário de Parceiro Medexame
                 btnClinica.addEventListener("click", function () {
                     selecao.style.display = "none";
                     formClinica.classList.remove("hidden");
                 });
 
-                // Atualizar sugestões de cidades ao selecionar um estado
+                // Mostrar formulário de Consulta para Menor de Idade
+                btnConsultaMenor.addEventListener("click", function () {
+                    formPaciente.classList.add("hidden");
+                    formConsultaMenor.classList.remove("hidden");
+                });
+
+                // Voltar para o formulário de Paciente
+                btnVoltarPaciente.addEventListener("click", function () {
+                    formConsultaMenor.classList.add("hidden");
+                    formPaciente.classList.remove("hidden");
+                });
+
+                // Atualizar sugestões de cidades ao selecionar um estado (Paciente)
                 estadoSelect.addEventListener("change", function () {
                     const estado = estadoSelect.value;
                     cidadeInput.value = "";
@@ -213,6 +288,37 @@
                                         sugestoesContainer.innerHTML = "";
                                     });
                                     sugestoesContainer.appendChild(li);
+                                });
+                            }
+                        });
+                    }
+                });
+
+                // Atualizar sugestões de cidades ao selecionar um estado (Menor de Idade)
+                estadoMenor.addEventListener("change", function () {
+                    const estado = estadoMenor.value;
+                    cidadeMenor.value = "";
+                    sugestoesContainerMenor.innerHTML = "";
+
+                    if (estado && cidadesPorEstado[estado]) {
+                        cidadeMenor.addEventListener("input", function () {
+                            const query = cidadeMenor.value.toLowerCase();
+                            sugestoesContainerMenor.innerHTML = "";
+
+                            if (query.length > 0) {
+                                const sugestoes = cidadesPorEstado[estado].filter(cidade =>
+                                    cidade.toLowerCase().startsWith(query)
+                                );
+
+                                sugestoes.forEach(cidade => {
+                                    const li = document.createElement("li");
+                                    li.textContent = cidade;
+                                    li.classList.add("list-group-item");
+                                    li.addEventListener("click", function () {
+                                        cidadeMenor.value = cidade;
+                                        sugestoesContainerMenor.innerHTML = "";
+                                    });
+                                    sugestoesContainerMenor.appendChild(li);
                                 });
                             }
                         });
