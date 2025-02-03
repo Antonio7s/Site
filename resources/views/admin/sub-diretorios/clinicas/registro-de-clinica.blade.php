@@ -15,10 +15,6 @@
                                 <label for="cnpj" class="form-label">CNPJ</label>
                                 <input type="text" class="form-control" id="cnpj" placeholder="00.000.000/0000-00" required>
                             </div>
-                            <div class="col-md-6">
-                                <label for="cnes" class="form-label">CNES (Número)</label>
-                                <input type="text" class="form-control" id="cnes" placeholder="Informe o número do CNES" required>
-                            </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -26,7 +22,7 @@
                                 <input type="text" class="form-control" id="razaoSocial" placeholder="Informe a razão social" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="nomeFantasia" class="form-label">Nome Fantasia</label>
+                                <label for="nomeFantasia" class="form-label">Nome para divulgação</label>
                                 <input type="text" class="form-control" id="nomeFantasia" placeholder="Informe o nome fantasia" required>
                             </div>
                         </div>

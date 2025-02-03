@@ -78,6 +78,10 @@ Route::get('/admin/dashboard', function () {
             return view('/admin/sub-diretorios/clinicas/analise');
         });
 
+        Route::get('/admin/clinicas5', function () {
+            return view('/admin/sub-diretorios/clinicas/detalhes');
+        });
+
 Route::get('/admin/usuarios', function () {
     return view('/admin/sub-diretorios/usuarios');
 });
