@@ -1,173 +1,166 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        /* Estilos principais do layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 10px;
+        }
 
-    <!DOCTYPE html>
-    <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Resultados da Busca</title>
-        <style>
-            /* Estilos principais do layout */
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f9;
-                margin: 0;
-                padding: 0;
-            }
-            .container {
-                max-width: 900px;
-                margin: 20px auto;
-                padding: 10px;
-            }
+        /* Estilos para a caixa de busca */
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-bar input[type="text"] {
+            padding: 12px 20px;
+            font-size: 18px;
+            width: 60%;
+            border: 2px solid #007bff;
+            border-radius: 30px;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+        .search-bar input[type="text"]:focus {
+            border-color: #0056b3;
+        }
+        .search-bar button {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+            margin-left: 15px;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
 
-            /* Estilos para a caixa de busca */
-            .search-bar {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-bottom: 30px;
-                background-color: #ffffff;
-                padding: 15px;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
-            .search-bar input[type="text"] {
-                padding: 12px 20px;
-                font-size: 18px;
-                width: 60%;
-                border: 2px solid #007bff;
-                border-radius: 30px;
-                transition: border-color 0.3s ease;
-                outline: none;
-            }
-            .search-bar input[type="text"]:focus {
-                border-color: #0056b3;
-            }
-            .search-bar button {
-                padding: 12px 25px;
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 30px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                font-size: 18px;
-                margin-left: 15px;
-            }
-            .search-bar button:hover {
-                background-color: #0056b3;
-            }
+        /* Estilos para a caixa de informações da pessoa */
+        .person-box {
+            background-color: #ffffff;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .person-info {
+            max-width: 60%;
+        }
+        .person-info h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .person-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .person-info .clinic-name {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .person-info .address {
+            color: #555;
+            font-size: 14px;
+        }
 
-            /* Estilos para a caixa de informações da pessoa */
-            .person-box {
-                background-color: #ffffff;
-                margin-bottom: 15px;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-            }
-            .person-info {
-                max-width: 60%;
-            }
-            .person-info h2 {
-                margin: 0;
-                font-size: 24px;
-                color: #333;
-            }
-            .person-info p {
-                margin: 5px 0;
-                color: #666;
-            }
-            .person-info .clinic-name {
-                font-weight: bold;
-                color: #007bff;
-            }
-            .person-info .address {
-                color: #555;
-                font-size: 14px;
-            }
-
-            /* Estilos para a foto do médico */
-            .person-photo {
-                width: 120px;
-                height: 120px;
-                margin:10px;
-                object-fit: cover;
-                
-            }
-
-            /* Informações extras */
-            .location, .price, .specialty, .rating {
-                margin-top: 10px;
-            }
-
-            /* Estilos para o botão "Ver no mapa" */
-            .location a {
-                color: #007bff;
-                text-decoration: none;
-                font-size: 14px;
-            }
-
-            .location a:hover {
-                text-decoration: underline;
-            }
-
+        /* Estilos para a foto do médico */
+        .person-photo {
+            width: 120px;
+            height: 120px;
+            margin:10px;
+            object-fit: cover;
             
-        </style>
+        }
 
-        <style>
-            /* Estilização geral */
-            .agenda h3 {
-                font-size: 24px;
-                margin-bottom: 10px;
-            }
+        /* Informações extras */
+        .location, .price, .specialty, .rating {
+            margin-top: 10px;
+        }
 
-            .agenda p {
-                font-size: 16px;
-                margin: 5px 0;
-            }
+        /* Estilos para o botão "Ver no mapa" */
+        .location a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
 
-            /* Estilo para o layout dos horários */
-            .schedule {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 20px;
-            }
+        .location a:hover {
+            text-decoration: underline;
+        }
 
-            .column {
-                width: 23%; /* Para dividir igualmente a largura da área */
-            }
+        
+    </style>
 
-            /* Estilo para cada horário */
-            .hour {
-                background-color:rgb(145, 222, 245);
-                padding: 12px;
-                text-align: center;
-                margin-bottom: 8px;
-                border-radius: 4px;
-                transition: background-color 0.3s ease, transform 0.3s ease;
-            }
+    <style>
+        /* Estilização geral */
+        .agenda h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
 
-            /* Efeito ao passar o mouse sobre os horários */
-            .hour:hover {
-                background-color: #4CAF50;
-                color: white;
-                cursor: pointer;
-                transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
-            }
+        .agenda p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        /* Estilo para o layout dos horários */
+        .schedule {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .column {
+            width: 23%; /* Para dividir igualmente a largura da área */
+        }
+
+        /* Estilo para cada horário */
+        .hour {
+            background-color:rgb(145, 222, 245);
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Efeito ao passar o mouse sobre os horários */
+        .hour:hover {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+        }
 
 
-            /* Efeito de hover em cada horário */
-            .hour:hover {
-                background-color:rgb(58, 119, 177);
-                transform: scale(1.05);
-            }
-        </style>
-    </head>
+        /* Efeito de hover em cada horário */
+        .hour:hover {
+            background-color:rgb(58, 119, 177);
+            transform: scale(1.05);
+        }
+    </style>
+
     <body>
         <div class="container">
             <!-- Formulário de busca -->
@@ -183,7 +176,7 @@
             <div class="person-box">
                 <img src="{{ asset('images/medico-1.jpg') }}" alt="Foto do Médico" class="person-photo">
                 <div class="person-info">
-                    <h2>João Silva</h2>
+                    <h2>Dr. João Silva</h2>
                     <p class="specialty"><strong>Especialidade:</strong> Cardiologia</p>
                     <p class="clinic-name"><strong>Clínica:</strong> Saúde Total</p>
                     <p class="address"><strong>Endereço:</strong> Rua das Flores, 123 - São Paulo, SP</p>
@@ -191,12 +184,12 @@
                     <p class="price"><strong>Valor:</strong> R$ 200</p>
                     <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐ (4.5/5)</p>
                 </div>
+
                 <div class="agenda">
                     <h3>Horário</h3>                    
                     <div class="date-picker">
-                        <button id="prev-date" class="navigate-button">&#8249;</button>
+                        <p>a</p>
                         <p id="date-display"><strong>Data:</strong> 03/02/2025</p>
-                        <button id="next-date" class="navigate-button">&#8250;</button>
                     </div>
 
                     <div class="schedule">
@@ -230,6 +223,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Exemplo 2 -->

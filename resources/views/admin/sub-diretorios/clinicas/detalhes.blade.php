@@ -159,21 +159,19 @@
                 <hr class="my-4">
                 <h3>Documentos para Download</h3>
                 <ul class="list-group">
-                    <li class="list-group-item">1 – Formulário de Proposta de Convênio Preenchido <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">2 – CNES (Cadastro Nacional de Estabelecimento de Saúde) <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">3 – CNPJ <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">4 – Comprovante Bancário <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">5 – Alvará de Funcionamento <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">6 – Alvará de Licença Sanitária <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">7 – Certidão de Responsabilidade Técnica <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">8 – Carteira do Conselho do Responsável Técnico <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">9 – Registro da Empresa junto ao respectivo Conselho de Classe <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">10 – RG, CPF e E-mail do Responsável pelo Contrato <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">12 – Contrato Social e Alterações, se houver <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">13 – Diploma <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">14 – Títulos <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                    <li class="list-group-item">15 – Identidade Profissional <a href="#" class="btn btn-link btn-sm">Download</a></li>
+                    <li class="list-group-item">Documentos <a href="#" class="btn btn-link btn-sm">Download</a></li>
                 </ul>
+
+                <hr class="my4">
+                <h3> Taxa de Serviço da MedExame </h3>
+                <div class="col-md-2">
+                            <label class="form-label">Taxa em %</label>
+                            <input type="text" class="form-control" value="5%" readonly>
+                </div>
+                <div class="col-md-2">
+                            <label class="form-label">Taxa fixa EM R$</label>
+                            <input type="text" class="form-control" value="R$5,00" readonly>
+                </div>
 
                 <div class="d-flex justify-content-end mt-4">
                     <button class="btn btn-success">Voltar</button>

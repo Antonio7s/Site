@@ -274,7 +274,6 @@
           <li><a href="contatos"><i class="bi bi-envelope"></i> Contatos</a></li>
           <li><a href="homepage"><i class="bi bi-globe"></i> Homepage</a></li>
           <li><a href="mensagens"><i class="bi bi-chat-dots"></i> Mensagens</a></li>
-          <li><a href="lucro"><i class="bi bi-cash-coin"></i> Lucro</a></li>
         </ul>
     </div>
 
