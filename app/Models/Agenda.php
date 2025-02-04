@@ -3,18 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Agenda extends Model
 {
-    // Relacionamento inverso com Medico
-    public function medico()
+    protected $fillable = ['data', 'horario', 'medico_id', 'paciente_nome'];
+
+    // Uma agenda pertence a um médico
+    public function medico(): BelongsTo
     {
         return $this->belongsTo(Medico::class);
-    }
-
-    // Relacionamento um para muitos com Consulta
-    public function consultas()
-    {
-        return $this->hasMany(Consulta::class);
     }
 }

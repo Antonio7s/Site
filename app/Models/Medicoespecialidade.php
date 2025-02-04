@@ -3,18 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MedicoEspecialidade extends Model
 {
-    // Relacionamento muitos para um com Medico
-    public function medico()
+    protected $fillable = ['medico_id', 'especialidade'];
+
+    // Uma especialidade pertence a um médico
+    public function medico(): BelongsTo
     {
         return $this->belongsTo(Medico::class);
-    }
-
-    // Relacionamento muitos para um com Especialidade
-    public function especialidade()
-    {
-        return $this->belongsTo(Especialidade::class);
     }
 }

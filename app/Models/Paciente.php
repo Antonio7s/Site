@@ -3,12 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Paciente extends Model
 {
-    // Relacionamento inverso com Consulta
-    public function consultas()
+    protected $fillable = ['nome', 'email', 'telefone', 'carrinho_id'];
+
+    // Um paciente recebe informações de um carrinho
+    public function carrinho(): BelongsTo
     {
-        return $this->hasMany(Consulta::class);
+        return $this->belongsTo(Carrinho::class);
+    }
+
+    // Um paciente pode ter vários agendamentos
+    public function agendamentos(): HasMany
+    {
+        return $this->hasMany(Agendamento::class);
     }
 }

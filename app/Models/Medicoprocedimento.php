@@ -3,19 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MedicoProcedimento extends Model
 {
-    // Relacionamento muitos para um com Procedimento
-    public function procedimento()
-    {
-        return $this->belongsTo(Procedimento::class);
-    }
+    protected $fillable = ['medico_id', 'procedimento_id'];
 
-    // Relacionamento muitos para um com Medico
-    public function medico()
+    // Um médico procedimento pertence a um médico
+    public function medico(): BelongsTo
     {
         return $this->belongsTo(Medico::class);
     }
-}
 
+    // Um médico procedimento pertence a um procedimento
+    public function procedimento(): BelongsTo
+    {
+        return $this->belongsTo(Procedimento::class);
+    }
+}

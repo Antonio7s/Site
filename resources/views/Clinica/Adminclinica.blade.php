@@ -145,161 +145,162 @@
 </head>
 <body>
 
-   <!-- Sidebar -->
-   <div class="sidebar">
+    <!-- Sidebar -->
+  <div class="sidebar">
     <h1>Painel Adm Clínica</h1>
     <div class="nav flex-column" role="tablist">
       <a href="#servicos" class="nav-link" data-bs-toggle="tab" role="tab">Serviços</a>
       <a href="#sobre-clinica" class="nav-link" data-bs-toggle="tab" role="tab">Sobre a Clínica</a>
       <a href="#localizacao" class="nav-link" data-bs-toggle="tab" role="tab">Localização</a>
-      <a href="#profissionais-associados" class="nav-link active" data-bs-toggle="tab" role="tab">Profissionais Associados</a>
+      <a href="#profissionais-associados" class="nav-link" data-bs-toggle="tab" role="tab">Profissionais Associados</a>
       <a href="#procedimentos" class="nav-link" data-bs-toggle="tab" role="tab">Procedimentos</a>
       <a href="#lista-profissionais" class="nav-link" data-bs-toggle="tab" role="tab">Lista de Profissionais</a>
+      <a href="#agendamento" class="nav-link" data-bs-toggle="tab" role="tab">Agendamento</a>
     </div>
   </div>
- <!-- Header -->
-    <div class="header">
-        <span>Bem-vindo ao Painel</span>
-        <div class="user-info">
-            <img src="{{ asset('images/icone-usuario.png') }}" alt="Foto da Clínica">
-            <span>Clínica Logada</span>
-        </div>
-    </div>
 
-<!-- Content -->
-<div class="content">
+  <!-- Header -->
+  <div class="header">
+    <span>Bem-vindo ao Painel</span>
+    <div class="user-info">
+      <img src="{{ asset('images/icone-usuario.png') }}" alt="Foto da Clínica" width="40">
+      <span>Clínica Logada</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
     <div class="tab-content">
 
-         <!-- Serviços -->
-            <div id="servicos" class="tab-pane fade" role="tabpanel">
-                <h3>Serviços</h3>
-                <form>
-                    <div class="mb-3">
-                        <label for="serviceName" class="form-label">Nome do Serviço</label>
-                        <input type="text" id="serviceName" class="form-control" placeholder="Digite o nome do serviço" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="serviceSpecialty" class="form-label">Especialidade</label>
-                        <input type="text" id="serviceSpecialty" class="form-control" placeholder="Digite a especialidade" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="servicePrice" class="form-label">Preço</label>
-                        <input type="number" id="servicePrice" class="form-control" placeholder="Digite o preço" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Serviço</button>
-                </form>
-            </div>
+      <!-- Serviços -->
+      <div id="servicos" class="tab-pane fade" role="tabpanel">
+        <h3>Serviços</h3>
+        <form>
+          <div class="mb-3">
+            <label for="serviceName" class="form-label">Nome do Serviço</label>
+            <input type="text" id="serviceName" class="form-control" placeholder="Digite o nome do serviço" required>
+          </div>
+          <div class="mb-3">
+            <label for="serviceSpecialty" class="form-label">Especialidade</label>
+            <input type="text" id="serviceSpecialty" class="form-control" placeholder="Digite a especialidade" required>
+          </div>
+          <div class="mb-3">
+            <label for="servicePrice" class="form-label">Preço</label>
+            <input type="number" id="servicePrice" class="form-control" placeholder="Digite o preço" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Adicionar Serviço</button>
+        </form>
+      </div>
 
-            <!-- Sobre a Clínica -->
-            <div id="sobre-clinica" class="tab-pane fade" role="tabpanel">
-                <h3>Sobre a Clínica</h3>
-                <form>
-                    <div class="mb-3">
-                        <label for="clinicName" class="form-label">Nome da Clínica</label>
-                        <input type="text" id="clinicName" class="form-control" placeholder="Digite o nome da clínica" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="clinicDescription" class="form-label">Descrição</label>
-                        <textarea id="clinicDescription" class="form-control" rows="4" placeholder="Descreva um pouco sobre a clínica" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Salvar Descrição</button>
-                </form>
-            </div>
+      <!-- Sobre a Clínica -->
+      <div id="sobre-clinica" class="tab-pane fade" role="tabpanel">
+        <h3>Sobre a Clínica</h3>
+        <form>
+          <div class="mb-3">
+            <label for="clinicName" class="form-label">Nome da Clínica</label>
+            <input type="text" id="clinicName" class="form-control" placeholder="Digite o nome da clínica" required>
+          </div>
+          <div class="mb-3">
+            <label for="clinicDescription" class="form-label">Descrição</label>
+            <textarea id="clinicDescription" class="form-control" rows="4" placeholder="Descreva um pouco sobre a clínica" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar Descrição</button>
+        </form>
+      </div>
 
-            <!-- Localização -->
-            <div id="localizacao" class="tab-pane fade" role="tabpanel">
-                <h3>Localização</h3>
-                <form>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Endereço</label>
-                        <input type="text" id="address" class="form-control" placeholder="Digite o endereço da clínica" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">Cidade</label>
-                        <input type="text" id="city" class="form-control" placeholder="Digite a cidade" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="state" class="form-label">Estado</label>
-                        <input type="text" id="state" class="form-control" placeholder="Digite o estado" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Salvar Localização</button>
-                </form>
-            </div>
+      <!-- Localização -->
+      <div id="localizacao" class="tab-pane fade" role="tabpanel">
+        <h3>Localização</h3>
+        <form>
+          <div class="mb-3">
+            <label for="address" class="form-label">Endereço</label>
+            <input type="text" id="address" class="form-control" placeholder="Digite o endereço da clínica" required>
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">Cidade</label>
+            <input type="text" id="city" class="form-control" placeholder="Digite a cidade" required>
+          </div>
+          <div class="mb-3">
+            <label for="state" class="form-label">Estado</label>
+            <input type="text" id="state" class="form-control" placeholder="Digite o estado" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar Localização</button>
+        </form>
+      </div>
 
+      <!-- Profissionais Associados -->
+      <div id="profissionais-associados" class="tab-pane fade" role="tabpanel">
+        <h3>Profissionais Associados</h3>
+        <form id="formProfissional">
+          <div class="mb-3">
+            <label for="employeeName" class="form-label">Nome do Profissional</label>
+            <input type="text" id="employeeName" class="form-control" placeholder="Nome do profissional" required>
+          </div>
+          <div class="mb-3">
+            <label for="employeeRole" class="form-label">Função</label>
+            <input type="text" id="employeeRole" class="form-control" placeholder="Função do profissional" required>
+          </div>
+          <div class="mb-3">
+            <label for="employeeEmail" class="form-label">E-mail</label>
+            <input type="email" id="employeeEmail" class="form-control" placeholder="E-mail do profissional" required>
+          </div>
+          <div class="mb-3">
+            <label for="employeePhone" class="form-label">Telefone</label>
+            <input type="tel" id="employeePhone" class="form-control" placeholder="Telefone do profissional" required>
+          </div>
+          <div class="mb-3">
+            <label for="employeePhoto" class="form-label">Foto</label>
+            <input type="file" id="employeePhoto" class="form-control" accept="image/*">
+          </div>
+          <div class="mb-3">
+            <label for="employeeCouncil" class="form-label">Registro do Conselho</label>
+            <select id="employeeCouncil" class="form-select" required>
+              <option value="">Selecione o Conselho</option>
+              <option value="CRM">CRM</option>
+              <option value="CRO">CRO</option>
+              <option value="CRP">CRP</option>
+              <option value="CRN">CRN</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="employeeCouncilNumber" class="form-label">Número do Conselho/UF</label>
+            <input type="text" id="employeeCouncilNumber" class="form-control" placeholder="Número do Conselho/UF" required>
+          </div>
+          <div class="mb-3">
+            <label for="employeeReturnConsultation" class="form-label">Consulta de Retorno</label>
+            <select id="employeeReturnConsultation" class="form-select" required>
+              <option value="">Selecione</option>
+              <option value="sim">Sim</option>
+              <option value="nao">Não</option>
+            </select>
+          </div>
+          <div class="mb-3" id="returnDaysField" style="display: none;">
+            <label for="employeeReturnDays" class="form-label">Dias para Retorno</label>
+            <input type="number" id="employeeReturnDays" class="form-control" placeholder="Informe os dias para retorno">
+          </div>
+          <div class="mb-3">
+            <label for="employeeSpecialties" class="form-label">Especialidades</label>
+            <button type="button" class="btn btn-secondary" onclick="openSpecialtyModal()">Escolher Especialidades</button>
+            <div id="selectedSpecialties" class="mt-2"></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Adicionar Profissional</button>
+        </form>
+      </div>
 
-            <!-- Profissionais Associados -->
-            <div id="profissionais-associados" class="tab-pane fade" role="tabpanel">
-                <h3>Profissionais Associados</h3>
-                <form id="formProfissional">
-                    <div class="mb-3">
-                        <label for="employeeName" class="form-label">Nome do Profissional</label>
-                        <input type="text" id="employeeName" class="form-control" placeholder="Nome do profissional" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeRole" class="form-label">Função</label>
-                        <input type="text" id="employeeRole" class="form-control" placeholder="Função do profissional" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeEmail" class="form-label">E-mail</label>
-                        <input type="email" id="employeeEmail" class="form-control" placeholder="E-mail do profissional" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeePhone" class="form-label">Telefone</label>
-                        <input type="tel" id="employeePhone" class="form-control" placeholder="Telefone do profissional" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeePhoto" class="form-label">Foto</label>
-                        <input type="file" id="employeePhoto" class="form-control" accept="image/*">
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeCouncil" class="form-label">Registro do Conselho</label>
-                        <select id="employeeCouncil" class="form-select" required>
-                            <option value="">Selecione o Conselho</option>
-                            <option value="CRM">CRM</option>
-                            <option value="CRO">CRO</option>
-                            <option value="CRP">CRP</option>
-                            <option value="CRN">CRN</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeCouncilNumber" class="form-label">Número do Conselho/UF</label>
-                        <input type="text" id="employeeCouncilNumber" class="form-control" placeholder="Número do Conselho/UF" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeReturnConsultation" class="form-label">Consulta de Retorno</label>
-                        <select id="employeeReturnConsultation" class="form-select" required>
-                            <option value="">Selecione</option>
-                            <option value="sim">Sim</option>
-                            <option value="nao">Não</option>
-                        </select>
-                    </div>
-                    <div class="mb-3" id="returnDaysField" style="display: none;">
-                        <label for="employeeReturnDays" class="form-label">Dias para Retorno</label>
-                        <input type="number" id="employeeReturnDays" class="form-control" placeholder="Informe os dias para retorno">
-                    </div>
-                    <div class="mb-3">
-                        <label for="employeeSpecialties" class="form-label">Especialidades</label>
-                        <button type="button" class="btn btn-secondary" onclick="openSpecialtyModal()">Escolher Especialidades</button>
-                        <div id="selectedSpecialties" class="mt-2"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Profissional</button>
-                </form>
-            </div>
+      <!-- Procedimentos -->
+      <div id="procedimentos" class="tab-pane fade" role="tabpanel">
+        <h3>Procedimentos</h3>
+        <form id="procedimentosForm">
+          <div class="mb-3">
+            <label for="procedimentoFile" class="form-label">Upload de Tabela de Procedimentos (Excel)</label>
+            <input type="file" id="procedimentoFile" class="form-control" accept=".xlsx, .xls" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar Tabela</button>
+        </form>
+        <div id="procedimentosTable" class="mt-4"></div>
+      </div>
 
-            <!-- Procedimentos -->
-            <div id="procedimentos" class="tab-pane fade" role="tabpanel">
-                <h3>Procedimentos</h3>
-                <form id="procedimentosForm">
-                    <div class="mb-3">
-                        <label for="procedimentoFile" class="form-label">Upload de Tabela de Procedimentos (Excel)</label>
-                        <input type="file" id="procedimentoFile" class="form-control" accept=".xlsx, .xls" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar Tabela</button>
-                </form>
-                <div id="procedimentosTable" class="mt-4"></div>
-            </div>
-
-                  <!-- Lista de Profissionais -->
+      <!-- Lista de Profissionais -->
       <div id="lista-profissionais" class="tab-pane fade" role="tabpanel">
         <h3>Lista de Profissionais Associados</h3>
         <table class="table table-bordered">
@@ -317,9 +318,40 @@
         </table>
       </div>
 
+      <!-- Agendamento -->
+      <div id="agendamento" class="tab-pane fade" role="tabpanel">
+        <h3>Agendamento</h3>
+        <input type="text" id="searchDoctor" class="form-control" placeholder="Pesquisar médico">
+        <ul id="doctorList" class="list-group mt-3">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Dr. João Silva
+            <!-- Ao clicar, chama a função que abre o modal de agendamento -->
+            <button class="btn btn-primary btn-sm" onclick="redirectToSchedule()">Horário</button>
+          </li>
+        </ul>
+      </div>
+
     </div>
   </div>
-
+   <!-- Modal para Agendamento com Grid de Horários -->
+   <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="scheduleModalLabel">Agendamento de Horários</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Container que será preenchido dinamicamente com os horários -->
+          <div id="timeSlotsContainer"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" onclick="saveSchedule()">Salvar Horários</button>
+        </div>
+      </div>
+    </div>
+  </div>
    <!-- Modal de Especialidades -->
 <div id="specialtyModal" class="specialty-modal">
     <div class="modal-content">
@@ -435,165 +467,257 @@
         </div>
     </div>
 
-           <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-    <script>
-        // Função para abrir o modal de especialidades
-        function openSpecialtyModal() {
-            document.getElementById('specialtyModal').classList.add('show');
-        }
+         <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+  <script>
+    // Função para abrir o modal de especialidades
+    function openSpecialtyModal() {
+      document.getElementById('specialtyModal').classList.add('show');
+    }
 
-        // Função para fechar o modal de especialidades
-        function closeSpecialtyModal() {
-            document.getElementById('specialtyModal').classList.remove('show');
-        }
+    // Função para fechar o modal de especialidades
+    function closeSpecialtyModal() {
+      document.getElementById('specialtyModal').classList.remove('show');
+    }
 
-        // Função para salvar as especialidades selecionadas
-        function saveSpecialties() {
-            const selectedSpecialties = [];
-            const checkboxes = document.querySelectorAll('#specialtyList input[type="checkbox"]:checked');
-            checkboxes.forEach(checkbox => {
-                selectedSpecialties.push(checkbox.value);
+    // Função para salvar as especialidades selecionadas
+    function saveSpecialties() {
+      const selectedSpecialties = [];
+      const checkboxes = document.querySelectorAll('#specialtyList input[type="checkbox"]:checked');
+      checkboxes.forEach(checkbox => {
+        selectedSpecialties.push(checkbox.value);
+      });
+      document.getElementById('selectedSpecialties').innerText = selectedSpecialties.join(', ');
+      closeSpecialtyModal();
+    }
+
+    // Exibir/ocultar campo de dias para retorno
+    document.getElementById('employeeReturnConsultation').addEventListener('change', function() {
+      const returnDaysField = document.getElementById('returnDaysField');
+      if (this.value === 'sim') {
+        returnDaysField.style.display = 'block';
+      } else {
+        returnDaysField.style.display = 'none';
+      }
+    });
+
+    // Array para armazenar os profissionais com um exemplo já incluído
+    const profissionais = [
+      {
+        nome: "João Silva",
+        funcao: "Médico",
+        email: "joao@clinica.com",
+        telefone: "(31) 99999-9999",
+        conselho: "CRM"
+      }
+    ];
+
+    // Função para listar os profissionais na tabela
+    function listarProfissionais() {
+      const tbody = document.getElementById('profissionaisList');
+      tbody.innerHTML = '';
+      profissionais.forEach((p, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            ${p.nome}
+            <button class="btn btn-info btn-sm" onclick="verDetalhes(${index})" style="margin-left: 5px;">Detalhes</button>
+          </td>
+          <td>${p.funcao}</td>
+          <td>${p.email}</td>
+          <td>${p.telefone}</td>
+          <td>${p.conselho}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="excluirProfissional(${index})">Deletar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Função para exibir os detalhes do profissional
+    function verDetalhes(index) {
+      const p = profissionais[index];
+      alert(
+        `Nome: ${p.nome}\n` +
+        `Função: ${p.funcao}\n` +
+        `E-mail: ${p.email}\n` +
+        `Telefone: ${p.telefone}\n` +
+        `Conselho: ${p.conselho}`
+      );
+    }
+
+    // Função para excluir um profissional
+    function excluirProfissional(index) {
+      if (confirm("Tem certeza que deseja deletar este profissional?")) {
+        profissionais.splice(index, 1);
+        listarProfissionais();
+      }
+    }
+
+    // Evento de submissão do formulário de Profissionais Associados
+    document.getElementById('formProfissional').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const novoProfissional = {
+        nome: document.getElementById('employeeName').value,
+        funcao: document.getElementById('employeeRole').value,
+        email: document.getElementById('employeeEmail').value,
+        telefone: document.getElementById('employeePhone').value,
+        conselho: document.getElementById('employeeCouncil').value,
+      };
+      profissionais.push(novoProfissional);
+      listarProfissionais();
+      this.reset();
+      document.getElementById('selectedSpecialties').innerText = '';
+      document.getElementById('returnDaysField').style.display = 'none';
+    });
+
+    // Função para processar o arquivo Excel de procedimentos
+    document.getElementById('procedimentosForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const file = document.getElementById('procedimentoFile').files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+          // Exibir os dados na tabela
+          const table = document.createElement('table');
+          table.className = 'table table-bordered';
+          const thead = document.createElement('thead');
+          const tbody = document.createElement('tbody');
+
+          // Cabeçalho da tabela
+          const headerRow = document.createElement('tr');
+          json[0].forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          // Corpo da tabela
+          json.slice(1).forEach(row => {
+            const tr = document.createElement('tr');
+            row.forEach(cell => {
+              const td = document.createElement('td');
+              td.textContent = cell;
+              tr.appendChild(td);
             });
-            document.getElementById('selectedSpecialties').innerText = selectedSpecialties.join(', ');
-            closeSpecialtyModal();
-        }
+            tbody.appendChild(tr);
+          });
+          table.appendChild(tbody);
 
-        // Função para exibir/ocultar campo de dias para retorno
-        document.getElementById('employeeReturnConsultation').addEventListener('change', function() {
-            const returnDaysField = document.getElementById('returnDaysField');
-            if (this.value === 'sim') {
-                returnDaysField.style.display = 'block';
-            } else {
-                returnDaysField.style.display = 'none';
-            }
+          // Exibir a tabela na div
+          const procedimentosTable = document.getElementById('procedimentosTable');
+          procedimentosTable.innerHTML = '';
+          procedimentosTable.appendChild(table);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    });
+
+    /* --- Adições para o Agendamento com Grid de Horários --- */
+
+    // Função para montar dinamicamente o grid de horários
+    function populateTimeSlots() {
+      const days = [
+        { id: "segunda", label: "Segunda-feira" },
+        { id: "terca", label: "Terça-feira" },
+        { id: "quarta", label: "Quarta-feira" },
+        { id: "quinta", label: "Quinta-feira" },
+        { id: "sexta", label: "Sexta-feira" }
+      ];
+      // Horários disponíveis de 07:00 a 00:00
+      const times = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00"];
+      const container = document.getElementById("timeSlotsContainer");
+      container.innerHTML = "";
+
+      days.forEach(day => {
+        // Cria um bloco para cada dia
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("mb-3");
+        const dayTitle = document.createElement("h6");
+        dayTitle.textContent = day.label;
+        dayDiv.appendChild(dayTitle);
+
+        // Cria uma linha com os horários
+        const rowDiv = document.createElement("div");
+        rowDiv.classList.add("row", "g-2");
+
+        times.forEach(time => {
+          const colDiv = document.createElement("div");
+          colDiv.classList.add("col-auto");
+
+          const formCheck = document.createElement("div");
+          formCheck.classList.add("form-check", "form-switch");
+
+          const checkbox = document.createElement("input");
+          checkbox.classList.add("form-check-input");
+          checkbox.type = "checkbox";
+          // Gerar um ID único para o checkbox, removendo os dois pontos do horário
+          checkbox.id = day.id + "_" + time.replace(":", "");
+          checkbox.dataset.day = day.id;
+          checkbox.value = time;
+
+          const label = document.createElement("label");
+          label.classList.add("form-check-label");
+          label.htmlFor = checkbox.id;
+          label.textContent = time;
+
+          formCheck.appendChild(checkbox);
+          formCheck.appendChild(label);
+          colDiv.appendChild(formCheck);
+          rowDiv.appendChild(colDiv);
         });
 
-        // Array para armazenar os profissionais com um exemplo já incluído
-        const profissionais = [
-            {
-                nome: "João Silva",
-                funcao: "Médico",
-                email: "joao@clinica.com",
-                telefone: "(31) 99999-9999",
-                conselho: "CRM"
-            }
-        ];
+        dayDiv.appendChild(rowDiv);
+        container.appendChild(dayDiv);
+      });
+    }
 
-        // Função para listar os profissionais na tabela
-        function listarProfissionais() {
-            const tbody = document.getElementById('profissionaisList');
-            tbody.innerHTML = '';
-            profissionais.forEach((p, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>
-                        ${p.nome}
-                        <button class="btn btn-info btn-sm" onclick="verDetalhes(${index})" style="margin-left: 5px;">Detalhes</button>
-                    </td>
-                    <td>${p.funcao}</td>
-                    <td>${p.email}</td>
-                    <td>${p.telefone}</td>
-                    <td>${p.conselho}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" onclick="excluirProfissional(${index})">Deletar</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
+    // Atualiza a função redirectToSchedule para abrir o modal e popular os horários
+    function redirectToSchedule() {
+      populateTimeSlots();
+      var scheduleModal = new bootstrap.Modal(document.getElementById('scheduleModal'));
+      scheduleModal.show();
+    }
+
+    // Função para salvar os horários selecionados no modal
+    function saveSchedule() {
+      const schedule = {};
+      const days = ["segunda", "terca", "quarta", "quinta", "sexta"];
+      days.forEach(day => {
+        schedule[day] = [];
+      });
+
+      const checkboxes = document.querySelectorAll("#timeSlotsContainer input[type='checkbox']");
+      checkboxes.forEach(chk => {
+        if (chk.checked) {
+          const day = chk.dataset.day;
+          schedule[day].push(chk.value);
         }
+      });
 
-        // Função para exibir os detalhes do profissional
-        function verDetalhes(index) {
-            const p = profissionais[index];
-            alert(
-                `Nome: ${p.nome}\n` +
-                `Função: ${p.funcao}\n` +
-                `E-mail: ${p.email}\n` +
-                `Telefone: ${p.telefone}\n` +
-                `Conselho: ${p.conselho}`
-            );
-        }
+      console.log(schedule);
+      alert("Horários salvos: " + JSON.stringify(schedule));
 
-        // Função para excluir um profissional
-        function excluirProfissional(index) {
-            if (confirm("Tem certeza que deseja deletar este profissional?")) {
-                profissionais.splice(index, 1);
-                listarProfissionais();
-            }
-        }
+      // Fechar o modal
+      var scheduleModalEl = document.getElementById('scheduleModal');
+      var modal = bootstrap.Modal.getInstance(scheduleModalEl);
+      modal.hide();
+    }
 
-        // Evento de submissão do formulário de Profissionais Associados
-        document.getElementById('formProfissional').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const novoProfissional = {
-                nome: document.getElementById('employeeName').value,
-                funcao: document.getElementById('employeeRole').value,
-                email: document.getElementById('employeeEmail').value,
-                telefone: document.getElementById('employeePhone').value,
-                conselho: document.getElementById('employeeCouncil').value,
-            };
-            profissionais.push(novoProfissional);
-            listarProfissionais();
-            this.reset();
-            document.getElementById('selectedSpecialties').innerText = '';
-            document.getElementById('returnDaysField').style.display = 'none';
-        });
-
-        window.onload = function() {
-            listarProfissionais();
-        }
-
-        // Função para processar o arquivo Excel de procedimentos
-        document.getElementById('procedimentosForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const file = document.getElementById('procedimentoFile').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-                    // Exibir os dados na tabela
-                    const table = document.createElement('table');
-                    table.className = 'table table-bordered';
-                    const thead = document.createElement('thead');
-                    const tbody = document.createElement('tbody');
-
-                    // Cabeçalho da tabela
-                    const headerRow = document.createElement('tr');
-                    json[0].forEach(header => {
-                        const th = document.createElement('th');
-                        th.textContent = header;
-                        headerRow.appendChild(th);
-                    });
-                    thead.appendChild(headerRow);
-                    table.appendChild(thead);
-
-                    // Corpo da tabela
-                    json.slice(1).forEach(row => {
-                        const tr = document.createElement('tr');
-                        row.forEach(cell => {
-                            const td = document.createElement('td');
-                            td.textContent = cell;
-                            tr.appendChild(td);
-                        });
-                        tbody.appendChild(tr);
-                    });
-                    table.appendChild(tbody);
-
-                    // Exibir a tabela na div
-                    const procedimentosTable = document.getElementById('procedimentosTable');
-                    procedimentosTable.innerHTML = '';
-                    procedimentosTable.appendChild(table);
-                };
-                reader.readAsArrayBuffer(file);
-            }
-        });
-    </script>
+    // Atualiza o window.onload para incluir a listagem de profissionais
+    window.onload = function() {
+      listarProfissionais();
+    }
+  </script>
 </body>
 </html>
