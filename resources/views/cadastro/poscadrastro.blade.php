@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.layout-index') <!-- Referencia o layout 'app.blade.php' -->
 
 @section('content')
 <div class="container text-center py-5">

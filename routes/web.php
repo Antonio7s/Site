@@ -1,7 +1,6 @@
 <?php
-
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
 
 // INDEX
 
@@ -48,6 +47,10 @@ Route::get('/cadastro/analise', function () {
     return view('/cadastro/poscadrastro');
 });
 
+
+
+
+
 //ADMIN DO SITE
 
 Route::get('/admin', function () {
@@ -72,10 +75,6 @@ Route::get('/admin/dashboard', function () {
 
         Route::get('/admin/clinicas4', function () {
             return view('/admin/sub-diretorios/clinicas/analise');
-        });
-
-        Route::get('/admin/clinicas5', function () {
-            return view('/admin/sub-diretorios/clinicas/detalhes');
         });
 
 Route::get('/admin/usuarios', function () {
@@ -141,6 +140,12 @@ Route::get('/admin-clinica', function () {
     return view('/Clinica/Adminclinica');
 });
 
+//CLINICA INDEX
+Route::get('/clinica', function () {
+    return view('/Clinica/Paginaclinica');
+});
+
+
 // BUSCA
 Route::get('/busca', function () {
     return view('/busca/busca');
@@ -151,7 +156,17 @@ Route::get('/em-construcao', function () {
 });
 
 
-//pagina do usuario
-Route::get('/pagusuario', function () {
-    return view('/Home/paginadousuario');
+////////////////////////////////////////////////////
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+require __DIR__.'/auth.php';

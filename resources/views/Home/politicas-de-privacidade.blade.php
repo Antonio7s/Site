@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.layout-index') <!-- Referencia o layout 'app.blade.php' -->
 
 @section('content')
     <div class="ms-4 mt-4"> <!-- Adicionando margem à esquerda de aproximadamente 1cm -->

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.layout-index') <!-- Referencia o layout 'app.blade.php' -->
 
 @section('content')
 <div class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f4f6f9;">
