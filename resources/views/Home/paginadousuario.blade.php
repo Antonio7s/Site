@@ -43,7 +43,6 @@
     <div class="container my-4">
         <div class="row mb-4">
             <div class="col-12">
-                <h1 class="display-4">Bem-vindo, {{ auth()->user()->name }}!</h1>
                 <p class="lead">Acompanhe seu histórico de compras e veja as compras realizadas hoje.</p>
             </div>
         </div>

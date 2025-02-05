@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Especialidade extends Model
 {
-    // Relacionamento um para muitos com MedicoEspecialidade
-    public function medicoEspecialidades()
+    protected $fillable = ['nome'];
+
+    // Uma especialidade pode ser associada a vários médicos
+    public function medicosEspecialidade(): HasMany
     {
         return $this->hasMany(MedicoEspecialidade::class);
     }

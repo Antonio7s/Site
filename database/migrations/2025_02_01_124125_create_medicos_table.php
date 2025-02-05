@@ -12,17 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('medicos', function (Blueprint $table) {
-            $table->id();  
-            $table->string('clinica'); 
-            $table->string('nome'); 
-            $table->string('endereco'); 
-            $table->string('email'); 
-            $table->string('crm'); 
-            $table->timestamps(); 
-        });
+            $table->id('id_medico');  
+            $table->unsignedBigInteger('id_clinica');  
+            $table->string('primeiro_nome', 255);
+            $table->string('segundo_nome', 255)->nullable();
+            $table->string('foto')->nullable();
+            $table->string('email', 255)->unique();
+            $table->string('crm', 50)->unique();
+            $table->timestamps();
 
+            // Definir a chave estrangeira
+            $table->foreign('id_clinica')->references('id')->on('clinicas')->onDelete('cascade');
+        });
     }
-    
+
     public function down(): void
     {
         Schema::dropIfExists('medicos');

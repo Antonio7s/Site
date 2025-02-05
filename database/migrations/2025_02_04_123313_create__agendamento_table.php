@@ -11,9 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_agendamento', function (Blueprint $table) {
-            $table->id();
+        Schema::create('agendamentos', function (Blueprint $table) {
+            $table->id('agendamento_id');
+            $table->unsignedBigInteger('paciente_id');
+            $table->unsignedBigInteger('procedimento_id');
+            $table->unsignedBigInteger('horario_disponivel_id');
+            $table->string('status'); // Pode ser 'agendado', 'cancelado', etc.
             $table->timestamps();
+
+            // Definir chaves estrangeiras (ajustando para suas tabelas)
+            $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
+            $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
+            $table->foreign('horario_disponivel_id')->references('id')->on('horarios_disponiveis')->onDelete('cascade');
         });
     }
 
@@ -22,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_agendamento');
+        Schema::dropIfExists('agendamentos');
     }
 };

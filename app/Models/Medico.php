@@ -3,30 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Medico extends Model
 {
-    // Relacionamento um para muitos com Agenda
-    public function agendas()
+    protected $fillable = ['nome', 'crm', 'clinica_id'];
+
+    // Um médico pertence a uma clínica
+    public function clinica(): BelongsTo
+    {
+        return $this->belongsTo(Clinica::class);
+    }
+
+    // Um médico pode ter vários agendamentos
+    public function agendas(): HasMany
     {
         return $this->hasMany(Agenda::class);
     }
 
-    // Relacionamento muitos para muitos com MedicoProcedimento
-    public function procedimentos()
+    // Um médico pode ter várias especialidades
+    public function especialidades(): HasMany
     {
-        return $this->belongsToMany(Procedimento::class, 'medico_procedimento');
+        return $this->hasMany(MedicoEspecialidade::class);
     }
 
-    // Relacionamento muitos para muitos com Especialidade
-    public function especialidades()
+    // Um médico pode realizar vários procedimentos
+    public function procedimentos(): HasMany
     {
-        return $this->belongsToMany(Especialidade::class, 'medico_especialidade');
-    }
-
-    // Relacionamento um para muitos com Clinica
-    public function clinicas()
-    {
-        return $this->hasMany(Clinica::class);
+        return $this->hasMany(MedicoProcedimento::class);
     }
 }

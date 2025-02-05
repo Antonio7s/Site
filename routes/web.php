@@ -48,10 +48,6 @@ Route::get('/cadastro/analise', function () {
     return view('/cadastro/poscadrastro');
 });
 
-
-
-
-
 //ADMIN DO SITE
 
 Route::get('/admin', function () {
@@ -145,12 +141,6 @@ Route::get('/admin-clinica', function () {
     return view('/Clinica/Adminclinica');
 });
 
-//CLINICA INDEX
-Route::get('/clinica', function () {
-    return view('/Clinica/Paginaclinica');
-});
-
-
 // BUSCA
 Route::get('/busca', function () {
     return view('/busca/busca');
@@ -161,5 +151,7 @@ Route::get('/em-construcao', function () {
 });
 
 
-
-
+//pagina do usuario
+Route::get('/pagusuario', function () {
+    return view('/Home/paginadousuario');
+});
