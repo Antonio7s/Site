@@ -124,8 +124,8 @@
             <!-- Exibir o estado selecionado -->
             <div>
                 <span id="estadoSelecionado" class="badge bg-info">Estado: Não Selecionado</span>
-                <a href="redirecionar-login" class="btn btn-outline-light btn-sm">Login</a>
-                <a href="cadastro" class="btn btn-light btn-sm">Cadastro</a>
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">Login</a>
+                <a href="{{ route('register') }}"class="btn btn-light btn-sm">Cadastro</a>
 
             </div>
         </div>

@@ -23,34 +23,12 @@ Route::get('/sobre-a-medexame', function () {
 
 // LOGIN E CADASTRO
 
-Route::get('/login', function () {
-    return view('/login');
-});
+Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
 
-Route::get('/redirecionar-login', function () {
-    return view('/login/redirecionar-login');
-});
-
-Route::get('/login-paciente', function () {
-    return view('/login/login-paciente');
-});
-
-Route::get('/login-clinica', function () {
-    return view('/login/login-clinica');
-});
-
-Route::get('/cadastro', function () {
-    return view('/cadastro/cadastro');
-});
-
-Route::get('/cadastro/analise', function () {
-    return view('/cadastro/poscadrastro');
-});
-
-
-
-
-
+Route::get('register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+   
 //ADMIN DO SITE
 
 Route::get('/admin', function () {
