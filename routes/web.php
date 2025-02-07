@@ -116,7 +116,7 @@ Route::get('/admin/servicos-diferenciados1', function () {
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {
     return view('/Clinica/Adminclinica');
-});
+})->middleware(['auth:clinic']);
 
 //CLINICA INDEX
 Route::get('/clinica', function () {

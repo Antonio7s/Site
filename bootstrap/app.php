@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Auth\AuthenticationException; // Adicione esta importação
+use Illuminate\Support\Arr;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +17,20 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->renderable(function (AuthenticationException $e, $request) {
+            $guards = $e->guards();
+            
+            // Pega o primeiro guard ou usa null
+            $guard = Arr::first($guards);
+
+            // Define a rota com base no guard
+            $loginRoute = match($guard) {
+                'clinic' => 'login2', // Nome da rota para clínicas
+                default  => 'login'   // Rota padrão
+            };
+
+            return $request->expectsJson()
+                ? response()->json(['message' => $e->getMessage()], 401)
+                : redirect()->guest(route($loginRoute));
+        });
     })->create();

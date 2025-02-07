@@ -3,7 +3,7 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <form method="POST" action="{{ route('login2') }}">
         @csrf
-
+        <h1> LOGIN CLINICA </h1>
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
