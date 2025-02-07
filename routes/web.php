@@ -21,14 +21,11 @@ Route::get('/sobre-a-medexame', function () {
 });
 
 
-// LOGIN E CADASTRO
+// Rota do usuario
+Route::get('/Pagina-usuario', function () {
+    return view('/Home/paginadousuario');
+});
 
-Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-
-Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-   
 //ADMIN DO SITE
 
 Route::get('/admin', function () {
