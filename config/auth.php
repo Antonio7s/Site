@@ -40,7 +40,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+            'clinic' => [ // Guard personalizado para clínicas
+            'driver' => 'session',
+            'provider' => 'clinics',
+        ],
     ],
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -63,6 +69,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+            'clinics' => [ // Provider para clínicas
+            'driver' => 'eloquent',
+            'model' => App\Models\Clinica::class, // Model da clínica
         ],
 
         // 'users' => [

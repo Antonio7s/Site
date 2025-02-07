@@ -148,3 +148,20 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+////////////////////////////////////////////2
+use App\Http\Controllers\ProfileController2;
+
+
+Route::get('/dashboard2', function () {
+    return view('dashboard2');
+})->middleware(['auth:clinic', 'verified'])->name('dashboard2');
+
+Route::middleware('auth:clinic')->group(function () {
+    Route::get('/profile2', [ProfileController2::class, 'edit'])->name('profile.edit2');
+    Route::patch('/profile2', [ProfileController2::class, 'update'])->name('profile.update2');
+    Route::delete('/profile2', [ProfileController2::class, 'destroy'])->name('profile.destroy2');
+});
+
+require __DIR__.'/auth2.php';

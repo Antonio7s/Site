@@ -1,17 +1,22 @@
 <?php
-
+ 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Clinica extends Model
+class Clinica extends Authenticatable
 {
-    protected $fillable = ['nome', 'endereco', 'telefone'];
+    use Notifiable;
 
-    // Uma clínica pode ter vários médicos
-    public function medicos(): HasMany
-    {
-        return $this->hasMany(Medico::class);
-    }
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
