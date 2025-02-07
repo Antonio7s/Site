@@ -1,47 +1,60 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts.layout-index')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('content')
+<div class="d-flex justify-content-center align-items-center" style="min-height: 90vh; background-color: #f4f6f9; padding-top: 20px; padding-bottom: 20px;">
+    <div class="card shadow-sm p-4 text-center" style="width: 380px; border-radius: 10px;">
+        <h4 class="fw-bold text-primary mb-3">Login</h4>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <!-- Formulário de Login -->
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <!-- E-mail -->
+            <div class="mb-3 text-start">
+                <label for="email" class="form-label fw-semibold">E-mail</label>
+                <input type="email" name="email" id="email" class="form-control py-2" placeholder="Digite seu e-mail" required>
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <!-- Senha -->
+            <div class="mb-3 text-start">
+                <label for="password" class="form-label fw-semibold">Senha</label>
+                <input type="password" name="password" id="password" class="form-control py-2" placeholder="Digite sua senha" required>
+                <!-- Link "Esqueci a senha" -->
+                <div class="text-end mt-2">
+                    <a href="#" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
+                </div>
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <!-- Botão "Acessar" -->
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary py-2">Acessar</button>
+            </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+            <!-- Divisor -->
+            <div class="position-relative my-3">
+                <hr>
+                <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted">ou</span>
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+            <!-- Botão "Entrar com Google" -->
+            <div class="mb-2">
+                <button type="button" class="btn btn-outline-danger w-100 py-2">
+                    <i class="bi bi-google me-2"></i> Entrar com Google
+                </button>
+            </div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <!-- Botão "Entrar com Facebook" -->
+            <div class="mb-3">
+                <button type="button" class="btn btn-outline-primary w-100 py-2">
+                    <i class="bi bi-facebook me-2"></i> Entrar com Facebook
+                </button>
+            </div>
+
+            <!-- Link para Cadastro -->
+            <div class="text-center">
+                <small>Ainda não tem uma conta? <a href="{{ route('register') }}" class="text-decoration-none">Cadastre-se</a></small>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
