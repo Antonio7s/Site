@@ -1,53 +1,67 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register2') }}">
-        @csrf
+@extends('layouts.layout-index')
 
-        <h1> REGISTRO DE CLÍNICA </h1>
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+@section('content')
+<div class="card mx-auto mt-5 shadow" style="max-width: 500px; border: none;">
+    <div class="card-header text-center" style="background: #fff; border-bottom: 1px solid #dee2e6;">
+         <h4 style="color: #007bff; font-weight: bold;">Cadastro de Clínica</h4>
+    </div>
+    <div class="card-body">
+         <form method="POST" action="{{ route('register2') }}">
+             @csrf
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+             <!-- Razão Social -->
+             <div class="mb-3">
+                 <x-input-label for="name" :value="__('Razão Social')" />
+                 <x-text-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
+             </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+             <!-- Nome Fantasia -->
+             <div class="mb-3">
+                 <x-input-label for="nome_fantasia" :value="__('Nome Fantasia')" />
+                 <x-text-input id="nome_fantasia" class="form-control" type="text" name="nome_fantasia" :value="old('nome_fantasia')" required autocomplete="nome_fantasia" />
+                 <x-input-error :messages="$errors->get('nome_fantasia')" class="mt-2" />
+             </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+             <!-- CNPJ/CPF -->
+             <div class="mb-3">
+                 <x-input-label for="document" :value="__('CNPJ/CPF')" />
+                 <x-text-input id="document" class="form-control" type="text" name="document" :value="old('document')" required autocomplete="document" />
+                 <x-input-error :messages="$errors->get('document')" class="mt-2" />
+             </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+             <!-- Email -->
+             <div class="mb-3">
+                 <x-input-label for="email" :value="__('Email')" />
+                 <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autocomplete="username" />
+                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
+             </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+             <!-- Password -->
+             <div class="mb-3">
+                 <x-input-label for="password" :value="__('Password')" />
+                 <x-text-input id="password" class="form-control" type="password" name="password" required autocomplete="new-password" />
+                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
+             </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+             <!-- Confirm Password -->
+             <div class="mb-3">
+                 <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                 <x-text-input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password" />
+                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+             </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+             <div class="d-flex justify-content-between align-items-center">
+                 <a class="text-decoration-none" href="{{ route('login2') }}">
+                     {{ __('Já possui cadastro?') }}
+                 </a>
+                 <x-primary-button class="btn btn-primary">
+                     {{ __('Cadastro') }}
+                 </x-primary-button>
+             </div>
+         </form>
+    </div>
+</div>
+@endsection
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login2') }}">
-                {{ __('Already registered?') }}
-            </a>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>

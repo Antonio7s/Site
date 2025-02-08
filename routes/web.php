@@ -38,9 +38,8 @@ Route::view('/admin/servicos-diferenciados2', 'admin/sub-diretorios/servicos-dif
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {
     return view('Clinica/Adminclinica');
-})->middleware(['auth:clinic'])->name('admin-clinica');
-    return view('/Clinica/Adminclinica');
-})->middleware(['auth:clinic','verified'])->name('admin-clinica');
+})->middleware(['auth:clinic', 'verified'])->name('admin-clinica');
+
 
 // CLINICA INDEX
 Route::view('/clinica', 'Clinica/Paginaclinica');

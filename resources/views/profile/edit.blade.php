@@ -55,15 +55,16 @@
 @section('content')
     <!-- Barra de Navegação -->
     <nav class="bg-blue-500 text-white p-4">
-        <div class="max-w-7xl mx-auto flex justify-between">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="{{ route('dashboard') }}" class="text-lg font-semibold">Dashboard</a>
-            <div>
+            <div class="flex items-center">
                 @auth
+                    <div class="flex items-center">
+                        <span class="mr-2">{{ auth()->user()->name }}</span>
+                        <img src="{{ auth()->user()->profile_photo_url ?? 'https://via.placeholder.com/150' }}" alt="{{ auth()->user()->name }}" class="h-8 w-8 rounded-full border-2 border-white">
+                    </div>
+                    <!-- Link do perfil -->
                     <a href="{{ route('profile.edit') }}" class="px-4">Perfil</a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="px-4">Sair</button>
-                    </form>
                 @else
                     <a href="{{ route('login') }}" class="px-4">Login</a>
                     <a href="{{ route('register') }}" class="px-4">Cadastro</a>
@@ -101,9 +102,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Suporte</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sair</a>
-                </li>
+                @auth
+                    <li class="nav-item mt-3">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-danger w-100">Sair</button>
+                        </form>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>
@@ -122,20 +128,30 @@
                         <li><a href="#">Endereços</a></li>
                         <li><a href="#">Pagamentos</a></li>
                         <li><a href="#">Suporte</a></li>
-                        <li><a href="#">Sair</a></li>
+                        @auth
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger w-100">Sair</button>
+                                </form>
+                            </li>
+                        @endauth
                     </ul>
                 </div>
             </div>
 
             <!-- Conteúdo Principal -->
             <div class="col-md-9">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Olá, {{ auth()->user()->name }} 👋</h2>
-                    <!-- Botão para offcanvas (apenas em mobile) -->
-                    <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
-                        Menu
-                    </button>
-                </div>
+                @auth
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Olá, {{ auth()->user()->name }} 👋</h2>
+                        <!-- Botão para offcanvas (apenas em mobile) -->
+                        <button class="btn btn-primary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+                            Menu
+                        </button>
+                    </div>
+                @endauth
+
                 <div class="row">
                     <!-- Card: Últimos Pedidos -->
                     <div class="col-12">
