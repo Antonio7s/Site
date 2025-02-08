@@ -7,7 +7,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // INDEX
-Route::view('/', 'Home/index');
+Route::view('/', 'Home/index')->name('index');;
 Route::view('/fale-conosco', 'Home/fale-conosco');
 Route::view('/politicas-de-privacidade', 'Home/politicas-de-privacidade');
 Route::view('/sobre-a-medexame', 'Home/sobre-a-medexame');
@@ -38,8 +38,6 @@ Route::view('/admin/servicos-diferenciados2', 'admin/sub-diretorios/servicos-dif
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {
     return view('Clinica/Adminclinica');
-})->middleware(['auth:clinic'])->name('admin-clinica');
-    return view('/Clinica/Adminclinica');
 })->middleware(['auth:clinic','verified'])->name('admin-clinica');
 
 // CLINICA INDEX
