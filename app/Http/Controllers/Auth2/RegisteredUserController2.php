@@ -45,6 +45,6 @@ class RegisteredUserController2 extends Controller
 
         Auth::login($clinica);
 
-        return redirect(route('dashboard2', absolute: false));
+        return redirect(route('admin-clinica', absolute: false));
     }
 }

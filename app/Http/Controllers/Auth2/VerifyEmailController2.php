@@ -14,14 +14,14 @@ class VerifyEmailController2 extends Controller
      */
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        if ($request->clinica()->hasVerifiedEmail()) {
+            return redirect()->intended(route('admin-clinica', absolute: false).'?verified=1');
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        if ($request->clinica()->markEmailAsVerified()) {
+            event(new Verified($request->clinica()));
         }
 
-        return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        return redirect()->intended(route('admin-clinica', absolute: false).'?verified=1');
     }
 }

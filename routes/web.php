@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileController2; // 🔹 Agora está importado corretamente
+use App\Http\Controllers\ProfileController2;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
