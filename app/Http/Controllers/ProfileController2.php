@@ -16,8 +16,8 @@ class ProfileController2 extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit2', [
-            'user' => $request->user(),
+        return view('profile2.edit', [
+            'clinica' => $request->clinica(),
         ]);
     }
 
@@ -26,13 +26,13 @@ class ProfileController2 extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $request->clinica()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($request->clinica()->isDirty('email')) {
+            $request->clinica()->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $request->clinica()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

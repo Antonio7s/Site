@@ -28,7 +28,7 @@ class AuthenticatedSessionController2 extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard2', absolute: false));
+        return redirect()->intended(route('admin-clinica', absolute: false));
     }
 
     /**

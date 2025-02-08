@@ -164,7 +164,32 @@
     <span>Bem-vindo ao Painel</span>
     <div class="user-info">
       <img src="{{ asset('images/icone-usuario.png') }}" alt="Foto da Clínica" width="40">
-      <span>Clínica Logada</span>
+      <div class="dropdown">
+        <button 
+          class="btn btn-light dropdown-toggle" 
+          type="button" 
+          data-bs-toggle="dropdown"
+        >
+          <!-- Nome do usuário logado -->
+          {{ Auth::user()->name }}
+        </button>
+
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href="{{ route('profile.edit2') }}">
+              Perfil
+            </a>
+          </li>
+          <li>
+            <form method="POST" action="{{ route('logout2') }}">
+              @csrf
+              <button type="submit" class="dropdown-item">
+                Sair
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

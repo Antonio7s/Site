@@ -111,7 +111,8 @@
                         Sou Profissional de saúde
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuProfissional">
-                        <li><a class="dropdown-item" href="/login-clinica">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
@@ -126,7 +127,6 @@
                 <span id="estadoSelecionado" class="badge bg-info">Estado: Não Selecionado</span>
                 <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">Login</a>
                 <a href="{{ route('register') }}"class="btn btn-light btn-sm">Cadastro</a>
-
             </div>
         </div>
     </header>

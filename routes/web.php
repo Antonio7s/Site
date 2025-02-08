@@ -113,7 +113,7 @@ Route::get('/admin/servicos-diferenciados1', function () {
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {
     return view('/Clinica/Adminclinica');
-})->middleware(['auth:clinic']);
+})->middleware(['auth:clinic'])->name('admin-clinica');
 
 //CLINICA INDEX
 Route::get('/clinica', function () {
@@ -151,9 +151,11 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\ProfileController2;
 
 
+/*
 Route::get('/dashboard2', function () {
     return view('dashboard2');
 })->middleware(['auth:clinic', 'verified'])->name('dashboard2');
+*/
 
 Route::middleware('auth:clinic')->group(function () {
     Route::get('/profile2', [ProfileController2::class, 'edit'])->name('profile.edit2');
