@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers\Auth;
 
@@ -25,10 +25,33 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return $this->redirectUser();
+    }
+
+    /**
+     * Redirect user based on role.
+     */
+    public function redirectUser(): RedirectResponse
+    {
+        // Verifica se o usuário está autenticado
+        if (Auth::check()) {
+            // Obtém o usuário autenticado
+            $user = Auth::user();
+
+            // Verifica se o usuário NÃO é admin
+            if (!$user->is_admin) {
+                // Redireciona diretamente para a rota 'profile.edit'
+                return redirect()->route('profile.edit');
+            } else {
+                // Se for admin, redireciona para o dashboard
+                return redirect()->route('dashboard');
+            }
+        }
+
+        // Caso o usuário não esteja autenticado, redireciona para a página de login
+        return redirect()->route('login');
     }
 
     /**
@@ -39,7 +62,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
