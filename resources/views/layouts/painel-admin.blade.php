@@ -162,6 +162,21 @@
     .navbar .user-info .profile span {
       color: #fff; /* Texto branco para o nome do usuário */
     }
+
+    /* Ajuste de posicionamento do dropdown do perfil */
+    .profile {
+      position: relative; /* Adicionado para referência de posicionamento */
+    }
+
+    #profile-dropdown {
+      top: calc(100% + 5px); /* Desce o dropdown 5px abaixo do elemento pai */
+      right: 0; /* Mantém alinhado à direita */
+      left: auto; /* Anula qualquer posicionamento à esquerda */
+      margin-top: 8px; /* Adiciona um pequeno espaçamento */
+    }
+    
+
+
     .title-container {
       background-color: #fff;
       padding: 15px;
@@ -242,12 +257,19 @@
           </div>
         </div>
         <div class="profile" onclick="toggleDropdown('profile')">
+          <span>{{ Auth::user()->name }}</span>
           <img src="{{ asset('images/icone-usuario.png') }}" alt="User Avatar">
-          <span>João Silva</span>
           <div class="dropdown-menu" id="profile-dropdown">
             <ul>
               <li>Configurações</li>
-              <li>Logout</li>
+              <li>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button type="submit" class="dropdown-item">
+                    Sair
+                  </button>
+                </form>
+              </li>
             </ul>
           </div>
         </div>
@@ -300,24 +322,32 @@
   <!-- Bootstrap JS e dependências -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  
   <!-- Script para interatividade -->
   <script>
+
+    // Exibir Dropdown corretamente ao clicar no nome ou na foto
     function toggleDropdown(id) {
+      const profileContainer = document.querySelector('.profile');
       const dropdown = document.getElementById(`${id}-dropdown`);
+
+      if (!dropdown) return;
+
+      // Alternar visibilidade do dropdown
       dropdown.classList.toggle('show');
     }
 
     // Fechar dropdowns ao clicar fora
     window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
+      if (!event.target.closest('.profile')) {
         const dropdowns = document.querySelectorAll('.dropdown-menu');
         dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
+          dropdown.classList.remove('show');
         });
       }
     };
+
+
   </script>
 </body>
 </html>

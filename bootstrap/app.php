@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 if (Auth::guard('clinic')->check()) {
                     return route('admin-clinica'); // Redireciona para '/dashboard2' se autenticado pelo guard 'clinic'
                 }
-                // Redireciona para a rota padrão de dashboard para outros guards
+                // Redireciona para a rota padrão de index para outros guards
                 return route('index');
             }
         );
