@@ -1,4 +1,4 @@
-@extends('layouts.layout-index')
+@extends('layouts.layout-index') 
 
 @push('styles')
     <!-- Bootstrap CSS -->
@@ -62,13 +62,17 @@
         <div class="offcanvas-body">
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
+                    <!-- Link funcional para a página inicial -->
+                    <a class="nav-link" href="{{ url('/') }}">Página Inicial</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link active" href="#">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Meus Pedidos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Lista de Desejos</a>
+                    <a class="nav-link" href="#">Exames:</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Endereços</a>
@@ -93,9 +97,11 @@
                 <div class="sidebar-desktop">
                     <h4 class="mb-3">Painel</h4>
                     <ul>
+                        <!-- Link funcional para a página inicial -->
+                        <li><a href="{{ url('/') }}">Página Inicial</a></li>
                         <li><a href="#" class="active">Dashboard</a></li>
                         <li><a href="#">Meus Pedidos</a></li>
-                        <li><a href="#">Lista de Desejos</a></li>
+                        <li><a href="#">Exames:</a></li>
                         <li><a href="#">Endereços</a></li>
                         <li><a href="#">Pagamentos</a></li>
                         <li><a href="#">Suporte</a></li>
@@ -139,11 +145,11 @@
                         </div>
                     </div>
 
-                    <!-- Card: Lista de Desejos -->
+                    <!-- Card: Exames: (anteriormente Lista de Desejos) -->
                     <div class="col-12">
                         <div class="card shadow-sm">
                             <div class="card-header bg-primary text-white">
-                                💖 Lista de Desejos
+                                💖 Exames:
                             </div>
                             <div class="card-body">
                                 @if(isset($wishlist) && $wishlist->isNotEmpty())
@@ -163,17 +169,17 @@
                                     </div>
                                     <a href="#" class="btn btn-info btn-sm mt-3">Ver todos</a>
                                 @else
-                                    <p class="text-center text-muted">Nenhum item na lista de desejos.</p>
+                                    <p class="text-center text-muted">Nenhum exame cadastrado.</p>
                                 @endif
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card: Produtos Recomendados -->
+                    <!-- Card: Profissionais em destaque (anteriormente Produtos Recomendados) -->
                     <div class="col-12">
                         <div class="card shadow-sm">
                             <div class="card-header bg-primary text-white">
-                                🔥 Produtos Recomendados
+                                🔥 Profissionais em destaque
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
@@ -191,7 +197,7 @@
                                             </div>
                                         @endforeach
                                     @else
-                                        <p class="text-center text-muted">Nenhum produto recomendado.</p>
+                                        <p class="text-center text-muted">Nenhum profissional em destaque.</p>
                                     @endif
                                 </div>
                             </div>
@@ -207,3 +213,9 @@
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 @endpush
+
+
+
+ 
+
+ 
