@@ -21,7 +21,7 @@
                 <input type="password" name="password" id="password" class="form-control py-2" placeholder="Digite sua senha" required>
                 <!-- Link "Esqueci a senha" -->
                 <div class="text-end mt-2">
-                    <a href="#" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
+                    <a href="{{route('password.request')}}" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
                 </div>
             </div>
 
