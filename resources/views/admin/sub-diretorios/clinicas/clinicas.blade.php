@@ -71,6 +71,7 @@
             <th scope="col">Nome da Clínica</th>
             <th scope="col">CNPJ</th>
             <th scope="col">Endereço</th>
+            <th scope="col">Email</th>
             <th scope="col">Ações</th>
           </tr>
         </thead>
@@ -80,7 +81,8 @@
               <th scope="row">{{ $clinica->id }}</th>
               <td>{{ $clinica->razao_social }}</td>
               <td>{{ $clinica->cnpj_cpf }}</td>
-              <td>{{ $clinica->email }}</td>
+              <td>{{ $clinica->modificar ?? 'Não informado' }}</td>
+              <td>{{ $clinica->email ?? 'Não informado' }}</td>
               <td>
                 <a href="{{ route('clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
                 <form action="{{ route('clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">

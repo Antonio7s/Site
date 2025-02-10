@@ -19,6 +19,30 @@ Route::prefix('admin')->group(function(){
     //clinicas/solicitacoes-de-cadastro-analise
 });
 
+    // Rotas que exigem autenticação de user e têm o prefixo 'admin'
+Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
+    Route::view('/dashboard', 'admin/sub-diretorios/dashboard/vendas')->name('dashboard.admin');
+    Route::view('', 'admin/login');
+    Route::view('clinicas1', 'admin/sub-diretorios/clinicas/clinicas');
+    Route::view('clinicas2', 'admin/sub-diretorios/clinicas/registro-de-clinica');
+    Route::view('clinicas3', 'admin/sub-diretorios/clinicas/solicitacoes-de-cadastro');
+    Route::view('clinicas4', 'admin/sub-diretorios/clinicas/analise');
+    Route::view('usuarios', 'admin/sub-diretorios/usuarios');
+    Route::view('especialidades', 'admin/sub-diretorios/especialidades');
+    Route::view('especialidades2', 'admin/sub-diretorios/especialidades-add');
+    Route::view('classes', 'admin/sub-diretorios/classes');
+    Route::view('classes2', 'admin/sub-diretorios/classes-add');
+    Route::view('procedimentos', 'admin/sub-diretorios/procedimentos');
+    Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos-add');
+    Route::view('relatorios', 'admin/sub-diretorios/relatorios');
+    Route::view('contatos', 'admin/sub-diretorios/contatos');
+    Route::view('homepage', 'admin/sub-diretorios/homepage');
+    Route::view('mensagens', 'admin/sub-diretorios/inbox');
+    Route::view('lucro', 'admin/sub-diretorios/lucro');
+    Route::view('servicos-diferenciados1', 'admin/sub-diretorios/servicos-diferenciados/visualizar');
+    Route::view('servicos-diferenciados2', 'admin/sub-diretorios/servicos-diferenciados/adicionar');
+});
+
 // INDEX
 Route::view('/', 'Home/index')->name('index');;
 Route::view('/fale-conosco', 'Home/fale-conosco');
@@ -26,27 +50,6 @@ Route::view('/politicas-de-privacidade', 'Home/politicas-de-privacidade');
 Route::view('/sobre-a-medexame', 'Home/sobre-a-medexame');
 Route::view('/Pagina-usuario', 'Home/paginadousuario');
 
-// ADMIN DO SITE
-Route::view('/admin', 'admin/login');
-Route::view('/admin/dashboard', 'admin/sub-diretorios/dashboard/vendas');
-Route::view('/admin/clinicas1', 'admin/sub-diretorios/clinicas/clinicas');
-Route::view('/admin/clinicas2', 'admin/sub-diretorios/clinicas/registro-de-clinica');
-Route::view('/admin/clinicas3', 'admin/sub-diretorios/clinicas/solicitacoes-de-cadastro');
-Route::view('/admin/clinicas4', 'admin/sub-diretorios/clinicas/analise');
-Route::view('/admin/usuarios', 'admin/sub-diretorios/usuarios');
-Route::view('/admin/especialidades', 'admin/sub-diretorios/especialidades');
-Route::view('/admin/especialidades2', 'admin/sub-diretorios/especialidades-add');
-Route::view('/admin/classes', 'admin/sub-diretorios/classes');
-Route::view('/admin/classes2', 'admin/sub-diretorios/classes-add');
-Route::view('/admin/procedimentos', 'admin/sub-diretorios/procedimentos');
-Route::view('/admin/procedimentos2', 'admin/sub-diretorios/procedimentos-add');
-Route::view('/admin/relatorios', 'admin/sub-diretorios/relatorios');
-Route::view('/admin/contatos', 'admin/sub-diretorios/contatos');
-Route::view('/admin/homepage', 'admin/sub-diretorios/homepage');
-Route::view('/admin/mensagens', 'admin/sub-diretorios/inbox');
-Route::view('/admin/lucro', 'admin/sub-diretorios/lucro');
-Route::view('/admin/servicos-diferenciados1', 'admin/sub-diretorios/servicos-diferenciados/visualizar');
-Route::view('/admin/servicos-diferenciados2', 'admin/sub-diretorios/servicos-diferenciados/adicionar');
 
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {
@@ -61,7 +64,7 @@ Route::view('/clinica', 'Clinica/Paginaclinica');
 Route::view('/busca', 'busca/busca');
 Route::view('/em-construcao', 'em-construcao');
 
-// Protegendo o dashboard com autenticação e verificação de e-mail
+// Protegendo o dashboard do usuário com autenticação e verificação de e-mail
 Route::get('/dashboard', function () {
     return redirect()->route('profile.edit');
 })->middleware(['auth', 'verified'])->name('dashboard');

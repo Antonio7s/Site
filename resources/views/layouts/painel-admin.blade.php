@@ -283,8 +283,8 @@
       <div class="col-md-2 sidebar">
         <h3>Menu</h3>
         <ul class="nav flex-column">
-          <li><a href="dashboard"><i class="bi bi-house-door"></i> Dashboard</a></li>
-          <li><a href="clinicas1"><i class="bi bi-building"></i> Clínicas</a></li>
+          <li><a href="{{ route('dashboard.admin') }}"><i class="bi bi-house-door"></i> Dashboard</a></li>
+          <li><a href="{{ route('clinicas.index') }}"><i class="bi bi-building"></i> Clínicas</a></li>
           <li><a href="usuarios"><i class="bi bi-people"></i> Usuários</a></li>
           <!--<li><a href="#"><i class="bi bi-file-earmark-text"></i> Médicos</a></li> -->
           <li><a href="especialidades"><i class="bi bi-journal-medical"></i> Especialidades</a></li>
