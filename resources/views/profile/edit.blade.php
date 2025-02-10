@@ -165,9 +165,12 @@
   <div class="side-panel" id="sidePanel">
     <div class="panel-content">
       <div class="panel-title">Painel</div>
-      <a href="#">Página Inicial</a>
+      <a href="{{ url('/') }}">Página Inicial</a>
       <a href="#">Minhas Informações</a>
-      <a href="#">Logout</a>
+      <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="btn btn-link" style="color: white; text-decoration: none; padding: 10px; margin-top: 10px;">Logout</button>
+      </form>
     </div>
   </div>
 
@@ -181,4 +184,3 @@
     }
   </script>
 @endpush
-
