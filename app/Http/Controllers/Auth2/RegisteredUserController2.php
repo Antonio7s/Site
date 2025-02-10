@@ -30,20 +30,25 @@ class RegisteredUserController2 extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'razao_social' => ['required', 'string', 'max:255'],
+            'nome_fantasia' => ['required', 'string', 'max:255'],  // Nome Fantasia
+            'cnpj_cpf' => ['required', 'string', 'max:18', 'unique:clinicas'],  // CNPJ/CPF
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Clinica::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $clinica = Clinica::create([
-            'name' => $request->name,
+            'razao_social' => $request->razao_social,
+            'nome_fantasia' => $request->nome_fantasia,  // Nome Fantasia
+            'cnpj_cpf' => $request->cnpj_cpf,  // CNPJ/CPF
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($clinica));
 
-        Auth::login($clinica);
+        Auth::guard('clinic')->login($clinica);
+
 
         return redirect(route('admin-clinica', absolute: false));
     }

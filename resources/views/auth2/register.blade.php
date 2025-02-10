@@ -11,9 +11,9 @@
 
              <!-- Razão Social -->
              <div class="mb-3">
-                 <x-input-label for="name" :value="__('Razão Social')" />
-                 <x-text-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                 <x-input-label for="razao_social" :value="__('Razão Social')" />
+                 <x-text-input id="razao_social" class="form-control" type="text" name="razao_social" :value="old('razao_social')" required autofocus autocomplete="name" />
+                 <x-input-error :messages="$errors->get('razao_social')" class="mt-2" />
              </div>
 
              <!-- Nome Fantasia -->
@@ -25,9 +25,9 @@
 
              <!-- CNPJ/CPF -->
              <div class="mb-3">
-                 <x-input-label for="document" :value="__('CNPJ/CPF')" />
-                 <x-text-input id="document" class="form-control" type="text" name="document" :value="old('document')" required autocomplete="document" />
-                 <x-input-error :messages="$errors->get('document')" class="mt-2" />
+                 <x-input-label for="cnpj_cpf" :value="__('CNPJ/CPF')" />
+                 <x-text-input id="cnpj_cpf" class="form-control" type="text" name="cnpj_cpf" :value="old('cnpj_cpf')" required autocomplete="cnpj_cpf" />
+                 <x-input-error :messages="$errors->get('cnpj_cpf')" class="mt-2" />
              </div>
 
              <!-- Email -->

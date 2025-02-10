@@ -63,56 +63,47 @@
       </div>
     </div>
 
-    <!-- Lista de Clínicas Cadastradas -->
-    <table class="table table-bordered">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome da Clínica</th>
-          <th scope="col">CNPJ</th>
-          <th scope="col">Endereço</th>
-          <th scope="col">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Exemplo 1 -->
-        <tr>
-          <th scope="row">1</th>
-          <td>Clínica Saúde Total</td>
-          <td>12.345.678/0001-99</td>
-          <td>Rua Principal, 123, Centro</td>
-          <td>
-            <button class="btn btn-warning btn-sm">Editar</button>
-            <button class="btn btn-danger btn-sm">Deletar</button>
-            <a class="btn btn-info btn-sm" href="clinicas5">Detalhes</a>
-          </td>
-        </tr>
-        <!-- Exemplo 2 -->
-        <tr>
-          <th scope="row">2</th>
-          <td>Clínica Vida e Saúde</td>
-          <td>98.765.432/0001-11</td>
-          <td>Avenida Secundária, 456, Bairro Novo</td>
-          <td>
-            <button class="btn btn-warning btn-sm">Editar</button>
-            <button class="btn btn-danger btn-sm">Deletar</button>
-            <button class="btn btn-info btn-sm">Detalhes</button>
-          </td>
-        </tr>
-        <!-- Exemplo 3 -->
-        <tr>
-          <th scope="row">3</th>
-          <td>Clínica Bem Estar</td>
-          <td>23.456.789/0001-22</td>
-          <td>Praça Central, 789, Vila Antiga</td>
-          <td>
-            <button class="btn btn-warning btn-sm">Editar</button>
-            <button class="btn btn-danger btn-sm">Deletar</button>
-            <button class="btn btn-info btn-sm">Detalhes</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+         <!-- Lista de Clínicas Cadastradas -->
+         <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome da Clínica</th>
+            <th scope="col">CNPJ</th>
+            <th scope="col">Endereço</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($clinicas as $clinica)
+            <tr>
+              <th scope="row">{{ $clinica->id }}</th>
+              <td>{{ $clinica->nome }}</td>
+              <td>{{ $clinica->cnpj }}</td>
+              <td>{{ $clinica->endereco }}</td>
+              <td>
+                <a href="{{ route('clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                <form action="{{ route('clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-danger btn-sm">Deletar</button>
+                </form>
+                <a href="{{ route('clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="5">Nenhuma clínica encontrada.</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+
+      <!-- Links de Paginação -->
+      <div class="d-flex justify-content-center">
+        {{ $clinicas->links() }}
+      </div>
+    </div>
   </div>
 
   <!-- Script para interatividade -->

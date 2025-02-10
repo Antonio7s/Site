@@ -9,16 +9,21 @@ class CreateClinicasTable extends Migration
     public function up()
     {
         Schema::create('clinicas', function (Blueprint $table) {
-            $table->id(); // Cria o campo id, chave primária
-            $table->string('name'); // Nome da clínica
-            $table->string('email')->unique(); // Email da clínica, único
-            $table->string('password'); // Senha da clínica
-            $table->rememberToken(); // Token de "lembrar-me" para autenticação persistente
-            $table->timestamps(); // Cria created_at e updated_at
+            $table->id();
+            $table->string('razao_social')->unique(); // Razão Social
+            $table->string('nome_fantasia'); // Nome Fantasia
+            $table->string('cnpj_cpf')->unique(); // CNPJ ou CPF
+            $table->string('email')->unique(); // Email
+            $table->string('password'); // Senha
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('clinicas');
     }

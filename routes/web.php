@@ -6,6 +6,12 @@ use App\Http\Controllers\ProfileController2;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\ClinicaController;
+
+Route::prefix('admin')->group(function(){
+    Route::get('/clinicas', [ClinicaController::class, 'index'])->name('clinicas.index');
+});
+
 // INDEX
 Route::view('/', 'Home/index')->name('index');;
 Route::view('/fale-conosco', 'Home/fale-conosco');
@@ -38,12 +44,8 @@ Route::view('/admin/servicos-diferenciados2', 'admin/sub-diretorios/servicos-dif
 // ADMIN DA CLINICA
 Route::get('/admin-clinica', function () {
     return view('Clinica/Adminclinica');
-<<<<<<< HEAD
 })->middleware(['auth:clinic', 'verified'])->name('admin-clinica');
 
-=======
-})->middleware(['auth:clinic','verified'])->name('admin-clinica');
->>>>>>> 716e92d2af1775ee857bd3412ae5703706b0cbe3
 
 // CLINICA INDEX
 Route::view('/clinica', 'Clinica/Paginaclinica');
