@@ -1,52 +1,117 @@
-<x-guest-layout>
+@extends('layouts.layout-index')
+
+@section('content')
+  <style>
+    .registration-container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .registration-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 24px;
+    }
+    .registration-container label {
+      display: block;
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .registration-container input {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .registration-container .error {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+    }
+    .registration-container .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .registration-container a {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .registration-container a:hover {
+      text-decoration: underline;
+    }
+    .registration-container button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .registration-container button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+
+  <div class="registration-container">
+    <h2>Cadastro</h2>
     <form method="POST" action="{{ route('register') }}">
-        @csrf
+      @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+      <!-- Campo Nome -->
+      <div>
+        <label for="name">Nome</label>
+        <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
+        @if ($errors->has('name'))
+          <div class="error">{{ $errors->first('name') }}</div>
+        @endif
+      </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+      <!-- Campo Email -->
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username">
+        @if ($errors->has('email'))
+          <div class="error">{{ $errors->first('email') }}</div>
+        @endif
+      </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+      <!-- Campo Senha -->
+      <div>
+        <label for="password">Senha</label>
+        <input id="password" type="password" name="password" required autocomplete="new-password">
+        @if ($errors->has('password'))
+          <div class="error">{{ $errors->first('password') }}</div>
+        @endif
+      </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+      <!-- Campo Confirmar Senha -->
+      <div>
+        <label for="password_confirmation">Confirmar Senha</label>
+        <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
+        @if ($errors->has('password_confirmation'))
+          <div class="error">{{ $errors->first('password_confirmation') }}</div>
+        @endif
+      </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+      <div class="actions">
+        <a href="{{ route('login') }}">Já registrado? Entrar</a>
+        <button type="submit">Cadastrar</button>
+      </div>
     </form>
-</x-guest-layout>
+  </div>
+@endsection
