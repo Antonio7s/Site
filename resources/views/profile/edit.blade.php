@@ -167,9 +167,11 @@
       <div class="panel-title">Painel</div>
       <a href="{{ url('/') }}">Página Inicial</a>
       <a href="#">Minhas Informações</a>
+      
+      <!-- Botão Sair (Logout) -->
       <form action="{{ route('logout') }}" method="POST">
         @csrf
-        <button type="submit" class="btn btn-link" style="color: white; text-decoration: none; padding: 10px; margin-top: 10px;">Logout</button>
+        <button type="submit" class="btn btn-link" style="color: white; text-decoration: none; padding: 10px; margin-top: 10px;">Sair</button>
       </form>
     </div>
   </div>
