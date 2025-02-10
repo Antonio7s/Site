@@ -287,7 +287,7 @@
           <li><a href="{{ route('clinicas.index') }}"><i class="bi bi-building"></i> Clínicas</a></li>
           <li><a href="{{ route('usuarios.index') }}"><i class="bi bi-people"></i> Usuários</a></li>
           <!--<li><a href="#"><i class="bi bi-file-earmark-text"></i> Médicos</a></li> -->
-          <li><a href="especialidades"><i class="bi bi-journal-medical"></i> Especialidades</a></li>
+          <li><a href="{{ route('especialidades.index') }}"><i class="bi bi-journal-medical"></i> Especialidades</a></li>
           <li><a href="classes"><i class="bi bi-layers"></i> Classes</a></li>
           <li><a href="procedimentos"><i class="bi bi-clipboard-pulse"></i> Procedimentos</a></li>
           <li><a href="servicos-diferenciados1"><i class="bi bi-cash-coin"></i> Servicos diferenciados</a></li>

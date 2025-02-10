@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\ClinicaController;
 use App\Http\Controllers\Admin\UsuarioController;
+use App\Http\Controllers\Admin\EspecialidadeController;
+use App\Http\Controllers\Admin\ClasseController;
+use App\Http\Controllers\Admin\ProcedimentoController;
 
 Route::prefix('admin')->group(function(){
     Route::get('/clinicas', [ClinicaController::class, 'index'])->name('clinicas.index');
@@ -29,8 +32,9 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::view('clinicas3', 'admin/sub-diretorios/clinicas/solicitacoes-de-cadastro');
     Route::view('clinicas4', 'admin/sub-diretorios/clinicas/analise');
     Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
-    Route::view('especialidades', 'admin/sub-diretorios/especialidades');
-    Route::view('especialidades2', 'admin/sub-diretorios/especialidades-add');
+    Route::get('especialidades', [EspecialidadeController::class, 'index'])->name('especialidades.index');
+    Route::get('especialidades/create', [EspecialidadeController::class, 'create'])->name('especialidades.create');
+    Route::post('especialidades', [EspecialidadeController::class, 'store'])->name('especialidades.store');
     Route::view('classes', 'admin/sub-diretorios/classes');
     Route::view('classes2', 'admin/sub-diretorios/classes-add');
     Route::view('procedimentos', 'admin/sub-diretorios/procedimentos');
