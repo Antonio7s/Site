@@ -14,7 +14,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->redirectTo(
+            guests: '/login', // Rota para onde os convidados (não autenticados) são redirecionados
+            users: function ($request) {
+                // Verifica se o usuário está autenticado pelo guard 'clinic'
+                if (Auth::guard('clinic')->check()) {
+                    return route('admin-clinica'); // Redireciona para '/dashboard2' se autenticado pelo guard 'clinic'
+                }
+                // Redireciona para a rota padrão de index para outros guards
+                return route('index');
+            }
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (AuthenticationException $e, $request) {
