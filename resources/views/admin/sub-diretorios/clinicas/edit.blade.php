@@ -14,13 +14,13 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">CNPJ</label>
-                            <input type="text" class="form-control" value="12.345.678/0001-99" readonly>
+                            <input type="text" class="form-control" value="{{ $clinica->cnpj ?? 'Não informado' }}" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label class="form-label">Razão Social</label>
-                            <input type="text" class="form-control" value="Clínica Saúde Nova" readonly>
+                            <input type="text" class="form-control" value="{{ $clinica->razao_social ?? 'Não informado' }}" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Nome Fantasia (Nome para divulgação)</label>

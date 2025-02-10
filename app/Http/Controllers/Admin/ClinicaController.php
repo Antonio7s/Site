@@ -41,4 +41,20 @@ class ClinicaController extends Controller
 
         return redirect()->route('clinicas.index')->with('success', 'Clínica atualizada com sucesso!');
     }
+
+    public function show($id)
+    {
+        $clinica = Clinica::findOrFail($id);
+        return view('admin.sub-diretorios.clinicas.show', compact('clinica'));
+    }
+
+    public function destroy($id)
+    {
+        $clinica = Clinica::findOrFail($id);
+        $clinica->delete();
+
+        return redirect()->route('clinicas.index')->with('success', 'Clínica deletada com sucesso!');
+    }
+
+
 }
