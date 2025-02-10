@@ -10,6 +10,13 @@ use App\Http\Controllers\Admin\ClinicaController;
 
 Route::prefix('admin')->group(function(){
     Route::get('/clinicas', [ClinicaController::class, 'index'])->name('clinicas.index');
+    Route::get('/clinicas/edit', [ClinicaController::class, 'edit'])->name('clinicas.edit');
+    Route::get('/clinicas/show', [ClinicaController::class, 'show'])->name('clinicas.show');
+    Route::get('/clinicas/destroy', [ClinicaController::class, 'destroy'])->name('clinicas.destroy');
+
+    //clinicas/registro
+    //clinicas/solicitacoes-de-cadastro
+    //clinicas/solicitacoes-de-cadastro-analise
 });
 
 // INDEX

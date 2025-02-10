@@ -18,4 +18,27 @@ class ClinicaController extends Controller
         // Retorna a view, passando a variável com os dados paginados
         return view('/admin/sub-diretorios/clinicas/clinicas', compact('clinicas'));
     }
+
+    public function edit($id)
+    {
+        $clinica = Clinica::findOrFail($id); // Busca a clínica pelo ID
+        return view('admin.sub-diretorios.clinicas.edit', compact('clinica'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $clinica = Clinica::findOrFail($id);
+
+        // Validação dos dados
+        $request->validate([
+            'razao_social' => 'required|string|max:255',
+            'cnpj_cpf' => 'required|string|unique:clinicas,cnpj_cpf,' . $id,
+            'email' => 'required|email|unique:clinicas,email,' . $id,
+        ]);
+
+        // Atualiza os dados
+        $clinica->update($request->all());
+
+        return redirect()->route('clinicas.index')->with('success', 'Clínica atualizada com sucesso!');
+    }
 }

@@ -78,9 +78,9 @@
           @forelse($clinicas as $clinica)
             <tr>
               <th scope="row">{{ $clinica->id }}</th>
-              <td>{{ $clinica->nome }}</td>
-              <td>{{ $clinica->cnpj }}</td>
-              <td>{{ $clinica->endereco }}</td>
+              <td>{{ $clinica->razao_social }}</td>
+              <td>{{ $clinica->cnpj_cpf }}</td>
+              <td>{{ $clinica->email }}</td>
               <td>
                 <a href="{{ route('clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
                 <form action="{{ route('clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">

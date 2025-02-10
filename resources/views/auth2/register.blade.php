@@ -18,7 +18,7 @@
 
              <!-- Nome Fantasia -->
              <div class="mb-3">
-                 <x-input-label for="nome_fantasia" :value="__('Nome Fantasia')" />
+                 <x-input-label for="nome_fantasia" :value="__('Nome Fantasia (Nome para divulgação)')" />
                  <x-text-input id="nome_fantasia" class="form-control" type="text" name="nome_fantasia" :value="old('nome_fantasia')" required autocomplete="nome_fantasia" />
                  <x-input-error :messages="$errors->get('nome_fantasia')" class="mt-2" />
              </div>

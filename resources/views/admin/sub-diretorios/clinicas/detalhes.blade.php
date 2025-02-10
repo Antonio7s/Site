@@ -23,7 +23,7 @@
                             <input type="text" class="form-control" value="Clínica Saúde Nova" readonly>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Nome Fantasia</label>
+                            <label class="form-label">Nome Fantasia (Nome para divulgação)</label>
                             <input type="text" class="form-control" value="Saúde Nova" readonly>
                         </div>
                     </div>
