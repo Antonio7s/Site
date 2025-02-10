@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\ClinicaController;
+use App\Http\Controllers\Admin\UsuarioController;
 
 Route::prefix('admin')->group(function(){
     Route::get('/clinicas', [ClinicaController::class, 'index'])->name('clinicas.index');
@@ -27,7 +28,7 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::view('clinicas2', 'admin/sub-diretorios/clinicas/registro-de-clinica');
     Route::view('clinicas3', 'admin/sub-diretorios/clinicas/solicitacoes-de-cadastro');
     Route::view('clinicas4', 'admin/sub-diretorios/clinicas/analise');
-    Route::view('usuarios', 'admin/sub-diretorios/usuarios');
+    Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
     Route::view('especialidades', 'admin/sub-diretorios/especialidades');
     Route::view('especialidades2', 'admin/sub-diretorios/especialidades-add');
     Route::view('classes', 'admin/sub-diretorios/classes');

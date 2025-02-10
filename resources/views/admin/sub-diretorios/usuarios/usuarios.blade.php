@@ -15,46 +15,29 @@
                         <th scope="col">Nome do Usuário</th>
                         <th scope="col">CPF</th>
                         <th scope="col">Endereço</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Exemplo 1 -->
+                  @forelse($usuarios as $usuario)
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Vitória Correia Almeida</td>
-                        <td>901.378.030-01</td>
-                        <td>Rua Principal, 123, Centro</td>
+                        <th scope="row">{{ $usuario->id ?? 'Não informado' }}</th>
+                        <td>{{ $usuario->name ?? 'Não informado' }}</td>
+                        <td>{{ $usuario->cpf ?? 'Não informado' }}</td>
+                        <td>{{ $usuario->endereco ?? 'Não informado' }}</td>
+                        <td>E{{ $usuario->email ?? 'Não informado' }}</td>
                         <td>
                             <button class="btn btn-warning btn-sm">Editar</button>
                             <button class="btn btn-danger btn-sm">Deletar</button>
                             <button class="btn btn-info btn-sm">Detalhes</button>
                         </td>
                     </tr>
-                    <!-- Exemplo 2 -->
+                  @empty
                     <tr>
-                        <th scope="row">2</th>
-                        <td>Luiz Pereira Barbosa</td>
-                        <td>945.203.300-25</td>
-                        <td>Avenida Secundária, 456, Bairro Novo</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Deletar</button>
-                            <button class="btn btn-info btn-sm">Detalhes</button>
-                        </td>
+                      <td colspan="5">Nenhum usuario encontrada.</td>
                     </tr>
-                    <!-- Exemplo 3 -->
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Anna Alves Ribeiro</td>
-                        <td>932.064.990-11</td>
-                        <td>Praça Central, 789, Vila Antiga</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Deletar</button>
-                            <button class="btn btn-info btn-sm">Detalhes</button>
-                        </td>
-                    </tr>
+                  @endforelse
                 </tbody>
             </table>
             </div>
