@@ -26,7 +26,7 @@
                         <td>{{ $usuario->name ?? 'Não informado' }}</td>
                         <td>{{ $usuario->cpf ?? 'Não informado' }}</td>
                         <td>{{ $usuario->endereco ?? 'Não informado' }}</td>
-                        <td>E{{ $usuario->email ?? 'Não informado' }}</td>
+                        <td>{{ $usuario->email ?? 'Não informado' }}</td>
                         <td>
                             <button class="btn btn-warning btn-sm">Editar</button>
                             <button class="btn btn-danger btn-sm">Deletar</button>

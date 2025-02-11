@@ -35,10 +35,10 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::get('especialidades', [EspecialidadeController::class, 'index'])->name('especialidades.index');
     Route::get('especialidades/create', [EspecialidadeController::class, 'create'])->name('especialidades.create');
     Route::post('especialidades', [EspecialidadeController::class, 'store'])->name('especialidades.store');
-    Route::view('classes', 'admin/sub-diretorios/classes');
-    Route::view('classes2', 'admin/sub-diretorios/classes-add');
-    Route::view('procedimentos', 'admin/sub-diretorios/procedimentos');
-    Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos-add');
+    Route::view('classes', 'admin/sub-diretorios/classes/classes');
+    Route::view('classes2', 'admin/sub-diretorios/classes/classes-add');
+    Route::view('procedimentos', 'admin/sub-diretorios/procedimentos/procedimentos');
+    Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos/procedimentos-add');
     Route::view('relatorios', 'admin/sub-diretorios/relatorios');
     Route::view('contatos', 'admin/sub-diretorios/contatos');
     Route::view('homepage', 'admin/sub-diretorios/homepage');
