@@ -105,4 +105,3 @@ Route::middleware('auth:clinic')->group(function () {
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
 
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

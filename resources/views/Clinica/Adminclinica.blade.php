@@ -343,7 +343,7 @@
         </table>
       </div>
 
-      <!-- Agendamento -->
+      <!-- Agendamento --> 
       <div id="agendamento" class="tab-pane fade" role="tabpanel">
         <h3>Agendamento</h3>
         <input type="text" id="searchDoctor" class="form-control" placeholder="Pesquisar médico">
@@ -351,32 +351,41 @@
           <li class="list-group-item d-flex justify-content-between align-items-center">
             Dr. João Silva
             <!-- Ao clicar, chama a função que abre o modal de agendamento -->
-            <button class="btn btn-primary btn-sm" onclick="redirectToSchedule()">Horário</button>
+            <button class="btn btn-primary btn-sm" onclick="abrirModalHorario()">Horário</button>
           </li>
         </ul>
       </div>
 
+      <div class="modal fade" id="modalHorario" tabindex="-1" aria-labelledby="modalHorarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalHorarioLabel">Definir Horário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="horariosContainer">
+                        <div class="horario-item">
+                            <label for="data">Data:</label>
+                            <input type="date" class="form-control mb-2" name="data">
+                            <label for="horaInicio">Horário de Início:</label>
+                            <input type="time" class="form-control mb-2" name="horaInicio">
+                            <label for="horaFim">Horário de Fim:</label>
+                            <input type="time" class="form-control mb-2" name="horaFim">
+                            <label for="intervalo">Intervalo (minutos):</label>
+                            <input type="number" class="form-control mb-2" name="intervalo">
+                            <button type="button" class="btn btn-danger" onclick="removerHorario(this)">Excluir</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success mt-2" onclick="adicionarHorario()">Adicionar</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarHorarios()">Salvar</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-   <!-- Modal para Agendamento com Grid de Horários -->
-   <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="scheduleModalLabel">Agendamento de Horários</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Container que será preenchido dinamicamente com os horários -->
-          <div id="timeSlotsContainer"></div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-primary" onclick="saveSchedule()">Salvar Horários</button>
-        </div>
-      </div>
-    </div>
-  </div>
    <!-- Modal de Especialidades -->
 <div id="specialtyModal" class="specialty-modal">
     <div class="modal-content">
@@ -646,103 +655,55 @@
         };
         reader.readAsArrayBuffer(file);
       }
-    });
-
-    /* --- Adições para o Agendamento com Grid de Horários --- */
-
-    // Função para montar dinamicamente o grid de horários
-    function populateTimeSlots() {
-      const days = [
-        { id: "segunda", label: "Segunda-feira" },
-        { id: "terca", label: "Terça-feira" },
-        { id: "quarta", label: "Quarta-feira" },
-        { id: "quinta", label: "Quinta-feira" },
-        { id: "sexta", label: "Sexta-feira" }
-      ];
-      // Horários disponíveis de 07:00 a 00:00
-      const times = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00"];
-      const container = document.getElementById("timeSlotsContainer");
-      container.innerHTML = "";
-
-      days.forEach(day => {
-        // Cria um bloco para cada dia
-        const dayDiv = document.createElement("div");
-        dayDiv.classList.add("mb-3");
-        const dayTitle = document.createElement("h6");
-        dayTitle.textContent = day.label;
-        dayDiv.appendChild(dayTitle);
-
-        // Cria uma linha com os horários
-        const rowDiv = document.createElement("div");
-        rowDiv.classList.add("row", "g-2");
-
-        times.forEach(time => {
-          const colDiv = document.createElement("div");
-          colDiv.classList.add("col-auto");
-
-          const formCheck = document.createElement("div");
-          formCheck.classList.add("form-check", "form-switch");
-
-          const checkbox = document.createElement("input");
-          checkbox.classList.add("form-check-input");
-          checkbox.type = "checkbox";
-          // Gerar um ID único para o checkbox, removendo os dois pontos do horário
-          checkbox.id = day.id + "_" + time.replace(":", "");
-          checkbox.dataset.day = day.id;
-          checkbox.value = time;
-
-          const label = document.createElement("label");
-          label.classList.add("form-check-label");
-          label.htmlFor = checkbox.id;
-          label.textContent = time;
-
-          formCheck.appendChild(checkbox);
-          formCheck.appendChild(label);
-          colDiv.appendChild(formCheck);
-          rowDiv.appendChild(colDiv);
-        });
-
-        dayDiv.appendChild(rowDiv);
-        container.appendChild(dayDiv);
-      });
-    }
-
-    // Atualiza a função redirectToSchedule para abrir o modal e popular os horários
-    function redirectToSchedule() {
-      populateTimeSlots();
-      var scheduleModal = new bootstrap.Modal(document.getElementById('scheduleModal'));
-      scheduleModal.show();
-    }
-
-    // Função para salvar os horários selecionados no modal
-    function saveSchedule() {
-      const schedule = {};
-      const days = ["segunda", "terca", "quarta", "quinta", "sexta"];
-      days.forEach(day => {
-        schedule[day] = [];
-      });
-
-      const checkboxes = document.querySelectorAll("#timeSlotsContainer input[type='checkbox']");
-      checkboxes.forEach(chk => {
-        if (chk.checked) {
-          const day = chk.dataset.day;
-          schedule[day].push(chk.value);
-        }
-      });
-
-      console.log(schedule);
-      alert("Horários salvos: " + JSON.stringify(schedule));
-
-      // Fechar o modal
-      var scheduleModalEl = document.getElementById('scheduleModal');
-      var modal = bootstrap.Modal.getInstance(scheduleModalEl);
-      modal.hide();
-    }
 
     // Atualiza o window.onload para incluir a listagem de profissionais
     window.onload = function() {
       listarProfissionais();
     }
+    //lista de horario
+        function abrirModalHorario() {
+            var modal = new bootstrap.Modal(document.getElementById('modalHorario'));
+            modal.show();
+        }
+
+        function adicionarHorario() {
+            const container = document.getElementById("horariosContainer");
+            const novoHorario = document.createElement("div");
+            novoHorario.classList.add("horario-item", "mt-3");
+            novoHorario.innerHTML = `
+                <label>Data:</label>
+                <input type="date" class="form-control mb-2" name="data">
+                <label>Horário de Início:</label>
+                <input type="time" class="form-control mb-2" name="horaInicio">
+                <label>Horário de Fim:</label>
+                <input type="time" class="form-control mb-2" name="horaFim">
+                <label>Intervalo (minutos):</label>
+                <input type="number" class="form-control mb-2" name="intervalo">
+                <button type="button" class="btn btn-danger" onclick="removerHorario(this)">Excluir</button>
+            `;
+            container.appendChild(novoHorario);
+        }
+
+        function removerHorario(button) {
+            button.parentElement.remove();
+        }
+
+        function salvarHorarios() {
+            const horarios = [];
+            document.querySelectorAll(".horario-item").forEach(item => {
+                const data = item.querySelector("input[name='data']").value;
+                const horaInicio = item.querySelector("input[name='horaInicio']").value;
+                const horaFim = item.querySelector("input[name='horaFim']").value;
+                const intervalo = item.querySelector("input[name='intervalo']").value;
+                horarios.push({ data, horaInicio, horaFim, intervalo });
+            });
+            console.log(horarios);
+            alert("Horários salvos com sucesso!");
+            var modalEl = document.getElementById('modalHorario');
+            var modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+        }
+
   </script>
 </body>
 </html>
