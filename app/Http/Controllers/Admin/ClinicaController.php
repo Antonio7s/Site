@@ -16,7 +16,7 @@ class ClinicaController extends Controller
         // Se precisar de filtros, você pode pegar os parâmetros de $request aqui e ajustar a query
 
         // Retorna a view, passando a variável com os dados paginados
-        return view('/admin/sub-diretorios/clinicas/clinicas', compact('clinicas'));
+        return view('/admin/sub-diretorios/clinicas/index', compact('clinicas'));
     }
 
     public function edit($id)
@@ -39,7 +39,7 @@ class ClinicaController extends Controller
         // Atualiza os dados
         $clinica->update($request->all());
 
-        return redirect()->route('clinicas.index')->with('success', 'Clínica atualizada com sucesso!');
+        return redirect()->route('admin.clinicas.index')->with('success', 'Clínica atualizada com sucesso!');
     }
 
     public function show($id)
@@ -53,7 +53,7 @@ class ClinicaController extends Controller
         $clinica = Clinica::findOrFail($id);
         $clinica->delete();
 
-        return redirect()->route('clinicas.index')->with('success', 'Clínica deletada com sucesso!');
+        return redirect()->route('admin.clinicas.index')->with('success', 'Clínica deletada com sucesso!');
     }
 
 

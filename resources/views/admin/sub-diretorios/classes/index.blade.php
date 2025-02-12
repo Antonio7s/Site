@@ -4,8 +4,10 @@
         
       <!-- Botão "Adicionar" -->
   <div class="mb-3">
-    <a href="classes2" class="btn btn-primary mb-3">Adicionar</a>
+    <a href="{{ route('admin.classes.create') }}" class="btn btn-primary mb-3">Adicionar</a>
   </div>
+
+  <hr>
 
       <div class="row mt-4">
             <table class="table table-bordered">
@@ -18,55 +20,21 @@
               </thead>
               <tbody>
                   <!-- Registro 1 -->
+                @forelse($classes as $classe)
                   <tr>
-                      <td>1</td>
-                      <td>CONSULTAS</td>
+                      <td>{{ $classe->id }}</td>
+                      <td>{{ $classe->nome }}</td>
                       <td>
-                          <button class="btn btn-warning btn-sm">Editar</button>
-                          <button class="btn btn-danger btn-sm">Deletar</button>
-                          <button class="btn btn-info btn-sm">Detalhes</button>
+                          <a href="{{ route('admin.classes.edit') }}" class="btn btn-warning btn-sm">Editar</a>
+                          <a href="{{ route('admin.classes.delet') }}" class="btn btn-danger btn-sm">Deletar</a>
+                          <a href="{{ route('admin.classes.show')}}" class="btn btn-info btn-sm">Detalhes</a>
                       </td>
                   </tr>
-                  <!-- Registro 2 -->
-                  <tr>
-                      <td>2</td>
-                      <td>Exames</td>
-                      <td>
-                          <button class="btn btn-warning btn-sm">Editar</button>
-                          <button class="btn btn-danger btn-sm">Deletar</button>
-                          <button class="btn btn-info btn-sm">Inspecionar</button>
-                      </td>
-                  </tr>
-                  <!-- Registro 3 -->
-                  <tr>
-                      <td>3</td>
-                      <td>Vacinas</td>
-                      <td>
-                          <button class="btn btn-warning btn-sm">Editar</button>
-                          <button class="btn btn-danger btn-sm">Deletar</button>
-                          <button class="btn btn-info btn-sm">Inspecionar</button>
-                      </td>
-                  </tr>
-                  <!-- Registro 4 -->
-                  <tr>
-                      <td>4</td>
-                      <td>Odontologia</td>
-                      <td>
-                          <button class="btn btn-warning btn-sm">Editar</button>
-                          <button class="btn btn-danger btn-sm">Deletar</button>
-                          <button class="btn btn-info btn-sm">Inspecionar</button>
-                      </td>
-                  </tr>
-                  <!-- Registro 5 -->
-                  <tr>
-                      <td>5</td>
-                      <td>Pronto Atendimento</td>
-                      <td>
-                          <button class="btn btn-warning btn-sm">Editar</button>
-                          <button class="btn btn-danger btn-sm">Deletar</button>
-                          <button class="btn btn-info btn-sm">Inspecionar</button>
-                      </td>
-                  </tr>
+                @empty
+                    <tr>
+                        <td> Não há registro de classes </td>
+                    </tr>
+                @endforelse
               </tbody>
           </table>
       </div>

@@ -4,7 +4,7 @@
         
   <!-- Botão "Adicionar" ESPECIALIDADE-->
   <div class="mb-3">
-    <a href="{{route('especialidades.create')}}" class="btn btn-primary mb-3">Adicionar</a>
+    <a href="{{route('admin.especialidades.create')}}" class="btn btn-primary mb-3">Adicionar</a>
   </div>
 
   <hr>
@@ -26,9 +26,9 @@
                 <td> {{ $especialidade->id ?? 'Não informado' }} </td>
                 <td> {{ $especialidade->especialidade ?? 'Não informado' }} </td>
                 <td>
-                    <button class="btn btn-warning btn-sm">Editar</button>
-                    <button class="btn btn-danger btn-sm">Deletar</button>
-                    <button class="btn btn-info btn-sm">Visualizar</button>
+                    <a  href="#" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="#" class="btn btn-danger btn-sm">Deletar</a>
+                    <a href="#" class="btn btn-info btn-sm">Visualizar</a>
                 </td>
             </tr>
           @empty

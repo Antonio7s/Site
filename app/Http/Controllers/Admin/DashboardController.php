@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProcedimentoController extends Controller
+class DashboardController extends Controller
 {
     public function index()
     {
-        return view ('admin.sub-diretorios.procedimentos.index');
+        return view('admin.sub-diretorios.dashboard.vendas');
     }
 }

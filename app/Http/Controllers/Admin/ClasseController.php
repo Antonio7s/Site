@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Classe;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -23,16 +25,16 @@ class ClasseController extends Controller
     {
         // Validação dos dados enviados
         $request->validate([
-            'classe' => 'required|string|max:255',
+            'nome' => 'required|string|max:255',
         ]);
 
         // Cria no banco
         Classe::create([
-            'classe' => $request->classe,
+            'nome' => $request->classe,
         ]);
 
         // Redireciona para a lista com mensagem de sucesso
-        return redirect()->route('classes.index')
+        return redirect()->route('admin.classes.index')
                         ->with('success', 'Classe cadastrada com sucesso!');
     }
 

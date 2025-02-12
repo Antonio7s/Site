@@ -3,7 +3,6 @@
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Importação de Controller's
@@ -13,22 +12,30 @@ use App\Http\Controllers\Admin\EspecialidadeController;
 use App\Http\Controllers\Admin\ClasseController;
 use App\Http\Controllers\Admin\ProcedimentoController;
 use App\Http\Controllers\Admin\ServicoDiferenciadoController;
+use App\Http\Controllers\Admin\ContatoController;
+use App\Http\Controllers\Admin\RelatorioController;
+use App\Http\Controllers\Admin\HomepageController;
+use App\Http\Controllers\Admin\InboxController;
+use App\Http\Controllers\Admin\DashboardController;
 
 // Inclusão das rotas de autenticação
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
 
 
-    // Rotas que exigem autenticação de user e têm o prefixo 'admin'
+// Rotas que exigem autenticação de user e têm o prefixo 'admin'
 Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
-    Route::view('/dashboard', 'admin/sub-diretorios/dashboard/vendas')->name('dashboard.admin');
-    Route::view('', 'admin/login');
     
+    //Dashboard
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function (){
+        Route::get('/', 'index')->name('admin.dashboard.admin');
+    });
+
     // Clínicas
-    Route::get('/clinicas', [ClinicaController::class, 'index'])->name('clinicas.index');
-    Route::get('/clinicas/{id}/edit', [ClinicaController::class, 'edit'])->name('clinicas.edit');
-    Route::get('/clinicas/{id}/show', [ClinicaController::class, 'show'])->name('clinicas.show');
-    Route::get('/clinicas/destroy', [ClinicaController::class, 'destroy'])->name('clinicas.destroy');
+    Route::get('/clinicas', [ClinicaController::class, 'index'])->name('admin.clinicas.index');
+    Route::get('/clinicas/{id}/edit', [ClinicaController::class, 'edit'])->name('admin.clinicas.edit');
+    Route::get('/clinicas/{id}/show', [ClinicaController::class, 'show'])->name('admin.clinicas.show');
+    Route::get('/clinicas/destroy', [ClinicaController::class, 'destroy'])->name('admin.clinicas.destroy');
     // ...
     Route::view('clinicas1', 'admin/sub-diretorios/clinicas/clinicas');
     Route::view('clinicas2', 'admin/sub-diretorios/clinicas/registro-de-clinica');
@@ -36,39 +43,42 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::view('clinicas4', 'admin/sub-diretorios/clinicas/analise');
     
     // Usuários
-    Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+    Route::get('usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     
     // Especialidades
     Route::controller(EspecialidadeController::class)->prefix('especialidades')->group(function () {
-        Route::get('especialidades', 'index')->name('especialidades.index');
-        Route::get('especialidades/create',  'create')->name('especialidades.create');
-        Route::post('especialidades', 'store')->name('especialidades.store');
+        Route::get('especialidades', 'index')->name('admin.especialidades.index');
+        Route::get('especialidades/create',  'create')->name('admin.especialidades.create');
+        Route::post('especialidades', 'store')->name('admin.especialidades.store');
     });
 
    // Classes
    Route::controller(ClasseController::class)->prefix('classes')->group(function () {
-        Route::get('/', 'index')->name('classes.index');
-        Route::get('/create', 'create')->name('classes.index');
-        Route::get('/edit', 'edit')->name('classes.index');
-        Route::get('/delet', 'delet')->name('classes.index');
-        Route::get('/update', 'update')->name('classes.index');
+        Route::get('/', 'index')->name('admin.classes.index');
+        Route::get('/create', 'create')->name('admin.classes.create');
+        Route::get('/edit', 'edit')->name('admin.classes.edit');
+        Route::get('/update', 'update')->name('admin.classes.update');
+        Route::post('/store', 'update')->name('admin.classes.store');
+        Route::get('/delet', 'delet')->name('admin.classes.delet');
    });
    
     // Procedimentos
-    Route::view('procedimentos', 'admin/sub-diretorios/procedimentos/procedimentos');
-    Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos/create');
+    Route::controller(ProcedimentoController::class)->prefix('procedimentos')->group(function () {
+        Route::get('/', 'index')->name('admin.procedimentos.index');
+        Route::get('/create', 'create')->name('admin.procedimentos.create');
+    });
 
     // Serviços Diferenciados
     Route::controller(ServicoDiferenciadoController::class)->prefix('servicos-diferenciados')->group(function () {
-        Route::get('/', 'index')->name('servicos-diferenciados.index');
-        Route::get('/create', 'create')->name('servicos-diferenciados.create');
+        Route::get('/', 'index')->name('admin.servicos-diferenciados.index');
+        Route::get('/create', 'create')->name('admin.servicos-diferenciados.create');
     });
 
     // Outros
-    Route::view('relatorios', 'admin/sub-diretorios/relatorios');
-    Route::view('contatos', 'admin/sub-diretorios/contatos');
-    Route::view('homepage', 'admin/sub-diretorios/homepage');
-    Route::view('mensagens', 'admin/sub-diretorios/inbox');
+    Route::get('relatorios', [RelatorioController::class, 'index'])->name('admin.relatorios.index');
+    Route::get('contatos', [ContatosController::class, 'index'])->name('admin.contatos.index');
+    Route::get('homepage', [HomepageController::class], 'index')->name('admin.homepage.index');
+    Route::get('mensagens', [InboxController::class], 'index')->name('admin.mensagens.index');
 });
 
 // Páginas públicas (Index e outras estáticas)

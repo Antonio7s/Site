@@ -13,7 +13,7 @@ class EspecialidadeController extends Controller
 
 
         // Retorna a view 'usuarios.index' passando os usuarios
-        return view('/admin/sub-diretorios/especialidades/especialidades', compact('especialidades'));
+        return view('admin.sub-diretorios.especialidades.index', compact('especialidades'));
     }
 
     public function create()

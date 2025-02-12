@@ -5,7 +5,7 @@
     <div class="container mt-5 ms-2">        
         <!-- Formulário de Cadastro -->
 
-        <a href="{{ route('servicos-diferenciados.create') }}" class="btn btn-primary">Adicionar Serviço</a>
+        <a href="{{ route('admin.servicos-diferenciados.create') }}" class="btn btn-primary">Adicionar Serviço</a>
 
         <!-- Tabela -->
         <table class="table table-bordered mt-4">

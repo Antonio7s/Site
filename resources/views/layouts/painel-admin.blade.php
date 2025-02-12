@@ -283,19 +283,17 @@
       <div class="col-md-2 sidebar">
         <h3>Menu</h3>
         <ul class="nav flex-column">
-          <li><a href="{{ route('dashboard.admin') }}"><i class="bi bi-house-door"></i> Dashboard</a></li>
-          <li><a href="{{ route('clinicas.index') }}"><i class="bi bi-building"></i> Clínicas</a></li>
-          <li><a href="{{ route('usuarios.index') }}"><i class="bi bi-people"></i> Usuários</a></li>
-          <!--<li><a href="#"><i class="bi bi-file-earmark-text"></i> Médicos</a></li> -->
-          <li><a href="{{ route('especialidades.index') }}"><i class="bi bi-journal-medical"></i> Especialidades</a></li>
-          <li><a href="classes"><i class="bi bi-layers"></i> Classes</a></li>
-          <li><a href="procedimentos"><i class="bi bi-clipboard-pulse"></i> Procedimentos</a></li>
-          <li><a href="{{ route('servicos-diferenciados.index') }}"><i class="bi bi-cash-coin"></i> Servicos diferenciados</a></li>
-          <!--<li><a href="#"><i class="bi bi-gear"></i> Agenda online</a></li> -->
-          <li><a href="relatorios"><i class="bi bi-file-earmark-bar-graph"></i> Relatórios</a></li>
-          <li><a href="contatos"><i class="bi bi-envelope"></i> Contatos</a></li>
-          <li><a href="homepage"><i class="bi bi-globe"></i> Homepage</a></li>
-          <li><a href="mensagens"><i class="bi bi-chat-dots"></i> Mensagens</a></li>
+          <li><a href="{{ route('admin.dashboard.admin') }}"><i class="bi bi-house-door"></i> Dashboard</a></li>
+          <li><a href="{{ route('admin.clinicas.index') }}"><i class="bi bi-building"></i> Clínicas</a></li>
+          <li><a href="{{ route('admin.usuarios.index') }}"><i class="bi bi-people"></i> Usuários</a></li>
+          <li><a href="{{ route('admin.especialidades.index') }}"><i class="bi bi-journal-medical"></i> Especialidades</a></li>
+          <li><a href="{{ route('admin.classes.index') }}"><i class="bi bi-layers"></i> Classes</a></li>
+          <li><a href="{{ route('admin.procedimentos.index') }}"><i class="bi bi-clipboard-pulse"></i> Procedimentos</a></li>
+          <li><a href="{{ route('admin.servicos-diferenciados.index') }}"><i class="bi bi-cash-coin"></i> Servicos diferenciados</a></li>
+          <li><a href="{{ route('admin.relatorios.index') }}"><i class="bi bi-file-earmark-bar-graph"></i> Relatórios</a></li>
+          <li><a href="{{ route('admin.contatos.index') }}"><i class="bi bi-envelope"></i> Contatos</a></li>
+          <li><a href="{{ route('admin.homepage.index') }}"><i class="bi bi-globe"></i> Homepage</a></li>
+          <li><a href="{{ route('admin.mensagens.index') }}"><i class="bi bi-chat-dots"></i> Mensagens</a></li>
         </ul>
     </div>
 
@@ -309,7 +307,7 @@
             <!-- Conteúdo da página -->
             <main>
             <div class="row mt-4">
-                @yield('content') <!-- Aqui será inserido o conteúdo da página -->
+                @yield('content') <!-- Aqui é o conteúdo da página -->
             </div>
             </main>
                 

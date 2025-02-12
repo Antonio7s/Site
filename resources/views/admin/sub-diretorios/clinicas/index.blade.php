@@ -84,13 +84,13 @@
               <td>{{ $clinica->modificar ?? 'Não informado' }}</td>
               <td>{{ $clinica->email ?? 'Não informado' }}</td>
               <td>
-                <a href="{{ route('clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                <form action="{{ route('clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
+                <a href="{{ route('admin.clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                <form action="{{ route('admin.clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
                   @csrf
                   @method('DELETE')
                   <button class="btn btn-danger btn-sm">Deletar</button>
                 </form>
-                <a href="{{ route('clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
+                <a href="{{ route('admin.clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
               </td>
             </tr>
           @empty
@@ -110,23 +110,6 @@
 
   <!-- Script para interatividade -->
   <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(`${id}-dropdown`);
-      dropdown.classList.toggle('show');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
-      }
-    };
-
     // Exibir intervalo de taxa de lucro
     document.getElementById('profitRate').addEventListener('change', function() {
       var profitRate = this.value;

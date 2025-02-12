@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <form action="{{ route('especialidades.store') }}" method="POST">
+    <form action="{{ route('admin.especialidades.store') }}" method="POST">
         @csrf
         <div class="mb-3">
             <label for="especialidade" class="form-label">Especialidade</label>
