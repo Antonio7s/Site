@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Adicionado para o logout -->
     <title>Site Inicial - MedExame</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -10,257 +11,366 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <style>
-        /* MENU E FOOTER */
-            body {
-                overflow-x: hidden; /* */
-                font-family: Arial, sans-serif;
-                background-color: #f0f8ff;
-                color: #333;
-            }
-            header {
-                background-color: #007bff;
-                padding: 10px 0;
-                color: white;
-            }
+        /* Estilos personalizados */
+        body {
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            min-height: 100vh; /* Garante que o body ocupe pelo menos a altura da tela */
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: #007bff;
+            padding: 10px 0;
+            color: white;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: auto; /* Move a logo para a esquerda */
+        }
+        .nav-link {
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        .banner {
+            margin-top: 20px;
+            background-color: #6aed5c;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            border-radius: 10px;
+        }
+        .info-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: auto; /* Mantém o rodapé no final da página */
+        }
+        footer .social-icons a {
+            font-size: 24px; /* Reduz o tamanho dos ícones */
+            margin: 0 10px;
+            text-decoration: none;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        footer .social-icons a:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+        .facebook {
+            color: #2d3270;
+        }
+        .instagram {
+            color: #E4405F;
+        }
+        .twitter {
+            color: black;
+        }
+        .whatsapp {
+            color: #25D366;
+        }
+        #userInfo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+        #userPhoto {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        #userDropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #userDropdown a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+        }
+        #userDropdown a:hover {
+            background-color: #f8f9fa;
+        }
+        .estado-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
             .logo {
-                font-size: 24px;
-                font-weight: bold;
+                font-size: 20px;
             }
             .nav-link {
-                color: white;
-                font-weight: 500;
-                text-decoration: none;
-                margin: 0 10px;
-            }
-            .nav-link:hover {
-                text-decoration: underline;
+                margin: 0 5px;
+                font-size: 14px;
             }
             .banner {
-                margin-top: 20px;
-                background-color: #6aed5c;
-                height: 300px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 32px;
-                color: white;
-                border-radius: 10px;
+                font-size: 24px;
+                height: 200px;
             }
             .info-section {
-                margin-top: 20px;
-                padding: 20px;
-                background-color: #ffffff;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-            footer {
-                background-color: #007bff;
-                color: white;
-                text-align: center;
-                padding: 40px 0;
+                padding: 15px;
             }
             footer .social-icons a {
-                font-size: 28px;
-                margin: 0 10px;
-                text-decoration: none;
-                transition: transform 0.2s ease, color 0.2s ease;
+                font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
             }
-            footer .social-icons a:hover {
-                transform: scale(1.2);
-                filter: brightness(1.2);
+            .user-container {
+                flex-direction: column;
+                align-items: flex-end;
             }
-            .facebook {
-                color: #2d3270;
+            #userInfo {
+                margin-top: 10px;
             }
-            .instagram {
-                color: #E4405F;
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 18px;
             }
-            .twitter {
-                color: black;
+            .nav-link {
+                font-size: 12px;
             }
-            .whatsapp {
-                color: #25D366;
+            .banner {
+                font-size: 20px;
+                height: 150px;
             }
+            .info-section {
+                padding: 10px;
+            }
+            footer .social-icons a {
+                font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
+            }
+            .user-container {
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
 
-
 <!-- Cabeçalho -->
-    <header class="container-fluid">
-        <div class="container d-flex justify-content-between align-items-center">
+<header>
+    <div class="container-fluid">
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+            <!-- Logo -->
             <div class="logo">
-                <a href="/" class="logo" style="text-decoration: none; color: inherit;">Minha Logo </a>
+                <a href="/" class="logo" style="text-decoration: none; color: inherit;">Minha Logo</a>
             </div>
-            <nav class="d-flex">
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sou Paciente
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="menuCliente">
-                        <li><a class="dropdown-item" href="/login-paciente">Fazer Login</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
-                        <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
-                    </ul>
+
+            <!-- Menu de Navegação -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary w-100">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse w-100" id="navbarNav">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sou Paciente
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="menuCliente">
+                            <li><a class="dropdown-item" href="/login-paciente">Fazer Login</a></li>
+                            <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
+                            <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
+                            <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
+                            <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
+                        </ul>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sou Profissional de saúde
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="menuProfissional">
+                            <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
+                            <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
+                            <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
+                            <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
+                        </ul>
+                    </div>
+                    <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
+                    <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
                 </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sou Profissional de saúde
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="menuProfissional">
-                        <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
-                        <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
-                        <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
-                    </ul>
-                </div>
-                <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
-                <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
             </nav>
 
-
-            <!-- Exibir o estado selecionado -->
-            <div>
+            <!-- Estado e Informações do Usuário -->
+            <div class="user-container">
                 <span id="estadoSelecionado" class="badge bg-info">Estado: Não Selecionado</span>
-                <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">Login</a>
-                <a href="{{ route('register') }}"class="btn btn-light btn-sm">Cadastro</a>
-            </div>
-        </div>
-    </header>
-
-
-
-    <!-- Modal de Seleção de Estado -->
-    <div class="modal fade" id="estadoModal" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="estadoModalLabel">Qual seu estado?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <select id="estado" class="form-select" onchange="mostrarEstado()">
-                        <option value="" disabled selected>Selecione um Estado</option>
-                        <option value="AC">Acre</option>
-                                <option value="AL">Alagoas</option>
-                                <option value="AM">Amazonas</option>
-                                <option value="BA">Bahia</option>
-                                <option value="CE">Ceará</option>
-                                <option value="DF">Distrito Federal</option>
-                                <option value="ES">Espírito Santo</option>
-                                <option value="GO">Goiás</option>
-                                <option value="MA">Maranhão</option>
-                                <option value="MG">Minas Gerais</option>
-                                <option value="MS">Mato Grosso do Sul</option>
-                                <option value="MT">Mato Grosso</option>
-                                <option value="PA">Pará</option>
-                                <option value="PB">Paraíba</option>
-                                <option value="PE">Pernambuco</option>
-                                <option value="PI">Piauí</option>
-                                <option value="PR">Paraná</option>
-                                <option value="RJ">Rio de Janeiro</option>
-                                <option value="RN">Rio Grande do Norte</option>
-                                <option value="RO">Rondônia</option>
-                                <option value="RR">Roraima</option>
-                                <option value="RS">Rio Grande do Sul</option>
-                                <option value="SC">Santa Catarina</option>
-                                <option value="SE">Sergipe</option>
-                                <option value="SP">São Paulo</option>
-                                <option value="TO">Tocantins</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                </div>
+                @if(auth()->check())
+                    <div id="userInfo">
+                        <img id="userPhoto" src="{{ auth()->user()->photo_url }}" alt="Foto do Usuário">
+                        <span id="userName">{{ auth()->user()->name }}</span>
+                        <div id="userDropdown">
+                            <a href="/profile">Página do Usuário</a>
+                            <a href="#" onclick="logout()">Logout</a>
+                        </div>
+                    </div>
+                @else
+                    <div id="authButtons">
+                        <a href="{{ route('login') }}" id="loginButton" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{{ route('register') }}" id="registerButton" class="btn btn-light btn-sm">Cadastro</a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
+</header>
 
-    <script>
-        // Verificar se há um estado armazenado ao carregar a página
-        window.onload = function() {
-            const estadoArmazenado = localStorage.getItem('estadoSelecionado');
+<!-- Modal de Seleção de Estado -->
+<div class="modal fade" id="estadoModal" tabindex="-1" aria-labelledby="estadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="estadoModalLabel">Qual seu estado?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select id="estado" class="form-select" onchange="mostrarEstado()">
+                    <option value="" disabled selected>Selecione um Estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="PR">Paraná</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="TO">Tocantins</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-            if (!estadoArmazenado) {
-                // Se não houver estado armazenado, abrir o modal
-                var myModal = new bootstrap.Modal(document.getElementById('estadoModal'));
-                myModal.show();
-            } else {
-                // Se houver estado armazenado, exibir no cabeçalho
-                document.getElementById('estadoSelecionado').textContent = 'Estado: ' + estadoArmazenado;
-            }
+<!-- Incluir o FontAwesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-            // Adicionar evento de clique no estado exibido no cabeçalho
-            document.getElementById('estadoSelecionado').addEventListener('click', function() {
-                var myModal = new bootstrap.Modal(document.getElementById('estadoModal'));
-                myModal.show();
-            });
-        };
+<!-- Conteúdo da página -->
+<main>
+    @yield('content') <!-- Aqui será inserido o conteúdo da página -->
+</main>
 
-        // Função para mostrar o estado selecionado no cabeçalho, armazenar no localStorage e fechar o modal
-        function mostrarEstado() {
-            const estado = document.getElementById('estado').value;
-            const estadoTexto = estado ? estado : 'Não Selecionado';
-
-            // Armazenar o estado no localStorage
-            localStorage.setItem('estadoSelecionado', estadoTexto);
-
-            // Exibir o estado no cabeçalho
-            document.getElementById('estadoSelecionado').textContent = 'Estado: ' + estadoTexto;
-
-            // Fechar o modal após selecionar o estado
-            var myModal = bootstrap.Modal.getInstance(document.getElementById('estadoModal'));
-            myModal.hide();
-        }
-    </script>
-
-    <!-- Incluir o FontAwesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
-
-    <!-- Conteúdo da página -->
-    <main>
-
-        @yield('content') <!-- Aqui será inserido o conteúdo da página -->
-
-    </main>
-
-    <!-- Rodapé -->
-    <footer class="mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h4 class="fw-bold">Medexame</h4>
-                    <p>CNPJ:</p>
-                    <p>Medexame</p>
-                    <p>Informações úteis sobre a Medexame podem ser adicionadas aqui.</p>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h4 class="fw-bold">Informações</h4>
-                    <p>Espaço em branco para preenchimento futuro.</p>
-                    <p>Espaço em branco.</p>
-                </div>
-                <div class="col-md-4 mb-4 text-center">
-                    <h4 class="fw-bold">Siga a gente nas Redes Sociais:</h4>
-                    <div class="d-flex justify-content-center social-icons">
-                        <a href="#" class="mx-2 facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="mx-2 twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
-                    </div>
+<!-- Rodapé -->
+<footer>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h4 class="fw-bold">Medexame</h4>
+                <p>CNPJ:</p>
+                <p>Medexame</p>
+                <p>Informações úteis sobre a Medexame podem ser adicionadas aqui.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h4 class="fw-bold">Informações</h4>
+                <p>Espaço em branco para preenchimento futuro.</p>
+                <p>Espaço em branco.</p>
+            </div>
+            <div class="col-md-4 mb-4 text-center">
+                <h4 class="fw-bold">Siga a gente nas Redes Sociais:</h4>
+                <div class="d-flex justify-content-center flex-wrap social-icons">
+                    <a href="#" class="mx-2 facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="mx-2 twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
-            <hr>
-            <p>© 2025 Medexame. Todos os direitos reservados.</p>
         </div>
-    </footer>
+        <hr>
+        <p>© 2025 Medexame. Todos os direitos reservados.</p>
+    </div>
+</footer>
 
-    <!-- Bootstrap and Font Awesome Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap and Font Awesome Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+<script>
+    // Mostrar/ocultar dropdown do usuário
+    document.getElementById('userInfo').addEventListener('click', function() {
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', function(event) {
+        const userInfo = document.getElementById('userInfo');
+        const dropdown = document.getElementById('userDropdown');
+        if (!userInfo.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    // Função de logout
+    function logout() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+        }).catch(error => {
+            console.error('Erro ao fazer logout:', error);
+        });
+    }
+</script>
 
 </body>
 </html>
