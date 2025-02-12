@@ -53,6 +53,7 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
         Route::get('/delet', 'delet')->name('classes.index');
         Route::get('/update', 'update')->name('classes.index');
    });
+   
     // Procedimentos
     Route::view('procedimentos', 'admin/sub-diretorios/procedimentos/procedimentos');
     Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos/create');

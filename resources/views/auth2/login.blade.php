@@ -6,7 +6,7 @@
         <h4 class="fw-bold text-primary mb-3">Login</h4>
 
         <!-- Formulário de Login -->
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login2') }}">
             @csrf
 
             <!-- E-mail -->
@@ -21,7 +21,7 @@
                 <input type="password" name="password" id="password" class="form-control py-2" placeholder="Digite sua senha" required>
                 <!-- Link "Esqueci a senha" -->
                 <div class="text-end mt-2">
-                    <a href="{{route('password.request')}}" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
+                    <a href="{{route('password.request2')}}" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
                 </div>
             </div>
 
@@ -52,7 +52,7 @@
 
             <!-- Link para Cadastro -->
             <div class="text-center">
-                <small>Ainda não tem uma conta? <a href="{{ route('register') }}" class="text-decoration-none">Cadastre-se</a></small>
+                <small>Ainda não tem uma conta? <a href="{{ route('register2') }}" class="text-decoration-none">Cadastre-se</a></small>
             </div>
         </form>
     </div>
