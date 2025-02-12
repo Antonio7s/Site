@@ -47,9 +47,13 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     
     // Especialidades
     Route::controller(EspecialidadeController::class)->prefix('especialidades')->group(function () {
-        Route::get('especialidades', 'index')->name('admin.especialidades.index');
-        Route::get('especialidades/create',  'create')->name('admin.especialidades.create');
-        Route::post('especialidades', 'store')->name('admin.especialidades.store');
+        Route::get('/', 'index')->name('admin.especialidades.index');
+        Route::get('/create',  'create')->name('admin.especialidades.create');
+        Route::post('/', 'store')->name('admin.especialidades.store');
+        Route::get('/{id}/edit', 'edit')->name('admin.especialidades.edit');
+        Route::get('/{id}', 'show')->name('admin.especialidades.show');
+        Route::put('/{id}', 'update')->name('admin.especialidades.update');
+        Route::delete('/{id}', 'destroy')->name('admin.especialidades.destroy');
     });
 
    // Classes

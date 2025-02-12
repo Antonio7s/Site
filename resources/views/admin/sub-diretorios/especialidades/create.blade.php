@@ -23,8 +23,8 @@
     <form action="{{ route('admin.especialidades.store') }}" method="POST">
         @csrf
         <div class="mb-3">
-            <label for="especialidade" class="form-label">Especialidade</label>
-            <input type="text" name="especialidade" class="form-control" id="especialidade" required>
+            <label for="nome" class="form-label">Especialidade</label>
+            <input type="text" name="nome" class="form-control" id="nome" required>
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar</button>
     </form>
