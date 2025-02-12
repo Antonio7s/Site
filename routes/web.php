@@ -138,5 +138,13 @@ Route::middleware('auth:clinic')->group(function () {
     Route::delete('/profile2', [ProfileController::class, 'destroy'])->name('profile.destroy2');
 });
 
+//gate para dashboard
+Route::middleware(['auth', 'can:access'])->prefix('admin')->group(function () {
+    // Dashboard
+    Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
+        Route::get('/', 'index')->name('admin.dashboard.admin');
+    });
+});
+
 
 
