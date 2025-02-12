@@ -187,68 +187,70 @@
 
 <!-- Cabeçalho -->
 <header>
-    <div class="container-fluid">
-        <div class="d-flex flex-wrap justify-content-between align-items-center">
-            <!-- Logo -->
-            <div class="logo">
-                <a href="/" class="logo" style="text-decoration: none; color: inherit;">Minha Logo</a>
-            </div>
+<div class="container-fluid">
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+        <!-- Logo -->
+        <div class="logo">
+            <a href="/" class="logo" style="text-decoration: none; color: inherit;">
+                <img src="https://i.postimg.cc/87nwqDF2/20250204-230841-0000.png" alt="Logo" style="max-width: 150px; height: auto;">
+            </a>
+        </div>
 
-            <!-- Menu de Navegação -->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary w-100">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse w-100" id="navbarNav">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sou Paciente
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="menuCliente">
-                            <li><a class="dropdown-item" href="/login-paciente">Fazer Login</a></li>
-                            <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
-                            <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
-                            <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
-                            <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
-                        </ul>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sou Profissional de saúde
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="menuProfissional">
-                            <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
-                            <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
-                            <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
-                            <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
-                        </ul>
-                    </div>
-                    <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
-                    <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
+        <!-- Estado e Informações do Usuário -->
+        <div class="user-container">
+            <span id="estadoSelecionado" class="badge bg-info">Estado: Não Selecionado</span>
+            @if(!auth()->check())
+                <div id="authButtons" class="d-flex align-items-center">
+                    <a href="{{ route('login') }}" id="loginButton" class="btn btn-outline-light btn-sm me-2">Login</a>
+                    <a href="{{ route('register') }}" id="registerButton" class="btn btn-light btn-sm">Cadastro</a>
                 </div>
-            </nav>
-
-            <!-- Estado e Informações do Usuário -->
-            <div class="user-container">
-                <span id="estadoSelecionado" class="badge bg-info">Estado: Não Selecionado</span>
-                @if(auth()->check())
-                    <div id="userInfo">
-                        <img id="userPhoto" src="{{ auth()->user()->photo_url }}" alt="Foto do Usuário">
-                        <span id="userName">{{ auth()->user()->name }}</span>
-                        <div id="userDropdown">
-                            <a href="/profile">Página do Usuário</a>
-                            <a href="#" onclick="logout()">Logout</a>
-                        </div>
+            @else
+                <div id="userInfo">
+                    <img id="userPhoto" src="{{ auth()->user()->photo_url }}" alt="Foto do Usuário">
+                    <span id="userName">{{ auth()->user()->name }}</span>
+                    <div id="userDropdown">
+                        <a href="/profile">Página do Usuário</a>
+                        <a href="#" onclick="logout()">Logout</a>
                     </div>
-                @else
-                    <div id="authButtons">
-                        <a href="{{ route('login') }}" id="loginButton" class="btn btn-outline-light btn-sm">Login</a>
-                        <a href="{{ route('register') }}" id="registerButton" class="btn btn-light btn-sm">Cadastro</a>
-                    </div>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
     </div>
+
+    <!-- Menu de Navegação -->
+    <nav class="navbar navbar-expand-lg navbar-dark w-100" style="background-color: #007bff;">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse w-100" id="navbarNav">
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sou Paciente
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="menuCliente">
+                    <li><a class="dropdown-item" href="/login-paciente">Fazer Login</a></li>
+                    <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
+                    <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
+                    <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
+                    <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
+                </ul>
+            </div>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sou Profissional de saúde
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="menuProfissional">
+                    <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
+                    <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
+                    <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
+                    <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
+                </ul>
+            </div>
+            <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
+            <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
+        </div>
+    </nav>
+</div>
 </header>
 
 <!-- Modal de Seleção de Estado -->
