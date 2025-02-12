@@ -30,7 +30,7 @@ class ClasseController extends Controller
 
         // Cria no banco
         Classe::create([
-            'nome' => $request->classe,
+            'nome' => $request->nome,
         ]);
 
         // Redireciona para a lista com mensagem de sucesso
@@ -46,32 +46,30 @@ class ClasseController extends Controller
 
     public function update(Request $request, $id)
     {
-        $clinica = Clinica::findOrFail($id);
+        $classe = Classe::findOrFail($id);
 
         // Validação dos dados
         $request->validate([
-            'razao_social' => 'required|string|max:255',
-            'cnpj_cpf' => 'required|string|unique:clinicas,cnpj_cpf,' . $id,
-            'email' => 'required|email|unique:clinicas,email,' . $id,
+            'nome' => 'required|string|max:255',
         ]);
 
         // Atualiza os dados
         $classe->update($request->all());
 
-        return redirect()->route('classes.index')->with('success', 'Clínica atualizada com sucesso!');
+        return redirect()->route('admin.classes.index')->with('success', 'Classe atualizada com sucesso!');
     }
 
     public function show($id)
     {
-        $clinica = Clinica::findOrFail($id);
+        $classe = Classe::findOrFail($id);
         return view('admin.sub-diretorios.classes.show', compact('classe'));
     }
 
     public function destroy($id)
     {
-        $clinica = Clinica::findOrFail($id);
-        $clinica->delete();
+        $classe = Classe::findOrFail($id);
+        $classe->delete();
 
-        return redirect()->route('clinicas.index')->with('success', 'Clínica deletada com sucesso!');
+        return redirect()->route('admin.classes.index')->with('success', 'Classe deletada com sucesso!');
     }
 }

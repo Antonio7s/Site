@@ -25,10 +25,14 @@
                       <td>{{ $classe->id }}</td>
                       <td>{{ $classe->nome }}</td>
                       <td>
-                          <a href="{{ route('admin.classes.edit') }}" class="btn btn-warning btn-sm">Editar</a>
-                          <a href="{{ route('admin.classes.delet') }}" class="btn btn-danger btn-sm">Deletar</a>
-                          <a href="{{ route('admin.classes.show')}}" class="btn btn-info btn-sm">Detalhes</a>
-                      </td>
+                        <a href="{{ route('admin.classes.edit', $classe->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('admin.classes.destroy', $classe->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Deletar</button>
+                        </form>
+                        <a href="{{ route('admin.classes.show', $classe->id)}}" class="btn btn-info btn-sm">Detalhes</a>
+                    </td>
                   </tr>
                 @empty
                     <tr>

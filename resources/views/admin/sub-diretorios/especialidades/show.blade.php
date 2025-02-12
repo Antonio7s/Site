@@ -5,7 +5,7 @@
 <form>
     <div class="mb-3">
                 <label for="nome" class="form-label">Especialidade</label>
-                <input type="text" name="nome" class="form-control" id="nome" readonly value="{{ $especialidade->value }}">
+                <input type="text" name="nome" class="form-control" id="nome" readonly value="{{ $especialidade->nome }}">
             </div>
             <a href="{{ route('admin.especialidades.index') }}" type="submit" class="btn btn-primary">Voltar</a>
     </div>

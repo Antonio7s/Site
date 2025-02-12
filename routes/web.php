@@ -60,10 +60,11 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
    Route::controller(ClasseController::class)->prefix('classes')->group(function () {
         Route::get('/', 'index')->name('admin.classes.index');
         Route::get('/create', 'create')->name('admin.classes.create');
-        Route::get('/edit', 'edit')->name('admin.classes.edit');
-        Route::get('/update', 'update')->name('admin.classes.update');
-        Route::post('/store', 'update')->name('admin.classes.store');
-        Route::get('/delet', 'delet')->name('admin.classes.delet');
+        Route::post('/', 'store')->name('admin.classes.store');
+        Route::get('/{id}/edit', 'edit')->name('admin.classes.edit');
+        Route::get('/{id}', 'show')-> name('admin.classes.show');
+        Route::put('/{id}', 'update')->name('admin.classes.update');
+        Route::delete('/{id}', 'destroy')->name('admin.classes.destroy');
    });
    
     // Procedimentos
