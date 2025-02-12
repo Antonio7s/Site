@@ -24,11 +24,15 @@
           @forelse($especialidades as $especialidade)
             <tr>
                 <td> {{ $especialidade->id ?? 'Não informado' }} </td>
-                <td> {{ $especialidade->especialidade ?? 'Não informado' }} </td>
+                <td> {{ $especialidade->nome ?? 'Não informado' }} </td>
                 <td>
-                    <a  href="#" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="#" class="btn btn-danger btn-sm">Deletar</a>
-                    <a href="#" class="btn btn-info btn-sm">Visualizar</a>
+                    <a href="{{ route('admin.especialidades.edit', $especialidade->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ route('admin.especialidades.destroy', $especialidade->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Deletar</button>
+                    </form>
+                    <a href="{{ route('admin.especialidades.show', $especialidade->id) }}" class="btn btn-info btn-sm">Visualizar</a>
                 </td>
             </tr>
           @empty
