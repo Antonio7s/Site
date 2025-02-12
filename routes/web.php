@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\UsuarioController;
 use App\Http\Controllers\Admin\EspecialidadeController;
 use App\Http\Controllers\Admin\ClasseController;
 use App\Http\Controllers\Admin\ProcedimentoController;
+use App\Http\Controllers\Admin\ServicoDiferenciadoController;
+
 
 Route::prefix('admin')->group(function(){
     Route::get('/clinicas', [ClinicaController::class, 'index'])->name('clinicas.index');
@@ -35,17 +37,22 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::get('especialidades', [EspecialidadeController::class, 'index'])->name('especialidades.index');
     Route::get('especialidades/create', [EspecialidadeController::class, 'create'])->name('especialidades.create');
     Route::post('especialidades', [EspecialidadeController::class, 'store'])->name('especialidades.store');
-    Route::view('classes', 'admin/sub-diretorios/classes/classes');
-    Route::view('classes2', 'admin/sub-diretorios/classes/classes-add');
+    Route::get('classes', [ClasseController::class, 'index'])->name('classes.index');
+    Route::get('classes', [ClasseController::class, 'create'])->name('classes.index');
+    Route::get('classes', [ClasseController::class, 'edit'])->name('classes.index');
+    Route::get('classes', [ClasseController::class, 'delet'])->name('classes.index');
+    Route::get('classes', [ClasseController::class, 'update'])->name('classes.index');
+
+    // Procedimentos
     Route::view('procedimentos', 'admin/sub-diretorios/procedimentos/procedimentos');
-    Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos/procedimentos-add');
+    Route::view('procedimentos2', 'admin/sub-diretorios/procedimentos/create');
     Route::view('relatorios', 'admin/sub-diretorios/relatorios');
     Route::view('contatos', 'admin/sub-diretorios/contatos');
     Route::view('homepage', 'admin/sub-diretorios/homepage');
     Route::view('mensagens', 'admin/sub-diretorios/inbox');
     Route::view('lucro', 'admin/sub-diretorios/lucro');
-    Route::view('servicos-diferenciados1', 'admin/sub-diretorios/servicos-diferenciados/visualizar');
-    Route::view('servicos-diferenciados2', 'admin/sub-diretorios/servicos-diferenciados/adicionar');
+    Route::get('servicos-diferenciados', [ServicoDiferenciadoController::class, 'index'])->name('servicos-diferenciados.index');
+    Route::get('servicos-diferenciados/create', [ServicoDiferenciadoController::class, 'create'])->name('servicos-diferenciados.create');
 });
 
 // INDEX

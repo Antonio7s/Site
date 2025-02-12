@@ -1,5 +1,5 @@
 @extends('layouts.painel-admin')
-@section('header_title', 'Serviços diferenciados') <!-- Alterando o h1 -->
+@section('header_title', 'Serviços diferenciados') 
 @section('content')
 
     <div class="container mt-5 ms-2">        
@@ -10,11 +10,13 @@
                 <label for="clinica" class="form-label">Clínica vinculada</label>
                 <select class="form-select" id="clinica" required>
                     <option value="" selected disabled>Selecione uma clínica</option>
-                    <option value="clinica_a">Clínica A</option>
-                    <option value="clinica_b">Clínica B</option>
-                    <option value="clinica_c">Clínica C</option>
-                    <option value="clinica_d">Clínica D</option>
-                    <option value="clinica_e">Clínica E</option>
+                    @forelse($clinicas as $clinica)
+                        <option value="clinica_a">{{ $clinica->nome_fantasia ?? 'Não informado' }}</option>
+                    @empty
+                        <tr>
+                            <td colspan="5">Nenhuma clínica encontrada.</td>
+                        </tr>
+                    @endforelse
                 </select>
             </div>
             
@@ -26,20 +28,18 @@
                 <label for="dataFinal" class="form-label">Data Final</label>
                 <input type="date" class="form-control" id="dataFinal">
             </div>
-            <div class="mb-3">
-                <label for="codigo" class="form-label">Código</label>
-                <input type="text" class="form-control" id="codigo" required>
-            </div>
 
             <div class="mb-3">
                 <label for="procedimento" class="form-label">Procedimento</label>
-                <select class="form-select" id="clinica" id="procedimento" required>
+                <select class="form-select" id="procedimento" id="procedimento" required>
                     <option value="" selected disabled>Selecione um procedimento</option>
-                    <option value="clinica_a">Procedimento A</option>
-                    <option value="clinica_b">Procedimento B</option>
-                    <option value="clinica_c">Procedimento C</option>
-                    <option value="clinica_d">Procedimento D</option>
-                    <option value="clinica_e">Procedimento E</option>
+                    @forelse($procedimentos as $procedimento)
+                    <option value="clinica_a">{{ $procedimento->nome ?? 'Não informado' }}</option>
+                    @empty
+                        <tr>
+                            <td colspan="5">Nenhuma clínica encontrada.</td>
+                        </tr>
+                    @endforelse
                 </select>
             </div>
 

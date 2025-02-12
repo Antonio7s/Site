@@ -24,7 +24,7 @@
                       <td>
                           <button class="btn btn-warning btn-sm">Editar</button>
                           <button class="btn btn-danger btn-sm">Deletar</button>
-                          <button class="btn btn-info btn-sm">Inspecionar</button>
+                          <button class="btn btn-info btn-sm">Detalhes</button>
                       </td>
                   </tr>
                   <!-- Registro 2 -->
@@ -70,26 +70,4 @@
               </tbody>
           </table>
       </div>
- 
-
-  <!-- Script para interatividade -->
-  <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(`${id}-dropdown`);
-      dropdown.classList.toggle('show');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
-      }
-    };
-  </script>
-
   @endsection
