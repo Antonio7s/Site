@@ -59,7 +59,7 @@
       <div class="d-flex align-items-center">
         <!-- Logo -->
         <a href="{{ url('/privacy-policy') }}" class="me-3">
-          <img src="/images/logo.png" alt="Minha Logo" style="height:40px;">
+          <img src="https://i.postimg.cc/mhK2Fhr6/logomed.png" alt="Minha Logo" style="height:40px;">
         </a>
         <!-- Links -->
         <a href="{{ url('/privacy-policy') }}" class="me-3">Políticas de Privacidade</a>
