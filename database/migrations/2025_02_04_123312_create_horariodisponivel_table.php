@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('procedimentos', function (Blueprint $table) {
-            $table->id('procedimento_id');  
-            $table->string('nome');  
-            $table->unsignedBigInteger('classe_id');  
-            $table->decimal('valor', 8, 2);  
-            $table->timestamps();  
+        Schema::create('horarios_disponiveis', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
-        
     }
 
     /**
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('procedimento');
+        Schema::dropIfExists('horariodisponivel');
     }
 };

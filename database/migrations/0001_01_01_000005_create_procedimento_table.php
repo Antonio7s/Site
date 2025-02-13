@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('horariodisponivel', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('procedimentos', function (Blueprint $table) {
+            $table->id('id');  
+            $table->string('nome');  
+            $table->unsignedBigInteger('classe_id');  
+            $table->decimal('valor', 8, 2);  
+            $table->timestamps();  
         });
+        
     }
 
     /**
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('horariodisponivel');
+        Schema::dropIfExists('procedimento');
     }
 };
