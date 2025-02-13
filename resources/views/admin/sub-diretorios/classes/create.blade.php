@@ -11,7 +11,7 @@
                 <input type="text" class="form-controll" id="nome" name="nome" required></input>
             </div>
             <button type="submit" class="btn btn-primary"> Cadastrar</button>
-            <a href="#" class="btn btn-primary"> Voltar</a>
+            <a href="{{route('admin.classes.index')}}" class="btn btn-primary">Voltar</a>
         </form>
     </div>
 

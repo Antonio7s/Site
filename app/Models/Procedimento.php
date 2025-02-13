@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Procedimento extends Model
 {
+
+    protected $fillable = ['nome', 'valor','classe_id'];
     // Relacionamento muitos para um com Classe
     public function classe()
     {

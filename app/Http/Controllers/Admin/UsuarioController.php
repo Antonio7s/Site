@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Gate;
 
 class UsuarioController extends Controller
 {
-    public function __construct()
-    {
-        // Certifique-se de que o usuário tenha permissão de 'access' antes de acessar qualquer método
-        $this->middleware('can:access');
-    }
 
     public function index(Request $request)
     {

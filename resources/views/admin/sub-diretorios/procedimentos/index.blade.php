@@ -1,104 +1,50 @@
 @extends('layouts.painel-admin')
 @section('header_title', 'Procedimentos') <!-- Alterando o h1 -->
-@section('content')       
-        <!-- Botão "Adicionar" -->
-        <div class="mb-3">
-          <a href="procedimentos2"class="btn btn-primary mb-3">Adicionar</a>
-        </div>
-
-        <!-- CORPO -->
-            <div class="row mt-4">
-                        <!-- Tabela com registros -->
-                <table class="table table-bordered">
-                  <thead>
-                      <tr>
-                          <th scope="col">Código</th>
-                          <th scope="col">Procedimento</th>
-                          <th scope="col">Valor</th>
-                          <th scope="col">Ações</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <!-- Registro 1 -->
-                      <tr>
-                          <td>001</td>
-                          <td>Exame de Sangue</td>
-                          <td>R$ 150,00</td>
-                          <td>
-                              <button class="btn btn-warning btn-sm">Editar</button>
-                              <button class="btn btn-danger btn-sm">Deletar</button>
-                              <button class="btn btn-info btn-sm">Inspecionar</button>
-                          </td>
-                      </tr>
-                      <!-- Registro 2 -->
-                      <tr>
-                          <td>002</td>
-                          <td>Raio-X</td>
-                          <td>R$ 200,00</td>
-                          <td>
-                              <button class="btn btn-warning btn-sm">Editar</button>
-                              <button class="btn btn-danger btn-sm">Deletar</button>
-                              <button class="btn btn-info btn-sm">Inspecionar</button>
-                          </td>
-                      </tr>
-                      <!-- Registro 3 -->
-                      <tr>
-                          <td>003</td>
-                          <td>Ultrassom</td>
-                          <td>R$ 250,00</td>
-                          <td>
-                              <button class="btn btn-warning btn-sm">Editar</button>
-                              <button class="btn btn-danger btn-sm">Deletar</button>
-                              <button class="btn btn-info btn-sm">Inspecionar</button>
-                          </td>
-                      </tr>
-                      <!-- Registro 4 -->
-                      <tr>
-                          <td>004</td>
-                          <td>Tomografia</td>
-                          <td>R$ 350,00</td>
-                          <td>
-                              <button class="btn btn-warning btn-sm">Editar</button>
-                              <button class="btn btn-danger btn-sm">Deletar</button>
-                              <button class="btn btn-info btn-sm">Inspecionar</button>
-                          </td>
-                      </tr>
-                      <!-- Registro 5 -->
-                      <tr>
-                          <td>005</td>
-                          <td>Consulta Médica</td>
-                          <td>R$ 100,00</td>
-                          <td>
-                              <button class="btn btn-warning btn-sm">Editar</button>
-                              <button class="btn btn-danger btn-sm">Deletar</button>
-                              <button class="btn btn-info btn-sm">Inspecionar</button>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
-      </div>
-    </div>
+@section('content')
+        
+  <!-- Botão "Adicionar"-->
+  <div class="mb-3">
+    <a href="{{route('admin.procedimentos.create')}}" class="btn btn-primary mb-3">Adicionar</a>
   </div>
 
+  <hr>
 
-  <!-- Script para interatividade -->
-  <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(`${id}-dropdown`);
-      dropdown.classList.toggle('show');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
-      }
-    };
-  </script>
+  <!-- EXIBIÇÃO DAS ESPECIALIDADES CADASTRADAS -->
+  <div class="row mt-1">
+      <!-- Tabela com registros -->
+      <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Procedimento</th>
+                <th scope="col">Classe associada</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+          @forelse($procedimentos as $procedimento)
+            <tr>
+                <td> {{ $procedimento->id ?? 'Não informado' }} </td>
+                <td> {{ $procedimento->nome ?? 'Não informado' }} </td>
+                <td> {{ $procedimento->classe->nome ?? 'Não informado' }} </td>
+                <td> {{ $procedimento->valor ?? 'Não informado' }} </td>
+                <td>
+                    <a href="{{ route('admin.procedimentos.edit', $procedimento->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ route('admin.procedimentos.destroy', $procedimento->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Deletar</button>
+                    </form>
+                    <a href="{{ route('admin.procedimentos.show', $procedimento->id) }}" class="btn btn-info btn-sm">Visualizar</a>
+                </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="5">Nenhuma procedimento encontrada.</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+  </div>
 @endsection

@@ -71,6 +71,11 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::controller(ProcedimentoController::class)->prefix('procedimentos')->group(function () {
         Route::get('/', 'index')->name('admin.procedimentos.index');
         Route::get('/create', 'create')->name('admin.procedimentos.create');
+        Route::post('/', 'store')->name('admin.procedimentos.store');
+        Route::get('/{id}/edit', 'edit')->name('admin.procedimentos.edit');
+        Route::get('/{id}', 'show')-> name('admin.procedimentos.show');
+        Route::put('/{id}', 'update')->name('admin.procedimentos.update');
+        Route::delete('/{id}', 'destroy')->name('admin.procedimentos.destroy');
     });
 
     // Serviços Diferenciados
