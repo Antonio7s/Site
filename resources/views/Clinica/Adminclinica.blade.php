@@ -149,6 +149,52 @@
             padding: 10px;
             margin-bottom: 10px;
         }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .header {
+                width: 100%;
+                left: 0;
+                position: relative;
+            }
+            .content {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+            .sidebar h1 {
+                font-size: 1.2rem;
+            }
+            .sidebar .nav-link {
+                font-size: 0.9rem;
+            }
+            .header .user-info img {
+                width: 30px;
+                height: 30px;
+            }
+            .header .user-info .dropdown-toggle {
+                font-size: 0.9rem;
+            }
+            .content {
+                padding: 10px;
+            }
+            .tab-content .form-label {
+                font-size: 0.9rem;
+            }
+            .form-control, .form-select {
+                font-size: 0.9rem;
+            }
+            .btn {
+                font-size: 0.9rem;
+            }
+            .specialty-modal {
+                width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
