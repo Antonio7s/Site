@@ -158,6 +158,10 @@
             #userInfo {
                 margin-top: 10px;
             }
+            /* Aumentando o tamanho da fonte para dispositivos móveis */
+            .nav-link {
+                font-size: 13px; /* Aumentando de 12px para 13px */
+            }
         }
 
         @media (max-width: 576px) {
@@ -165,7 +169,7 @@
                 font-size: 18px;
             }
             .nav-link {
-                font-size: 12px;
+                font-size: 13px; /* Aumentando de 12px para 13px */
             }
             .banner {
                 font-size: 20px;
@@ -192,13 +196,13 @@
         <!-- Logo -->
         <div class="logo">
             <a href="/" class="logo" style="text-decoration: none; color: inherit;">
-                <img src="https://i.postimg.cc/87nwqDF2/20250204-230841-0000.png" alt="Logo" style="max-width: 150px; height: auto;">
+                <img src="https://i.postimg.cc/mhK2Fhr6/logomed.png" alt="Logo" style="max-width: 150px; height: auto;">
             </a>
         </div>
 
         <!-- Estado e Informações do Usuário -->
         <div class="user-container">
-            <span id="estadoSelecionado" class="badge bg-info">Estado: Não Selecionado</span>
+            <span id="estadoSelecionado" class="badge bg-info" style="cursor: pointer;" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
             @if(!auth()->check())
                 <div id="authButtons" class="d-flex align-items-center">
                     <a href="{{ route('login') }}" id="loginButton" class="btn btn-outline-light btn-sm me-2">Login</a>
@@ -262,7 +266,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <select id="estado" class="form-select" onchange="mostrarEstado()">
+                <select id="estado" class="form-select">
                     <option value="" disabled selected>Selecione um Estado</option>
                     <option value="AC">Acre</option>
                     <option value="AL">Alagoas</option>
@@ -293,7 +297,7 @@
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="salvarEstado()">Salvar</button>
             </div>
         </div>
     </div>
@@ -341,6 +345,42 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // Função para abrir o modal de seleção de estado
+    function abrirModalEstado() {
+        const estadoModal = new bootstrap.Modal(document.getElementById('estadoModal'));
+        estadoModal.show();
+    }
+
+    // Função para mostrar o estado selecionado
+    function mostrarEstado() {
+        const estadoSelecionado = document.getElementById('estado').value;
+        const estadoBadge = document.getElementById('estadoSelecionado');
+        if (estadoSelecionado) {
+            estadoBadge.textContent = `Estado: ${estadoSelecionado}`;
+            localStorage.setItem('estadoSelecionado', estadoSelecionado); // Salva o estado no localStorage
+        } else {
+            estadoBadge.textContent = 'Estado: Não Selecionado';
+        }
+    }
+
+    // Função para salvar o estado selecionado e fechar o modal
+    function salvarEstado() {
+        mostrarEstado();
+        const estadoModal = bootstrap.Modal.getInstance(document.getElementById('estadoModal'));
+        estadoModal.hide();
+    }
+
+    // Verifica se o estado já foi selecionado ao carregar a página
+    document.addEventListener('DOMContentLoaded', function() {
+        const estadoSalvo = localStorage.getItem('estadoSelecionado');
+        const estadoBadge = document.getElementById('estadoSelecionado');
+        if (estadoSalvo) {
+            estadoBadge.textContent = `Estado: ${estadoSalvo}`;
+        } else {
+            abrirModalEstado();
+        }
+    });
+
     // Mostrar/ocultar dropdown do usuário
     document.getElementById('userInfo').addEventListener('click', function() {
         const dropdown = document.getElementById('userDropdown');
