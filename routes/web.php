@@ -18,6 +18,9 @@ use App\Http\Controllers\Admin\HomepageController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\DashboardController;
 
+use App\Http\Controllers\Admin_clinica\DashboardClinicaController;
+
+
 // Inclusão das rotas de autenticação
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
@@ -91,6 +94,17 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::get('mensagens', [InboxController::class], 'index')->name('admin.mensagens.index');
 });
 
+// Rotas que exigem autenticação de clínica e têm o prefixo 'admin-clinica'
+Route::middleware('auth:clinic', 'verified')->prefix('admin-clinica')->group(function () {
+    Route::get('/dashboard', [DashboardClinicaController::class, 'index'])->name('admin-clinica.dashboard.index'); // DASHBOARD - EM BRANCO
+    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.servicos'); // Listagem de serviços
+    //Route::get('/localização', ['','dashboard'])->name('admin.clinica.clinica'); //SOBRE A CLÍNICA
+    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.dashboard'); // VISUALIZAR OS PROCEDIMENTOS DISP. E  OS CADASTRADOS.
+    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.dashboard'); // CADASTRAR PROFISSIONAIS
+    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.dashboard'); // VISUALIZAR PROFISSIONAIS
+    //Route::get('/agendamento', ['','dashboard'])->name('admin.clinica.dashboard'); // AGENDAR HORARIO PARA O PROF.
+});
+
 // Páginas públicas (Index e outras estáticas)
 Route::name('public.')->group(function () {
     Route::view('/', 'Home/index')->name('index');
@@ -104,11 +118,6 @@ Route::name('public.')->group(function () {
 });
 
 
-
-// ADMIN DA CLINICA
-Route::get('/admin-clinica', function () {
-    return view('Clinica/Adminclinica');
-})->middleware(['auth:clinic', 'verified'])->name('admin-clinica');
 
 
 // Protegendo o dashboard do usuário com autenticação e verificação de e-mail

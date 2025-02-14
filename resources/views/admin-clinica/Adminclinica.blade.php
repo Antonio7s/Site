@@ -388,22 +388,7 @@
                 </table>
             </div>
 
-            <!-- Agendamento -->
-            <div id="agendamento" class="tab-pane fade" role="tabpanel">
-                <h3>Agendamento</h3>
-                <input type="text" id="searchDoctor" class="form-control" placeholder="Pesquisar médico">
-                <ul id="doctorList" class="list-group mt-3">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Dr. João Silva
-                        <button class="btn btn-primary btn-sm" onclick="abrirHorarios('Dr. João Silva')">Horário</button>
-                    </li>
-                </ul>
-                <div id="horariosSection" style="display: none;">
-                    <h4 class="mt-4">Horários para <span id="doctorName"></span></h4>
-                    <div id="horariosContainer"></div>
-                    <button type="button" class="btn btn-success mt-2" onclick="adicionarHorario()">Adicionar Horário</button>
-                </div>
-            </div>
+
 
             <!-- Modal de Especialidades -->
             <div id="specialtyModal" class="specialty-modal">
