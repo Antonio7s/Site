@@ -67,6 +67,9 @@
     }
   </style>
 
+  <!-- Script do reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
   <div class="registration-container">
     <h2>Cadastro</h2>
     <form method="POST" action="{{ route('register') }}">
@@ -108,6 +111,12 @@
         @endif
       </div>
 
+      <!-- Widget do reCAPTCHA -->
+      <div class="g-recaptcha" data-sitekey="poem"></div>
+      @if ($errors->has('g-recaptcha-response'))
+          <div class="error">{{ $errors->first('g-recaptcha-response') }}</div>
+      @endif
+
       <div class="actions">
         <a href="{{ route('login') }}">Já registrado? Entrar</a>
         <button type="submit">Cadastrar</button>
@@ -115,3 +124,4 @@
     </form>
   </div>
 @endsection
+

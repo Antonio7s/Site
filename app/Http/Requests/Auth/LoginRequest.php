@@ -1,16 +1,20 @@
-<?php
+<?php 
 
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
+    // Acrescentado: declaração da propriedade redirectTo
+    public $redirectTo;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -47,6 +51,14 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
+        }
+
+        // Verifica se o usuário é um admin usando o Gate
+        $user = Auth::user();
+        if (Gate::allows('isAdmin', $user)) { // Usando o Gate para verificar se o usuário é admin
+            $this->redirectTo = '/admin/dashboard'; // Redireciona para o painel do admin
+        } else {
+            $this->redirectTo = '/profile'; // Redireciona para o perfil do usuário
         }
 
         RateLimiter::clear($this->throttleKey());

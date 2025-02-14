@@ -1,4 +1,4 @@
-<?php 
+<?php  
 
 namespace App\Http\Controllers\Auth;
 
@@ -26,6 +26,11 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
+
+        // Acrescentado: se a propriedade redirectTo estiver definida na request, redireciona para ela
+        if (isset($request->redirectTo) && $request->redirectTo) {
+            return redirect()->intended($request->redirectTo);
+        }
 
         return $this->redirectUser();
     }
