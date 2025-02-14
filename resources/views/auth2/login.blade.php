@@ -25,6 +25,11 @@
                 </div>
             </div>
 
+            <!-- reCAPTCHA -->
+            <div class="mb-3">
+                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+            </div>
+
             <!-- Botão "Acessar" -->
             <div class="d-grid mb-3">
                 <button type="submit" class="btn btn-primary py-2">Acessar</button>
@@ -57,4 +62,7 @@
         </form>
     </div>
 </div>
+
+<!-- Script do reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endsection

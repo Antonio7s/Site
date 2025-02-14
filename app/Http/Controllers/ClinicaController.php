@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Clinica;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class ClinicaController extends Controller
 {
@@ -21,7 +22,22 @@ class ClinicaController extends Controller
                 'document'       => 'required|string|max:20',
                 'email'          => 'required|email|unique:clinicas',
                 'password'       => 'required|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+                'g-recaptcha-response' => 'required', // Campo do reCAPTCHA
             ]);
+
+            // Validação do reCAPTCHA
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            $responseData = $response->json();
+
+            // Se o reCAPTCHA não for válido, retorna um erro
+            if (!$responseData['success']) {
+                return back()->withErrors(['captcha' => 'Falha na validação do reCAPTCHA. Tente novamente.']);
+            }
 
             // Criar a clínica no banco de dados
             $clinica = Clinica::create([
