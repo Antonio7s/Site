@@ -50,6 +50,6 @@ class RegisteredUserController2 extends Controller
         Auth::guard('clinic')->login($clinica);
 
 
-        return redirect(route('admin-clinica', absolute: false));
+        return redirect(route('admin-clinica.dashboard.index', absolute: false));
     }
 }

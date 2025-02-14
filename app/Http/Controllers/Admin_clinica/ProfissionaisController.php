@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin-clinica;
+namespace App\Http\Controllers\Admin_clinica;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

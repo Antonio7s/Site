@@ -68,88 +68,6 @@
             margin-left: 250px;
             padding: 20px;
         }
-        .tab-content .form-label {
-            font-weight: bold;
-        }
-
-        /* Ajustes nas abas */
-        .nav-link.active {
-            background-color: #004080;
-        }
-
-        /* Ajustes para o formulário de Profissionais Associados */
-        .form-select {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .form-control {
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        .mb-3 {
-            margin-bottom: 1.5rem;
-        }
-
-        .photo-input {
-            display: block;
-            margin-top: 10px;
-        }
-
-        /* Estilo para a aba de especialidades */
-        .specialty-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1050;
-        }
-        .specialty-modal.show {
-            display: block;
-        }
-        .specialty-modal .modal-content {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .specialty-modal .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
-        }
-        .specialty-modal .modal-footer button {
-            margin-left: 10px;
-        }
-
-        /* Estilo para a tabela de procedimentos */
-        #procedimentosTable table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        #procedimentosTable th, #procedimentosTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        #procedimentosTable th {
-            background-color: #f2f2f2;
-            text-align: left;
-        }
-
-        /* Estilo para os cards de horário */
-        .horario-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
         /* Responsividade */
         @media (max-width: 768px) {
             .sidebar {
@@ -182,18 +100,6 @@
             .content {
                 padding: 10px;
             }
-            .tab-content .form-label {
-                font-size: 0.9rem;
-            }
-            .form-control, .form-select {
-                font-size: 0.9rem;
-            }
-            .btn {
-                font-size: 0.9rem;
-            }
-            .specialty-modal {
-                width: 90%;
-            }
         }
     </style>
 </head>
@@ -202,15 +108,16 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h1>Painel Adm Clínica</h1>
-        <div class="nav flex-column" role="tablist">
-            <a href="#servicos" class="nav-link" data-bs-toggle="tab" role="tab">Serviços</a>
-            <a href="#sobre-clinica" class="nav-link" data-bs-toggle="tab" role="tab">Sobre a Clínica</a>
-            <a href="#localizacao" class="nav-link" data-bs-toggle="tab" role="tab">Localização</a>
-            <a href="#profissionais-associados" class="nav-link" data-bs-toggle="tab" role="tab">Profissionais Associados</a>
-            <a href="#procedimentos" class="nav-link" data-bs-toggle="tab" role="tab">Procedimentos</a>
-            <a href="#lista-profissionais" class="nav-link" data-bs-toggle="tab" role="tab">Lista de Profissionais</a>
-            <a href="#agendamento" class="nav-link" data-bs-toggle="tab" role="tab">Agendamento</a>
-        </div>
+        <nav class="nav flex-column">
+            <a href="{{ route('admin-clinica.dashboard.index') }}" class="nav-link"> dahsboard</a>
+            <a href="#" class="nav-link">Serviços</a>
+            <a href="#" class="nav-link">Sobre a Clínica</a>
+            <a href="#" class="nav-link">Localização</a>
+            <a href="#" class="nav-link">Profissionais Associados</a>
+            <a href="#" class="nav-link">Procedimentos</a>
+            <a href="#" class="nav-link">Lista de Profissionais</a>
+            <a href="#" class="nav-link">Agendamento</a>
+        </nav>
     </div>
 
     <!-- Header -->
@@ -220,7 +127,6 @@
             <img src="{{ asset('images/icone-usuario.png') }}" alt="Foto da Clínica" width="40">
             <div class="dropdown">
                 <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    <!-- Nome do usuário logado -->
                     {{ Auth::guard('clinic')->user()->nome_fantasia }}
                 </button>
                 <ul class="dropdown-menu">
@@ -240,18 +146,14 @@
 
     <!-- Content -->
     <div class="content">
-        
-            <!-- Conteúdo da página -->
-            <main>
-                <div class="row mt-4">
-                    @yield('content') <!-- Aqui é o conteúdo da página -->
-                </div>
-            </main>
-            
+        <main>
+            <div class="row mt-4">
+                @yield('content')
+            </div>
+        </main>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 </body>
 </html>

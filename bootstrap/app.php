@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             users: function ($request) {
                 // Verifica se o usuário está autenticado pelo guard 'clinic'
                 if (Auth::guard('clinic')->check()) {
-                    return route('admin-clinica'); // Redireciona para '/dashboard2' se autenticado pelo guard 'clinic'
+                    return route('admin-clinica.dashboard.index'); // Redireciona para '/dashboard2' se autenticado pelo guard 'clinic'
                 }
                 // Redireciona para a rota padrão de index para outros guards
                 return route('profile.edit');
