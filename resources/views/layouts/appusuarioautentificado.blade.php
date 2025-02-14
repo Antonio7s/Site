@@ -49,21 +49,45 @@
     .custom-footer a:hover {
       text-decoration: underline;
     }
+    /* Ajustes para telas pequenas */
+    @media (max-width: 768px) {
+      .custom-header .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .custom-header .d-flex a {
+        margin: 5px 0;
+      }
+      .custom-footer .row {
+        flex-direction: column;
+      }
+      .custom-footer .col-md-4 {
+        margin-bottom: 20px;
+      }
+    }
+    /* Permitir rolagem interna na offcanvas caso o conteúdo ultrapasse a altura da tela */
+    .offcanvas-body {
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
   <!-- Cabeçalho -->
   <header class="custom-header py-3">
     <div class="container d-flex justify-content-between align-items-center">
-      <!-- Logo e Links do header -->
+      <!-- Logo e Botão Hamburger -->
       <div class="d-flex align-items-center">
+        <!-- Botão Hamburger visível apenas em telas pequenas -->
+        <button class="btn btn-outline-light d-md-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+          <i class="fas fa-bars"></i>
+        </button>
         <!-- Logo -->
         <a href="{{ url('/privacy-policy') }}" class="me-3">
           <img src="https://i.postimg.cc/mhK2Fhr6/logomed.png" alt="Minha Logo" style="height:40px;">
         </a>
-        <!-- Links -->
-        <a href="{{ url('/privacy-policy') }}" class="me-3">Políticas de Privacidade</a>
-        <a href="{{ url('/about-medexames') }}">Sobre a Medexames</a>
+        <!-- Links visíveis apenas em telas médias ou maiores -->
+        <a href="{{ url('/privacy-policy') }}" class="me-3 d-none d-md-inline">Políticas de Privacidade</a>
+        <a href="{{ url('/about-medexames') }}" class="d-none d-md-inline">Sobre a Medexames</a>
       </div>
       <!-- Informações do usuário (ou links para login/cadastro) -->
       <div class="d-flex align-items-center">
@@ -86,15 +110,23 @@
     </div>
     <div class="offcanvas-body">
       <ul class="nav nav-pills flex-column">
+        <!-- Itens do menu -->
         <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Página Inicial</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Minhas Informações</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Meus Pedidos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Exames</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Endereços</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Pagamentos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Suporte</a></li>
+
+        <!-- Botões adicionais para usuários autenticados -->
         @auth
+          <!-- Botão "Meus Pedidos" -->
           <li class="nav-item mt-3">
+            <a href="#" class="btn btn-primary w-100">Meus Pedidos</a>
+          </li>
+          <!-- Botão "Sair" -->
+          <li class="nav-item mt-2">
             <form action="{{ url('/logout') }}" method="POST">
               @csrf
               <button type="submit" class="btn btn-danger w-100">Sair</button>
@@ -107,10 +139,6 @@
 
   <!-- Conteúdo Principal -->
   <div class="container my-4">
-    <!-- Botão para abrir o menu lateral (visível em telas pequenas) -->
-    <button class="btn btn-primary d-md-none mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
-      Menu
-    </button>
     <!-- Mensagem de boas-vindas (centralizada) -->
     @auth
       <div class="text-center mb-4">

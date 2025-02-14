@@ -11,18 +11,16 @@
   <!-- Estilos personalizados -->
   <style>
     body {
-      background-color: #f0f4f8; /* Fundo claro e suave */
+      background-color: #f0f4f8;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .sidebar {
       height: 100vh;
-      background-color: #202044; /* Azul escuro para o menu */
+      background-color: #202044;
       color: #fff;
       padding: 20px;
-      padding-bottom: 120px; /* Adiciona um padding no final para garantir que os itens não fiquem muito próximos da borda */
+      padding-bottom: 120px;
       box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
-      position: fixed; /* Fixa o menu lateral */
-      width: 16.666667%; /* Largura da coluna do Bootstrap */
       overflow-y: auto;
     }
     .sidebar a {
@@ -35,7 +33,7 @@
       transition: all 0.3s ease;
     }
     .sidebar a:hover {
-      background-color: rgba(255, 255, 255, 0.1); /* Efeito hover suave */
+      background-color: rgba(255, 255, 255, 0.1);
       transform: translateX(5px);
     }
     .sidebar h3 {
@@ -45,8 +43,7 @@
     }
     .main-content {
       padding: 20px;
-      background-color: #f0f4f8; /* Fundo claro */
-      margin-left: 16.666667%; /* Compensa a largura do menu lateral */
+      background-color: #f0f4f8;
     }
     .card {
       margin-bottom: 20px;
@@ -54,32 +51,32 @@
       border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      background-color: #fff; /* Fundo branco para os cards */
+      background-color: #fff;
     }
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
     }
     .card-header {
-      background-color: #1a1a2e; /* Azul mais escuro para o cabeçalho do card */
+      background-color: #1a1a2e;
       color: #fff;
       border-radius: 10px 10px 0 0;
       padding: 15px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
     .card-title {
-      color: #1a1a2e; /* Azul mais escuro para o título */
+      color: #1a1a2e;
       font-weight: bold;
     }
     .btn-primary {
-      background-color: #1a1a2e; /* Azul mais escuro para botões */
+      background-color: #1a1a2e;
       border: none;
       border-radius: 5px;
       padding: 10px 20px;
       transition: all 0.3s ease;
     }
     .btn-primary:hover {
-      background-color: #0f0f1a; /* Azul ainda mais escuro no hover */
+      background-color: #0f0f1a;
       transform: scale(1.05);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
@@ -91,7 +88,7 @@
       background-color: #fff;
     }
     .table thead {
-      background-color: #1a1a2e; /* Azul mais escuro para o cabeçalho da tabela */
+      background-color: #1a1a2e;
       color: #fff;
     }
     .table th, .table td {
@@ -104,28 +101,28 @@
       font-weight: bold;
     }
     .bg-success {
-      background-color: #5cb85c !important; /* Verde suave */
+      background-color: #5cb85c !important;
     }
     .bg-warning {
-      background-color: #f0ad4e !important; /* Laranja suave */
+      background-color: #f0ad4e !important;
     }
     .bg-danger {
-      background-color: #d9534f !important; /* Vermelho suave */
+      background-color: #d9534f !important;
     }
     h1, h2 {
-      color: #1a1a2e; /* Azul mais escuro para títulos */
+      color: #1a1a2e;
       font-weight: bold;
     }
     .navbar {
-      background-color: #1a1a2e; /* Azul mais escuro para a navbar */
+      background-color: #1a1a2e;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       padding: 10px 20px;
-      position: sticky; /* Fixa a navbar no topo */
+      position: sticky;
       top: 0;
-      z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+      z-index: 1000;
     }
     .navbar-brand {
-      color: #fff; /* Texto branco para o logo */
+      color: #fff;
       font-weight: bold;
     }
     .navbar .user-info {
@@ -136,7 +133,7 @@
     .navbar .user-info .notifications, .navbar .user-info .email {
       margin-right: 20px;
       position: relative;
-      color: #fff; /* Ícones brancos */
+      color: #fff;
       cursor: pointer;
     }
     .navbar .user-info .notifications .badge {
@@ -160,23 +157,17 @@
       margin-right: 10px;
     }
     .navbar .user-info .profile span {
-      color: #fff; /* Texto branco para o nome do usuário */
+      color: #fff;
     }
-
-    /* Ajuste de posicionamento do dropdown do perfil */
     .profile {
-      position: relative; /* Adicionado para referência de posicionamento */
+      position: relative;
     }
-
     #profile-dropdown {
-      top: calc(100% + 5px); /* Desce o dropdown 5px abaixo do elemento pai */
-      right: 0; /* Mantém alinhado à direita */
-      left: auto; /* Anula qualquer posicionamento à esquerda */
-      margin-top: 8px; /* Adiciona um pequeno espaçamento */
+      top: calc(100% + 5px);
+      right: 0;
+      left: auto;
+      margin-top: 8px;
     }
-    
-
-
     .title-container {
       background-color: #fff;
       padding: 15px;
@@ -208,33 +199,49 @@
     .dropdown-menu ul li:hover {
       background-color: #f0f4f8;
     }
-
-    /* sidebar*/
-    /* Estilo da barra de rolagem para navegadores WebKit (Chrome, Safari, Edge) */
     .sidebar::-webkit-scrollbar {
-    width: 10px; /* Largura da barra de rolagem */
+      width: 10px;
     }
-
     .sidebar::-webkit-scrollbar-track {
-    background: #f0f4f8; /* Cor de fundo da área da barra de rolagem */
+      background: #f0f4f8;
     }
-
     .sidebar::-webkit-scrollbar-thumb {
-    background: #000000; /* Cor da barra de rolagem (preta) */
-    border-radius: 5px; /* Bordas arredondadas */
+      background: #000000;
+      border-radius: 5px;
+    }
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: #333;
     }
 
-    .sidebar::-webkit-scrollbar-thumb:hover {
-    background: #333; /* Cor da barra de rolagem ao passar o mouse */
+    /* Estilo personalizado para o botão hambúrguer */
+    .navbar-toggler-custom {
+      background: none;
+      border: none;
+      padding: 0;
+      margin-right: 15px;
+    }
+    .navbar-toggler-custom .navbar-toggler-icon {
+      width: 24px;
+      height: 24px;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    /* Ajuste do tamanho do Offcanvas */
+    .offcanvas {
+      width: 250px !important; /* Largura reduzida do Offcanvas */
     }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar">
+  <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Painel Admin</a>
       <div class="user-info">
+        <!-- Botão Hambúrguer personalizado -->
+        <button class="navbar-toggler navbar-toggler-custom d-block d-md-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="notifications" onclick="toggleDropdown('notifications')">
           <i class="bi bi-bell"></i>
           <span class="badge">3</span>
@@ -277,11 +284,14 @@
     </div>
   </nav>
 
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-      <div class="col-md-2 sidebar">
-        <h3>Menu</h3>
+  <!-- Offcanvas Sidebar -->
+  <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="sidebarMenuLabel">Menu</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="sidebar">
         <ul class="nav flex-column">
           <li><a href="{{ route('admin.dashboard.admin') }}"><i class="bi bi-house-door"></i> Dashboard</a></li>
           <li><a href="{{ route('admin.clinicas.index') }}"><i class="bi bi-building"></i> Clínicas</a></li>
@@ -295,27 +305,45 @@
           <li><a href="{{ route('admin.homepage.index') }}"><i class="bi bi-globe"></i> Homepage</a></li>
           <li><a href="{{ route('admin.mensagens.index') }}"><i class="bi bi-chat-dots"></i> Mensagens</a></li>
         </ul>
-    </div>
-
-      <!-- Main Content -->
-      <div class="col-md-10 main-content">
-        <div class="title-container">
-          <h1>@yield('header_title', 'Título Padrão')</h1>
-        </div>
-        
-
-            <!-- Conteúdo da página -->
-            <main>
-            <div class="row mt-4">
-                @yield('content') <!-- Aqui é o conteúdo da página -->
-            </div>
-            </main>
-                
-            </div>
       </div>
     </div>
   </div>
 
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar (visível apenas em telas maiores) -->
+      <div class="col-md-2 d-none d-md-block">
+        <div class="sidebar">
+          <h3>Menu</h3>
+          <ul class="nav flex-column">
+            <li><a href="{{ route('admin.dashboard.admin') }}"><i class="bi bi-house-door"></i> Dashboard</a></li>
+            <li><a href="{{ route('admin.clinicas.index') }}"><i class="bi bi-building"></i> Clínicas</a></li>
+            <li><a href="{{ route('admin.usuarios.index') }}"><i class="bi bi-people"></i> Usuários</a></li>
+            <li><a href="{{ route('admin.especialidades.index') }}"><i class="bi bi-journal-medical"></i> Especialidades</a></li>
+            <li><a href="{{ route('admin.classes.index') }}"><i class="bi bi-layers"></i> Classes</a></li>
+            <li><a href="{{ route('admin.procedimentos.index') }}"><i class="bi bi-clipboard-pulse"></i> Procedimentos</a></li>
+            <li><a href="{{ route('admin.servicos-diferenciados.index') }}"><i class="bi bi-cash-coin"></i> Servicos diferenciados</a></li>
+            <li><a href="{{ route('admin.relatorios.index') }}"><i class="bi bi-file-earmark-bar-graph"></i> Relatórios</a></li>
+            <li><a href="{{ route('admin.contatos.index') }}"><i class="bi bi-envelope"></i> Contatos</a></li>
+            <li><a href="{{ route('admin.homepage.index') }}"><i class="bi bi-globe"></i> Homepage</a></li>
+            <li><a href="{{ route('admin.mensagens.index') }}"><i class="bi bi-chat-dots"></i> Mensagens</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-12 col-md-10 main-content">
+        <div class="title-container">
+          <h1>@yield('header_title', 'Título Padrão')</h1>
+        </div>
+        <main>
+          <div class="row mt-4">
+            @yield('content')
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
 
   <!-- Bootstrap JS e dependências -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -323,19 +351,12 @@
   
   <!-- Script para interatividade -->
   <script>
-
-    // Exibir Dropdown corretamente ao clicar no nome ou na foto
     function toggleDropdown(id) {
-      const profileContainer = document.querySelector('.profile');
       const dropdown = document.getElementById(`${id}-dropdown`);
-
       if (!dropdown) return;
-
-      // Alternar visibilidade do dropdown
       dropdown.classList.toggle('show');
     }
 
-    // Fechar dropdowns ao clicar fora
     window.onclick = function(event) {
       if (!event.target.closest('.profile')) {
         const dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -344,8 +365,6 @@
         });
       }
     };
-
-
   </script>
 </body>
 </html>
