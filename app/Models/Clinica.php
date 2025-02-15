@@ -21,6 +21,7 @@ class Clinica extends Authenticatable
         'cnpj_cpf', // Novo campo para CNPJ ou CPF
         'email',
         'password',
+        'documentos', // caminho do arquivo
     ];
 
     // Campos a serem ocultados (não aparecerão nas respostas de JSON, por exemplo)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Models\Clinica;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -120,6 +121,23 @@ class ClinicaController extends Controller
         }
     
         return view('admin.sub-diretorios.clinicas.solicitacoes-de-cadastro.analise', compact('clinica'));
+    }
+
+    public function download($id)
+    {
+        // Busca a clínica pelo ID
+        $clinica = Clinica::findOrFail($id);
+
+        // Obtém o caminho do documento armazenado no BD
+        $documentoPath = $clinica->documentos; // Ex: "uploads/documentos/1739641962_Documento.pdf"
+
+        // Verifica se o arquivo existe no storage privado
+        if (!Storage::exists($documentoPath)) {
+            return response()->json(['message' => 'Arquivo não encontrado'], 404);
+        }
+
+        // Retorna o arquivo para download
+        return Storage::download($documentoPath);
     }
     
 }

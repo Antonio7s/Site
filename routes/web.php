@@ -44,7 +44,7 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     // Clínicas - Análise de cadastros
     Route::get('/clinicas/solicitacoes-de-cadastro/', [ClinicaController::class, 'solicitacoes_de_cadastro'])->name('admin.clinicas.solicitacoes');
     Route::match(['get', 'post'], 'clinicas/solicitacoes-de-cadastro/{id}/analise', [ClinicaController::class, 'analise'])->name('admin.clinicas.solicitacoes-de-cadastro.analise');
-
+    Route::get('/clinicas/{id}/download', [ClinicaController::class, 'download'])->name('admin.clinicas.download');
     // Usuários
     Route::get('usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     

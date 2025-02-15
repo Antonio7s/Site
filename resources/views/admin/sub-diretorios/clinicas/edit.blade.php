@@ -247,9 +247,14 @@
             <!-- Seção de Documentos -->
             <hr class="my-4">
             <div>
-                <h3>Documentos para Download</h3>
+            <h3>Documentos para Download</h3>
                 <ul class="list-group">
-                    <li class="list-group-item">Documentos <a href="#" class="btn btn-link btn-sm">Download</a></li>
+                    <li class="list-group-item">
+                        Documento: {{ $clinica->documentos }} 
+                        <a href="{{ route('admin.clinicas.download', $clinica->id) }}" class="btn btn-primary">
+                            Baixar Documento
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -266,7 +271,7 @@
                             <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
                 </div>
             </div>
-            
+
             <!-- BOTOES -->
             <div class="d-flex justify-content-end mt-4">
                 <button type="reset" class="btn btn-warning">Cancelar</button>
