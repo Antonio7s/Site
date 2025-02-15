@@ -32,8 +32,37 @@ class ClinicaController extends Controller
         // Validação dos dados
         $request->validate([
             'razao_social' => 'required|string|max:255',
-            'cnpj_cpf' => 'required|string|unique:clinicas,cnpj_cpf,' . $id,
-            'email' => 'required|email|unique:clinicas,email,' . $id,
+            'status' => 'required|string|max:255',
+            'cnpj_cpf' => 'nullable|string|unique:clinicas,cnpj_cpf,' . $id,
+            'email' => 'nullable|email|unique:clinicas,email,' . $id,
+            'ficha_cadastral' => 'required|string|max:255',
+            'nome_fantasia' => 'nullable|string|max:255',
+            'cep' => 'required|string|max:10', // Formato: 00000-000
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:10',
+            'complemento' => 'nullable|string|max:255',
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'uf' => 'required|string|max:2',
+            'email_administrativo' => 'required|email|max:255',
+            'email_faturamento' => 'required|email|max:255',
+            'telefone_local' => 'required|string|max:15',
+            'telefone_financeiro' => 'required|string|max:15',
+            'celular' => 'required|string|max:15',
+            'responsavel_nome' => 'required|string|max:255',
+            'rg' => 'required|string|max:20',
+            'orgao_emissor' => 'required|string|max:20',
+            'data_emissao' => 'required|date',
+            'cpf' => 'required|string|max:14',
+            'estado_civil' => 'required|string|max:20',
+            /*
+            'banco' => 'required|string|max:255',
+            'numero_banco' => 'required|string|max:4',
+            'agencia' => 'required|string|max:10',
+            'conta_corrente' => 'required|string|max:20',
+            'titular_conta' => 'required|string|max:255',
+            'cpf_titular' => 'required|string|max:14',
+            */
         ]);
 
         // Atualiza os dados

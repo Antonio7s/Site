@@ -38,8 +38,9 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::get('/clinicas', [ClinicaController::class, 'index'])->name('admin.clinicas.index');
     Route::get('/clinicas/create', [ClinicaController::class, 'create'])->name('admin.clinicas.create');
     Route::get('/clinicas/{id}/edit', [ClinicaController::class, 'edit'])->name('admin.clinicas.edit');
+    Route::put('/clinicas/{id}', [ClinicaController::class, 'update'])->name('admin.clinicas.update');
     Route::get('/clinicas/{id}/show', [ClinicaController::class, 'show'])->name('admin.clinicas.show');
-    Route::get('/clinicas/destroy', [ClinicaController::class, 'destroy'])->name('admin.clinicas.destroy');
+    Route::delete('/clinicas/{id}', [ClinicaController::class, 'destroy'])->name('admin.clinicas.destroy'); // Corrigido para delete, já que é uma exclusão
     // Clínicas - Análise de cadastros
     Route::get('/clinicas/solicitacoes-de-cadastro/', [ClinicaController::class, 'solicitacoes_de_cadastro'])->name('admin.clinicas.solicitacoes');
     Route::match(['get', 'post'], 'clinicas/solicitacoes-de-cadastro/{id}/analise', [ClinicaController::class, 'analise'])->name('admin.clinicas.solicitacoes-de-cadastro.analise');
