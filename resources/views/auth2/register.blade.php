@@ -100,9 +100,9 @@
 
             <!-- Upload de Documentos -->
             <div class="mb-3">
-                <x-input-label for="documentos" :value="__('Anexar Documentos (PDF)')" />
-                <input type="file" id="documentos" name="documentos[]" class="form-control" accept="application/pdf" multiple required>
-                <small class="text-muted">Envie todos os documentos necessários em formato PDF.</small>
+                <x-input-label for="documentos" :value="__('Anexar Documento (PDF)')" />
+                <input type="file" id="documentos" name="documentos" class="form-control" accept="application/pdf" required>
+                <small class="text-muted">Envie o documento necessário em formato PDF.</small>
                 <x-input-error :messages="$errors->get('documentos')" class="mt-2" />
             </div>
 

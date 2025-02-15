@@ -35,7 +35,17 @@ class RegisteredUserController2 extends Controller
             'cnpj_cpf' => ['required', 'string', 'max:18', 'unique:clinicas'],  // CNPJ/CPF
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Clinica::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'documentos'     => 'required|file|mimes:pdf|max:2048',
         ]);
+
+        $documentoPath = null;
+        if ($request->hasFile('documentos')) {
+            $file = $request->file('documentos');
+            // Gera um nome único para o arquivo
+            $nomeArquivo = time() . '_' . $file->getClientOriginalName();
+            // Armazena o arquivo no disco 'private' dentro da pasta 'uploads/documentos'
+            $documentoPath = $file->storeAs('uploads/documentos', $nomeArquivo, 'private');
+        }
 
         $clinica = Clinica::create([
             'razao_social' => $request->razao_social,
@@ -43,6 +53,7 @@ class RegisteredUserController2 extends Controller
             'cnpj_cpf' => $request->cnpj_cpf,  // CNPJ/CPF
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'documentos'     => $documentoPath, // Salva o caminho do arquivo PDF
         ]);
 
         event(new Registered($clinica));

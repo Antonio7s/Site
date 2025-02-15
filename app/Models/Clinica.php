@@ -15,11 +15,13 @@ class Clinica extends Authenticatable
 
     // Campos preenchíveis (os que podem ser atribuídos em massa)
     protected $fillable = [
+        'status', // [pendente, aprovado, negado]
         'razao_social', // Novo campo para a Razão Social
         'nome_fantasia', // Novo campo para o Nome Fantasia
         'cnpj_cpf', // Novo campo para CNPJ ou CPF
         'email',
         'password',
+        'documentos', // caminho do arquivo
     ];
 
     // Campos a serem ocultados (não aparecerão nas respostas de JSON, por exemplo)

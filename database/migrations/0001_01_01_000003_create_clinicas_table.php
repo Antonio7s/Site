@@ -16,6 +16,7 @@ class CreateClinicasTable extends Migration
             $table->string('cnpj_cpf')->unique(); // CNPJ ou CPF
             $table->string('email')->unique(); // Email
             $table->string('password'); // Senha
+            $table->string('documentos')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

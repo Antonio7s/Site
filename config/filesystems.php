@@ -60,6 +60,13 @@ return [
             'report' => false,
         ],
 
+        // disco para armazenar documentos confidenciais!
+        'private' => [
+            'driver' => 'local',                    // Usando o sistema de arquivos local
+            'root'   => storage_path('app/private'), // Pasta onde os arquivos serão armazenados
+            'visibility' => 'private',              // Define o acesso como privado
+        ],
+
     ],
 
     /*
