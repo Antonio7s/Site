@@ -24,11 +24,11 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Razão Social</label>
-                            <input type="text" class="form-control" value="Clínica Saúde Nova" readonly>
+                            <input type="text" class="form-control" value="{{ $clinica->razao_social ?? 'Não informado'}}" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Nome Fantasia</label>
-                            <input type="text" class="form-control" value="Saúde Nova" readonly>
+                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado'}}" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -180,34 +180,15 @@
                 </ul>
 
                 <div class="d-flex justify-content-end mt-4">
-                    <button class="btn btn-danger me-2">Recusar</button>
-                    <button class="btn btn-warning me-2">Entrar em Contato</button>
-                    <button class="btn btn-success">Aceitar</button>
-                    
+                    <button class="btn btn-warning me-2">Entrar em Contato</button> 
+                    <form action="{{ route('admin.clinicas.solicitacoes-de-cadastro.analise', $clinica->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" name="acao" value="aprovar" class="btn btn-success">Aceitar</button>
+                        <button type="submit" name="acao" value="negar" class="btn btn-danger">Negar</button>
+                    </form>
                 </div>
             </div>
       </div>
     </div>
   </div>
-
-
-<!-- Script para interatividade -->
-  <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(`${id}-dropdown`);
-      dropdown.classList.toggle('show');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
-      }
-    };
-  </script>
 @endsection

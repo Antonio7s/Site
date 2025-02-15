@@ -10,6 +10,7 @@ class CreateClinicasTable extends Migration
     {
         Schema::create('clinicas', function (Blueprint $table) {
             $table->id();
+            $table->enum('status', ['pendente', 'negado', 'aprovado'])->default('pendente'); // STATUS DE CADASTRO
             $table->string('razao_social')->unique(); // Razão Social
             $table->string('nome_fantasia'); // Nome Fantasia
             $table->string('cnpj_cpf')->unique(); // CNPJ ou CPF

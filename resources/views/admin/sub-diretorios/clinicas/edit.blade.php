@@ -1,206 +1,250 @@
 @extends('layouts.painel-admin')
 @section('header_title', 'Análise de registro de clínicas') <!-- Alterando o h1 -->
 @section('content')
-        <!-- CORPO -->
-            <div class="row mt-4 ms-2">
-                
-                <!-- Informações da Clínica -->
-                <form>
-                    <h3>Dados da Clínica</h3>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Ficha Cadastral</label>
-                            <input type="text" class="form-control" value="Ficha Cadastral de Profissionais Médicos" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">CNPJ</label>
-                            <input type="text" class="form-control" value="{{ $clinica->cnpj_cpf ?? 'Não informado' }}">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Razão Social</label>
-                            <input type="text" class="form-control" value="{{ $clinica->razao_social ?? 'Não informado' }}">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Nome Fantasia (Nome para divulgação)</label>
-                            <input type="text" class="form-control" value="{{ $clinica->nome_fantasia ?? 'Não informado' }}">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <label class="form-label">CEP</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-5">
-                            <label class="form-label">Endereço</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Número</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Complemento</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Bairro</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Cidade</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">UF</label>
-                            <select class="form-select" disabled>
-                                <option selected>{{ $clinica->modificar ?? 'Não informado' }}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">E-mail Administrativo</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">E-mail Faturamento</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Telefone do Local (DDD)</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Telefone Financeiro (DDD)</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Celular (DDD)</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                </form>
+<!-- CORPO -->
+    <div class="row mt-4 ms-2">
+    <form method="POST" action="{{ route('admin.clinicas.update', $clinica->id) }}">
+        @csrf
+        @method('PUT') <!-- Especifica que estamos fazendo uma atualização -->
 
-                    <!-- Dados do Responsável pelo Contrato -->
-                <hr class="my-4">
-                <form>
-                    <h3>Responsável pelo Contrato</h3>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Nome Completo</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">RG</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Órgão Emissor</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Data de Emissão</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">CPF</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Estado Civil</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Dados Bancários -->
-                <hr class="my-4">
-                <form>
-                    <h3>Dados Bancários</h3>
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Banco</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Nº Banco</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Agência</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Conta Corrente</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Titular da Conta</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Chave PIX</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                        </div>
-                    </div>
-                </form>
-
-                <!-- Seção de Documentos -->
-                <hr class="my-4">
-                <h3>Documentos para Download</h3>
-                <ul class="list-group">
-                    <li class="list-group-item">Documentos <a href="#" class="btn btn-link btn-sm">Download</a></li>
-                </ul>
-
-                <hr class="my4">
-                <h3> Taxa de Serviço da MedExame </h3>
-                <div class="col-md-2">
-                            <label class="form-label">Taxa em %</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                </div>
-                <div class="col-md-2">
-                            <label class="form-label">Taxa fixa EM R$</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
-                </div>
-
-                <div class="d-flex justify-content-end mt-4">
-                <button class="btn btn-warning">Cancelar</button>
-                    <button class="btn btn-success">Salvar</button>
-                    
-                </div>
+        <h3>Dados da Clínica</h3>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Ficha Cadastral</label>
+                <input type="text" class="form-control @error('ficha_cadastral') is-invalid @enderror" name="ficha_cadastral" value="{{ old('ficha_cadastral', $clinica->ficha_cadastral) }}">
+                @error('ficha_cadastral')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-      </div>
+            <div class="col-md-6">
+                <label class="form-label">CNPJ</label>
+                <input type="text" class="form-control @error('cnpj_cpf') is-invalid @enderror" name="cnpj_cpf" value="{{ old('cnpj_cpf', $clinica->cnpj_cpf) }}">
+                @error('cnpj_cpf')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Razão Social</label>
+                <input type="text" class="form-control @error('razao_social') is-invalid @enderror" name="razao_social" value="{{ old('razao_social', $clinica->razao_social) }}">
+                @error('razao_social')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Nome Fantasia</label>
+                <input type="text" class="form-control @error('nome_fantasia') is-invalid @enderror" name="nome_fantasia" value="{{ old('nome_fantasia', $clinica->nome_fantasia) }}">
+                @error('nome_fantasia')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">CEP</label>
+                <input type="text" class="form-control @error('cep') is-invalid @enderror" name="cep" value="{{ old('cep', $clinica->cep) }}">
+                @error('cep')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Endereço</label>
+                <input type="text" class="form-control @error('endereco') is-invalid @enderror" name="endereco" value="{{ old('endereco', $clinica->endereco) }}">
+                @error('endereco')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Número</label>
+                <input type="text" class="form-control @error('numero') is-invalid @enderror" name="numero" value="{{ old('numero', $clinica->numero) }}">
+                @error('numero')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Complemento</label>
+                <input type="text" class="form-control @error('complemento') is-invalid @enderror" name="complemento" value="{{ old('complemento', $clinica->complemento) }}">
+                @error('complemento')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Bairro</label>
+                <input type="text" class="form-control @error('bairro') is-invalid @enderror" name="bairro" value="{{ old('bairro', $clinica->bairro) }}">
+                @error('bairro')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Cidade</label>
+                <input type="text" class="form-control @error('cidade') is-invalid @enderror" name="cidade" value="{{ old('cidade', $clinica->cidade) }}">
+                @error('cidade')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">UF</label>
+                <select class="form-select @error('uf') is-invalid @enderror" name="uf" disabled>
+                    <option selected>{{ old('uf', $clinica->uf) }}</option>
+                </select>
+                @error('uf')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">E-mail Administrativo</label>
+                <input type="email" class="form-control @error('email_administrativo') is-invalid @enderror" name="email_administrativo" value="{{ old('email_administrativo', $clinica->email_administrativo) }}">
+                @error('email_administrativo')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">E-mail Faturamento</label>
+                <input type="email" class="form-control @error('email_faturamento') is-invalid @enderror" name="email_faturamento" value="{{ old('email_faturamento', $clinica->email_faturamento) }}">
+                @error('email_faturamento')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Telefone do Local (DDD)</label>
+                <input type="text" class="form-control @error('telefone_local') is-invalid @enderror" name="telefone_local" value="{{ old('telefone_local', $clinica->telefone_local) }}">
+                @error('telefone_local')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Telefone Financeiro (DDD)</label>
+                <input type="text" class="form-control @error('telefone_financeiro') is-invalid @enderror" name="telefone_financeiro" value="{{ old('telefone_financeiro', $clinica->telefone_financeiro) }}">
+                @error('telefone_financeiro')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Celular (DDD)</label>
+                <input type="text" class="form-control @error('celular') is-invalid @enderror" name="celular" value="{{ old('celular', $clinica->celular) }}">
+                @error('celular')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <h3>Responsável pelo Contrato</h3>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Nome Completo</label>
+                <input type="text" class="form-control @error('responsavel_nome') is-invalid @enderror" name="responsavel_nome" value="{{ old('responsavel_nome', $clinica->responsavel_nome) }}">
+                @error('responsavel_nome')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">RG</label>
+                <input type="text" class="form-control @error('rg') is-invalid @enderror" name="rg" value="{{ old('rg', $clinica->rg) }}">
+                @error('rg')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Órgão Emissor</label>
+                <input type="text" class="form-control @error('orgao_emissor') is-invalid @enderror" name="orgao_emissor" value="{{ old('orgao_emissor', $clinica->orgao_emissor) }}">
+                @error('orgao_emissor')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Data de Emissão</label>
+                <input type="text" class="form-control @error('data_emissao') is-invalid @enderror" name="data_emissao" value="{{ old('data_emissao', $clinica->data_emissao) }}">
+                @error('data_emissao')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">CPF</label>
+                <input type="text" class="form-control @error('cpf') is-invalid @enderror" name="cpf" value="{{ old('cpf', $clinica->cpf) }}">
+                @error('cpf')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Estado Civil</label>
+                <input type="text" class="form-control @error('estado_civil') is-invalid @enderror" name="estado_civil" value="{{ old('estado_civil', $clinica->estado_civil) }}">
+                @error('estado_civil')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <!-- TEMPORIAMENTE DESATIVADO 
+        <h3>Dados Bancários</h3>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Banco</label>
+                <input type="text" class="form-control @error('banco') is-invalid @enderror" name="banco" value="{{ old('banco', $clinica->banco) }}">
+                @error('banco')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Nº Banco</label>
+                <input type="text" class="form-control @error('numero_banco') is-invalid @enderror" name="numero_banco" value="{{ old('numero_banco', $clinica->numero_banco) }}">
+                @error('numero_banco')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Agência</label>
+                <input type="text" class="form-control @error('agencia') is-invalid @enderror" name="agencia" value="{{ old('agencia', $clinica->agencia) }}">
+                @error('agencia')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Conta Corrente</label>
+                <input type="text" class="form-control @error('conta_corrente') is-invalid @enderror" name="conta_corrente" value="{{ old('conta_corrente', $clinica->conta_corrente) }}">
+                @error('conta_corrente')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Titular da Conta</label>
+                <input type="text" class="form-control @error('titular_conta') is-invalid @enderror" name="titular_conta" value="{{ old('titular_conta', $clinica->titular_conta) }}">
+                @error('titular_conta')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">CPF do Titular</label>
+                <input type="text" class="form-control @error('cpf_titular') is-invalid @enderror" name="cpf_titular" value="{{ old('cpf_titular', $clinica->cpf_titular) }}">
+                @error('cpf_titular')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        fim do comentario-->
+
+        <div class="d-flex justify-content-end mt-4">
+            <button type="reset" class="btn btn-warning">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </form>
     </div>
-  </div>
-
-
-<!-- Script para interatividade -->
-  <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(`${id}-dropdown`);
-      dropdown.classList.toggle('show');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
-      }
-    };
-  </script>
 @endsection

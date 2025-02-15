@@ -3,8 +3,8 @@
 @section('content')
   <!-- Botões de Ação -->
   <div class="d-flex justify-content-between mb-3">
-    <a href="clinicas2" class="btn btn-primary">Adicionar Clínica</a>
-    <a href="clinicas3" class="btn btn-secondary">Ver Solicitações de Cadastro</a>
+    <a href="{{ route('admin.clinicas.create') }}" class="btn btn-primary">Adicionar Clínica</a>
+    <a href="{{ route('admin.clinicas.solicitacoes') }}" class="btn btn-secondary">Ver Solicitações de Cadastro</a>
   </div>
 
   <!-- CORPO -->
