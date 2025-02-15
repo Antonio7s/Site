@@ -75,13 +75,8 @@
   <!-- Cabeçalho -->
   <header class="custom-header py-3">
     <div class="container d-flex justify-content-between align-items-center">
-      <!-- Logo e Botão Hamburger -->
+      <!-- Logo -->
       <div class="d-flex align-items-center">
-        <!-- Botão Hamburger visível apenas em telas pequenas -->
-        <button class="btn btn-outline-light d-md-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <!-- Logo -->
         <a href="{{ url('/privacy-policy') }}" class="me-3">
           <img src="https://i.postimg.cc/mhK2Fhr6/logomed.png" alt="Minha Logo" style="height:40px;">
         </a>

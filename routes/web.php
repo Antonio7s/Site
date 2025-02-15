@@ -162,3 +162,7 @@ Route::middleware(['auth', 'can:access'])->prefix('admin')->group(function () {
 
 
 
+Route::get('/minhasinformacoes', [ProfileController::class, 'show'])->name('profile.show');
+
+
+

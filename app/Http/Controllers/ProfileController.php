@@ -22,6 +22,16 @@ class ProfileController extends Controller
     }
 
     /**
+     * Exibe a página de informações do perfil do usuário.
+     */
+    public function show(Request $request): View
+    {
+        return view('minhasinformacoes', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * Atualiza as informações do perfil do usuário.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse

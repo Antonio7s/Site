@@ -571,4 +571,4 @@
             var typed = new Typed(".typed-effect", options);
         </script>
     </body>
-@endsection
+@endsection 

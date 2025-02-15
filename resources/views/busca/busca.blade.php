@@ -188,40 +188,41 @@
                 <div class="agenda">
                     <h3>Horário</h3>                    
                     <div class="date-picker">
-                        <p>a</p>
-                        <p id="date-display"><strong>Data:</strong> 03/02/2025</p>
+                        <input type="date" id="date-input" onchange="updateDate()">
+                        <p id="date-display"><strong>Data:</strong> <span id="selected-date">03/02/2025</span></p>
                     </div>
 
                     <div class="schedule">
                         <div class="column">
-                            <div class="hour">08:00</div>
-                            <div class="hour">09:00</div>
-                            <div class="hour">10:00</div>
-                            <div class="hour">11:00</div>
-                            <div class="hour">12:00</div>
+                            <div class="hour" onclick="selectHour('08:00')">08:00</div>
+                            <div class="hour" onclick="selectHour('09:00')">09:00</div>
+                            <div class="hour" onclick="selectHour('10:00')">10:00</div>
+                            <div class="hour" onclick="selectHour('11:00')">11:00</div>
+                            <div class="hour" onclick="selectHour('12:00')">12:00</div>
                         </div>
                         <div class="column">
-                            <div class="hour">10:00</div>
-                            <div class="hour">11:00</div>
-                            <div class="hour">12:00</div>
-                            <div class="hour">13:00</div>
-                            <div class="hour">14:00</div>
+                            <div class="hour" onclick="selectHour('10:00')">10:00</div>
+                            <div class="hour" onclick="selectHour('11:00')">11:00</div>
+                            <div class="hour" onclick="selectHour('12:00')">12:00</div>
+                            <div class="hour" onclick="selectHour('13:00')">13:00</div>
+                            <div class="hour" onclick="selectHour('14:00')">14:00</div>
                         </div>
                         <div class="column">
-                            <div class="hour">11:00</div>
-                            <div class="hour">12:00</div>
-                            <div class="hour">13:00</div>
-                            <div class="hour">14:00</div>
-                            <div class="hour">15:00</div>
+                            <div class="hour" onclick="selectHour('11:00')">11:00</div>
+                            <div class="hour" onclick="selectHour('12:00')">12:00</div>
+                            <div class="hour" onclick="selectHour('13:00')">13:00</div>
+                            <div class="hour" onclick="selectHour('14:00')">14:00</div>
+                            <div class="hour" onclick="selectHour('15:00')">15:00</div>
                         </div>
                         <div class="column">
-                            <div class="hour">13:00</div>
-                            <div class="hour">14:00</div>
-                            <div class="hour">15:00</div>
-                            <div class="hour">16:00</div>
-                            <div class="hour">17:00</div>
+                            <div class="hour" onclick="selectHour('13:00')">13:00</div>
+                            <div class="hour" onclick="selectHour('14:00')">14:00</div>
+                            <div class="hour" onclick="selectHour('15:00')">15:00</div>
+                            <div class="hour" onclick="selectHour('16:00')">16:00</div>
+                            <div class="hour" onclick="selectHour('17:00')">17:00</div>
                         </div>
                     </div>
+                    <button onclick="saveSchedule()">Salvar Horário</button>
                 </div>
 
             </div>
@@ -337,6 +338,30 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            function updateDate() {
+                const dateInput = document.getElementById('date-input');
+                const selectedDate = document.getElementById('selected-date');
+                selectedDate.textContent = dateInput.value.split('-').reverse().join('/');
+            }
+
+            let selectedHour = null;
+
+            function selectHour(hour) {
+                selectedHour = hour;
+                alert(`Horário selecionado: ${hour}`);
+            }
+
+            function saveSchedule() {
+                const date = document.getElementById('date-input').value;
+                if (date && selectedHour) {
+                    alert(`Horário salvo: ${date} às ${selectedHour}`);
+                } else {
+                    alert('Por favor, selecione uma data e um horário.');
+                }
+            }
+        </script>
     </body>
     </html>
 @endsection
