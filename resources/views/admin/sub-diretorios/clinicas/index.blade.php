@@ -1,6 +1,13 @@
 @extends('layouts.painel-admin')
 @section('header_title', 'Clínicas')
 @section('content')
+
+  @if(session('success'))
+      <div class="alert alert-success">
+          {{ session('success') }}
+      </div>
+  @endif
+
   <!-- Botões de Ação -->
   <div class="d-flex justify-content-between mb-3">
     <a href="{{ route('admin.clinicas.create') }}" class="btn btn-primary">Adicionar Clínica</a>

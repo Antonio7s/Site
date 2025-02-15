@@ -35,26 +35,25 @@ class ClinicaController extends Controller
             'status' => 'required|string|max:255',
             'cnpj_cpf' => 'nullable|string|unique:clinicas,cnpj_cpf,' . $id,
             'email' => 'nullable|email|unique:clinicas,email,' . $id,
-            'ficha_cadastral' => 'required|string|max:255',
             'nome_fantasia' => 'nullable|string|max:255',
-            'cep' => 'required|string|max:10', // Formato: 00000-000
-            'endereco' => 'required|string|max:255',
-            'numero' => 'required|string|max:10',
+            'cep' => 'nullable|string|max:10', // Formato: 00000-000
+            'endereco' => 'nullable|string|max:255',
+            'numero' => 'nullable|string|max:10',
             'complemento' => 'nullable|string|max:255',
-            'bairro' => 'required|string|max:255',
-            'cidade' => 'required|string|max:255',
-            'uf' => 'required|string|max:2',
-            'email_administrativo' => 'required|email|max:255',
-            'email_faturamento' => 'required|email|max:255',
-            'telefone_local' => 'required|string|max:15',
-            'telefone_financeiro' => 'required|string|max:15',
-            'celular' => 'required|string|max:15',
-            'responsavel_nome' => 'required|string|max:255',
-            'rg' => 'required|string|max:20',
-            'orgao_emissor' => 'required|string|max:20',
-            'data_emissao' => 'required|date',
-            'cpf' => 'required|string|max:14',
-            'estado_civil' => 'required|string|max:20',
+            'bairro' => 'nullable|string|max:255',
+            'cidade' => 'nullable|string|max:255',
+            'uf' => 'nullable|string|max:2',
+            'email_administrativo' => 'nullable|email|max:255',
+            'email_faturamento' => 'nullable|email|max:255',
+            'telefone_local' => 'nullable|string|max:15',
+            'telefone_financeiro' => 'nullable|string|max:15',
+            'celular' => 'nullable|string|max:15',
+            'responsavel_nome' => 'nullable|string|max:255',
+            'rg' => 'nullable|string|max:20',
+            'orgao_emissor' => 'nullable|string|max:20',
+            'data_emissao' => 'nullable|date',
+            'cpf' => 'nullable|string|max:14',
+            'estado_civil' => 'nullable|string|max:20',
             /*
             'banco' => 'required|string|max:255',
             'numero_banco' => 'required|string|max:4',
@@ -123,6 +122,4 @@ class ClinicaController extends Controller
         return view('admin.sub-diretorios.clinicas.solicitacoes-de-cadastro.analise', compact('clinica'));
     }
     
-
-
 }
