@@ -67,12 +67,15 @@
     }
   </style>
 
+  <!-- Script do reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
   <div class="registration-container">
     <h2>Cadastro</h2>
     <form method="POST" action="{{ route('register') }}">
       @csrf
 
-      <!-- Campo Nome -->
+      <!-- Nome -->
       <div>
         <label for="name">Nome</label>
         <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
@@ -81,7 +84,7 @@
         @endif
       </div>
 
-      <!-- Campo Email -->
+      <!-- Email -->
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username">
@@ -90,7 +93,7 @@
         @endif
       </div>
 
-      <!-- Campo Senha -->
+      <!-- Senha -->
       <div>
         <label for="password">Senha</label>
         <input id="password" type="password" name="password" required autocomplete="new-password">
@@ -99,7 +102,7 @@
         @endif
       </div>
 
-      <!-- Campo Confirmar Senha -->
+      <!-- Confirmar Senha -->
       <div>
         <label for="password_confirmation">Confirmar Senha</label>
         <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
@@ -107,6 +110,12 @@
           <div class="error">{{ $errors->first('password_confirmation') }}</div>
         @endif
       </div>
+
+      <!-- Widget do reCAPTCHA -->
+      <div class="g-recaptcha mt-3" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+      @if ($errors->has('g-recaptcha-response'))
+          <div class="error">{{ $errors->first('g-recaptcha-response') }}</div>
+      @endif
 
       <div class="actions">
         <a href="{{ route('login') }}">Já registrado? Entrar</a>

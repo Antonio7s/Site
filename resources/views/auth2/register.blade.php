@@ -1,6 +1,10 @@
 @extends('layouts.layout-index')
 
 @section('content')
+
+<!-- Script do reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <div class="card mx-auto mt-5 shadow" style="max-width: 500px; border: none;">
     <div class="card-header text-center" style="background: #fff; border-bottom: 1px solid #dee2e6;">
         <h4 style="color: #007bff; font-weight: bold;">Cadastro de Clínica</h4>
@@ -102,8 +106,14 @@
                 <x-input-error :messages="$errors->get('documentos')" class="mt-2" />
             </div>
 
+            <!-- Widget do reCAPTCHA -->
+            <div class="g-recaptcha mt-3" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+            @if ($errors->has('g-recaptcha-response'))
+                <div class="error text-danger">{{ $errors->first('g-recaptcha-response') }}</div>
+            @endif
+
             <!-- Botões -->
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mt-3">
                 <a class="text-decoration-none" href="{{ route('login2') }}">
                     {{ __('Já possui cadastro?') }}
                 </a>
@@ -119,6 +129,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 @endsection
+
 
 
 
