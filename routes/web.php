@@ -36,15 +36,14 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
 
     // Clínicas
     Route::get('/clinicas', [ClinicaController::class, 'index'])->name('admin.clinicas.index');
+    Route::get('/clinicas/create', [ClinicaController::class, 'create'])->name('admin.clinicas.create');
     Route::get('/clinicas/{id}/edit', [ClinicaController::class, 'edit'])->name('admin.clinicas.edit');
     Route::get('/clinicas/{id}/show', [ClinicaController::class, 'show'])->name('admin.clinicas.show');
     Route::get('/clinicas/destroy', [ClinicaController::class, 'destroy'])->name('admin.clinicas.destroy');
-    // ...
-    Route::view('clinicas1', 'admin/sub-diretorios/clinicas/clinicas');
-    Route::view('clinicas2', 'admin/sub-diretorios/clinicas/registro-de-clinica');
-    Route::view('clinicas3', 'admin/sub-diretorios/clinicas/solicitacoes-de-cadastro');
-    Route::view('clinicas4', 'admin/sub-diretorios/clinicas/analise');
-    
+    // Clínicas - Análise de cadastros
+    Route::get('/clinicas/solicitacoes-de-cadastro/', [ClinicaController::class, 'solicitacoes_de_cadastro'])->name('admin.clinicas.solicitacoes');
+    Route::match(['get', 'post'], 'clinicas/solicitacoes-de-cadastro/{id}/analise', [ClinicaController::class, 'analise'])->name('admin.clinicas.solicitacoes-de-cadastro.analise');
+
     // Usuários
     Route::get('usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     
@@ -95,7 +94,7 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
 });
 
 // Rotas que exigem autenticação de clínica e têm o prefixo 'admin-clinica'
-Route::middleware('auth:clinic', 'verified')->prefix('admin-clinica')->group(function () {
+Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('admin-clinica')->group(function () {
     Route::get('/dashboard', [DashboardClinicaController::class, 'index'])->name('admin-clinica.dashboard.index'); // DASHBOARD - EM BRANCO
     //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.servicos'); // Listagem de serviços
     //Route::get('/localização', ['','dashboard'])->name('admin.clinica.clinica'); //SOBRE A CLÍNICA
@@ -160,5 +159,13 @@ Route::middleware(['auth', 'can:access'])->prefix('admin')->group(function () {
     });
 });
 
+
+Route::get('/clinica-pendente', function () {
+    return view('admin-clinica/acesso/pendente');
+})->name('clinica.pendente');
+
+Route::get('/clinica-negado', function () {
+    return view('admin-clinica/acesso/negado');
+})->name('clinica.negado');
 
 

@@ -57,4 +57,43 @@ class ClinicaController extends Controller
     }
 
 
+    /*
+    // ANALISE DA CLÍNICA
+    */
+
+    public function create() // CADASTRAR UMA NOVA CLÍNICA
+    {
+        return view('admin.sub-diretorios.clinicas.create');
+    }
+
+    //exibir todas as clínicas com status == pendente
+    public function solicitacoes_de_cadastro(Request $request)
+    {
+        $clinicas = Clinica::where('status', 'pendente')->paginate(10);
+        return view('admin.sub-diretorios.clinicas.solicitacoes-de-cadastro.solicitacoes-de-cadastro', compact('clinicas'));
+    }
+
+    public function analise(Request $request, $id)
+    {
+        $clinica = Clinica::findOrFail($id);
+    
+        // Verifica se a requisição é POST e se há uma ação definida
+        if ($request->isMethod('post')) {
+            if ($request->input('acao') === 'aprovar') {
+                $clinica->status = 'aprovado';
+            } elseif ($request->input('acao') === 'negar') {
+                $clinica->status = 'negado';
+            }
+    
+            $clinica->save();
+            //return redirect()->back()->with('success', 'Status atualizado com sucesso!');
+            return redirect()->route('admin.clinicas.solicitacoes')->with('success', 'Status atualizado com sucesso!');
+
+        }
+    
+        return view('admin.sub-diretorios.clinicas.solicitacoes-de-cadastro.analise', compact('clinica'));
+    }
+    
+
+
 }

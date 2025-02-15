@@ -3,8 +3,41 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Auth\AuthenticationException; // Adicione esta importação
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+//use Closure;
+
+/**
+ * Middleware que verifica se o usuário (clinica) possui status "aprovado".
+ */
+class CheckClinicaStatus
+{
+    public function handle(Request $request, Closure $next)
+    {
+        //Auth::guard('clinic')->user()->status;
+        $clinica = Auth::guard('clinic')->user(); // Obtém a clínica autenticada
+
+        $status = $clinica->status;
+
+        // Verifica o status e redireciona para a rota correspondente
+        switch ($status) {
+            case 'pendente':
+                // Redireciona para uma página informando que a clínica está pendente de aprovação
+                return redirect()->route('clinica.pendente');
+            case 'parcial':
+                // Redireciona para uma página que indica acesso negado.
+                return redirect()->route('clinica.negado');
+            case 'aprovado':
+                // Se estiver aprovado, permite o acesso normalmente
+                return $next($request);
+            default:
+                // Opcional: redireciona para uma página de erro ou logout
+                return redirect()->route('login');
+        }
+    }
+}
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,27 +48,31 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectTo(
-            guests: '/login', // Rota para onde os convidados (não autenticados) são redirecionados
+            guests: '/login', // Rota para convidados (não autenticados)
             users: function ($request) {
-                // Verifica se o usuário está autenticado pelo guard 'clinic'
+                // Se o usuário estiver autenticado com o guard 'clinic'
                 if (Auth::guard('clinic')->check()) {
-                    return route('admin-clinica.dashboard.index'); // Redireciona para '/dashboard2' se autenticado pelo guard 'clinic'
+                    return route('admin-clinica.dashboard.index');
                 }
-                // Redireciona para a rota padrão de index para outros guards
+                // Rota padrão para outros guards
                 return route('profile.edit');
             }
         );
+
+        // Registra o middleware customizado com um alias
+        $middleware->alias([
+            'check.clinica.status' => CheckClinicaStatus::class,
+        ]);
+
+        // Se desejar que ele seja aplicado globalmente, pode usá-lo com:
+        // $middleware->append(CheckClinicaStatus::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (AuthenticationException $e, $request) {
             $guards = $e->guards();
-            
-            // Pega o primeiro guard ou usa null
             $guard = Arr::first($guards);
-
-            // Define a rota com base no guard
             $loginRoute = match($guard) {
-                'clinic' => 'login2', // Nome da rota para clínicas
+                'clinic' => 'login2', // Rota para clínicas
                 default  => 'login'   // Rota padrão
             };
 

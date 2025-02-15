@@ -16,6 +16,10 @@
                             <label class="form-label">CNPJ</label>
                             <input type="text" class="form-control" value="{{ $clinica->cnpj_cpf ?? 'Não informado' }}">
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label">status</label>
+                            <input type="text" class="form-control" value="{{ $clinica->status ?? 'Não informado' }}">
+                        </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4">
@@ -182,25 +186,4 @@
       </div>
     </div>
   </div>
-
-
-<!-- Script para interatividade -->
-  <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(`${id}-dropdown`);
-      dropdown.classList.toggle('show');
-    }
-
-    // Fechar dropdowns ao clicar fora
-    window.onclick = function(event) {
-      if (!event.target.matches('.notifications, .email, .profile')) {
-        const dropdowns = document.querySelectorAll('.dropdown-menu');
-        dropdowns.forEach(dropdown => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
-      }
-    };
-  </script>
 @endsection
