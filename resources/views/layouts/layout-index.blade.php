@@ -132,59 +132,60 @@
             margin-left: auto;
         }
 
-        /* Estilos responsivos */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 20px;
-            }
-            .nav-link {
-                margin: 0 5px;
-                font-size: 14px;
-            }
-            .banner {
-                font-size: 24px;
-                height: 200px;
-            }
-            .info-section {
-                padding: 15px;
-            }
-            footer .social-icons a {
-                font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
-            }
-            .user-container {
-                flex-direction: column;
-                align-items: flex-end;
-            }
-            #userInfo {
-                margin-top: 10px;
-            }
-            /* Aumentando o tamanho da fonte para dispositivos móveis */
-            .nav-link {
-                font-size: 13px; /* Aumentando de 12px para 13px */
-            }
-        }
+     /* Estilos responsivos */
+@media (max-width: 768px) {
+    .logo {
+        font-size: 20px;
+    }
+    .nav-link {
+        margin: 0 5px;
+        font-size: 14px;
+    }
+    .banner {
+        font-size: 24px;
+        height: 200px;
+    }
+    .info-section {
+        padding: 15px;
+    }
+    footer .social-icons a {
+        font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
+    }
+    .user-container {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    #userInfo {
+        margin-top: 10px;
+    }
+    /* Aumentando o tamanho da fonte dos menus específicos */
+    .nav-link, 
+    .dropdown-toggle {
+        font-size: 17px; /* Aumentado para 17px */
+    }
+}
 
-        @media (max-width: 576px) {
-            .logo {
-                font-size: 18px;
-            }
-            .nav-link {
-                font-size: 13px; /* Aumentando de 12px para 13px */
-            }
-            .banner {
-                font-size: 20px;
-                height: 150px;
-            }
-            .info-section {
-                padding: 10px;
-            }
-            footer .social-icons a {
-                font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
-            }
-            .user-container {
-                align-items: center;
-            }
-        }
+@media (max-width: 576px) {
+    .logo {
+        font-size: 18px;
+    }
+    .nav-link {
+        font-size: 17px; /* Mantendo 17px para melhor visibilidade */
+    }
+    .banner {
+        font-size: 20px;
+        height: 150px;
+    }
+    .info-section {
+        padding: 10px;
+    }
+    footer .social-icons a {
+        font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
+    }
+    .user-container {
+        align-items: center;
+    }
+}
     </style>
 </head>
 <body>

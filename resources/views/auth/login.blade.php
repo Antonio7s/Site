@@ -102,7 +102,7 @@
 
   <div class="login-container">
     <h2>Login</h2>
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" id="loginForm">
       @csrf
 
       <!-- Campo Email -->
@@ -136,7 +136,7 @@
 
       <!-- Botão "Entrar" -->
       <div class="actions">
-        <button type="submit">Entrar</button>
+        <button type="submit" onclick="checkAdmin(event)">Entrar</button>
       </div>
 
       <!-- Botões de Login Social (um encima do outro) -->
@@ -146,6 +146,31 @@
       </div>
     </form>
   </div>
+
+  <script>
+    function checkAdmin(event) {
+        event.preventDefault(); // Impede o envio imediato do formulário
+
+        fetch("{{ url('/admin/dashboard') }}", { // Tenta acessar a rota admin
+            method: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "{{ url('/admin/dashboard') }}"; // Redireciona admins
+            } else {
+                document.getElementById("loginForm").submit(); // Continua login normal
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao verificar admin:", error);
+            document.getElementById("loginForm").submit(); // Em caso de erro, continua login normal
+        });
+    }
+  </script>
 @endsection
 
 

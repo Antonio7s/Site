@@ -1,4 +1,4 @@
-<?php  
+<?php   
 
 namespace App\Http\Controllers\Auth;
 
@@ -45,14 +45,13 @@ class AuthenticatedSessionController extends Controller
             // Obtém o usuário autenticado
             $user = Auth::user();
 
-            // Verifica se o usuário NÃO é admin
-            if (!$user->is_admin) {
-                // Redireciona diretamente para a rota 'profile.edit'
-                return redirect()->route('profile.edit');
-            } else {
-                // Se for admin, redireciona para o dashboard
-                return redirect()->route('dashboard');
-            }
+            // Se for admin, redireciona para o painel administrativo
+            if ($user->is_admin) {
+                return redirect()->route('admin.dashboard'); // Garante que vá para /admin/dashboard
+            } 
+
+            // Se não for admin, redireciona para o perfil do usuário
+            return redirect()->route('profile.edit');
         }
 
         // Caso o usuário não esteja autenticado, redireciona para a página de login
@@ -72,3 +71,4 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 }
+
