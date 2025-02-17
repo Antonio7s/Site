@@ -49,6 +49,16 @@
           </div>
         </div>
 
+        <!-- Valor Exato de Taxa de Lucro -->
+        <div class="row mt-3" id="profitRateExact" style="display:none;">
+          <div class="col-md-12 d-flex ml-auto justify-content-end gap-3">
+            <div class="w-15">
+              <label for="exactRate">Valor Exato:</label>
+              <input type="number" class="form-control form-control-sm" id="exactRate" placeholder="Ex: 5">
+            </div>
+          </div>
+        </div>
+
         <!-- Intervalo de Taxa de Lucro -->
         <div class="row mt-3" id="profitRateRange" style="display:none;">
           <div class="col-md-12 d-flex ml-auto justify-content-end gap-3">
@@ -58,7 +68,7 @@
             </div>
             <div class="w-15">
               <label for="maxRate">Máximo:</label>
-              <input type="number" class="form-control form-control-sm" id="maxRate" placeholder="Ex: 2">
+              <input type="number" class="form-control form-control-sm" id="maxRate" placeholder="Ex: 10">
             </div>
           </div>
         </div>
@@ -116,14 +126,21 @@
 
   <!-- Script para interatividade -->
   <script>
-    // Exibir intervalo de taxa de lucro
+    // Exibir intervalo ou valor exato de taxa de lucro
     document.getElementById('profitRate').addEventListener('change', function() {
       var profitRate = this.value;
       var profitRateRange = document.getElementById('profitRateRange');
+      var profitRateExact = document.getElementById('profitRateExact');
+
       if (profitRate === 'intervalo') {
         profitRateRange.style.display = 'flex';
+        profitRateExact.style.display = 'none';
+      } else if (profitRate === 'valor_exato') {
+        profitRateExact.style.display = 'flex';
+        profitRateRange.style.display = 'none';
       } else {
         profitRateRange.style.display = 'none';
+        profitRateExact.style.display = 'none';
       }
     });
 
