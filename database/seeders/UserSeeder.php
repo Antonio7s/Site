@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
         // User::factory(100000)->create();
 
         // Número total de usuários
-        $total = 10000; // dez mil
+        $total = 1000; // dez mil
         // Tamanho do lote
         $batchSize = 1000; // mil mil
 

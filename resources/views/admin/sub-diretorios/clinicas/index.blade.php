@@ -118,11 +118,10 @@
       </tbody>
     </table>
 
-    <!-- Links de Paginação -->
-    <div class="d-flex justify-content-center">
-      {{ $clinicas->links() }}
-    </div>
-  </div>
+      <!-- Links de paginação -->
+      <div class="d-flex justify-content-center">
+        {{ $clinicas->links('pagination::bootstrap-5') }}
+      </div>
 
   <!-- Script para interatividade -->
   <script>

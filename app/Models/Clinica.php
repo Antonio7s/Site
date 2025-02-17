@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory; //SEED
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -9,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 class Clinica extends Authenticatable
 {
     use Notifiable;
+    use HasFactory;
 
     // Definindo a tabela que a Clínica usa (caso seja diferente do padrão 'clinicas')
     protected $table = 'clinicas';

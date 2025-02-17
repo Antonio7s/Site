@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             // Campos adicionais:
+            //CPF, ENDERECO
             'access_level' => fake()->numberBetween(1, 3),
             'photo_url' => 'images/default-photo.png', // ou utilize fake() para gerar URLs dinâmicas
         ];
