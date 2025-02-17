@@ -21,7 +21,7 @@
     <!-- CONTAINER DE PESQUISA -->
     <div class="container">
       <div>
-        <input type="text" class="form-control" placeholder="Pesquisar clínicas cadastradas">
+        <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar clínicas cadastradas">
       </div>
 
       <!-- Filtros -->
@@ -70,48 +70,47 @@
       </div>
     </div>
 
-         <!-- Lista de Clínicas Cadastradas -->
-         <table class="table table-bordered mt-4">
-        <thead class="table-dark">
+    <!-- Lista de Clínicas Cadastradas -->
+    <table class="table table-bordered mt-4" id="clinicasTable">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nome da Clínica</th>
+          <th scope="col">CNPJ</th>
+          <th scope="col">Endereço</th>
+          <th scope="col">Email</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($clinicas as $clinica)
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nome da Clínica</th>
-            <th scope="col">CNPJ</th>
-            <th scope="col">Endereço</th>
-            <th scope="col">Email</th>
-            <th scope="col">Ações</th>
+            <th scope="row">{{ $clinica->id }}</th>
+            <td>{{ $clinica->razao_social }}</td>
+            <td>{{ $clinica->cnpj_cpf }}</td>
+            <td>{{ $clinica->modificar ?? 'Não informado' }}</td>
+            <td>{{ $clinica->email ?? 'Não informado' }}</td>
+            <td>
+              <a href="{{ route('admin.clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
+              <form action="{{ route('admin.clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger btn-sm">Deletar</button>
+              </form>
+              <a href="{{ route('admin.clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          @forelse($clinicas as $clinica)
-            <tr>
-              <th scope="row">{{ $clinica->id }}</th>
-              <td>{{ $clinica->razao_social }}</td>
-              <td>{{ $clinica->cnpj_cpf }}</td>
-              <td>{{ $clinica->modificar ?? 'Não informado' }}</td>
-              <td>{{ $clinica->email ?? 'Não informado' }}</td>
-              <td>
-                <a href="{{ route('admin.clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                <form action="{{ route('admin.clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
-                  @csrf
-                  @method('DELETE')
-                  <button class="btn btn-danger btn-sm">Deletar</button>
-                </form>
-                <a href="{{ route('admin.clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="5">Nenhuma clínica encontrada.</td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
+        @empty
+          <tr>
+            <td colspan="5">Nenhuma clínica encontrada.</td>
+          </tr>
+        @endforelse
+      </tbody>
+    </table>
 
-      <!-- Links de Paginação -->
-      <div class="d-flex justify-content-center">
-        {{ $clinicas->links() }}
-      </div>
+    <!-- Links de Paginação -->
+    <div class="d-flex justify-content-center">
+      {{ $clinicas->links() }}
     </div>
   </div>
 
@@ -125,6 +124,48 @@
         profitRateRange.style.display = 'flex';
       } else {
         profitRateRange.style.display = 'none';
+      }
+    });
+
+    // Função para filtrar as clínicas
+    document.getElementById('searchInput').addEventListener('input', function() {
+      var filter = this.value.toUpperCase();
+      var filterBy = document.getElementById('filterBy').value;
+      var table = document.getElementById('clinicasTable');
+      var tr = table.getElementsByTagName('tr');
+
+      for (var i = 1; i < tr.length; i++) { // Começa de 1 para pular o cabeçalho
+        var tdNome = tr[i].getElementsByTagName('td')[0];
+        var tdCnpj = tr[i].getElementsByTagName('td')[1];
+        var tdCidade = tr[i].getElementsByTagName('td')[2];
+
+        if (tdNome || tdCnpj || tdCidade) {
+          var txtValueNome = tdNome.textContent || tdNome.innerText;
+          var txtValueCnpj = tdCnpj.textContent || tdCnpj.innerText;
+          var txtValueCidade = tdCidade.textContent || tdCidade.innerText;
+
+          var match = false;
+
+          if (filterBy === 'nome' && txtValueNome.toUpperCase().indexOf(filter) > -1) {
+            match = true;
+          } else if (filterBy === 'cnpj' && txtValueCnpj.toUpperCase().indexOf(filter) > -1) {
+            match = true;
+          } else if (filterBy === 'cidade' && txtValueCidade.toUpperCase().indexOf(filter) > -1) {
+            match = true;
+          } else if (filterBy === 'todos' && (
+            txtValueNome.toUpperCase().indexOf(filter) > -1 ||
+            txtValueCnpj.toUpperCase().indexOf(filter) > -1 ||
+            txtValueCidade.toUpperCase().indexOf(filter) > -1
+          )) {
+            match = true;
+          }
+
+          if (match) {
+            tr[i].style.display = '';
+          } else {
+            tr[i].style.display = 'none';
+          }
+        }
       }
     });
   </script>
