@@ -53,16 +53,9 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // Verifica se o usuário é um admin usando o Gate
-        $user = Auth::user();
-        if (Gate::allows('isAdmin', $user)) { // Usando o Gate para verificar se o usuário é admin
-            $this->redirectTo = '/admin/dashboard'; // Redireciona para o painel do admin
-        } else {
-            $this->redirectTo = '/profile'; // Redireciona para o perfil do usuário
-        }
-
         RateLimiter::clear($this->throttleKey());
     }
+        
 
     /**
      * Ensure the login request is not rate limited.

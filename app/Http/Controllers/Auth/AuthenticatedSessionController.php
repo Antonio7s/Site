@@ -46,8 +46,8 @@ class AuthenticatedSessionController extends Controller
             $user = Auth::user();
 
             // Se for admin, redireciona para o painel administrativo
-            if ($user->is_admin) {
-                return redirect()->route('admin.dashboard'); // Garante que vá para /admin/dashboard
+            if ($user->access_level=='admin') {
+                return redirect()->route('admin.dashboard.admin'); // Garante que vá para /admin/dashboard
             } 
 
             // Se não for admin, redireciona para o perfil do usuário
