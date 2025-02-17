@@ -230,6 +230,35 @@
     .offcanvas {
       width: 250px !important; /* Largura reduzida do Offcanvas */
     }
+
+    /* Estilo para o card de mensagens */
+    .message-card {
+      position: absolute;
+      top: 50px;
+      right: 20px;
+      width: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      z-index: 1000;
+    }
+    .message-card h5 {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .message-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .message-card ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f4f8;
+    }
+    .message-card ul li:last-child {
+      border-bottom: none;
+    }
   </style>
 </head>
 <body>
@@ -242,16 +271,9 @@
         <button class="navbar-toggler navbar-toggler-custom d-block d-md-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="notifications" onclick="toggleDropdown('notifications')">
+        <div class="notifications" onclick="toggleMessageCard()">
           <i class="bi bi-bell"></i>
           <span class="badge">3</span>
-          <div class="dropdown-menu" id="notifications-dropdown">
-            <ul>
-              <li>Novo e-mail recebido</li>
-              <li>Atualização do sistema</li>
-              <li>Novo usuário cadastrado</li>
-            </ul>
-          </div>
         </div>
         <div class="email" onclick="toggleDropdown('email')">
           <i class="bi bi-envelope"></i>
@@ -283,6 +305,16 @@
       </div>
     </div>
   </nav>
+
+  <!-- Card de Mensagens -->
+  <div class="message-card" id="messageCard" style="display: none;">
+    <h5>Mensagens:</h5>
+    <ul>
+      <li>Clínica A se cadastrou</li>
+      <li>Clínica B se cadastrou</li>
+      <li>Clínica C se cadastrou</li>
+    </ul>
+  </div>
 
   <!-- Offcanvas Sidebar -->
   <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
@@ -357,12 +389,24 @@
       dropdown.classList.toggle('show');
     }
 
+    function toggleMessageCard() {
+      const messageCard = document.getElementById('messageCard');
+      if (!messageCard) return;
+      messageCard.style.display = messageCard.style.display === 'none' ? 'block' : 'none';
+    }
+
     window.onclick = function(event) {
       if (!event.target.closest('.profile')) {
         const dropdowns = document.querySelectorAll('.dropdown-menu');
         dropdowns.forEach(dropdown => {
           dropdown.classList.remove('show');
         });
+      }
+      if (!event.target.closest('.notifications')) {
+        const messageCard = document.getElementById('messageCard');
+        if (messageCard) {
+          messageCard.style.display = 'none';
+        }
       }
     };
   </script>
