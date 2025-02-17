@@ -30,7 +30,9 @@ class User extends Authenticatable // implements MustVerifyEmail
     // Método para retornar a URL da foto do usuário
     public function getPhotoUrlAttribute()
     {
-        // Verifica se o usuário tem uma foto, caso contrário, retorna uma imagem padrão
-        return $this->photo_url ? asset('storage/' . $this->photo) : asset('images/default-photo.png');
+        return isset($this->attributes['photo_url']) && $this->attributes['photo_url']
+            ? asset('storage/' . $this->attributes['photo_url'])
+            : asset('images/default-photo.png');
     }
+    
 }
