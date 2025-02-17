@@ -64,7 +64,7 @@
 
         <!-- Links de paginação -->
         <div class="d-flex justify-content-center">
-            {{ $usuarios->links() }}
+            {{ $usuarios->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>
