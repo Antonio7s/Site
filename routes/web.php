@@ -178,4 +178,4 @@ Route::get('/clinica-negado', function () {
 Route::get('/minhasinformacoes', [ProfileController::class, 'show'])->name('profile.show');
 
 
-
+Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
