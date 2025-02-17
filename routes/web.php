@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
 
-// Importação de Controller's
+// Importação de Controller's \ADMIN
 use App\Http\Controllers\Admin\ClinicaController;
 use App\Http\Controllers\Admin\UsuarioController;
 use App\Http\Controllers\Admin\EspecialidadeController;
@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\HomepageController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\DashboardController;
 
+// Importação de Controller's \Admin_clinica
 use App\Http\Controllers\Admin_clinica\DashboardClinicaController;
 
 
@@ -26,8 +27,8 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
 
 
-// Rotas que exigem autenticação de user e têm o prefixo 'admin'
-Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
+// Rotas que exigem AUTENTICACAO de user e AUTORIZAÇÃO de admin e têm o prefixo 'admin'.
+Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(function () {
     
     //Dashboard
     Route::controller(DashboardController::class)->prefix('dashboard')->group(function (){
@@ -45,6 +46,7 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
     Route::get('/clinicas/solicitacoes-de-cadastro/', [ClinicaController::class, 'solicitacoes_de_cadastro'])->name('admin.clinicas.solicitacoes');
     Route::match(['get', 'post'], 'clinicas/solicitacoes-de-cadastro/{id}/analise', [ClinicaController::class, 'analise'])->name('admin.clinicas.solicitacoes-de-cadastro.analise');
     Route::get('/clinicas/{id}/download', [ClinicaController::class, 'download'])->name('admin.clinicas.download');
+    
     // Usuários
     Route::get('usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
     
@@ -112,6 +114,7 @@ Route::name('public.')->group(function () {
     Route::view('politicas-de-privacidade', 'Home/politicas-de-privacidade')->name('politicas');
     Route::view('sobre-a-medexame', 'Home/sobre-a-medexame')->name('sobre');
     Route::view('pagina-usuario', 'Home/paginadousuario')->name('pagina-usuario');
+
     // BUSCA
     Route::view('/busca', 'busca/busca');
     Route::view('/em-construcao', 'em-construcao');
@@ -120,45 +123,28 @@ Route::name('public.')->group(function () {
 
 
 
-// Protegendo o dashboard do usuário com autenticação e verificação de e-mail
+// dashboard do usuário
 Route::get('/dashboard', function () {
     return redirect()->route('profile.edit');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+// ??????
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Grupo de rotas para ADMIN com Middleware de autorização
-    Route::middleware('can:access')->prefix('admin')->group(function () {
-        Route::get('/dashboard/vendas', [PagesController::class, 'vendas'])->name('admin.dashboard.vendas');
-        Route::get('/dashboard/site', [PagesController::class, 'site'])->name('admin.dashboard.site');
-
-        // Serviços diferenciados
-        Route::prefix('dashboard/servicos-diferenciados')->group(function () {
-            Route::get('/agenda-online', [PagesController::class, 'agendaOnline'])->name('admin.dashboard.servicos.agenda-online');
-            Route::get('/classes', [PagesController::class, 'classes'])->name('admin.dashboard.servicos.classes');
-            Route::get('/contatos', [PagesController::class, 'contatos'])->name('admin.dashboard.servicos.contatos');
-            Route::get('/usuarios', [PagesController::class, 'usuarios'])->name('admin.dashboard.servicos.usuarios');
-        });
-    });
 });
 
 // Autenticação específica para clínicas
+/*
 Route::middleware('auth:clinic')->group(function () {
     Route::get('/profile2', [ProfileController::class, 'edit'])->name('profile.edit2');
     Route::patch('/profile2', [ProfileController::class, 'update'])->name('profile.update2');
     Route::delete('/profile2', [ProfileController::class, 'destroy'])->name('profile.destroy2');
 });
+*/
 
-//gate para dashboard
-Route::middleware(['auth', 'can:access'])->prefix('admin')->group(function () {
-    // Dashboard
-    Route::controller(DashboardController::class)->prefix('dashboard')->group(function () {
-        Route::get('/', 'index')->name('admin.dashboard.admin');
-    });
-});
 
 
 Route::get('/clinica-pendente', function () {
