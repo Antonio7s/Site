@@ -15,7 +15,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'email',
         'password',
         'access_level',
-        'photo', // Adicionando o campo 'photo'
+        'photo_url',
     ];
 
     protected $hidden = [
@@ -27,6 +27,6 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function getPhotoUrlAttribute()
     {
         // Verifica se o usuário tem uma foto, caso contrário, retorna uma imagem padrão
-        return $this->photo ? asset('storage/' . $this->photo) : asset('images/default-photo.png');
+        return $this->photo_url ? asset('storage/' . $this->photo) : asset('images/default-photo.png');
     }
 }

@@ -109,11 +109,18 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
     
     //Sobre
     Route::get('/sobre', [AdminClinicaController::class,'index'])->name('admin-clinica.sobre.index'); //SOBRE A CLÍNICA
-    
-    //Profissionais
-    Route::get('/profissionais', [ProfissionaisController::class,'index'])->name('admin-clinica.profissionais.index'); // CADASTRAR PROFISSIONAIS
-    //Route::get('/profissionais/create', [ProfissionaisController::class,'create'])->name('admin-clinica.profissionais.show'); // VISUALIZAR PROFISSIONAIS
-    
+        
+    // Profissionais
+    Route::controller(ProfissionaisController::class)->prefix('profissionais')->group(function () {
+        Route::get('/', 'index')->name('admin-clinica.profissionais.index');
+        Route::get('/create', 'create')->name('admin.procedimentos.create');
+        Route::post('/', 'store')->name('admin.procedimentos.store');
+        Route::get('/{id}/edit', 'edit')->name('admin.procedimentos.edit');
+        Route::get('/{id}', 'show')-> name('admin.procedimentos.show');
+        Route::put('/{id}', 'update')->name('admin.procedimentos.update');
+        Route::delete('/{id}', 'destroy')->name('admin.procedimentos.destroy');
+    });
+
     //Agenda
     Route::get('/agendamento/index', [AgendaController::class,'index'])->name('admin-clinica.agenda.index'); // AGENDAR HORARIO PARA O PROF.
     Route::get('/agendamento/create', [AgendaController::class,'index'])->name('admin-clinica.agenda.create'); // AGENDAR HORARIO PARA O PROF.
