@@ -36,5 +36,12 @@
                 @endforeach
           </tbody>
     </table>
+          <!-- Links de paginação -->
+    <div class="d-flex justify-content-center">
+        {{ $clinicas->links('pagination::bootstrap-5') }}
+    </div>
+
+
+
   </div>
 @endsection
