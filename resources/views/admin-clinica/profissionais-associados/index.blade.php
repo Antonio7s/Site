@@ -3,7 +3,7 @@
 @section('content')
 
     <!--botao de adicionar-->
-    <a href="">adicionar prof</a>
+    <a href="{{ route('admin-clinica.profissionais.create') }}">Adicionar Profissional</a>
     
     <hr>
 
@@ -21,16 +21,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($professionals as $professional)
+                @foreach($profissionais as $profissional)
                     <tr>
-                        <td>{{ $professional->nome }}</td>
-                        <td>{{ $professional->funcao }}</td>
-                        <td>{{ $professional->email }}</td>
-                        <td>{{ $professional->telefone }}</td>
-                        <td>{{ $professional->conselho }}</td>
+                        <td>{{ $profissional->nome }}</td>
+                        <td>{{ $profissional->funcao }}</td>
+                        <td>{{ $profissional->email }}</td>
+                        <td>{{ $profissional->telefone }}</td>
+                        <td>{{ $profissional->conselho }}</td>
                         <td>
-                            <a href="{{ route('professionals.edit', $professional->id) }}" class="btn btn-primary btn-sm">Editar</a>
-                            <form action="{{ route('professionals.destroy', $professional->id) }}" method="POST" style="display:inline">
+                            <a href="{{ route('profissionais.edit', $profissional->id) }}" class="btn btn-primary btn-sm">Editar</a>
+                            <form action="{{ route('profissionais.destroy', $profissional->id) }}" method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja excluir este profissional?')">Excluir</button>
