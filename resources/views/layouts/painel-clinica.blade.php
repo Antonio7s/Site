@@ -109,14 +109,11 @@
     <div class="sidebar">
         <h1>Painel Adm Clínica</h1>
         <nav class="nav flex-column">
-            <a href="{{ route('admin-clinica.dashboard.index') }}" class="nav-link"> dahsboard</a>
-            <a href="#" class="nav-link">Serviços</a>
-            <a href="#" class="nav-link">Sobre a Clínica</a>
-            <a href="#" class="nav-link">Localização</a>
-            <a href="#" class="nav-link">Profissionais Associados</a>
-            <a href="#" class="nav-link">Procedimentos</a>
-            <a href="#" class="nav-link">Lista de Profissionais</a>
-            <a href="#" class="nav-link">Agendamento</a>
+            <a href="{{ route('admin-clinica.dashboard.index') }}" class="nav-link"> Dashboard</a>
+            <a href="{{ route('admin-clinica.servicos.index') }}" class="nav-link">Serviços</a>
+            <a href="{{ route('admin-clinica.sobre.index') }}" class="nav-link">Sobre a Clínica</a>
+            <a href="{{ route('admin-clinica.profissionais.index') }}" class="nav-link">Profissionais Associados</a>
+            <a href="{{ route('admin-clinica.agenda.index') }}" class="nav-link">Agendamento</a>
         </nav>
     </div>
 
@@ -131,7 +128,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item" href="{{ route('profile.edit2') }}">Perfil</a>
+                        <a class="dropdown-item" href="#">Perfil</a>
                     </li>
                     <li>
                         <form method="POST" action="{{ route('logout2') }}">

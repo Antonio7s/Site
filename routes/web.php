@@ -19,9 +19,11 @@ use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\DashboardController;
 
 // Importação de Controller's \Admin_clinica
+use App\Http\Controllers\Admin_clinica\AgendaController;
+use App\Http\Controllers\Admin_clinica\AdminClinicaController;
 use App\Http\Controllers\Admin_clinica\DashboardClinicaController;
-
-
+use App\Http\Controllers\Admin_clinica\ProfissionaisController;
+use App\Http\Controllers\Admin_clinica\ServicosController;
 // Inclusão das rotas de autenticação
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
@@ -98,13 +100,23 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
 
 // Rotas que exigem autenticação de clínica e têm o prefixo 'admin-clinica'
 Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('admin-clinica')->group(function () {
+    
+    //Dashboard
     Route::get('/dashboard', [DashboardClinicaController::class, 'index'])->name('admin-clinica.dashboard.index'); // DASHBOARD - EM BRANCO
-    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.servicos'); // Listagem de serviços
-    //Route::get('/localização', ['','dashboard'])->name('admin.clinica.clinica'); //SOBRE A CLÍNICA
-    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.dashboard'); // VISUALIZAR OS PROCEDIMENTOS DISP. E  OS CADASTRADOS.
-    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.dashboard'); // CADASTRAR PROFISSIONAIS
-    //Route::get('/profissionais', ['','dashboard'])->name('admin.clinica.dashboard'); // VISUALIZAR PROFISSIONAIS
-    //Route::get('/agendamento', ['','dashboard'])->name('admin.clinica.dashboard'); // AGENDAR HORARIO PARA O PROF.
+    
+    //Servicos
+    Route::get('/servicos', [ServicosController::class,'index'])->name('admin-clinica.servicos.index'); // Listagem de serviços
+    
+    //Sobre
+    Route::get('/sobre', [AdminClinicaController::class,'index'])->name('admin-clinica.sobre.index'); //SOBRE A CLÍNICA
+    
+    //Profissionais
+    Route::get('/profissionais', [ProfissionaisController::class,'index'])->name('admin-clinica.profissionais.index'); // CADASTRAR PROFISSIONAIS
+    //Route::get('/profissionais/create', [ProfissionaisController::class,'create'])->name('admin-clinica.profissionais.show'); // VISUALIZAR PROFISSIONAIS
+    
+    //Agenda
+    Route::get('/agendamento/index', [AgendaController::class,'index'])->name('admin-clinica.agenda.index'); // AGENDAR HORARIO PARA O PROF.
+    Route::get('/agendamento/create', [AgendaController::class,'index'])->name('admin-clinica.agenda.create'); // AGENDAR HORARIO PARA O PROF.
 });
 
 // Páginas públicas (Index e outras estáticas)
