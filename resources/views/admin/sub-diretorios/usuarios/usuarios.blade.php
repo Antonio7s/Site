@@ -55,6 +55,12 @@
                 @endforelse
             </tbody>
         </table>
+
+        <!-- Links de paginação -->
+        <div class="d-flex justify-content-center">
+            {{ $usuarios->links() }}
+        </div>
+
     </div>
 </div>
 
