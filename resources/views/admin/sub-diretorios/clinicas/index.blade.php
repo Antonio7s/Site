@@ -1,4 +1,4 @@
-@extends('layouts.painel-admin')
+vc ja removeu aqui caso não tenha feito faça: @extends('layouts.painel-admin') 
 @section('header_title', 'Clínicas')
 @section('content')
 
@@ -20,64 +20,67 @@
 
     <!-- CONTAINER DE PESQUISA -->
     <div class="container">
-      <div>
-        <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar clínicas cadastradas">
-      </div>
-
-      <!-- Filtros -->
-      <div class="filter-container">
-        <div class="row">
-          <!-- Buscar por -->
-          <div class="col-md-6">
-            <label for="filterBy">Filtros</label>
-            <select class="form-control" id="filterBy">
-              <option value="todos">Todos</option>
-              <option value="nome">Nome</option>
-              <option value="cnpj">CNPJ</option>
-              <option value="cidade">Cidade</option>
-            </select>
-          </div>
-
-          <!-- Taxa de Lucro -->
-          <div class="col-md-6">
-            <label for="profitRate">Taxa de Lucro:</label>
-            <select class="form-control" id="profitRate">
-              <option value="todos">Todos</option>
-              <option value="valor_exato">Valor exato</option>
-              <option value="intervalo">Intervalo</option>
-            </select>
-          </div>
+      <form action="{{ route('admin.clinicas.index') }}" method="GET">
+        <div>
+          <input type="text" name="search" id="searchInput" class="form-control" placeholder="Pesquisar clínicas cadastradas" value="{{ request('search') }}">
         </div>
 
-        <!-- Valor Exato de Taxa de Lucro -->
-        <div class="row mt-3" id="profitRateExact" style="display:none;">
-          <div class="col-md-12 d-flex ml-auto justify-content-end gap-3">
-            <div class="w-15">
-              <label for="exactRate">Valor Exato:</label>
-              <input type="number" class="form-control form-control-sm" id="exactRate" placeholder="Ex: 5">
+        <!-- Filtros -->
+        <div class="filter-container">
+          <div class="row">
+            <!-- Buscar por -->
+            <div class="col-md-6">
+              <label for="filterBy">Filtros</label>
+              <select class="form-control" id="filterBy" name="filterBy">
+                <option value="todos" {{ request('filterBy') == 'todos' ? 'selected' : '' }}>Todos</option>
+                <option value="nome" {{ request('filterBy') == 'nome' ? 'selected' : '' }}>Nome</option>
+                <option value="cnpj" {{ request('filterBy') == 'cnpj' ? 'selected' : '' }}>CNPJ</option>
+                <option value="cidade" {{ request('filterBy') == 'cidade' ? 'selected' : '' }}>Cidade</option>
+              </select>
+            </div>
+
+            <!-- Taxa de Lucro -->
+            <div class="col-md-6">
+              <label for="profitRate">Taxa de Lucro:</label>
+              <select class="form-control" id="profitRate" name="profitRate">
+                <option value="todos" {{ request('profitRate') == 'todos' ? 'selected' : '' }}>Todos</option>
+                <option value="valor_exato" {{ request('profitRate') == 'valor_exato' ? 'selected' : '' }}>Valor exato</option>
+                <option value="intervalo" {{ request('profitRate') == 'intervalo' ? 'selected' : '' }}>Intervalo</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Valor Exato de Taxa de Lucro -->
+          <div class="row mt-3" id="profitRateExact" style="display: {{ request('profitRate') == 'valor_exato' ? 'flex' : 'none' }};">
+            <div class="col-md-12 d-flex ml-auto justify-content-end gap-3">
+              <div class="w-15">
+                <label for="exactRate">Valor Exato:</label>
+                <input type="number" class="form-control form-control-sm" id="exactRate" name="exactRate" placeholder="Ex: 5" value="{{ request('exactRate') }}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Intervalo de Taxa de Lucro -->
+          <div class="row mt-3" id="profitRateRange" style="display: {{ request('profitRate') == 'intervalo' ? 'flex' : 'none' }};">
+            <div class="col-md-12 d-flex ml-auto justify-content-end gap-3">
+              <div class="w-15">
+                <label for="minRate">Mínimo:</label>
+                <input type="number" class="form-control form-control-sm" id="minRate" name="minRate" placeholder="Ex: 1" value="{{ request('minRate') }}">
+              </div>
+              <div class="w-15">
+                <label for="maxRate">Máximo:</label>
+                <input type="number" class="form-control form-control-sm" id="maxRate" name="maxRate" placeholder="Ex: 10" value="{{ request('maxRate') }}">
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Intervalo de Taxa de Lucro -->
-        <div class="row mt-3" id="profitRateRange" style="display:none;">
-          <div class="col-md-12 d-flex ml-auto justify-content-end gap-3">
-            <div class="w-15">
-              <label for="minRate">Mínimo:</label>
-              <input type="number" class="form-control form-control-sm" id="minRate" placeholder="Ex: 1">
-            </div>
-            <div class="w-15">
-              <label for="maxRate">Máximo:</label>
-              <input type="number" class="form-control form-control-sm" id="maxRate" placeholder="Ex: 10">
-            </div>
-          </div>
+        <!-- Botão de Filtrar -->
+        <div class="form-group mt-4">
+          <button type="submit" class="btn btn-success">Filtrar</button>
+          <a href="{{ route('admin.clinicas.index') }}" class="btn btn-secondary">Limpar Filtros</a>
         </div>
-      </div>
-
-      <!-- Botão de Filtrar -->
-      <div class="form-group mt-4">
-        <button class="btn btn-success">Filtrar</button>
-      </div>
+      </form>
     </div>
 
     <!-- Lista de Clínicas Cadastradas -->
@@ -98,32 +101,34 @@
             <th scope="row">{{ $clinica->id }}</th>
             <td>{{ $clinica->razao_social }}</td>
             <td>{{ $clinica->cnpj_cpf }}</td>
-            <td>{{ $clinica->modificar ?? 'Não informado' }}</td>
+            <td>{{ $clinica->endereco ?? 'Não informado' }}</td>
             <td>{{ $clinica->email ?? 'Não informado' }}</td>
             <td>
               <a href="{{ route('admin.clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
               <form action="{{ route('admin.clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
-                <button class="btn btn-danger btn-sm">Deletar</button>
+                <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
               </form>
               <a href="{{ route('admin.clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
             </td>
           </tr>
         @empty
           <tr>
-            <td colspan="5">Nenhuma clínica encontrada.</td>
+            <td colspan="6">Nenhuma clínica encontrada.</td>
           </tr>
         @endforelse
       </tbody>
     </table>
 
-      <!-- Links de paginação -->
-      <div class="d-flex justify-content-center">
-        {{ $clinicas->links('pagination::bootstrap-5') }}
-      </div>
+    <!-- Links de paginação -->
+    <div class="d-flex justify-content-center">
+      {{ $clinicas->links('pagination::bootstrap-5') }}
+    </div>
+  </div>
 
   <!-- Script para interatividade -->
+  <!-- Se for usar somente a pesquisa server-side, é recomendado remover o bloco de filtragem client-side -->
   <script>
     // Exibir intervalo ou valor exato de taxa de lucro
     document.getElementById('profitRate').addEventListener('change', function() {
@@ -140,48 +145,6 @@
       } else {
         profitRateRange.style.display = 'none';
         profitRateExact.style.display = 'none';
-      }
-    });
-
-    // Função para filtrar as clínicas
-    document.getElementById('searchInput').addEventListener('input', function() {
-      var filter = this.value.toUpperCase();
-      var filterBy = document.getElementById('filterBy').value;
-      var table = document.getElementById('clinicasTable');
-      var tr = table.getElementsByTagName('tr');
-
-      for (var i = 1; i < tr.length; i++) { // Começa de 1 para pular o cabeçalho
-        var tdNome = tr[i].getElementsByTagName('td')[0];
-        var tdCnpj = tr[i].getElementsByTagName('td')[1];
-        var tdCidade = tr[i].getElementsByTagName('td')[2];
-
-        if (tdNome || tdCnpj || tdCidade) {
-          var txtValueNome = tdNome.textContent || tdNome.innerText;
-          var txtValueCnpj = tdCnpj.textContent || tdCnpj.innerText;
-          var txtValueCidade = tdCidade.textContent || tdCidade.innerText;
-
-          var match = false;
-
-          if (filterBy === 'nome' && txtValueNome.toUpperCase().indexOf(filter) > -1) {
-            match = true;
-          } else if (filterBy === 'cnpj' && txtValueCnpj.toUpperCase().indexOf(filter) > -1) {
-            match = true;
-          } else if (filterBy === 'cidade' && txtValueCidade.toUpperCase().indexOf(filter) > -1) {
-            match = true;
-          } else if (filterBy === 'todos' && (
-            txtValueNome.toUpperCase().indexOf(filter) > -1 ||
-            txtValueCnpj.toUpperCase().indexOf(filter) > -1 ||
-            txtValueCidade.toUpperCase().indexOf(filter) > -1
-          )) {
-            match = true;
-          }
-
-          if (match) {
-            tr[i].style.display = '';
-          } else {
-            tr[i].style.display = 'none';
-          }
-        }
       }
     });
   </script>
