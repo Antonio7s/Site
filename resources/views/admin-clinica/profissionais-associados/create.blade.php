@@ -13,11 +13,11 @@
                 <label for="employeeSpecialties" class="form-label">Especialidades</label>
                 <!-- Select para múltiplos itens -->
                 <select id="especialidades" class="form-control" name="especialidades[]" multiple required>
-                    forelse()
+                    forelse($especialidades as $especialidade)
                         <option value="especialidade1">Especialidade 1</option>
                         @empty
                         <tr>
-                            <td colspan="5">Nenhuma clínica encontrada.</td>
+                            <td colspan="5">Nenhuma especialidade encontrada.</td>
                         </tr>
                     @endforelse
                 </select>
@@ -26,8 +26,13 @@
                 <!-- Select para múltiplos itens -->
                 <label for="" class="form-label">Procedimentos</label>
                 <select id="procedimentos" class="form-control" name="procedimentos[]" multiple required>
-                    for    
+                    forelse($procedimentos as $procedimento)
                         <option value="procedimento1">Procedimento 1</option>
+                    @empty
+                        <tr>
+                            <td colspan="5">Nenhuma especialidade encontrada.</td>
+                        </tr>
+                    @endforelse
                 </select>
             </div>
 

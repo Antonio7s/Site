@@ -29,6 +29,7 @@ class Medico extends Model
     }
 
     // Um médico pode realizar vários procedimentos
+    // OU SEJA, AO RESGATAR O MÉDICO DEVEM VIM TODOS SEUS PROCEDIMENTOS
     public function procedimentos(): HasMany
     {
         return $this->hasMany(MedicoProcedimento::class);
