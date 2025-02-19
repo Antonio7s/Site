@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Medico extends Model
 {
-    protected $fillable = ['nome', 'crm', 'clinica_id'];
+    protected $fillable = ['primeiro_nome','segundo_nome', 'email', 'crm', 'clinica_id', 'foto_url'];
 
     // Um médico pertence a uma clínica
     public function clinica(): BelongsTo
@@ -22,16 +22,15 @@ class Medico extends Model
         return $this->hasMany(Agenda::class);
     }
 
-    // Um médico pode ter várias especialidades
-    public function especialidades(): HasMany
+    // Relação: Médico tem muitas Especialidades (muitos-para-muitos)
+    public function especialidades()
     {
-        return $this->hasMany(MedicoEspecialidade::class);
+        return $this->belongsToMany(Especialidade::class, 'medico_especialidade')->using(MedicoEspecialidade::class);;
     }
 
-    // Um médico pode realizar vários procedimentos
-    // OU SEJA, AO RESGATAR O MÉDICO DEVEM VIM TODOS SEUS PROCEDIMENTOS
-    public function procedimentos(): HasMany
+    // Relação: Médico tem muitos Procedimentos (muitos-para-muitos)
+    public function procedimentos()
     {
-        return $this->hasMany(MedicoProcedimento::class);
+        return $this->belongsToMany(Procedimento::class, 'medico_procedimento')->using(MedicoProcedimento::class);
     }
 }

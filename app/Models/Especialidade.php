@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Especialidade extends Model
 {
     protected $table = 'especialidades';
+
     protected $fillable = ['nome'];
+
     public $timestamps = true; // Se for usar created_at e updated_at
 
-    // Uma especialidade pode ser associada a vários médicos
-    public function medicosEspecialidade(): HasMany
+    // Relação: Especialidade pertence a muitos Médicos
+    public function medicos()
     {
-        return $this->hasMany(MedicoEspecialidade::class);
+        return $this->belongsToMany(Medico::class, 'medico_especialidade');
     }
 }

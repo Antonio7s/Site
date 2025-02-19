@@ -46,5 +46,8 @@
           @endforelse
         </tbody>
       </table>
+      <div class="d-flex justify-content-center">
+        {{ $procedimentos->links('pagination::bootstrap-5') }}
+    </div>
   </div>
 @endsection

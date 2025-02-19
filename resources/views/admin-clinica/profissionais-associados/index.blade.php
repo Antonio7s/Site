@@ -3,7 +3,7 @@
 @section('content')
 
     <!--botao de adicionar-->
-    <a href="{{ route('admin-clinica.profissionais.create') }}">Adicionar Profissional</a>
+    <a href="{{ route('admin-clinica.profissionais-associados.create') }}">Adicionar Profissional</a>
     
     <hr>
 
@@ -29,8 +29,8 @@
                         <td>{{ $profissional->telefone }}</td>
                         <td>{{ $profissional->conselho }}</td>
                         <td>
-                            <a href="{{ route('profissionais.edit', $profissional->id) }}" class="btn btn-primary btn-sm">Editar</a>
-                            <form action="{{ route('profissionais.destroy', $profissional->id) }}" method="POST" style="display:inline">
+                            <a href="{{ route('admin-clinica.profissionais-associados.edit', $profissional->id) }}" class="btn btn-primary btn-sm">Editar</a>
+                            <form action="{{ route('admin-clinica.profissionais-associados.destroy', $profissional->id) }}" method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja excluir este profissional?')">Excluir</button>

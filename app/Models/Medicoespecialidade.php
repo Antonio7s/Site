@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class MedicoEspecialidade extends Model
+class MedicoEspecialidade extends Pivot
 {
-    protected $fillable = ['medico_id', 'especialidade'];
+    protected $table = 'medico_especialidade';
 
-    // Uma especialidade pertence a um médico
-    public function medico(): BelongsTo
-    {
-        return $this->belongsTo(Medico::class);
-    }
+    // Caso precise permitir a atribuição em massa, defina os campos preenchíveis
+    protected $fillable = ['medico_id', 'especialidade_id'];
+
+    // Se tiver campos extras, adicione-os aqui, por exemplo:
+    // protected $fillable = ['medico_id', 'especialidade_id', 'data_atribuicao'];
 }

@@ -42,5 +42,8 @@
           @endforelse
         </tbody>
       </table>
+      <div class="d-flex justify-content-center">
+        {{ $especialidades->links('pagination::bootstrap-5') }}
+    </div>
   </div>
 @endsection

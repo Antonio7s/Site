@@ -20,6 +20,19 @@ class CreateClinicasTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+            // Inserir o admin "chumbado" diretamente na tabela
+            DB::table('clinicas')->insert([
+                'status' => 'aprovado', // O status será aprovado
+                'razao_social' => 'Clínica Exemplo Ltda', // Razão Social
+                'nome_fantasia' => 'Clínica Exemplo', // Nome Fantasia
+                'cnpj_cpf' => '12.345.678/0001-90', // CNPJ ou CPF
+                'email' => 'admin@gmail.com', // E-mail
+                'password' => Hash::make('12345678'), // Senha encriptada
+                'documentos' => null, // Pode adicionar o caminho para documentos, se necessário
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
     }
 
     /**

@@ -114,7 +114,7 @@
             <a href="{{ route('admin-clinica.dashboard.index') }}" class="nav-link"> Dashboard</a>
             <a href="{{ route('admin-clinica.servicos.index') }}" class="nav-link">Serviços</a>
             <a href="{{ route('admin-clinica.sobre.index') }}" class="nav-link">Sobre a Clínica</a>
-            <a href="{{ route('admin-clinica.profissionais.index') }}" class="nav-link">Profissionais Associados</a>
+            <a href="{{ route('admin-clinica.profissionais-associados.index') }}" class="nav-link">Profissionais Associados</a>
             <a href="{{ route('admin-clinica.agenda.index') }}" class="nav-link">Agendamento</a>
         </nav>
     </div>

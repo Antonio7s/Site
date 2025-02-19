@@ -15,9 +15,9 @@ class Procedimento extends Model
     }
 
     // Relacionamento um para muitos com MedicoProcedimento
-    public function medicoProcedimentos()
+    public function medicos()
     {
-        return $this->hasMany(MedicoProcedimento::class);
+        return $this->belongsToMany(Medico::class, 'medico_procedimento');
     }
 }
 

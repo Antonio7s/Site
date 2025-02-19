@@ -112,13 +112,13 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         
     // Profissionais
     Route::controller(ProfissionaisController::class)->prefix('profissionais')->group(function () {
-        Route::get('/', 'index')->name('admin-clinica.profissionais.index');
-        Route::get('/create', 'create')->name('admin-clinica.profissionais.create');
-        Route::post('/', 'store')->name('admin-clinica.profissionais.store');
-        Route::get('/{id}/edit', 'edit')->name('admin-clinica.profissionais.edit');
-        Route::get('/{id}', 'show')-> name('admin-clinica.profissionais.show');
-        Route::put('/{id}', 'update')->name('admin-clinica.profissionais.update');
-        Route::delete('/{id}', 'destroy')->name('admin-clinica.profissionais.destroy');
+        Route::get('/', 'index')->name('admin-clinica.profissionais-associados.index');
+        Route::get('/create', 'create')->name('admin-clinica.profissionais-associados.create');
+        Route::post('/', 'store')->name('admin-clinica.profissionais-associados.store');
+        Route::get('/{id}/edit', 'edit')->name('admin-clinica.profissionais-associados.edit');
+        Route::get('/{id}', 'show')-> name('admin-clinica.profissionais-associados.show');
+        Route::put('/{id}', 'update')->name('admin-clinica.profissionais-associados.update');
+        Route::delete('/{id}', 'destroy')->name('admin-clinica.profissionais-associados.destroy');
     });
 
     //Agenda

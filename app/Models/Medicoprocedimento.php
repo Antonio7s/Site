@@ -2,22 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class MedicoProcedimento extends Model
+class MedicoProcedimento extends Pivot
 {
+    protected $table = 'medico_procedimento';
+
     protected $fillable = ['medico_id', 'procedimento_id'];
 
-    // Um médico procedimento pertence a um médico
-    public function medico(): BelongsTo
-    {
-        return $this->belongsTo(Medico::class);
-    }
-
-    // Um médico procedimento pertence a um procedimento
-    public function procedimento(): BelongsTo
-    {
-        return $this->belongsTo(Procedimento::class);
-    }
+    // Adicione outros campos extras, se necessário
 }
+
