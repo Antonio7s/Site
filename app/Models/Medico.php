@@ -17,9 +17,9 @@ class Medico extends Model
     }
 
     // Um médico pode ter vários agendamentos
-    public function agendas(): HasMany
+    public function agenda()
     {
-        return $this->hasMany(Agenda::class);
+        return $this->hasOne(Agenda::class);
     }
 
     // Relação: Médico tem muitas Especialidades (muitos-para-muitos)

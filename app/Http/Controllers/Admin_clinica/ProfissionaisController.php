@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Medico;
 use App\Models\Especialidade;
 use App\Models\Procedimento;
+use App\Models\Agenda;
 
 class ProfissionaisController extends Controller
 {
@@ -59,6 +60,17 @@ class ProfissionaisController extends Controller
         // Associa as especialidades e procedimentos usando os dados do request
         $medico->especialidades()->attach($request->especialidades);
         $medico->procedimentos()->attach($request->procedimentos);
+
+        //ASSOCIAR AGENDA.
+        $agendaPadrao = Agenda::create([
+            'medico_id' => $medico->id, // Associando a agenda ao médico recém-criado
+            'tipo' => 'padrao', // outros campos necessários
+            // outros valores default, caso haja
+        ]);
+
+        // Associar a agenda padrão ao médico (usando save, pois é um relacionamento HasOne)
+        $medico->agenda()->save($agendaPadrao);
+
 
         return redirect()->route('admin-clinica.profissionais-associados.index')
                          ->with('success', 'Profissional cadastrado com sucesso!');
