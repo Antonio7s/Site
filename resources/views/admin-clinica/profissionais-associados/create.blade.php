@@ -65,8 +65,8 @@
             </div>
             
             <div class="mb-3">
-                <label for="employeeCouncil" class="form-label">Registro do Conselho</label>
-                <select id="employeeCouncil" class="form-select" name="conselho" required>
+                <label for="conselho" class="form-label">Registro do Conselho</label>
+                <select id="conselho" class="form-select" name="conselho" required>
                     <option value="">Selecione o Conselho</option>
                     <option value="CRM" {{ old('conselho') == 'CRM' ? 'selected' : '' }}>CRM</option>
                     <option value="CRO" {{ old('conselho') == 'CRO' ? 'selected' : '' }}>CRO</option>

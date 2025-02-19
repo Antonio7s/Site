@@ -23,8 +23,8 @@
             <tbody>
                 @foreach($profissionais as $profissional)
                     <tr>
-                        <td>{{ $profissional->nome }}</td>
-                        <td>{{ $profissional->funcao }}</td>
+                        <td>{{ $profissional->primeiro_nome }}</td>
+                        <td>{{ $profissional->especialidade }}</td>
                         <td>{{ $profissional->email }}</td>
                         <td>{{ $profissional->telefone }}</td>
                         <td>{{ $profissional->conselho }}</td>

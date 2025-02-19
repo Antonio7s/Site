@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Medico extends Model
 {
-    protected $fillable = ['primeiro_nome','segundo_nome', 'email', 'crm', 'clinica_id', 'foto_url'];
+    protected $fillable = ['primeiro_nome','segundo_nome', 'email', 'telefone', 'conselho_nome','conselho_numero', 'clinica_id', 'foto_url'];
 
     // Um médico pertence a uma clínica
     public function clinica(): BelongsTo

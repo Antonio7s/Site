@@ -38,6 +38,14 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
+        // Cria o usuário admin
+        User::create([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('12345678'), // Criptografa a senha
+            'access_level' => 'admin', // Define como admin (ajuste de 'is_admin' para 'access_level')
+        ]);
+
     }
 
     /**
