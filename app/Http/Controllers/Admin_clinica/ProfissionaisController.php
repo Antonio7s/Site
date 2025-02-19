@@ -101,7 +101,7 @@ class ProfissionaisController extends Controller
         ]);
 
         // Atualiza os dados do médico
-        $dados = $request->only(['primeiro_nome', 'segundo_nome', 'email', 'telefone', 'crm','clinica_id']);
+        $dados = $request->only(['profissional_nome', 'profissional_sobrenome', 'email', 'telefone', 'crm','clinica_id']);
 
         if ($request->hasFile('foto_url')) {
             $dados['foto_url'] = $request->file('foto_url')->store('fotos_medicos', 'public');
