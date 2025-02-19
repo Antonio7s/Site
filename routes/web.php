@@ -181,9 +181,6 @@ Route::get('/minhasinformacoes', [ProfileController::class, 'show'])->name('prof
 Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
 
 
-Route::get('/admin/clinicas', [AdminClinicaController::class, 'index'])->name('admin.clinicas.index');
-
-
 Route::get('/admin/inbox', function () {
     return view('admin.sub-diretorios.inbox.inbox');
 })->name('admin.inbox');
