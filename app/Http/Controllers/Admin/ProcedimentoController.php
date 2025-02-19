@@ -8,12 +8,22 @@ use Illuminate\Http\Request;
 use App\Models\Procedimento;
 use App\Models\Classe;
 
-
 class ProcedimentoController extends Controller
 {
     public function index(Request $request)
     {
-        $procedimentos = Procedimento::paginate(10);
+        // Verifica se há um termo de pesquisa na requisição
+        $search = $request->input('search');
+
+        // Filtra os procedimentos com base no termo de pesquisa
+        $procedimentos = Procedimento::when($search, function ($query, $search) {
+            return $query->where('nome', 'like', '%' . $search . '%')
+                         ->orWhereHas('classe', function ($query) use ($search) {
+                             $query->where('nome', 'like', '%' . $search . '%');
+                         });
+        })->paginate(10);
+
+        // Mantém a lista de classes para uso no formulário de criação/edição
         $classes = Classe::all();
 
         return view('admin.sub-diretorios.procedimentos.index', compact('procedimentos', 'classes'));

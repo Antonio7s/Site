@@ -1,31 +1,49 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Clinica;
 
+use App\Models\Clinica;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ClinicaController extends Controller
 {
+    // Método para listar clínicas com busca e paginação
     public function index(Request $request)
     {
-        // Usando paginação: exibe 10 registros por página
-        $clinicas = Clinica::paginate(50);
+        $query = Clinica::query();
 
-        // Se precisar de filtros, você pode pegar os parâmetros de $request aqui e ajustar a query
+        // Filtro de busca
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('razao_social', 'like', "%{$search}%")
+                  ->orWhere('cnpj_cpf', 'like', "%{$search}%")
+                  ->orWhere('cidade', 'like', "%{$search}%");
+            });
+        }
 
-        // Retorna a view, passando a variável com os dados paginados
-        return view('/admin/sub-diretorios/clinicas/index', compact('clinicas'));
+        // Paginação e anexação dos parâmetros da query
+        $clinicas = $query->paginate(30)->appends($request->query());
+
+        // Verifica se a requisição é AJAX
+        if ($request->ajax()) {
+            return view('admin.sub-diretorios.clinicas.index', compact('clinicas'))->render();
+        }
+
+        // Retorna a view com os dados
+        return view('admin.sub-diretorios.clinicas.index', compact('clinicas'));
     }
 
+    // Método para exibir o formulário de edição de uma clínica
     public function edit($id)
     {
-        $clinica = Clinica::findOrFail($id); // Busca a clínica pelo ID
+        $clinica = Clinica::findOrFail($id);
         return view('admin.sub-diretorios.clinicas.edit', compact('clinica'));
     }
 
+    // Método para atualizar os dados de uma clínica
     public function update(Request $request, $id)
     {
         $clinica = Clinica::findOrFail($id);
@@ -37,7 +55,7 @@ class ClinicaController extends Controller
             'cnpj_cpf' => 'nullable|string|unique:clinicas,cnpj_cpf,' . $id,
             'email' => 'nullable|email|unique:clinicas,email,' . $id,
             'nome_fantasia' => 'nullable|string|max:255',
-            'cep' => 'nullable|string|max:10', // Formato: 00000-000
+            'cep' => 'nullable|string|max:10',
             'endereco' => 'nullable|string|max:255',
             'numero' => 'nullable|string|max:10',
             'complemento' => 'nullable|string|max:255',
@@ -55,14 +73,6 @@ class ClinicaController extends Controller
             'data_emissao' => 'nullable|date',
             'cpf' => 'nullable|string|max:14',
             'estado_civil' => 'nullable|string|max:20',
-            /*
-            'banco' => 'required|string|max:255',
-            'numero_banco' => 'required|string|max:4',
-            'agencia' => 'required|string|max:10',
-            'conta_corrente' => 'required|string|max:20',
-            'titular_conta' => 'required|string|max:255',
-            'cpf_titular' => 'required|string|max:14',
-            */
         ]);
 
         // Atualiza os dados
@@ -71,12 +81,14 @@ class ClinicaController extends Controller
         return redirect()->route('admin.clinicas.index')->with('success', 'Clínica atualizada com sucesso!');
     }
 
+    // Método para exibir os detalhes de uma clínica
     public function show($id)
     {
         $clinica = Clinica::findOrFail($id);
         return view('admin.sub-diretorios.clinicas.show', compact('clinica'));
     }
 
+    // Método para deletar uma clínica
     public function destroy($id)
     {
         $clinica = Clinica::findOrFail($id);
@@ -85,59 +97,50 @@ class ClinicaController extends Controller
         return redirect()->route('admin.clinicas.index')->with('success', 'Clínica deletada com sucesso!');
     }
 
-
-    /*
-    // ANALISE DA CLÍNICA
-    */
-
-    public function create() // CADASTRAR UMA NOVA CLÍNICA
+    // Método para exibir o formulário de cadastro de uma nova clínica
+    public function create()
     {
         return view('admin.sub-diretorios.clinicas.create');
     }
 
-    //exibir todas as clínicas com status == pendente
+    // Método para listar solicitações de cadastro com status "pendente"
     public function solicitacoes_de_cadastro(Request $request)
     {
         $clinicas = Clinica::where('status', 'pendente')->paginate(10);
         return view('admin.sub-diretorios.clinicas.solicitacoes-de-cadastro.solicitacoes-de-cadastro', compact('clinicas'));
     }
 
+    // Método para analisar e aprovar/negar solicitações de cadastro
     public function analise(Request $request, $id)
     {
         $clinica = Clinica::findOrFail($id);
-    
-        // Verifica se a requisição é POST e se há uma ação definida
+
         if ($request->isMethod('post')) {
-            if ($request->input('acao') === 'aprovar') {
+            $acao = $request->input('acao');
+
+            if ($acao === 'aprovar') {
                 $clinica->status = 'aprovado';
-            } elseif ($request->input('acao') === 'negar') {
+            } elseif ($acao === 'negar') {
                 $clinica->status = 'negado';
             }
-    
-            $clinica->save();
-            //return redirect()->back()->with('success', 'Status atualizado com sucesso!');
-            return redirect()->route('admin.clinicas.solicitacoes')->with('success', 'Status atualizado com sucesso!');
 
+            $clinica->save();
+            return redirect()->route('admin.clinicas.solicitacoes')->with('success', 'Status atualizado com sucesso!');
         }
-    
+
         return view('admin.sub-diretorios.clinicas.solicitacoes-de-cadastro.analise', compact('clinica'));
     }
 
+    // Método para download de documentos
     public function download($id)
     {
-        // Busca a clínica pelo ID
         $clinica = Clinica::findOrFail($id);
+        $documentoPath = $clinica->documentos;
 
-        // Obtém o caminho do documento armazenado no BD
-        $documentoPath = $clinica->documentos; // Ex: "uploads/documentos/1739641962_Documento.pdf"
-
-        // Verifica se o arquivo existe no storage privado
         if (!Storage::exists($documentoPath)) {
             return response()->json(['message' => 'Arquivo não encontrado'], 404);
         }
 
-        // Retorna o arquivo para download
         return Storage::download($documentoPath);
     }
-    
 }

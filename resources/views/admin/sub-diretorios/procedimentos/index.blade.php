@@ -7,6 +7,16 @@
     <a href="{{route('admin.procedimentos.create')}}" class="btn btn-primary mb-3">Adicionar</a>
   </div>
 
+  <!-- Barra de Pesquisa -->
+  <div class="mb-3">
+      <form action="{{ route('admin.procedimentos.index') }}" method="GET">
+          <div class="input-group">
+              <input type="text" name="search" class="form-control" placeholder="Pesquisar procedimentos..." value="{{ request('search') }}">
+              <button type="submit" class="btn btn-primary">Pesquisar</button>
+          </div>
+      </form>
+  </div>
+
   <hr>
 
   <!-- EXIBIÇÃO DAS ESPECIALIDADES CADASTRADAS -->
@@ -47,7 +57,7 @@
         </tbody>
       </table>
       <div class="d-flex justify-content-center">
-        {{ $procedimentos->links('pagination::bootstrap-5') }}
-    </div>
+        {{ $procedimentos->appends(['search' => request('search')])->links('pagination::bootstrap-5') }}
+      </div>
   </div>
 @endsection

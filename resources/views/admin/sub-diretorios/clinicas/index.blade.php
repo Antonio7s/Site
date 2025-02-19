@@ -1,4 +1,4 @@
-vc ja removeu aqui caso não tenha feito faça: @extends('layouts.painel-admin') 
+@extends('layouts.painel-admin') 
 @section('header_title', 'Clínicas')
 @section('content')
 
