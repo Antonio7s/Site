@@ -3,7 +3,7 @@
 @section('content')
 
     <!--botao de adicionar-->
-    <a href="{{ route('admin-clinica.profissionais-associados.create') }}">Adicionar Profissional</a>
+    <a class="btn btn-success"href="{{ route('admin-clinica.profissionais-associados.create') }}">Adicionar Profissional</a>
     
     <hr>
 
