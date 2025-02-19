@@ -88,19 +88,19 @@
         .whatsapp {
             color: #25D366;
         }
-        #userInfo {
+        #userInfo, #clinicInfo {
             display: flex;
             align-items: center;
             gap: 10px;
             cursor: pointer;
             position: relative;
         }
-        #userPhoto {
+        #userPhoto, #clinicPhoto {
             width: 30px;
             height: 30px;
             border-radius: 50%;
         }
-        #userDropdown {
+        #userDropdown, #clinicDropdown {
             display: none;
             position: absolute;
             top: 100%;
@@ -111,13 +111,13 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
-        #userDropdown a {
+        #userDropdown a, #clinicDropdown a {
             display: block;
             padding: 10px;
             color: #333;
             text-decoration: none;
         }
-        #userDropdown a:hover {
+        #userDropdown a:hover, #clinicDropdown a:hover {
             background-color: #f8f9fa;
         }
         .estado-container {
@@ -155,7 +155,7 @@
         flex-direction: column;
         align-items: flex-end;
     }
-    #userInfo {
+    #userInfo, #clinicInfo {
         margin-top: 10px;
     }
     /* Aumentando o tamanho da fonte dos menus específicos */
@@ -201,7 +201,7 @@
             </a>
         </div>
 
-        <!-- Estado e Informações do Usuário -->
+        <!-- Estado e Informações do Usuário/Clínica -->
         <div class="user-container">
             <span id="estadoSelecionado" class="badge bg-info" style="cursor: pointer;" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
             @if(!auth()->check())
@@ -210,14 +210,25 @@
                     <a href="{{ route('register') }}" id="registerButton" class="btn btn-light btn-sm">Cadastro</a>
                 </div>
             @else
-                <div id="userInfo">
-                    <img id="userPhoto" src="{{ auth()->user()->photo_url }}" alt="Foto do Usuário">
-                    <span id="userName">{{ auth()->user()->name }}</span>
-                    <div id="userDropdown">
-                        <a href="/profile">Página do Usuário</a>
-                        <a href="#" onclick="logout()">Logout</a>
+                @if(auth()->user()->is_clinic)
+                    <div id="clinicInfo">
+                        <img id="clinicPhoto" src="{{ !empty(auth()->user()->photo_url) ? auth()->user()->photo_url : asset('images/default_clinic.png') }}" alt="Foto da Clínica">
+                        <span id="clinicName">{{ auth()->user()->name }}</span>
+                        <div id="clinicDropdown">
+                            <a href="/clinic-profile">Página da Clínica</a>
+                            <a href="#" onclick="logout()">Logout</a>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div id="userInfo">
+                        <img id="userPhoto" src="{{ !empty(auth()->user()->photo_url) ? auth()->user()->photo_url : asset('images/default_user.png') }}" alt="Foto do Usuário">
+                        <span id="userName">{{ auth()->user()->name }}</span>
+                        <div id="userDropdown">
+                            <a href="/profile">Página do Usuário</a>
+                            <a href="#" onclick="logout()">Logout</a>
+                        </div>
+                    </div>
+                @endif
             @endif
         </div>
     </div>
@@ -382,18 +393,28 @@
         }
     });
 
-    // Mostrar/ocultar dropdown do usuário
-    document.getElementById('userInfo').addEventListener('click', function() {
+    // Mostrar/ocultar dropdown do usuário/clínica
+    document.getElementById('userInfo')?.addEventListener('click', function() {
         const dropdown = document.getElementById('userDropdown');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.getElementById('clinicInfo')?.addEventListener('click', function() {
+        const dropdown = document.getElementById('clinicDropdown');
         dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     });
 
     // Fechar dropdown ao clicar fora
     document.addEventListener('click', function(event) {
         const userInfo = document.getElementById('userInfo');
-        const dropdown = document.getElementById('userDropdown');
-        if (!userInfo.contains(event.target)) {
-            dropdown.style.display = 'none';
+        const clinicInfo = document.getElementById('clinicInfo');
+        const userDropdown = document.getElementById('userDropdown');
+        const clinicDropdown = document.getElementById('clinicDropdown');
+        if (userInfo && !userInfo.contains(event.target)) {
+            userDropdown.style.display = 'none';
+        }
+        if (clinicInfo && !clinicInfo.contains(event.target)) {
+            clinicDropdown.style.display = 'none';
         }
     });
 
