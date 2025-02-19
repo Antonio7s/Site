@@ -19,12 +19,12 @@ return new class extends Migration
             // Definir a chave estrangeira
             $table->foreign('clinica_id')->references('id')->on('clinicas')->onDelete('cascade');
             
-            $table->string('primeiro_nome', 255);
-            $table->string('segundo_nome', 255)->nullable();
+            $table->string('profissional_nome', 255);
+            $table->string('profissional_sobrenome', 255)->nullable();
             $table->string('foto_url')->nullable();
             $table->string('email', 255)->unique();
-            $table->string('conselho_nome',)->nullable();
-            $table->string('conselho_numero',)->nullable();
+            $table->string('conselho_nome', 20)->nullable();
+            $table->string('conselho_numero', 20)->unique();
             $table->string('telefone', 15)->unique();
             $table->timestamps();
 

@@ -22,8 +22,13 @@
             <input type="hidden" name="clinica_id" id="clinica_id" value="{{ Auth::guard('clinic')->user()->id }}"></input>
 
             <div class="mb-3">
-                <label for="employeeName" class="form-label">Nome do Profissional</label>
-                <input type="text" id="employeeName" name="primeiro_nome" class="form-control" placeholder="Nome do profissional" value="{{ old('primeiro_nome') }}" required>
+                <label for="profissional_nome" class="form-label">Primeiro nome do Profissional</label>
+                <input type="text" id="profissional_nome" name="profissional_nome" class="form-control" placeholder="Nome do profissional" value="{{ old('profissional_nome') }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="profissional_sobrenome" class="form-label">Segundo nome do Profissional</label>
+                <input type="text" id="profissional_sobrenome" name="profissional_sobrenome" class="form-control" placeholder="Sobreome do profissional" value="{{ old('profissional_sobrenome') }}" required>
             </div>
             
             <div class="mb-3">
@@ -65,8 +70,8 @@
             </div>
             
             <div class="mb-3">
-                <label for="conselho" class="form-label">Registro do Conselho</label>
-                <select id="conselho" class="form-select" name="conselho" required>
+                <label for="conselho_nome" class="form-label">Registro do Conselho</label>
+                <select id="conselho_nome" class="form-select" name="conselho_nome" required>
                     <option value="">Selecione o Conselho</option>
                     <option value="CRM" {{ old('conselho') == 'CRM' ? 'selected' : '' }}>CRM</option>
                     <option value="CRO" {{ old('conselho') == 'CRO' ? 'selected' : '' }}>CRO</option>
@@ -76,13 +81,13 @@
             </div>
             
             <div class="mb-3">
-                <label for="employeeCouncilNumber" class="form-label">Número do Conselho/UF</label>
-                <input type="text" id="employeeCouncilNumber" name="crm" class="form-control" placeholder="Número do Conselho/UF" value="{{ old('crm') }}" required>
+                <label for="conselho_numero" class="form-label">Número do Conselho/UF</label>
+                <input type="text" id="conselho_numero" name="conselho_numero" class="form-control" placeholder="Número do Conselho/UF" value="{{ old('conselho_numero') }}" required>
             </div>
             
             <div class="mb-3">
-                <label for="employeeReturnConsultation" class="form-label">Consulta de Retorno</label>
-                <select id="employeeReturnConsultation" class="form-select" name="consulta_retorno" required onchange="toggleReturnDays()">
+                <label for="consulta_retorno" class="form-label">Consulta de Retorno</label>
+                <select id="consulta_retorno" class="form-select" name="consulta_retorno" required onchange="toggleReturnDays()">
                     <option value="">Selecione</option>
                     <option value="sim" {{ old('consulta_retorno') == 'sim' ? 'selected' : '' }}>Sim</option>
                     <option value="nao" {{ old('consulta_retorno') == 'nao' ? 'selected' : '' }}>Não</option>

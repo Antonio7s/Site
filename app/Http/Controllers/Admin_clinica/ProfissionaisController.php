@@ -30,8 +30,8 @@ class ProfissionaisController extends Controller
         // Validação dos dados enviados
         $request->validate([
             'clinica_id'      => 'required|exists:clinicas,id',
-            'primeiro_nome'   => 'required|string|max:255',
-            'segundo_nome'    => 'nullable|string|max:255',
+            'profissional_nome'   => 'required|string|max:255',
+            'profissional_sobrenome'    => 'nullable|string|max:255',
             'foto_url'        => 'nullable|image|max:2048',
             'email'           => 'required|email|unique:medicos,email',
             'telefone'        => 'required|string|max:20',
@@ -45,7 +45,7 @@ class ProfissionaisController extends Controller
 
         // Captura apenas os campos necessários para o médico
         $dados = $request->only([
-            'clinica_id', 'primeiro_nome', 'segundo_nome', 'email', 'telefone', 'crm','foto_url',
+            'clinica_id', 'profissional_nome', 'profissional_sobrenome', 'email', 'telefone', 'conselho_nome', 'conselho_numero','foto_url',
         ]);
 
         // Upload da foto, se existir

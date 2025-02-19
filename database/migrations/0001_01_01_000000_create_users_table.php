@@ -39,7 +39,7 @@ return new class extends Migration
         });
 
         // Cria o usuário admin
-        User::create([
+        DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'), // Criptografa a senha
