@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\HomeController;
+
 // Importação de Controller's \ADMIN
 use App\Http\Controllers\Admin\ClinicaController;
 use App\Http\Controllers\Admin\UsuarioController;
@@ -183,3 +185,9 @@ Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
 });
+
+
+
+Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
+Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
+
