@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('agendas', function (Blueprint $table) {
-            $table->id('id_agenda');  
-            $table->unsignedBigInteger('id_medico');  
-            $table->date('data');  
-            $table->time('hora_inicio'); 
-            $table->time('hora_fim');  
+            $table->id('id');
+            
+            $table->unsignedBigInteger('medico_id')->unique(); // Cada médico só pode ter uma agenda
+            // Definir a chave estrangeira
+            $table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
+            
             $table->timestamps();
 
-            // Definir a chave estrangeira
-            $table->foreign('id_medico')->references('id_medico')->on('medicos')->onDelete('cascade');
+
         });
     }
 

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->id('agendamento_id');
+            $table->time('horario');
+            
             $table->unsignedBigInteger('paciente_id');
             $table->unsignedBigInteger('procedimento_id');
             $table->unsignedBigInteger('horario_disponivel_id');
