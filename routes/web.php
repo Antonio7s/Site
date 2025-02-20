@@ -94,7 +94,7 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     // Outros
     Route::get('relatorios', [RelatorioController::class, 'index'])->name('admin.relatorios.index');
     Route::get('contatos', [ContatosController::class, 'index'])->name('admin.contatos.index');
-    Route::get('homepage', [HomepageController::class], 'index')->name('admin.homepage.index');
+    Route::get('homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
     Route::get('mensagens', [InboxController::class], 'index')->name('admin.mensagens.index');
 });
 
@@ -180,10 +180,6 @@ Route::get('/minhasinformacoes', [ProfileController::class, 'show'])->name('prof
 
 Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
 
-
-Route::get('/admin/inbox', function () {
-    return view('admin.sub-diretorios.inbox.inbox');
-})->name('admin.inbox');
-
-Route::get('/admin/inbox', [App\Http\Controllers\Admin\InboxController::class, 'index'])->name('admin.inbox');
-
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
+});
