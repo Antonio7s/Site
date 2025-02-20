@@ -124,6 +124,8 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
     //Agenda
     Route::get('/agendamento/index', [AgendaController::class,'index'])->name('admin-clinica.agenda.index'); // AGENDAR HORARIO PARA O PROF.
     Route::get('/agendamento/create', [AgendaController::class,'index'])->name('admin-clinica.agenda.create'); // AGENDAR HORARIO PARA O PROF.
+    Route::get('/search-medicos', [AgendaController::class, 'search'])->name('admin-clinica.agenda.search');
+
 });
 
 // Páginas públicas (Index e outras estáticas)

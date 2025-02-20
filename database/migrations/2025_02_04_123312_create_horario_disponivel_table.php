@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('horarios_disponiveis', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('agenda_id')->unique(); // Cada horario_disp só pode ter uma agenda
+            // Definir a chave estrangeira
+            $table->foreign('agenda_id')->references('id')->on('agendas')->onDelete('cascade');
+            
             $table->timestamps();
+
+
         });
     }
 
@@ -22,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('horariodisponivel');
+        Schema::dropIfExists('horarios_disponiveis');
     }
 };
