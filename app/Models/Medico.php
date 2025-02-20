@@ -16,7 +16,7 @@ class Medico extends Model
         return $this->belongsTo(Clinica::class);
     }
 
-    // Um médico pode ter vários agendamentos
+    // Um médico pode ter uma única agenda
     public function agenda()
     {
         return $this->hasOne(Agenda::class);
