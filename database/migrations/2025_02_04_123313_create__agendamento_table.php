@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id('agendamento_id');
             $table->time('horario');
             
+            //$table->unsignedBigInteger('procedimento_id');
             $table->unsignedBigInteger('paciente_id');
-            $table->unsignedBigInteger('procedimento_id');
-            $table->unsignedBigInteger('horario_disponivel_id');
-            $table->string('status'); // Pode ser 'agendado', 'cancelado', etc.
+            $table->unsignedBigInteger('horario_id')->unique(); // Garante que cada horário tenha no máximo um agendamento
+            
+            $table->string('status'); // Pode ser 'agendado', 'cancelado', 'concluido' etc.
             $table->timestamps();
 
             // Definir chaves estrangeiras (ajustando para suas tabelas)

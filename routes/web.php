@@ -124,9 +124,24 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
     });
 
     //Agenda
-    Route::get('/agendamento/index', [AgendaController::class,'index'])->name('admin-clinica.agenda.index'); // AGENDAR HORARIO PARA O PROF.
-    Route::get('/agendamento/create', [AgendaController::class,'index'])->name('admin-clinica.agenda.create'); // AGENDAR HORARIO PARA O PROF.
-    Route::get('/search-medicos', [AgendaController::class, 'search'])->name('admin-clinica.agenda.search');
+    Route::controller(AgendaController::class)->prefix('agenda')->group(function () {
+        //Agendamento
+        Route::get('/index','index')->name('admin-clinica.agenda.index');
+        Route::get('agendamento/create', 'agendamento_create')->name('admin-clinica.agenda.agendamento.create'); 
+        Route::get('agendamento/show', 'agendamento_show')->name('admin-clinica.agenda.agendamento.create');
+
+        //Horario
+        Route::get('/horario/create', 'horario_create')->name('admin-clinica.agenda.horario.create');
+        Route::get('/horario/show', 'horario_show')->name('admin-clinica.agenda.horario.show');
+
+        /*
+        Route::get('/search-medicos', [AgendaController::class, 'search'])->name('admin-clinica.agenda.search');
+        // Rota para pegar a agenda do profissional
+        Route::get('/agenda/getAgenda', [AgendaController::class, 'getAgenda'])->name('admin-clinica.agenda.getAgenda');
+        // Rota para pegar os horários da agenda
+        Route::get('/agenda/getHorarios', [AgendaController::class, 'getHorarios'])->name('admin-clinica.agenda.getHorarios');
+        */
+    });
 
 });
 
@@ -192,4 +207,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
 Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
-
