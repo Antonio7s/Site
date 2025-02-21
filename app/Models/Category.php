@@ -9,9 +9,14 @@ class Category extends Model
 {
     use HasFactory;
 
+    /**
+     * Campos que podem ser preenchidos em massa.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'title',
-        'icon',
-        'color',
+        'title', // Título da categoria
+        'icon',  // Ícone da categoria
+        'color', // Cor da categoria
     ];
 }

@@ -10,9 +10,9 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('icon');
-            $table->string('color');
+            $table->string('title')->comment('Título da categoria');
+            $table->string('icon')->comment('Ícone da categoria');
+            $table->string('color')->comment('Cor da categoria');
             $table->timestamps();
         });
     }

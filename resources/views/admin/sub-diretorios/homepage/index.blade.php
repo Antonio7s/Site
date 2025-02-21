@@ -161,7 +161,11 @@
         </form>
     </div>
 
+    <!-- SweetAlert2 para feedback visual -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
+        // Adicionar nova categoria
         function addNewCategory() {
             const categoryIndex = document.querySelectorAll('.category-item').length;
             const categoryList = document.getElementById('categoriesList');
@@ -191,6 +195,7 @@
             categoryList.appendChild(newCategory);
         }
 
+        // Adicionar nova pergunta FAQ
         function addFaqQuestion() {
             const faqIndex = document.querySelectorAll('#faqList .mb-3').length / 2;
             const faqList = document.getElementById('faqList');
@@ -210,31 +215,35 @@
             faqList.appendChild(newFaq);
         }
 
+        // Remover categoria
         function removeCategory(button) {
             button.closest('.category-item').remove();
         }
 
+        // Envio do formulário via AJAX
         document.getElementById('formPaginaInicial').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
+            e.preventDefault(); // Impede o envio tradicional do formulário
+
+            const formData = new FormData(this); // Cria um objeto FormData com os dados do formulário
 
             fetch('{{ route("admin.homepage.save") }}', {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Adiciona o token CSRF para segurança
                 }
             })
-            .then(response => response.json())
+            .then(response => response.json()) // Converte a resposta para JSON
             .then(data => {
                 if (data.success) {
-                    alert('Configurações salvas com sucesso!');
+                    Swal.fire('Sucesso!', 'Configurações salvas com sucesso!', 'success');
                 } else {
-                    alert('Erro ao salvar as configurações.');
+                    Swal.fire('Erro!', 'Erro ao salvar as configurações.', 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                Swal.fire('Erro!', 'Ocorreu um erro ao enviar os dados.', 'error');
             });
         });
     </script>

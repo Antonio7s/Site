@@ -9,8 +9,13 @@ class Faq extends Model
 {
     use HasFactory;
 
+    /**
+     * Campos que podem ser preenchidos em massa.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'question',
-        'answer',
+        'question', // Pergunta do FAQ
+        'answer',   // Resposta do FAQ
     ];
 }

@@ -9,11 +9,16 @@ class HomepageSetting extends Model
 {
     use HasFactory;
 
+    /**
+     * Campos que podem ser preenchidos em massa.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'logo_path',
-        'banner_path',
-        'info_basicas',
-        'play_store_link',
-        'apk_link',
+        'logo_path',       // Caminho do arquivo de logo
+        'banner_path',     // Caminho do arquivo de banner
+        'info_basicas',   // Informações básicas da clínica
+        'play_store_link', // Link do app na Play Store
+        'apk_link',       // Link direto do APK
     ];
 }

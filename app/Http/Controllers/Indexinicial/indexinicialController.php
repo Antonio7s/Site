@@ -7,7 +7,7 @@ use App\Models\HomepageSetting;
 use App\Models\Category;
 use App\Models\Faq;
 
-class HomeController extends Controller
+class indexinicialController extends Controller
 {
     public function index(Request $request)
     {
