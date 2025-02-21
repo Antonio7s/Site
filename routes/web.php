@@ -96,7 +96,13 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     // Outros
     Route::get('relatorios', [RelatorioController::class, 'index'])->name('admin.relatorios.index');
     Route::get('contatos', [ContatosController::class, 'index'])->name('admin.contatos.index');
-    Route::get('homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
+    Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
+
+    Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
+    Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.home.save');
+    
+    Route::get('/admin/homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
+    
     Route::get('mensagens', [InboxController::class], 'index')->name('admin.mensagens.index');
 });
 
@@ -181,13 +187,4 @@ Route::get('/minhasinformacoes', [ProfileController::class, 'show'])->name('prof
 
 
 Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
-});
-
-
-
-Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
-Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
 
