@@ -88,7 +88,6 @@
                                 <li>Diploma</li>
                                 <li>Títulos</li>
                                 <li>Identidade Profissional</li>
-                                <li>RG, CPF do Responsável pelo Contrato</li>
                             </ul>
                         </div>
                         <div class="modal-footer">

@@ -4,10 +4,13 @@
 @section('content')
 
     <head>
-        
+        <!-- Inclua as bibliotecas necessárias -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
         <!-- CSS TEXTO DINÂMICO PESQUISA -->
         <style>
-            /* Estilo personalizado para o título */
             .search-title {
                 font-size: 1.5rem;
                 font-weight: bold;
@@ -15,14 +18,13 @@
                 margin-bottom: 20px;
             }
             .typed-effect {
-                color: #007bff; /* Azul para destacar */
+                color: #007bff;
                 font-weight: bold;
             }
         </style>
 
         <!-- ESTILO DOS CARDS E BARRA DE BUSCA -->
         <style>
-            /* Estilo personalizado para melhorar a aparência */
             .custom-search-bar {
                 max-width: 900px;
                 margin: 0 auto;
@@ -42,8 +44,8 @@
             }
         </style>
 
+        <!-- CSS DOS CARDS -->
         <style>
-            /* CSS DOS CARDS */
             .card {
                 border-radius: 15px;
                 text-align: center;
@@ -58,7 +60,6 @@
                 font-size: 2rem;
                 margin-bottom: 10px;
             }
-            /* CSS DO APP-QRCODE */
             .promo-section {
                 background-color: #f4f3ff;
                 border-radius: 15px;
@@ -104,15 +105,8 @@
             }
         </style>
 
-        <!-- CSS DO PARALLAX-->
+        <!-- CSS DO PARALLAX -->
         <style>
-            /* Estilos globais */
-            body {
-                font-family: 'Poppins', sans-serif;
-                background-color: #f8f9fa;
-                color: #333;
-            }
-            /* Estilos para o parallax */
             .parallax {
                 position: relative;
                 overflow: hidden;
@@ -128,7 +122,6 @@
                 will-change: transform;
                 transition: transform 0.3s ease;
             }
-            /* Estilos para a seção de contagem */
             .counter-section {
                 padding: 100px 0;
                 text-align: center;
@@ -149,13 +142,11 @@
                 color: #f8f9fa;
                 margin-top: 10px;
             }
-            /* Ícones */
             .icon {
                 font-size: 50px;
                 margin-bottom: 15px;
                 color: #fff;
             }
-            /* Estilos gerais */
             .content {
                 padding: 100px 0;
             }
@@ -169,7 +160,7 @@
             }
         </style>
 
-        <!--CSS CARDS -->
+        <!-- CSS CARDS -->
         <style>
             .servicos-clinica {
                 background-color: #f8f9fa;
@@ -215,7 +206,6 @@
                 margin-bottom: 0.8rem;
                 display: block;
             }
-            /* Media Queries para Responsividade */
             @media (max-width: 992px) {
                 .banner.container,
                 .info-section.container {
@@ -409,7 +399,8 @@
                 </div>
             </div>
         </div>
-                <!-- Seção Parallax com Animação -->
+
+        <!-- Seção Parallax com Animação -->
         <div class="parallax mt-5">
             <div class="container">
                 <div class="counter-section" id="counter-section">
@@ -571,4 +562,4 @@
             var typed = new Typed(".typed-effect", options);
         </script>
     </body>
-@endsection 
+@endsection
