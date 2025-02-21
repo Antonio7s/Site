@@ -133,10 +133,13 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
     Route::controller(AgendaController::class)->prefix('agenda')->group(function () {
         //Agendamento
         Route::get('/index','index')->name('admin-clinica.agenda.index');
-        Route::get('agendamento/create', 'agendamento_create')->name('admin-clinica.agenda.agendamento.create'); 
-        Route::get('agendamento/show', 'agendamento_show')->name('admin-clinica.agenda.agendamento.create');
+
+        Route::get('agendamento/index', 'agendamento_index')->name('admin-clinica.agenda.agendamento.index'); 
+        //Route::get('agendamento/create', 'agendamento_create')->name('admin-clinica.agenda.agendamento.create'); 
+        //Route::get('agendamento/show', 'agendamento_show')->name('admin-clinica.agenda.agendamento.create');
 
         //Horario
+        //Route::get('/horario/index', 'horario_index')->name('admin-clinica.agenda.horario.index');
         Route::get('/horario/create', 'horario_create')->name('admin-clinica.agenda.horario.create');
         Route::get('/horario/show', 'horario_show')->name('admin-clinica.agenda.horario.show');
 

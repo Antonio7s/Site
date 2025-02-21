@@ -14,12 +14,12 @@ class AgendaController extends Controller
 {
     public function index()
     {
-        $profissionais = Medico::all();
+        $profissionais = Medico::paginate(10);
 
-        return view('/admin-clinica/agenda/index',compact('profissionais'));
+        return view('/admin-clinica/agenda/index', compact('profissionais'));
     }
 
-    // Método de busca para médicos
+    /* Método de busca para médicos
     public function search(Request $request)
     {
         // Captura o termo de pesquisa
@@ -33,6 +33,7 @@ class AgendaController extends Controller
         // Retorna os médicos encontrados em formato JSON
         return response()->json($profissionais);
     }
+    */
 
     // Método para obter a agenda de um profissional
     public function getAgenda(Request $request)
@@ -49,11 +50,30 @@ class AgendaController extends Controller
         }
     }
     
+    //Busca todos os profissionais e exibe em listagem
+
+
+    // 
+    public function agendamento_index(Request $request)
+    {
+        // BUSCA TODOS OS AGENDAMENTO VINCULADO A UM PROFISSIONAL
+        //code
+
+        return view('/admin-clinica/agenda/agendamento/index');
+    }
+
+    public function agendamento_edit(Request $request)
+    {
+        return view('/admin-clinica/agenda/agendamento/edit');
+    }
+
+    
+    /////
 
     // Método para 
-    public function agendamento_create(Request $request)
+    public function horario_show(Request $request)
     {
-        return view('/admin-clinica/agenda/agendamento/create');
+        return view('/admin-clinica/agenda/horario/show');
     }
 
     //
@@ -62,15 +82,6 @@ class AgendaController extends Controller
         return view('/admin-clinica/agenda/horario/create');
     }
 
-    // Método para 
-    public function agendamento_index(Request $request)
-    {
-        return view('/admin-clinica/agenda/agendamento/show');
-    }
 
-    // Método para 
-    public function horario_index(Request $request)
-    {
-        return view('/admin-clinica/agenda/horario/index');
-    }
+
 }
