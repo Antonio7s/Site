@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Agenda extends Model
 {
-    protected $fillable = ['medico_id', 'paciente_id'];
+    protected $fillable = ['medico_id'];
 
     // Um agenda possui muitos horários
     public function horarios()

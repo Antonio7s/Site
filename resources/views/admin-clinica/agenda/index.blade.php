@@ -31,4 +31,9 @@
         </tbody>
     </table>
 
+        <!-- Links de paginação -->
+    <div class="d-flex justify-content-center">
+      {{ $profissionais->links('pagination::bootstrap-5') }}
+    </div>
+
 @endsection
