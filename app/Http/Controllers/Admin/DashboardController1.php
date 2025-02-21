@@ -1,45 +1,76 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Consulta;
-use App\Models\Agendamento;
-use App\Models\User;
-use App\Models\Clinica;
+use App\Http\Controllers\Controller;
+use App\Models\Agendamento; // Para vendas (agendamentos)
+use App\Models\Paciente; // Para clientes (pacientes)
+use App\Models\Clinica; // Para clínicas
+use Illuminate\Support\Facades\DB; // Para consultas personalizadas
 
 class DashboardController1 extends Controller
 {
     public function index()
     {
-        // Consultas: supondo que você tenha um campo 'tipo' para diferenciar presencial e remota
-        $consulta_presencial = Consulta::where('tipo', 'presencial')->count();
-        $consulta_remota    = Consulta::where('tipo', 'remota')->count();
+        // Total de Vendas (Agendamentos)
+        $totalVendas = Agendamento::count();
 
-        // Exames, Vacinas e Odontologia:
-        // Se a classe/model existir, executa o count; caso contrário, atribui 0.
-        $exames      = class_exists(\App\Models\Exame::class) ? \App\Models\Exame::count() : 0;
-        $vacinas     = class_exists(\App\Models\Vacina::class) ? \App\Models\Vacina::count() : 0;
-        $odontologia = class_exists(\App\Models\Odontologia::class) ? \App\Models\Odontologia::count() : 0;
+        // Total de Clientes (Pacientes)
+        $totalClientes = Paciente::count();
 
-        // Últimas vendas
-        $vendas = Agendamento::latest()->take(10)->get(); // exemplo: se Agendamento representa vendas
+        // Total de Clínicas
+        $totalClinicas = Clinica::count();
 
-        // Últimos clientes (supondo que sejam usuários ou pacientes)
-        $clientes = User::latest()->take(5)->get();
+        // Últimas Vendas (Agendamentos)
+        $vendas = Agendamento::with(['clinica', 'paciente'])
+            ->latest()
+            ->take(10)
+            ->get();
 
-        // Últimas clínicas
-        $clinicas = Clinica::latest()->take(5)->get();
+        // Últimos Clientes Cadastrados (Pacientes)
+        $clientes = Paciente::latest()
+            ->take(5)
+            ->get();
+
+        // Últimas Clínicas Cadastradas
+        $clinicas = Clinica::latest()
+            ->take(5)
+            ->get();
+
+        // Dados para o gráfico de crescimento de vendas (agendamentos por mês)
+        $vendasPorMes = Agendamento::select(
+                DB::raw('MONTH(created_at) as mes'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->whereYear('created_at', date('Y')) // Filtra pelo ano atual
+            ->groupBy('mes')
+            ->pluck('total', 'mes')
+            ->toArray();
+
+        // Preenche os meses faltantes com 0
+        $meses = range(1, 12);
+        $vendasMensais = [];
+        foreach ($meses as $mes) {
+            $vendasMensais[] = $vendasPorMes[$mes] ?? 0;
+        }
+
+        // Dados para o gráfico de distribuição de vendas por categoria
+        $distribuicaoVendas = [
+            'vendas' => $totalVendas,
+            'clientes' => $totalClientes,
+            'clinicas' => $totalClinicas
+        ];
 
         // Envia todas as variáveis para a view
         return view('dashboard', compact(
-            'consulta_presencial',
-            'consulta_remota',
-            'exames',
-            'vacinas',
-            'odontologia',
+            'totalVendas',
+            'totalClientes',
+            'totalClinicas',
             'vendas',
             'clientes',
-            'clinicas'
+            'clinicas',
+            'vendasMensais',
+            'distribuicaoVendas'
         ));
     }
 }

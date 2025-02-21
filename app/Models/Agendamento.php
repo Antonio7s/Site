@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Agendamento extends Model
 {
-    protected $fillable = ['data', 'horario_disponivel_id', 'procedimento_id', 'medico_id', 'paciente_nome'];
+    protected $fillable = [
+        'data',
+        'horario_disponivel_id',
+        'procedimento_id',
+        'medico_id',
+        'paciente_id', // Adicionado para relacionamento com Paciente
+        'clinica_id',  // Adicionado para relacionamento com Clinica
+        'valor',       // Adicionado para armazenar o valor da venda
+        'descricao',   // Adicionado para descrição do agendamento
+        'tipo'         // Adicionado para tipo de agendamento (ex: consulta, exame, etc.)
+    ];
 
     // Um agendamento está relacionado a um procedimento
     public function procedimento(): BelongsTo
@@ -19,5 +29,17 @@ class Agendamento extends Model
     public function horarioDisponivel(): BelongsTo
     {
         return $this->belongsTo(HorarioDisponivel::class);
+    }
+
+    // Um agendamento está relacionado a uma clínica
+    public function clinica(): BelongsTo
+    {
+        return $this->belongsTo(Clinica::class);
+    }
+
+    // Um agendamento está relacionado a um paciente
+    public function paciente(): BelongsTo
+    {
+        return $this->belongsTo(Paciente::class);
     }
 }
