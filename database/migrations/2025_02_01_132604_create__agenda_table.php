@@ -36,9 +36,9 @@ return new class extends Migration
 
             // Campos adicionais
             $table->date('data'); // Data do agendamento
-            $table->decimal('valor', 8, 2)->default(0); // Valor do agendamento
-            $table->string('descricao')->nullable(); // Descrição do agendamento
-            $table->string('tipo')->nullable(); // Tipo de agendamento (ex: consulta, exame, etc.)
+            $table->decimal('valor', 8, 2)->default(0); 
+            $table->string('descricao')->nullable(); 
+            $table->string('tipo')->nullable(); 
 
             $table->timestamps(); // created_at e updated_at
         });
