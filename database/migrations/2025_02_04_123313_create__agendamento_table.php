@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->id('id');
             
-            $table->string('status'); // Pode ser 'agendado', 'cancelado', 'concluido' etc.
+            // Adicionando a coluna 'data' (tipo DATE ou DATETIME)
+            $table->date('data'); // Ou $table->datetime('data'); se precisar incluir a hora
 
+            $table->string('status'); // Pode ser 'agendado', 'cancelado', 'concluido' etc.
 
             $table->unsignedBigInteger('procedimento_id');
             $table->unsignedBigInteger('paciente_id');

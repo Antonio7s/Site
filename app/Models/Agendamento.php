@@ -9,7 +9,7 @@ class Agendamento extends Model
 {
     protected $fillable = [
         'data',
-        'horario_disponivel_id',
+        'horario_id',
         'procedimento_id',
         'medico_id',
         'paciente_id', // Adicionado para relacionamento com Paciente
@@ -26,9 +26,9 @@ class Agendamento extends Model
     }
 
     // Um agendamento está relacionado a um horário disponível
-    public function horarioDisponivel(): BelongsTo
+    public function horario(): BelongsTo
     {
-        return $this->belongsTo(HorarioDisponivel::class);
+        return $this->belongsTo(Horario::class);
     }
 
     // Um agendamento está relacionado a uma clínica
