@@ -19,7 +19,6 @@ return new class extends Migration
 
             $table->string('status'); // Pode ser 'agendado', 'cancelado', 'concluido' etc.
 
-            $table->unsignedBigInteger('procedimento_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('horario_id')->unique(); // Garante que cada horário tenha no máximo um agendamento
             
@@ -27,7 +26,7 @@ return new class extends Migration
 
             // Definir chaves estrangeiras (ajustando para suas tabelas)
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
+           // $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
             $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('cascade');
         });
     }

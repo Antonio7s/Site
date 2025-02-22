@@ -16,6 +16,11 @@ return new class extends Migration
             $table->date('data'); // Campo para a data do horário
             $table->time('horario_inicio'); // Campo para o horário
             $table->integer('duracao'); // Campo para a duração em minutos
+
+            $table->unsignedBigInteger('procedimento_id');
+            $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
+
+
             $table->unsignedBigInteger('agenda_id'); // Cada horario só pode ter uma agenda
             // Definir a chave estrangeira
             $table->foreign('agenda_id')->references('id')->on('agendas')->onDelete('cascade');

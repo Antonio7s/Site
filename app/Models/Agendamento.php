@@ -16,16 +16,11 @@ class Agendamento extends Model
     protected $fillable = [
         'data',
         'horario_id',
-        'procedimento_id',
         'user_id',
         'status'
     ];
 
-    // Um agendamento está relacionado a um procedimento
-    public function procedimento(): BelongsTo
-    {
-        return $this->belongsTo(Procedimento::class);
-    }
+
 
     // Um agendamento está relacionado a um horário disponível
     public function horario(): BelongsTo
