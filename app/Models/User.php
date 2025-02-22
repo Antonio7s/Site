@@ -34,5 +34,11 @@ class User extends Authenticatable // implements MustVerifyEmail
             ? asset('storage/' . $this->attributes['photo_url'])
             : asset('images/default-photo.png');
     }
+
+    // Um paciente pode ter vários agendamentos
+    public function agendamentos(): HasMany
+    {
+        return $this->hasMany(Agendamento::class);
+    }
     
 }
