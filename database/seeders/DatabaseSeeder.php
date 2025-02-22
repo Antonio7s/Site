@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MedicoProcedimentoSeeder::class);
         $this->call(AgendaSeeder::class);
         $this->call(HorarioSeeder::class);
+        $this->call(AgendamentoSeeder::class);
 
     }
 }

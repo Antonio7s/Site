@@ -26,7 +26,6 @@ return new class extends Migration
 
             // Definir chaves estrangeiras (ajustando para suas tabelas)
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-           // $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
             $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('cascade');
         });
     }

@@ -28,14 +28,6 @@ class Agendamento extends Model
         return $this->belongsTo(Horario::class);
     }
 
-    /*
-    // Um agendamento está relacionado a uma clínica
-    public function clinica(): BelongsTo
-    {
-        return $this->belongsTo(Clinica::class);
-    }
-    */
-
     // Um agendamento está relacionado a um paciente
     public function user(): BelongsTo
     {
