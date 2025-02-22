@@ -2,6 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Horario; 
+use App\Models\Procedimento; 
+use App\Models\User; 
+
+
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -11,9 +17,8 @@ class Agendamento extends Model
         'data',
         'horario_id',
         'procedimento_id',
-        'medico_id',
         'user_id',
-        'clinica_id',
+        'status'
     ];
 
     // Um agendamento está relacionado a um procedimento
@@ -28,11 +33,13 @@ class Agendamento extends Model
         return $this->belongsTo(Horario::class);
     }
 
+    /*
     // Um agendamento está relacionado a uma clínica
     public function clinica(): BelongsTo
     {
         return $this->belongsTo(Clinica::class);
     }
+    */
 
     // Um agendamento está relacionado a um paciente
     public function user(): BelongsTo
