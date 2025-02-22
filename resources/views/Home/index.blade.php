@@ -42,6 +42,13 @@
             .custom-search-bar .input-group {
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
+            .custom-search-bar .form-select {
+                border-radius: 50px;
+                margin-right: 10px;
+                padding: 6px 10px; /* Reduzido o padding */
+                font-size: 0.8rem; /* Reduzido o tamanho da fonte */
+                width: 15%; /* Reduzido o tamanho do select para 30% do tamanho atual */
+            }
         </style>
 
         <!-- CSS DOS CARDS -->
@@ -343,7 +350,15 @@
             <div class="row justify-content-center mb-4">
                 <div class="custom-search-bar">
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-lg" placeholder="Pesquisar especialidades..." aria-label="Pesquisar especialidades">
+                        <select class="form-select custom-select" aria-label="Filtrar por">
+                            <option selected value="todos">Todos</option>
+                            <option value="distancia">Distância</option>
+                            <option value="especialidade">Especialidade</option>
+                            <option value="procedimento">Procedimento</option>
+                            <option value="profissional">Nome do Profissional</option>
+                            <option value="clinica">Nome da Clínica</option>
+                        </select>
+                        <input type="text" class="form-control form-control-lg" placeholder="Pesquisar..." aria-label="Pesquisar">
                         <a href="busca" class="btn btn-primary btn-lg" type="button">
                             <i class="fas fa-search"></i>
                         </a>
