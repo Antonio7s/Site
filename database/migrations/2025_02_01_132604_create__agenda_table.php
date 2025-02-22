@@ -11,44 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('agendamentos', function (Blueprint $table) {
-            $table->id(); // ID do agendamento
-
-            // Relacionamento com a tabela de médicos
-            $table->unsignedBigInteger('medico_id');
+        Schema::create('agendas', function (Blueprint $table) {
+            $table->id('id');
+            
+            $table->unsignedBigInteger('medico_id')->unique(); // Cada médico só pode ter uma agenda
+            // Definir a chave estrangeira
             $table->foreign('medico_id')->references('id')->on('medicos')->onDelete('cascade');
+            
+            $table->timestamps();
 
-            // Relacionamento com a tabela de pacientes
-            $table->unsignedBigInteger('paciente_id');
-            $table->foreign('paciente_id')->references('id')->on('pacientes')->onDelete('cascade');
 
-            // Relacionamento com a tabela de clínicas
-            $table->unsignedBigInteger('clinica_id');
-            $table->foreign('clinica_id')->references('id')->on('clinicas')->onDelete('cascade');
-
-            // Relacionamento com a tabela de procedimentos
-            $table->unsignedBigInteger('procedimento_id');
-            $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
-
-            // Relacionamento com a tabela de horários disponíveis
-            $table->unsignedBigInteger('horario_disponivel_id');
-            $table->foreign('horario_disponivel_id')->references('id')->on('horarios_disponiveis')->onDelete('cascade');
-
-            // Campos adicionais
-            $table->date('data'); // Data do agendamento
-            $table->decimal('valor', 8, 2)->default(0); 
-            $table->string('descricao')->nullable(); 
-            $table->string('tipo')->nullable(); 
-
-            $table->timestamps(); // created_at e updated_at
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('agendamentos');
+        Schema::dropIfExists('agendas');
     }
 };
