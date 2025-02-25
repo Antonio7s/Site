@@ -1,3 +1,4 @@
+<!-- teste -->
 <?php
 
 use App\Http\Controllers\PagesController;
