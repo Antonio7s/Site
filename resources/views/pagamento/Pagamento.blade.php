@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.appusuarioautentificado')
+
     <title>Finalizar Pagamento</title>
     <style>
         body {
@@ -191,5 +188,5 @@
             <p>Ou entre em contato conosco: <a href="mailto:contato@medexame.com">contato@medexame.com</a></p>
         </div>
     </div>
-</body>
-</html>
+
+@endsection

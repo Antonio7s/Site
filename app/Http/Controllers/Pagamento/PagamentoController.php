@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Pagamento;
 
+use App\Http\Controllers\Controller;
+
 use App\Services\AsaasService;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,7 @@ class PagamentoController extends Controller
 
 
     public function index(){
-        return view('pagamento/checkout');
+        return view('pagamento.checkout');
     }
 
     public function criarCobrancaPix(Request $request)

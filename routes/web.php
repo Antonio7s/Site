@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 
+//Importacao de controller de pagamento
+use App\Http\Controllers\Pagamento\PagamentoController;
+
+
 // Importação de Controller's \ADMIN
 use App\Http\Controllers\Admin\ClinicaController;
 use App\Http\Controllers\Admin\UsuarioController;
@@ -184,9 +188,9 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //ROTAS DE CHECKOUT
-    Route::controller(Controller::class)->prefix('pagamento')->group(function () {
-        Route::get('/', [PagamentoController::class, 'index']);
-        Route::post('/', [PagamentoController::class, 'criarCobrancaPix']);
+    Route::controller(PagamentoController::class)->prefix('pagamento')->group(function () {
+        Route::get('/', 'index')->name('pagamento.index');
+        Route::post('/', 'criarCobrancaPix');
     });
 });
 
