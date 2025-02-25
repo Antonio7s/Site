@@ -1,18 +1,21 @@
-@extends('layouts.painel-admin') <!-- Referencia o layout 'app.blade.php' -->
-@section('header_title', 'Dashboard') <!-- Alterando o h1 -->
+@extends('layouts.painel-admin')  
+@section('header_title', 'Dashboard')
 
 @section('content')
     <body>
         <div class="container-fluid">
             <div class="row">
-                <!-- Barra de Pesquisa -->
+                <!-- Barra de Pesquisa com botão -->
                 <div class="row mb-4">
-                    <div class="col-md-12">
+                    <div class="col-md-10">
                         <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar...">
+                    </div>
+                    <div class="col-md-2">
+                        <button id="searchButton" class="btn btn-primary btn-block">Pesquisar</button>
                     </div>
                 </div>
 
-                <!-- Cards de Informações -->
+                <!-- Cards de Informações Principais -->
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
@@ -26,7 +29,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Total de Clientes</h5>
-                                <p class="card-text">{{ $totalClientes ?? 0 }}</p>
+                                <p class="card-text">{{ $totalUsuarios ?? 0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -35,6 +38,42 @@
                             <div class="card-body">
                                 <h5 class="card-title">Total de Clínicas</h5>
                                 <p class="card-text">{{ $totalClinicas ?? 0 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards Extras com Dados -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Classes</h5>
+                                <p class="card-text">{{ $totalClasses ?? 0 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Procedimentos</h5>
+                                <p class="card-text">{{ $totalProcedimentos ?? 0 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Horário</h5>
+                                <p class="card-text">{{ $totalHorarios ?? 0 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Agendamento</h5>
+                                <p class="card-text">{{ $totalAgendamentos ?? 0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -62,12 +101,13 @@
 
                 <!-- Tabelas -->
                 <div class="row mt-4">
+                    <!-- Tabela de Últimas Vendas -->
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Últimas Vendas</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" id="salesTable">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -79,7 +119,7 @@
                                                 <th>Valor</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="salesTable">
+                                        <tbody>
                                             @if(isset($vendas) && $vendas->count() > 0)
                                                 @foreach ($vendas as $venda)
                                                     <tr>
@@ -105,7 +145,7 @@
                     </div>
                 </div>
 
-                <!-- Tabelas -->
+                <!-- Tabelas de Clientes e Clínicas -->
                 <div class="row mt-4">
                     <!-- Últimos Clientes Cadastrados -->
                     <div class="col-md-6">
@@ -113,7 +153,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Últimos Clientes Cadastrados</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" id="recentClientsTable">
                                         <thead>
                                             <tr>
                                                 <th>Nome</th>
@@ -121,13 +161,13 @@
                                                 <th>Data de Cadastro</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="recentClientsTable">
-                                            @if(isset($clientes) && $clientes->count() > 0)
-                                                @foreach ($clientes as $cliente)
+                                        <tbody>
+                                            @if(isset($usuarios) && $usuarios->count() > 0)
+                                                @foreach ($usuarios as $usuario)
                                                     <tr>
-                                                        <td>{{ $cliente->nome ?? 'N/A' }}</td>
-                                                        <td>{{ $cliente->email ?? 'N/A' }}</td>
-                                                        <td>{{ $cliente->created_at->format('d/m/Y') ?? 'N/A' }}</td>
+                                                        <td>{{ $usuario->nome ?? 'N/A' }}</td>
+                                                        <td>{{ $usuario->email ?? 'N/A' }}</td>
+                                                        <td>{{ $usuario->created_at->format('d/m/Y') ?? 'N/A' }}</td>
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -148,7 +188,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Últimas Clínicas Cadastradas</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" id="recentClinicsTable">
                                         <thead>
                                             <tr>
                                                 <th>Nome</th>
@@ -156,7 +196,7 @@
                                                 <th>Data de Cadastro</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="recentClinicsTable">
+                                        <tbody>
                                             @if(isset($clinicas) && $clinicas->count() > 0)
                                                 @foreach ($clinicas as $clinica)
                                                     <tr>
@@ -186,35 +226,29 @@
         <!-- Chart.js para gráficos -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            // Função de pesquisa
-            document.getElementById('searchInput').addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                filterTable('salesTable', searchTerm);
-                filterTable('recentClientsTable', searchTerm);
-                filterTable('recentClinicsTable', searchTerm);
+            // Função de pesquisa que filtra os dados de cada tabela
+            function filterAllTables() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const tableIds = ['salesTable', 'recentClientsTable', 'recentClinicsTable'];
+                tableIds.forEach(function(id) {
+                    filterTable(id, searchTerm);
+                });
+            }
+
+            // Evento para o botão "Pesquisar"
+            document.getElementById('searchButton').addEventListener('click', function() {
+                filterAllTables();
             });
 
+            // Função que filtra uma tabela pelo termo pesquisado
             function filterTable(tableId, searchTerm) {
                 const table = document.getElementById(tableId);
-                const rows = table.getElementsByTagName('tr');
-
-                for (let i = 1; i < rows.length; i++) { // Começa de 1 para pular o cabeçalho
-                    const row = rows[i];
-                    const cells = row.getElementsByTagName('td');
-                    let found = false;
-
-                    for (let j = 0; j < cells.length; j++) {
-                        const cellText = cells[j].textContent.toLowerCase();
-                        if (cellText.includes(searchTerm)) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (found) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+                if (table) {
+                    const rows = table.getElementsByTagName('tr');
+                    for (let i = 1; i < rows.length; i++) {
+                        let row = rows[i];
+                        let rowText = row.textContent.toLowerCase();
+                        row.style.display = rowText.includes(searchTerm) ? '' : 'none';
                     }
                 }
             }
@@ -229,7 +263,7 @@
                         label: 'Distribuição',
                         data: [
                             {{ $totalVendas ?? 0 }},
-                            {{ $totalClientes ?? 0 }},
+                            {{ $totalUsuarios ?? 0 }},
                             {{ $totalClinicas ?? 0 }}
                         ],
                         backgroundColor: [
@@ -242,11 +276,7 @@
                 },
                 options: {
                     responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        }
-                    }
+                    plugins: { legend: { position: 'top' } }
                 }
             });
 
@@ -256,21 +286,22 @@
                 type: 'line',
                 data: {
                     labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
-                    datasets: [
-                        {
-                            label: 'Vendas',
-                            data: [{{ $vendasJaneiro ?? 0 }}, {{ $vendasFevereiro ?? 0 }}, {{ $vendasMarco ?? 0 }}, {{ $vendasAbril ?? 0 }}, {{ $vendasMaio ?? 0 }}, {{ $vendasJunho ?? 0 }}],
-                            borderColor: 'rgba(0, 123, 255, 1)',
-                            borderWidth: 2
-                        }
-                    ]
+                    datasets: [{
+                        label: 'Vendas',
+                        data: [
+                            {{ $vendasJaneiro ?? 0 }},
+                            {{ $vendasFevereiro ?? 0 }},
+                            {{ $vendasMarco ?? 0 }},
+                            {{ $vendasAbril ?? 0 }},
+                            {{ $vendasMaio ?? 0 }},
+                            {{ $vendasJunho ?? 0 }}
+                        ],
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 2
+                    }]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                    scales: { y: { beginAtZero: true } }
                 }
             });
         </script>
