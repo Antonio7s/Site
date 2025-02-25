@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 
+//Importacao de controller de pagamento
+use App\Http\Controllers\Pagamento\PagamentoController;
+
+
 // Importação de Controller's \ADMIN
 use App\Http\Controllers\Admin\ClinicaController;
 use App\Http\Controllers\Admin\UsuarioController;
@@ -177,11 +181,17 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-// ??????
-Route::middleware('auth')->group(function () {
+//ROTAS QUE EXIGEM AUTENTICACAO DE USUARIO
+Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //ROTAS DE CHECKOUT
+    Route::controller(PagamentoController::class)->prefix('pagamento')->group(function () {
+        Route::get('/', 'index')->name('pagamento.index');
+        Route::post('/', 'criarCobrancaPix');
+    });
 });
 
 // Autenticação específica para clínicas
