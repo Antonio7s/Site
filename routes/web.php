@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 
+//Importacao de controller de pagamento
+use App\Http\Controllers\Pagamento\PagamentoController;
+
+
 // Importação de Controller's \ADMIN
 use App\Http\Controllers\Admin\ClinicaController;
 use App\Http\Controllers\Admin\UsuarioController;
@@ -177,11 +181,27 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-// ??????
-Route::middleware('auth')->group(function () {
+//ROTAS QUE EXIGEM AUTENTICACAO DE USUARIO
+Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //ROTAS DE CHECKOUT
+    Route::controller(PagamentoController::class)->prefix('pagamento')->group(function () {
+        Route::get('/', 'index')->name('pagamento.index');
+        Route::post('/pagamento/gerar-pix', 'gerarPix')->name('pagamento.gerarPix');
+        Route::post('/pagamento/gerar-boleto', 'gerarBoleto')->name('pagamento.gerarBoleto');
+        Route::post('/finalizar-cartao', 'finalizarCartao')->name('pagamento.finalizarCartao');
+
+        // Views de pagamento
+        Route::get('pagamento-pix', 'pagamentoPix')->name('pagamento.pagamentoPix');
+        Route::get('pagamento-boleto', 'pagamentoBoleto')->name('pagamento.pagamentoBoleto');
+        
+        // Views de falha no pagamento
+        Route::get('falha-pix', 'falhaPix')->name('pagamento.falhaPix');
+        Route::get('falha-boleto', 'falhaBoleto')->name('pagamento.falhaBoleto');
+    });
 });
 
 // Autenticação específica para clínicas

@@ -13,6 +13,7 @@ use App\Models\Procedimento;
 use App\Models\Classe;
 use DB;
 
+
 class DashboardController extends Controller
 {
     public function index()

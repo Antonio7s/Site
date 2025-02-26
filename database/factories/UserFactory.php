@@ -31,6 +31,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             // Campos adicionais:
             //CPF, ENDERECO
+            'cpf' => fake()->unique()->numerify('###########'), // Gera um CPF com 11 dígitos
+            'telefone' => fake()->numerify('###########'), // Gera um telefone com 11 dígitos
             'access_level' => fake()->numberBetween(1, 3),
             'photo_url' => 'images/default-photo.png', // ou utilize fake() para gerar URLs dinâmicas
         ];
