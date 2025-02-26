@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('access_level')->default('users');
             $table->string('photo_url')->nullable();
+
+            $table->string('customer_id')->nullable();
+            $table->bigInteger('cpf')->unique(); // obrigatorio
+            $table->bigInteger('telefone'); //obrigatorio
             $table->rememberToken();
             $table->timestamps();
         });
@@ -44,6 +48,18 @@ return new class extends Migration
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'), // Criptografa a senha
             'access_level' => 'admin', // Define como admin (ajuste de 'is_admin' para 'access_level')
+            'cpf' =>'02345678901',
+            'telefone'=>'85997220523',
+        ]);
+
+        // Cria o usuário Jose, um cliente qualquer
+        DB::table('users')->insert([
+            'name' => 'Jose',
+            'email' => 'jose@gmail.com',
+            'password' => Hash::make('12345678'), // Criptografa a senha
+            'access_level' => 'users',
+            'cpf' =>'12345678901',
+            'telefone'=>'88997220523',
         ]);
 
     }

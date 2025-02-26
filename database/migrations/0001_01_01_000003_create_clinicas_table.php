@@ -17,6 +17,7 @@ class CreateClinicasTable extends Migration
             $table->string('email')->unique(); // Email
             $table->string('password'); // Senha
             $table->string('documentos')->nullable();
+            $table->string('wallet_id');
             $table->rememberToken();
             $table->timestamps();
         });
