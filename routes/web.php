@@ -190,7 +190,9 @@ Route::middleware('auth', 'verified')->group(function () {
     //ROTAS DE CHECKOUT
     Route::controller(PagamentoController::class)->prefix('pagamento')->group(function () {
         Route::get('/', 'index')->name('pagamento.index');
-        Route::post('/', 'criarCobrancaPix');
+        Route::post('/pagamento/gerar-pix', 'gerarPix')->name('pagamento.gerarPix');
+        Route::post('/pagamento/gerar-boleto', 'gerarBoleto')->name('pagamento.gerarBoleto');
+        Route::post('/finalizar-cartao', 'finalizarCartao')->name('pagamento.finalizarCartao');
     });
 });
 

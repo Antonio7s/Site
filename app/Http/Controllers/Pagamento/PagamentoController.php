@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers\Pagamento;
 
-//models
-use App\Models\Horario;
-use App\Models\User;
-use App\Models\Agenda;
-use App\Models\Medico;
-use App\Models\Clinica;
-use App\Models\Procedimento;
-
 use App\Http\Controllers\Controller;
-
-use App\Services\AsaasService;
+use App\Models\Horario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Services\AsaasService;
 
 class PagamentoController extends Controller
 {
@@ -24,54 +17,94 @@ class PagamentoController extends Controller
         $this->asaasService = $asaasService;
     }
 
-
-    public function index(){
-
-        
-        //Pegando o primeiro horario
+    // Exibe a tela de checkout
+    public function index()
+    {
         $horario = Horario::findOrFail(1);
-        
-        //informacoes do user autenticado
-        $user = 
-        
-        // Pegando a agenda relacionada ao horário
+        $user = Auth::user();
         $agenda = $horario->agenda;
         $medico = $horario->agenda->medico;
         $clinica = $horario->agenda->medico->clinica;
         $procedimento = $horario->procedimento;
-        return view('pagamento.checkout', compact('horario', 'agenda', 'clinica', 'medico','procedimento'));
+
+        return view('pagamento.checkout', compact('horario', 'agenda', 'clinica', 'medico', 'procedimento', 'user'));
     }
 
-    public function criarCobrancaPix(Request $request)
+    // Gera cobrança para pagamento via PIX
+    public function gerarPix(Request $request)
     {
         $request->validate([
-            'customer_id' => 'required|string',
             'valor' => 'required|numeric',
-            'descricao' => 'required|string',
+            'descricao' => 'required|string'
         ]);
 
-        $cobranca = $this->asaasService->criarCobranca(
-            $request->customer_id,
-            $request->valor,
-            $request->descricao
-        );
+        $user = Auth::user();
+
+        // Verifica se o usuário já possui customer_id, se não, cria o cliente no Asaas
+        if (!$user->customer_id) {
+            $cliente = $this->asaasService->criarCliente(
+                $user->name,
+                $user->cpf,
+                $user->email,
+                $user->telefone,
+                //$user->data_nascimento
+            );
+            $user->update(['customer_id' => $cliente['id']]);
+            $customerId = $cliente['id'];
+        } else {
+            $customerId = $user->customer_id;
+        }
+
+        $cobranca = $this->asaasService->criarCobranca($customerId, $request->valor, $request->descricao, 'PIX');
 
         return response()->json($cobranca);
     }
-    
-    public function criarCobrancaBoleto(Request $request)
+
+    // Gera cobrança para pagamento via Boleto
+    public function gerarBoleto(Request $request)
     {
-        //code
+        $request->validate([
+            'valor' => 'required|numeric',
+            'descricao' => 'required|string'
+        ]);
+
+        $user = Auth::user();
+
+        if (!$user->customer_id) {
+            $cliente = $this->asaasService->criarCliente(
+                $user->name,
+                $user->cpf,
+                $user->email,
+                $user->telefone,
+                //$user->data_nascimento
+            );
+            $user->update(['customer_id' => $cliente['id']]);
+            $customerId = $cliente['id'];
+        } else {
+            $customerId = $user->customer_id;
+        }
+
+        $cobranca = $this->asaasService->criarCobranca($customerId, $request->valor, $request->descricao, 'BOLETO');
+
+        return response()->json($cobranca);
     }
 
-    public function criarCobrancaCartao(Request $request)
+    // Exemplo de finalização de pagamento com Cartão de Crédito
+    public function finalizarCartao(Request $request)
     {
-        //code
-    }
+        $request->validate([
+            'cardName'    => 'required|string',
+            'cardNumber'  => 'required|string',
+            'cardExpiry'  => 'required|string',
+            'cardCVV'     => 'required|string',
+            'installments'=> 'required|integer',
+        ]);
 
-    public function realizarPagamentoPix(Request $request)
-    {
-        //code
+        // Aqui você integraria com o serviço de pagamento com cartão.
+        // Esta é apenas uma simulação.
+        return response()->json([
+            'status'  => 'sucesso',
+            'message' => 'Pagamento com cartão finalizado com sucesso.'
+        ]);
     }
-
 }
