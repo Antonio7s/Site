@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers\Pagamento;
 
+//models
+use App\Models\Horario;
+use App\Models\User;
+use App\Models\Agenda;
+use App\Models\Medico;
+use App\Models\Clinica;
+use App\Models\Procedimento;
+
 use App\Http\Controllers\Controller;
 
 use App\Services\AsaasService;
@@ -18,7 +26,20 @@ class PagamentoController extends Controller
 
 
     public function index(){
-        return view('pagamento.checkout');
+
+        
+        //Pegando o primeiro horario
+        $horario = Horario::findOrFail(1);
+        
+        //informacoes do user autenticado
+        $user = 
+        
+        // Pegando a agenda relacionada ao horário
+        $agenda = $horario->agenda;
+        $medico = $horario->agenda->medico;
+        $clinica = $horario->agenda->medico->clinica;
+        $procedimento = $horario->procedimento;
+        return view('pagamento.checkout', compact('horario', 'agenda', 'clinica', 'medico','procedimento'));
     }
 
     public function criarCobrancaPix(Request $request)

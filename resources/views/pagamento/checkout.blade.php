@@ -15,26 +15,36 @@
             <div class="card mb-4">
             <div class="card-header bg-primary text-white">Detalhes do Agendamento</div>
             <div class="card-body">
-                <p><strong>Médico:</strong> Dr. João Silva</p>
-                <p><strong>Data:</strong> 15/03/2025</p>
-                <p><strong>Horário:</strong> 14:00</p>
-                <p><strong>Procedimento:</strong> Checkup Completo</p>
-                <p><strong>Localização:</strong> Clínica Saúde Total</p>
+                <p><strong>Médico:</strong> {{ $medico->profissional_nome ?? 'nao informado' }}</p>
+                <p><strong>Data:</strong> {{ $horario->data }}</p>
+                <p><strong>Horário:</strong> {{ $horario->horario_inicio ?? 'nao informado'}}</p>
+                <p><strong>Procedimento:</strong> {{ $procedimento->nome ?? 'nao informado'}}</p>
+                <p><strong>Localização:</strong> {{ $clinica->nome_fantasia}}</p>
+                <!-- wallet id clinica -->
+                <!-- customer_id -->
             </div>
             </div>
             <div class="card">
             <div class="card-header bg-info text-white">Resumo do Pagamento</div>
             <div class="card-body">
-                <p><strong>Consulta:</strong> R$ 200,00</p>
-                <p><strong>Checkup:</strong> R$ 350,00</p>
+                <p><strong>Consulta:</strong> {{ $procedimento->valor }}</p>
                 <hr>
-                <p class="h5 text-end"><strong>Total: R$ 550,00</strong></p>
+                <p class="h5 text-end"><strong>Total: {{ $procedimento->valor }}</strong></p>
             </div>
             </div>
         </div>
 
         <div class="col-lg-8">
             <div class="card">
+            <div class="mb-3">
+                <!-- Exibindo as informações do cliente -->
+                <h1>Informações do Cliente</h1>
+                <p><strong>Nome:</strong> {{ Auth::user()->name ?? 'Não informado' }}</p>
+                <p><strong>CPF:</strong> {{ Auth::user()->cpf ?? 'Não informado' }}</p>
+                <p><strong>Telefone:</strong> {{ Auth::user()->telefone }}</p>
+                <!-- customer_id -->
+                <p><strong>Data de Nascimento:</strong> {{ $user->data_nascimento ?? 'Não informado' }}</p>
+            </div>
             <div class="card-header bg-success text-white">Formas de Pagamento</div>
             <div class="card-body">
                 <form>
@@ -103,6 +113,8 @@
                 <div id="pixSection" class="hidden">
                     <p class="text-center">Escaneie o QR Code abaixo para pagar via Pix.</p>
                     <img src="https://via.placeholder.com/250" class="d-block mx-auto">
+                    <button type="button" class="btn btn-secondary w-100">Gerar PIX</button>
+
                 </div>
 
                 <!-- Boleto -->
