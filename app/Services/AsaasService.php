@@ -57,4 +57,34 @@ class AsaasService
 
         return json_decode($response->getBody(), true);
     }
+
+    public function obterQrCodePix($paymentId)
+    {
+        $url = $this->baseUrl . "payments/{$paymentId}/pixQrCode";
+
+        $response = $this->client->get($url, [
+            'headers' => [
+                'accept' => 'application/json',
+                'access_token' => $this->apiKey,
+            ],
+        ]);
+
+        return json_decode($response->getBody(), true);
+    }
+
+    public function obterBoleto($paymentId)
+    {
+        $url = $this->baseUrl . "payments/{$paymentId}";
+
+        $response = $this->client->get($url, [
+            'headers' => [
+                'accept' => 'application/json',
+                'access_token' => $this->apiKey,
+            ],
+        ]);
+
+        return json_decode($response->getBody(), true);
+}
+
+
 }

@@ -46,8 +46,7 @@ class PagamentoController extends Controller
                 $user->name,
                 $user->cpf,
                 $user->email,
-                $user->telefone,
-                //$user->data_nascimento
+                $user->telefone
             );
             $user->update(['customer_id' => $cliente['id']]);
             $customerId = $cliente['id'];
@@ -55,10 +54,27 @@ class PagamentoController extends Controller
             $customerId = $user->customer_id;
         }
 
+        // Cria a cobrança PIX
         $cobranca = $this->asaasService->criarCobranca($customerId, $request->valor, $request->descricao, 'PIX');
 
-        return response()->json($cobranca);
+        if (!isset($cobranca['id'])) {
+            return redirect()->route('pagamento.falhaPix');
+        }
+
+        // Obtém o QR Code PIX usando o ID da cobrança
+        $qrCodePix = $this->asaasService->obterQrCodePix($cobranca['id']);
+
+        if (!isset($qrCodePix['encodedImage'])) {
+            return redirect()->route('pagamento.falhaPix');
+        }
+
+        // Redireciona para a view de pagamento Pix passando os dados necessários
+        return view('pagamento/pagamento-pix', [
+            'qrcode' => 'data:image/png;base64,' . $qrCodePix['encodedImage'],
+            'valor'  => $request->valor
+        ]);
     }
+
 
     // Gera cobrança para pagamento via Boleto
     public function gerarBoleto(Request $request)
@@ -75,8 +91,7 @@ class PagamentoController extends Controller
                 $user->name,
                 $user->cpf,
                 $user->email,
-                $user->telefone,
-                //$user->data_nascimento
+                $user->telefone
             );
             $user->update(['customer_id' => $cliente['id']]);
             $customerId = $cliente['id'];
@@ -84,10 +99,27 @@ class PagamentoController extends Controller
             $customerId = $user->customer_id;
         }
 
+        // Criação da cobrança via boleto
         $cobranca = $this->asaasService->criarCobranca($customerId, $request->valor, $request->descricao, 'BOLETO');
 
-        return response()->json($cobranca);
+        if (!isset($cobranca['id'])) {
+            return redirect()->route('pagamento.falhaBoleto');
+        }
+
+        // Obtém os detalhes do boleto
+        $detalhesBoleto = $this->asaasService->obterBoleto($cobranca['id']);
+
+        if (!isset($detalhesBoleto['bankSlipUrl'])) {
+            return redirect()->route('pagamento.falhaBoleto');
+        }
+
+        // Redireciona para a view de pagamento do boleto
+        return view('pagamento/pagamento-boleto', [
+            'boletoUrl' => $detalhesBoleto['bankSlipUrl'],
+            'valor'     => $request->valor
+        ]);
     }
+
 
     // Exemplo de finalização de pagamento com Cartão de Crédito
     public function finalizarCartao(Request $request)
@@ -106,5 +138,26 @@ class PagamentoController extends Controller
             'status'  => 'sucesso',
             'message' => 'Pagamento com cartão finalizado com sucesso.'
         ]);
+    }
+
+
+    public function pagamentoBoleto()
+    {
+        return view('pagamento/pagamento-boleto');
+    }
+
+    public function pagamentoPix()
+    {
+        return view('pagamento/pagamento-pix');
+    }
+
+    public function falhaPix()
+    {
+        return view('pagamento/falha-pix');
+    }
+
+    public function falhaBoleto()
+    {
+        return view('pagamento/falha-boleto');
     }
 }
