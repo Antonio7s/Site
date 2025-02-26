@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers\Admin;
 
@@ -9,75 +9,83 @@ use App\Models\User;
 use App\Models\Clinica;
 use App\Models\Agenda;
 use App\Models\Horario;
-use App\Models\Procedimento; // Adicionado o modelo Procedimento
+use App\Models\Procedimento;
+use App\Models\Classe;
+use DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalVendas   = Agendamento::count() ?? 0; 
+        $totalVendas   = Classe::join('procedimentos as p', 'classes.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->count() ?? 0;
+        
         $totalUsuarios = User::count() ?? 0; 
         $totalClinicas = Clinica::count() ?? 0;
         
-        // Novos dados para os cards extras
-        $totalClasses       = Agenda::count() ?? 0;
-        $totalProcedimentos = Procedimento::count() ?? 0; // Corrigido para usar o modelo Procedimento
+        // Dados para os cards extras
+        $totalClasses = Classe::count() ?? 0;
+        
+        $totalProcedimentos = Procedimento::count() ?? 0;
         $totalHorarios      = Horario::count() ?? 0;
-        $totalAgendamentos  = $totalVendas; // Mesmo valor de $totalVendas
-
-        // Carrega 'horario' e 'user'
-        $vendas = Agendamento::with([
-            'horario',
-            'user'
-        ])->latest()->limit(10)->get() ?? collect([]);
-
-        // Coleta os IDs de horários dos agendamentos
-        $horarioIds = $vendas->pluck('horario.id')->filter()->unique();
-
-        // Consulta todas as agendas associadas aos horários carregados,
-        // com seus relacionamentos 'medico.clinica'
-        $agendasGrouped = Agenda::with('medico.clinica')
-            ->whereIn('horario_id', $horarioIds)
-            ->get()
-            ->groupBy('horario_id');
-
-        // Para cada agendamento, associamos a coleção de agendas ao Horário
-        $vendas->each(function ($venda) use ($agendasGrouped) {
-            if ($venda->horario) {
-                $agendas = $agendasGrouped->get($venda->horario->id, collect([]));
-                $venda->horario->setRelation('agendas', $agendas);
-            }
-        });
+        $totalAgendamentos  = Agendamento::count() ?? 0;
 
         $usuarios = User::latest()->limit(10)->get() ?? collect([]);
         $clinicas = Clinica::latest()->limit(10)->get() ?? collect([]);
 
-        $vendasMensais = [
-            'janeiro'   => Agendamento::whereMonth('created_at', '01')->count() ?? 0,
-            'fevereiro' => Agendamento::whereMonth('created_at', '02')->count() ?? 0,
-            'marco'     => Agendamento::whereMonth('created_at', '03')->count() ?? 0,
-            'abril'     => Agendamento::whereMonth('created_at', '04')->count() ?? 0,
-            'maio'      => Agendamento::whereMonth('created_at', '05')->count() ?? 0,
-            'junho'     => Agendamento::whereMonth('created_at', '06')->count() ?? 0,
-        ];
+        $vendasMensais = Agendamento::select(
+                DB::raw("strftime('%m', created_at) as mes"),
+                DB::raw('COUNT(id) as total')
+            )
+            ->groupBy(DB::raw("strftime('%m', created_at)"))
+            ->pluck('total', 'mes')
+            ->toArray();
+
+        // Consulta para o gráfico "Distribuição de Vendas por Categoria"
+        $vendasPorCategoria = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado')
+            ->select('c.nome as categoria', DB::raw('COUNT(ag.id) as total'))
+            ->groupBy('c.nome')
+            ->get();
+
+        // Consulta para o Crescimento de Vendas
+        $crescimentoVendas = Agendamento::select(
+                DB::raw("strftime('%Y-%m-%d', created_at) as data"),
+                DB::raw('COUNT(id) as total')
+            )
+            ->groupBy(DB::raw("strftime('%Y-%m-%d', created_at)"))
+            ->orderBy('data', 'asc')
+            ->get();
+
+        // Consulta para Últimas Vendas
+        $ultimasVendas = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->select('c.id as classe_id', 'c.nome as classe_nome', 'p.id as procedimento_id', 'h.id as horario_id', 'ag.id as agendamento_id', 'ag.created_at as data_agendamento')
+            ->orderBy('ag.created_at', 'desc')
+            ->limit(10)
+            ->get();
 
         return view('admin.sub-diretorios.dashboard.vendas', [
             'totalVendas'        => $totalVendas,
             'totalUsuarios'      => $totalUsuarios, 
             'totalClinicas'      => $totalClinicas,
             'totalClasses'       => $totalClasses,
-            'totalProcedimentos' => $totalProcedimentos, // Agora com a contagem correta de procedimentos
+            'totalProcedimentos' => $totalProcedimentos,
             'totalHorarios'      => $totalHorarios,
             'totalAgendamentos'  => $totalAgendamentos,
-            'vendas'             => $vendas,
             'usuarios'           => $usuarios, 
             'clinicas'           => $clinicas,
-            'vendasJaneiro'      => $vendasMensais['janeiro'],
-            'vendasFevereiro'    => $vendasMensais['fevereiro'],
-            'vendasMarco'        => $vendasMensais['marco'],
-            'vendasAbril'        => $vendasMensais['abril'],
-            'vendasMaio'         => $vendasMensais['maio'],
-            'vendasJunho'        => $vendasMensais['junho'],
+            'vendasMensais'      => $vendasMensais,
+            'vendasPorCategoria' => $vendasPorCategoria,
+            'crescimentoVendas'  => $crescimentoVendas,
+            'ultimasVendas'      => $ultimasVendas,
         ]);
     }
 }
