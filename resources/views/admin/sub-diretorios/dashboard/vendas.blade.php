@@ -1,4 +1,5 @@
-@extends('layouts.painel-admin')  
+@extends('layouts.painel-admin')
+
 @section('header_title', 'Dashboard')
 
 @section('content')
@@ -64,7 +65,8 @@
                     <div class="col-md-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Horário</h5>
+                                <h5 class="card-title">Horários</h5>
+
                                 <p class="card-text">{{ $totalHorarios ?? 0 }}</p>
                             </div>
                         </div>
@@ -72,7 +74,8 @@
                     <div class="col-md-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Agendamento</h5>
+                                <h5 class="card-title">Agendamentos</h5>
+
                                 <p class="card-text">{{ $totalAgendamentos ?? 0 }}</p>
                             </div>
                         </div>
@@ -111,30 +114,28 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Tipo</th>
-                                                <th>Descrição</th>
-                                                <th>Clínica</th>
-                                                <th>Paciente</th>
+                                                <th>Classe</th>
+                                                <th>Procedimento</th>
                                                 <th>Data</th>
-                                                <th>Valor</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(isset($vendas) && $vendas->count() > 0)
-                                                @foreach ($vendas as $venda)
+
+                                            @if(isset($ultimasVendas) && $ultimasVendas->count() > 0)
+                                                @foreach ($ultimasVendas as $venda)
+
                                                     <tr>
-                                                        <td>{{ $venda->id ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->tipo ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->descricao ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->clinica->nome ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->paciente->nome ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->data ?? 'N/A' }}</td>
-                                                        <td>R$ {{ number_format($venda->valor ?? 0, 2, ',', '.') }}</td>
+                                                        <td>{{ $venda->agendamento_id ?? 'N/A' }}</td>
+                                                        <td>{{ $venda->classe_nome ?? 'N/A' }}</td>
+                                                        <td>{{ $venda->procedimento_id ?? 'N/A' }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($venda->data_agendamento)->format('d/m/Y') ?? 'N/A' }}</td>
+                                                        <td>{{ $venda->status ?? 'N/A' }}</td>
                                                     </tr>
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="7" class="text-center">Nenhuma venda encontrada.</td>
+                                                    <td colspan="5" class="text-center">Nenhuma venda encontrada.</td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -165,9 +166,10 @@
                                             @if(isset($usuarios) && $usuarios->count() > 0)
                                                 @foreach ($usuarios as $usuario)
                                                     <tr>
-                                                        <td>{{ $usuario->nome ?? 'N/A' }}</td>
+                                                        <td>{{ $usuario->name ?? 'N/A' }}</td>
                                                         <td>{{ $usuario->email ?? 'N/A' }}</td>
-                                                        <td>{{ $usuario->created_at->format('d/m/Y') ?? 'N/A' }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/Y') ?? 'N/A' }}</td>
+
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -202,7 +204,7 @@
                                                     <tr>
                                                         <td>{{ $clinica->nome ?? 'N/A' }}</td>
                                                         <td>{{ $clinica->localizacao ?? 'N/A' }}</td>
-                                                        <td>{{ $clinica->created_at->format('d/m/Y') ?? 'N/A' }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($clinica->created_at)->format('d/m/Y') ?? 'N/A' }}</td>
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -254,22 +256,30 @@
             }
 
             // Gráfico de Distribuição de Vendas por Categoria
+            var vendasPorCategoriaData = @json($vendasPorCategoria);
+            var categoryLabels = vendasPorCategoriaData.map(function(item) {
+                return item.categoria;
+            });
+            var categoryData = vendasPorCategoriaData.map(function(item) {
+                return item.total;
+            });
+
             var ctxDistribution = document.getElementById('salesDistributionChart').getContext('2d');
             var salesDistributionChart = new Chart(ctxDistribution, {
                 type: 'pie',
                 data: {
-                    labels: ['Vendas', 'Clientes', 'Clínicas'],
+                    labels: categoryLabels,
                     datasets: [{
-                        label: 'Distribuição',
-                        data: [
-                            {{ $totalVendas ?? 0 }},
-                            {{ $totalUsuarios ?? 0 }},
-                            {{ $totalClinicas ?? 0 }}
-                        ],
+                        label: 'Distribuição de Vendas por Categoria',
+                        data: categoryData,
+
                         backgroundColor: [
                             'rgba(0, 123, 255, 0.6)',
                             'rgba(40, 167, 69, 0.6)',
-                            'rgba(255, 193, 7, 0.6)'
+                            'rgba(255, 193, 7, 0.6)',
+                            'rgba(220, 53, 69, 0.6)',
+                            'rgba(108, 117, 125, 0.6)',
+                            'rgba(23, 162, 184, 0.6)'
                         ],
                         borderWidth: 1
                     }]
@@ -281,21 +291,23 @@
             });
 
             // Gráfico de Crescimento de Vendas
+            var crescimentoVendasData = @json($crescimentoVendas);
+            var growthLabels = crescimentoVendasData.map(function(item) {
+                return new Date(item.data).toLocaleDateString('pt-BR');
+            });
+            var growthData = crescimentoVendasData.map(function(item) {
+                return item.total;
+            });
+
             var ctxGrowth = document.getElementById('salesGrowthChart').getContext('2d');
             var salesGrowthChart = new Chart(ctxGrowth, {
                 type: 'line',
                 data: {
-                    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
+                    labels: growthLabels,
                     datasets: [{
                         label: 'Vendas',
-                        data: [
-                            {{ $vendasJaneiro ?? 0 }},
-                            {{ $vendasFevereiro ?? 0 }},
-                            {{ $vendasMarco ?? 0 }},
-                            {{ $vendasAbril ?? 0 }},
-                            {{ $vendasMaio ?? 0 }},
-                            {{ $vendasJunho ?? 0 }}
-                        ],
+                        data: growthData,
+
                         borderColor: 'rgba(0, 123, 255, 1)',
                         borderWidth: 2
                     }]
