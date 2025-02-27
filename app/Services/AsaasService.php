@@ -30,6 +30,7 @@ class AsaasService
                 'customer'    => $customerId,
                 'billingType' => $billingType, // Pode ser 'PIX' ou 'BOLETO'
                 'value'       => $valor,
+                'cpfCnpj'   => '071.275.153-01', //chumbado
                 'description' => $descricao,
                 'dueDate'     => now()->addDays(5)->format('Y-m-d'),
             ],

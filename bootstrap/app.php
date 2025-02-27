@@ -64,6 +64,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.clinica.status' => CheckClinicaStatus::class,
         ]);
 
+        // Exclui a rota '/asaas/webhook' da verificação CSRF
+        $middleware->validateCsrfTokens(except: [
+            'asaas/webhook', // Adicione outras URIs conforme necessário
+        ]);
+
         // Se desejar que ele seja aplicado globalmente, pode usá-lo com:
         // $middleware->append(CheckClinicaStatus::class);
     })
