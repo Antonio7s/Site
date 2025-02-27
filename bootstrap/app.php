@@ -55,7 +55,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     return route('admin-clinica.dashboard.index');
                 }
                 // Rota padrão para outros guards
-                return route('profile.edit');
+                return route('perfil.edit');
             }
         );
 

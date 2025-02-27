@@ -14,13 +14,11 @@ class ClasseSeeder extends Seeder
     public function run(): void
     {
         $classes = [
-            'Clínica Geral', 'Cardiologia', 'Laboratório', 'Imagem', 'Ultrassonografia',
-            'Radiologia', 'Dermatologia', 'Pediatria', 'Ginecologia', 'Ortopedia',
-            'Neurologia', 'Oftalmologia', 'Gastroenterologia', 'Urologia', 'Psiquiatria',
-            'Cirurgia Geral', 'Endocrinologia', 'Otorrinolaringologia', 'Pneumologia',
-            'Reumatologia', 'Procedimentos Especiais', 'Terapias Complementares', 'Vacinação'
+            'Consultas', 'Exames', 'Vacinas', 'Odontologia', 'Cirurgias',
+            'Check-up', 'Atendimento Online'
         ];
-
+        
+        
         foreach ($classes as $nome) {
             Classe::firstOrCreate(['nome' => $nome]);
         }
