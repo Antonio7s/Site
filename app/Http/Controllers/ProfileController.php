@@ -80,4 +80,9 @@ class ProfileController extends Controller
     {
         return view('profile/minhasInformacoes');
     }
+
+    public function meusPedidos()
+    {
+        return view('profile/meusPedidos');
+    }
 }

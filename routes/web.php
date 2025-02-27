@@ -175,7 +175,7 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
 /*
 Route::get('/dashboard', function () {
     return redirect()->route('profile.edit');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard'); 
 */
 
 //ROTAS QUE EXIGEM AUTENTICACAO DE USUARIO
@@ -189,6 +189,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
         Route::get('/minhas-informacoes', 'minhasInformacoes')->name('perfil.minhasInformacoes');
         Route::get('/agendamentos', 'agendamento')->name('perfil.agendamentos');
+        Route::get('/meus-pedidos','meusPedidos')->name('perfil.meusPedidos');
     });
 
     //Rotas de checkout
@@ -256,3 +257,6 @@ Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.ho
 
 //Asaas
 Route::post('/asaas/webhook', [AsaasController::class, 'webhook']);
+
+
+
