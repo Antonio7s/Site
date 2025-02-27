@@ -89,8 +89,8 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
         Route::put('/{id}', 'update')->name('admin.classes.update');
         Route::delete('/{id}', 'destroy')->name('admin.classes.destroy');
    });
-   
-    // Procedimentos
+
+   // Procedimentos
     Route::controller(ProcedimentoController::class)->prefix('procedimentos')->group(function () {
         Route::get('/', 'index')->name('admin.procedimentos.index');
         Route::get('/create', 'create')->name('admin.procedimentos.create');
@@ -112,12 +112,15 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
 
     Route::get('contatos', [ContatosController::class, 'index'])->name('admin.contatos.index');
 
-    Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
 
-    Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
-    Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.home.save');
-    
-    Route::get('/admin/homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
+    //homepage
+    Route::controller(HomeController::class)->prefix('home')->group(function () {
+        Route::get('/', 'index')->name('admin.home.index');
+        Route::post('/save', 'save')->name('admin.home.save');
+    });
+
+    Route::post('/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
+    Route::get('/homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
     
     Route::get('mensagens', [InboxController::class], 'index')->name('admin.mensagens.index');
 });
@@ -251,8 +254,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 
-Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
-Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
+// Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
+// Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
 
 //Asaas
 Route::post('/asaas/webhook', [AsaasController::class, 'webhook']);
