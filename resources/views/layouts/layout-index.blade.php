@@ -219,14 +219,15 @@
                             <a href="#" onclick="logout()">Logout</a>
                         </div>
                     </div>
-                @else
-                    <div id="userInfo">
-                        <img id="userPhoto" src="{{ !empty(auth()->user()->photo_url) ? auth()->user()->photo_url : asset('images/default_user.png') }}" alt="Foto do Usuário">
-                        <span id="userName">{{ auth()->user()->name }}</span>
-                        <div id="userDropdown">
-                            <a href="/profile">Página do Usuário</a>
-                            <a href="#" onclick="logout()">Logout</a>
-                        </div>
+                    @else
+    <div id="userInfo">
+        <img id="userPhoto" src="{{ !empty(auth()->user()->photo_url) ? auth()->user()->photo_url : asset('images/default_user.png') }}" alt="Foto do Usuário">
+        <span id="userName">{{ auth()->user()->name }}</span>
+        <div id="userDropdown">
+            <a href="/perfil">Página do Usuário</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
                     </div>
                 @endif
             @endif

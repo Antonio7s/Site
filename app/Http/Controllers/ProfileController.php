@@ -83,6 +83,6 @@ class ProfileController extends Controller
 
     public function meusPedidos()
     {
-        return view('profile/meusPedidos');
+        return view('profile/meuspedidos');
     }
 }

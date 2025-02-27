@@ -117,9 +117,10 @@
         <!-- Botões adicionais para usuários autenticados -->
         @auth
           <!-- Botão "Meus Pedidos" -->
-          <li class="nav-item mt-3">
-            <a href="#" class="btn btn-primary w-100">Meus Pedidos</a>
-          </li>
+<li class="nav-item mt-3">
+  <a href="{{ url('perfil/meus-pedidos') }}" class="btn btn-primary w-100">Meus Pedidos</a>
+</li>
+
           <!-- Botão "Sair" -->
           <li class="nav-item mt-2">
             <form action="{{ url('/logout') }}" method="POST">

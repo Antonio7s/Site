@@ -192,7 +192,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
         Route::get('/minhas-informacoes', 'minhasInformacoes')->name('perfil.minhasInformacoes');
         Route::get('/agendamentos', 'agendamento')->name('perfil.agendamentos');
-        Route::get('/meus-pedidos','meusPedidos')->name('perfil.meusPedidos');
+        Route::get('/meus-pedidos', 'meusPedidos')->name('perfil.meusPedidos');
     });
 
     //Rotas de checkout

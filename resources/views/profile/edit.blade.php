@@ -1,4 +1,4 @@
-@extends('layouts.appusuarioautentificado')
+@extends('layouts.appusuarioautentificado') 
 
 @push('styles')
   <style>
@@ -199,8 +199,8 @@
     <div class="panel-content">
       <div class="panel-title">Painel</div>
       <a href="{{ url('/') }}">Página Inicial</a>
-      <a href="{{ route('perfil.minhasInformacoes')}}">Minhas Informações</a>
-      <a href="{{ url('/meus-pedidos') }}">Meus Pedidos</a>
+      <a href="{{ route('perfil.minhasInformacoes') }}">Minhas Informações</a>
+      <a href="{{ url('perfil/meus-pedidos') }}">Meus Pedidos</a>
       
       <!-- Botão Sair (Logout) -->
       <form action="{{ route('logout') }}" method="POST">
