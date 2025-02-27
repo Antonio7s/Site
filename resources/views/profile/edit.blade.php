@@ -199,7 +199,7 @@
     <div class="panel-content">
       <div class="panel-title">Painel</div>
       <a href="{{ url('/') }}">Página Inicial</a>
-      <a href="{{ url('/minhas-informacoes') }}">Minhas Informações</a>
+      <a href="{{ route('perfil.minhasInformacoes')}}">Minhas Informações</a>
       <a href="{{ url('/meus-pedidos') }}">Meus Pedidos</a>
       
       <!-- Botão Sair (Logout) -->

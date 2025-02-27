@@ -51,7 +51,7 @@ class AuthenticatedSessionController extends Controller
             } 
 
             // Se não for admin, redireciona para o perfil do usuário
-            return redirect()->route('profile.edit');
+            return redirect()->route('perfil.edit');
         }
 
         // Caso o usuário não esteja autenticado, redireciona para a página de login
