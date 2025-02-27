@@ -67,4 +67,17 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+
+
+    //
+        public function agendamentos()
+    {
+        return view('profile/agendamentos');
+    }
+
+    public function minhasInformacoes()
+    {
+        return view('profile/minhasInformacoes');
+    }
 }

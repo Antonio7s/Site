@@ -64,7 +64,7 @@
           <p><strong>E-mail:</strong> {{ Auth::user()->email }}</p>
           <p><strong>Data de Nascimento:</strong> {{ Auth::user()->data_nascimento ?? 'Não informado' }}</p>
           <p><strong>Telefone:</strong> {{ Auth::user()->telefone ?? 'Não informado' }}</p>
-          <a href="{{ route('editar-perfil') }}" class="btn">Editar Perfil</a>
+          <a href="#" class="btn">Editar Perfil</a>
         </div>
       </div>
     </div>

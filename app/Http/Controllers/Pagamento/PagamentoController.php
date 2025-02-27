@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Pagamento;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Horario;
+use App\Models\Agendamento;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\AsaasService;
@@ -105,6 +108,17 @@ class PagamentoController extends Controller
         if (!isset($cobranca['id'])) {
             return redirect()->route('pagamento.falhaBoleto');
         }
+        
+        // Criação do agendamento
+        //obs:
+        $horario = Horario::findOrFail(1); // Aqui você pode alterar conforme necessário
+        $agendamento = new Agendamento();
+        $agendamento->user_id = $user->id;
+        $agendamento->horario_id = $horario->id;
+        //$agendamento->valor = $request->valor;
+        //$agendamento->descricao = $request->descricao;
+        $agendamento->status = 'pendente';  // pendente indica aguardando pagamento
+        $agendamento->save();
 
         // Obtém os detalhes do boleto
         $detalhesBoleto = $this->asaasService->obterBoleto($cobranca['id']);

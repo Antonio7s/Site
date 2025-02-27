@@ -1,4 +1,3 @@
-<!-- teste2 -->
 <?php
 
 use App\Http\Controllers\PagesController;
@@ -31,6 +30,11 @@ use App\Http\Controllers\Admin_clinica\AdminClinicaController;
 use App\Http\Controllers\Admin_clinica\DashboardClinicaController;
 use App\Http\Controllers\Admin_clinica\ProfissionaisController;
 use App\Http\Controllers\Admin_clinica\ServicosController;
+
+//Asaas
+use App\Http\Controllers\AsaasController;
+
+
 // Inclusão das rotas de autenticação
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
@@ -45,20 +49,25 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     });
 
     // Clínicas
-    Route::get('/clinicas', [ClinicaController::class, 'index'])->name('admin.clinicas.index');
-    Route::get('/clinicas/create', [ClinicaController::class, 'create'])->name('admin.clinicas.create');
-    Route::get('/clinicas/{id}/edit', [ClinicaController::class, 'edit'])->name('admin.clinicas.edit');
-    Route::put('/clinicas/{id}', [ClinicaController::class, 'update'])->name('admin.clinicas.update');
-    Route::get('/clinicas/{id}/show', [ClinicaController::class, 'show'])->name('admin.clinicas.show');
-    Route::delete('/clinicas/{id}', [ClinicaController::class, 'destroy'])->name('admin.clinicas.destroy'); // Corrigido para delete, já que é uma exclusão
-    // Clínicas - Análise de cadastros
-    Route::get('/clinicas/solicitacoes-de-cadastro/', [ClinicaController::class, 'solicitacoes_de_cadastro'])->name('admin.clinicas.solicitacoes');
-    Route::match(['get', 'post'], 'clinicas/solicitacoes-de-cadastro/{id}/analise', [ClinicaController::class, 'analise'])->name('admin.clinicas.solicitacoes-de-cadastro.analise');
-    Route::get('/clinicas/{id}/download', [ClinicaController::class, 'download'])->name('admin.clinicas.download');
-    
+    Route::controller(ClinicaController::class)->prefix('clinicas')->group(function (){
+        Route::get('/', 'index')->name('admin.clinicas.index');
+        Route::get('/create', 'create')->name('admin.clinicas.create');
+        Route::get('/{id}/edit', 'edit')->name('admin.clinicas.edit');
+        Route::put('/{id}',  'update')->name('admin.clinicas.update');
+        Route::get('/{id}/show',  'show')->name('admin.clinicas.show');
+        Route::delete('/{id}',  'destroy')->name('admin.clinicas.destroy');
+
+        // Clínicas - Análise de cadastros
+        Route::get('/solicitacoes-de-cadastro',  'solicitacoes_de_cadastro')->name('admin.clinicas.solicitacoes');
+        Route::match(['get', 'post'], '/solicitacoes-de-cadastro/{id}/analise',  'analise')->name('admin.clinicas.solicitacoes-de-cadastro.analise');
+        Route::get('/{id}/download',  'download')->name('admin.clinicas.download');
+    });
+
     // Usuários
-    Route::get('usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
-    
+    Route::controller(UsuarioController::class)->prefix('usuarios')->group(function (){
+        Route::get('/', 'index')->name('admin.usuarios.index');
+    });
+
     // Especialidades
     Route::controller(EspecialidadeController::class)->prefix('especialidades')->group(function () {
         Route::get('/', 'index')->name('admin.especialidades.index');
@@ -100,7 +109,9 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
 
     // Outros
     Route::get('relatorios', [RelatorioController::class, 'index'])->name('admin.relatorios.index');
+
     Route::get('contatos', [ContatosController::class, 'index'])->name('admin.contatos.index');
+
     Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
 
     Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
@@ -159,35 +170,28 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
 
 });
 
-// Páginas públicas (Index e outras estáticas)
-Route::name('public.')->group(function () {
-    Route::view('/', 'Home/index')->name('index');
-    Route::view('fale-conosco', 'Home/fale-conosco')->name('fale-conosco');
-    Route::view('politicas-de-privacidade', 'Home/politicas-de-privacidade')->name('politicas');
-    Route::view('sobre-a-medexame', 'Home/sobre-a-medexame')->name('sobre');
-    Route::view('pagina-usuario', 'Home/paginadousuario')->name('pagina-usuario');
-
-    // BUSCA
-    Route::view('/busca', 'busca/busca');
-    Route::view('/em-construcao', 'em-construcao');
-});
-
-
-
 
 // dashboard do usuário
+/*
 Route::get('/dashboard', function () {
     return redirect()->route('profile.edit');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
+*/
 
 //ROTAS QUE EXIGEM AUTENTICACAO DE USUARIO
 Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    //Rotas do perfil do usuario
+    Route::controller(ProfileController::Class)->prefix('perfil')->group(function () {
+        Route::get('/', 'edit')->name('perfil.edit');
+        Route::patch('/', 'update')->name('perfil.update');
+        Route::delete('/', 'destroy')->name('perfil.destroy');
 
-    //ROTAS DE CHECKOUT
+        Route::get('/minhas-informacoes', 'minhasInformacoes')->name('perfil.minhasInformacoes');
+        Route::get('/agendamentos', 'agendamento')->name('perfil.agendamentos');
+    });
+
+    //Rotas de checkout
     Route::controller(PagamentoController::class)->prefix('pagamento')->group(function () {
         Route::get('/', 'index')->name('pagamento.index');
         Route::post('/pagamento/gerar-pix', 'gerarPix')->name('pagamento.gerarPix');
@@ -214,6 +218,19 @@ Route::middleware('auth:clinic')->group(function () {
 */
 
 
+// Páginas públicas (Index e outras estáticas)
+Route::name('public.')->group(function () {
+    Route::view('/', 'Home/index')->name('index');
+    Route::view('fale-conosco', 'Home/fale-conosco')->name('fale-conosco');
+    Route::view('politicas-de-privacidade', 'Home/politicas-de-privacidade')->name('politicas');
+    Route::view('sobre-a-medexame', 'Home/sobre-a-medexame')->name('sobre');
+    Route::view('pagina-usuario', 'Home/paginadousuario')->name('pagina-usuario');
+
+    // BUSCA
+    Route::view('/busca', 'busca/busca');
+    Route::view('/em-construcao', 'em-construcao');
+});
+
 
 Route::get('/clinica-pendente', function () {
     return view('admin-clinica/acesso/pendente');
@@ -224,7 +241,6 @@ Route::get('/clinica-negado', function () {
 })->name('clinica.negado');
 
 
-Route::get('/minhasinformacoes', [ProfileController::class, 'show'])->name('profile.show');
 
 
 Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
@@ -237,3 +253,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
 Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
+
+//Asaas
+Route::post('/asaas/webhook', [AsaasController::class, 'webhook']);
