@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agendamento;  // Certifique-se de que o modelo Agendamento está importado
 use Illuminate\Http\Request;
 
 class AsaasController extends Controller
@@ -15,13 +16,20 @@ class AsaasController extends Controller
         $data = $request->all();
 
         // Verifique o status do pagamento
-        if (isset($data['status']) && $data['status'] == 'PAID') {
-            // O pagamento foi confirmado, você pode realizar as ações necessárias aqui.
-            // Exemplo: atualizar o status do pedido ou notificar o usuário.
+        if (isset($data['payment']['status']) && $data['payment']['status'] == 'RECEIVED') {
+            // O pagamento foi confirmado, verifique se existe um agendamento com o id do pagamento
+            $paymentId = $data['payment']['id'];
 
-            // Aqui você pode, por exemplo, salvar os dados em seu banco ou fazer outra ação.
-            // Suponhamos que você tenha um modelo de Pedido:
-            // Pedido::where('id', $data['paymentId'])->update(['status' => 'pago']);
+            // Buscar o agendamento associado ao pagamento pelo 'paymentId'
+            $agendamento = Agendamento::where('pagamento_id', $paymentId)->first();
+
+            if ($agendamento) {
+                // Se o agendamento for encontrado, altere seu status para 'agendado'
+                $agendamento->status = 'agendado';
+                $agendamento->save();
+                
+                // Aqui você pode adicionar qualquer outra ação necessária, como enviar uma notificação
+            }
         }
 
         // Retorne uma resposta adequada

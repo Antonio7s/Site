@@ -17,14 +17,16 @@ return new class extends Migration
             // Adicionando a coluna 'data' (tipo DATE ou DATETIME)
             $table->date('data'); // Ou $table->datetime('data'); se precisar incluir a hora
 
-            $table->string('status'); // Pode ser 'agendado', 'cancelado', 'concluido' etc.
+            $table->enum('status', ['pendente', 'cancelado', 'agendado', 'concluido' ]);
+            $table->unsignedBigInteger('pagamento_id')->unique()->nullable();
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('horario_id')->unique(); // Garante que cada horário tenha no máximo um agendamento
             
+
             $table->timestamps();
 
-            // Definir chaves estrangeiras (ajustando para suas tabelas)
+            // Chaves estrangeiras 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('cascade');
         });
