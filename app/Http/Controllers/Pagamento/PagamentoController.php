@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Horario;
 use App\Models\Agendamento;
+use App\Models\User;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\AsaasService;
+
+use Carbon\Carbon;
+
 
 class PagamentoController extends Controller
 {
@@ -64,6 +69,19 @@ class PagamentoController extends Controller
             return redirect()->route('pagamento.falhaPix');
         }
 
+        // Criação do agendamento
+        //obs:
+        $horario = Horario::findOrFail(1); // Aqui você pode alterar conforme necessário
+        $agendamento = new Agendamento();
+        $agendamento->user_id = $user->id;
+        $agendamento->horario_id = $horario->id;
+        $agendamento->data = Carbon::now(); // Isso irá definir data e hora atuais
+        $agendamento->pagamento_id = $cobranca['id']; // Atribui o id do pagamento (pix); // id da cobranca para o webhook resgatar.
+        //$agendamento->valor = $request->valor;
+        //$agendamento->descricao = $request->descricao;
+        $agendamento->status = 'pendente';  // pendente indica aguardando pagamento
+        $agendamento->save();
+
         // Obtém o QR Code PIX usando o ID da cobrança
         $qrCodePix = $this->asaasService->obterQrCodePix($cobranca['id']);
 
@@ -115,6 +133,7 @@ class PagamentoController extends Controller
         $agendamento = new Agendamento();
         $agendamento->user_id = $user->id;
         $agendamento->horario_id = $horario->id;
+        $agendamento->data = Carbon::now(); // Isso irá definir data e hora atuais
         //$agendamento->valor = $request->valor;
         //$agendamento->descricao = $request->descricao;
         $agendamento->status = 'pendente';  // pendente indica aguardando pagamento

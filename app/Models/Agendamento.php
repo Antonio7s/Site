@@ -17,7 +17,8 @@ class Agendamento extends Model
         'data',
         'horario_id',
         'user_id',
-        'status'
+        'status',
+        'pagamento_id',
     ];
 
 
