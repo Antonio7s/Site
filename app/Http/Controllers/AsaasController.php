@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agendamento;  // Certifique-se de que o modelo Agendamento está importado
+use App\Models\Agendamento; 
 use Illuminate\Http\Request;
 
 class AsaasController extends Controller
