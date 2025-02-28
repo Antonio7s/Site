@@ -176,11 +176,11 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
 
 
 // dashboard do usuário
-/*
+
 Route::get('/dashboard', function () {
     return redirect()->route('profile.edit');
 })->middleware(['auth', 'verified'])->name('dashboard'); 
-*/
+
 
 //ROTAS QUE EXIGEM AUTENTICACAO DE USUARIO
 Route::middleware('auth', 'verified')->group(function () {

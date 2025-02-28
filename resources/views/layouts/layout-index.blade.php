@@ -189,6 +189,7 @@
     </style>
 </head>
 <body>
+<h3 style="background-color: red; color: white;">Ambiente atual: {{ app()->environment() }}</h3><h3 style="background-color: red; color: white;">Ambiente atual: {{ app()->environment() }}</h3><h3 style="background-color: red; color: white;">Ambiente atual: {{ app()->environment() }}</h3><h3 style="background-color: red; color: white;">Ambiente atual: {{ app()->environment() }}</h3>
 
 <!-- Cabeçalho -->
 <header>
@@ -233,7 +234,6 @@
             @endif
         </div>
     </div>
-
     <!-- Menu de Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark w-100" style="background-color: #007bff;">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
