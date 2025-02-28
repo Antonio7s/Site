@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\HomeController;
+//use App\Http\Controllers\HomeController;
 
 //Importacao de controller de pagamento
 use App\Http\Controllers\Pagamento\PagamentoController;
@@ -114,11 +114,12 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
 
 
     //homepage
+    /*
     Route::controller(HomeController::class)->prefix('home')->group(function () {
         Route::get('/', 'index')->name('admin.home.index');
         Route::post('/save', 'save')->name('admin.home.save');
     });
-
+    */
     Route::post('/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
     Route::get('/homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
     
