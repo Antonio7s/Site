@@ -91,13 +91,15 @@
                                 <div class="mb-3">
                                     <label for="installments" class="form-label">Parcelamento</label>
                                     <select class="form-select" id="installments" name="installments">
-                                        <option value="1">1x de R$ 550,00 (Sem juros)</option>
-                                        <option value="2">2x de R$ 275,00</option>
-                                        <option value="3">3x de R$ 183,33</option>
-                                        <option value="4">4x de R$ 137,50</option>
-                                        <option value="5">5x de R$ 110,00</option>
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}">
+                                                {{ $i }}x de R$ {{ number_format($procedimento->valor / $i, 2, ',', '.') }}
+                                            </option>
+                                        @endfor
                                     </select>
                                 </div>
+
+
                                 <button type="submit" class="btn btn-primary w-100">Finalizar Pagamento</button>
                             </div>
                         </form>

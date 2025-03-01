@@ -20,8 +20,8 @@ class AsaasService
 
 
 
-    // Método para criar cobrança (geralizado para PIX, BOLETO, etc.)
-    public function criarCobranca($customerId, $valor, $descricao, $billingType = 'PIX')
+    // Método para criar cobrança Pix
+    public function criarCobrancaPix($customerId, $valor, $descricao)
     {
         // Buscar os splits no banco de dados (ajuste conforme o nome da sua tabela e os campos)
         //$splitsData = Clinica::where('customer_id', $customerId)->get();
