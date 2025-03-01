@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\HomeController;
+//use App\Http\Controllers\HomeController;
 
 //Importacao de controller de pagamento
 use App\Http\Controllers\Pagamento\PagamentoController;
@@ -114,10 +114,12 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
 
 
     //homepage
+    /*
     Route::controller(HomeController::class)->prefix('home')->group(function () {
         Route::get('/', 'index')->name('admin.home.index');
         Route::post('/save', 'save')->name('admin.home.save');
     });
+    */
 
     Route::post('/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
     Route::get('/homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
@@ -209,6 +211,12 @@ Route::middleware('auth', 'verified')->group(function () {
         // Views de falha no pagamento
         Route::get('falha-pix', 'falhaPix')->name('pagamento.falhaPix');
         Route::get('falha-boleto', 'falhaBoleto')->name('pagamento.falhaBoleto');
+        
+        //Views de Sucesso
+        Route::get('sucesso-pix', 'sucessoPix')->name('pagamento.sucessoPix');
+        
+        //Aguardando pagamento
+        Route::get('/verificar-pagamento', 'verificarPagamento');
     });
 });
 
