@@ -26,6 +26,8 @@ class Clinica extends Authenticatable
         'password',
         'documentos', // caminho do arquivo
         'wallet_id',
+        'porcentagem_lucro',
+        'valor_fixo_lucro',
     ];
 
     // Campos a serem ocultados (não aparecerão nas respostas de JSON, por exemplo)

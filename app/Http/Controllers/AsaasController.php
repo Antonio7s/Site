@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Agendamento; 
 use Illuminate\Http\Request;
 
+use App\Models\Clinica;
+
 class AsaasController extends Controller
 {
     /**
