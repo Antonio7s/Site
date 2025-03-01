@@ -54,10 +54,6 @@
                                 <input class="form-check-input" type="radio" name="paymentMethod" id="radioPix" value="pix">
                                 <label class="form-check-label" for="radioPix">Pix</label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="radioBoleto" value="boleto">
-                                <label class="form-check-label" for="radioBoleto">Boleto</label>
-                            </div>
                         </div>
 
                         <!-- Seção Cartão de Crédito -->
@@ -95,13 +91,15 @@
                                 <div class="mb-3">
                                     <label for="installments" class="form-label">Parcelamento</label>
                                     <select class="form-select" id="installments" name="installments">
-                                        <option value="1">1x de R$ 550,00 (Sem juros)</option>
-                                        <option value="2">2x de R$ 275,00</option>
-                                        <option value="3">3x de R$ 183,33</option>
-                                        <option value="4">4x de R$ 137,50</option>
-                                        <option value="5">5x de R$ 110,00</option>
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}">
+                                                {{ $i }}x de R$ {{ number_format($procedimento->valor / $i, 2, ',', '.') }}
+                                            </option>
+                                        @endfor
                                     </select>
                                 </div>
+
+
                                 <button type="submit" class="btn btn-primary w-100">Finalizar Pagamento</button>
                             </div>
                         </form>
@@ -112,20 +110,7 @@
                             <input type="hidden" name="valor" value="{{ $procedimento->valor }}">
                             <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
                             <div id="pixSection" class="hidden">
-                                <p class="text-center">Escaneie o QR Code abaixo para pagar via Pix.</p>
-                                <img src="https://via.placeholder.com/250" class="d-block mx-auto">
                                 <button type="submit" class="btn btn-secondary w-100">Gerar PIX</button>
-                            </div>
-                        </form>
-
-                        <!-- Seção Boleto -->
-                        <form id="formBoleto" action="{{ route('pagamento.gerarBoleto') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="valor" value="{{ $procedimento->valor }}">
-                            <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
-                            <div id="boletoSection" class="hidden">
-                                <p class="text-center">Clique no botão abaixo para gerar o boleto.</p>
-                                <button type="submit" class="btn btn-secondary w-100">Gerar Boleto</button>
                             </div>
                         </form>
                     </div>
@@ -138,15 +123,12 @@
         function updatePaymentMethod() {
             document.getElementById('creditCardSection').classList.add('hidden');
             document.getElementById('pixSection').classList.add('hidden');
-            document.getElementById('boletoSection').classList.add('hidden');
 
             const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             if (selectedMethod === "cartao") {
                 document.getElementById('creditCardSection').classList.remove('hidden');
             } else if (selectedMethod === "pix") {
                 document.getElementById('pixSection').classList.remove('hidden');
-            } else if (selectedMethod === "boleto") {
-                document.getElementById('boletoSection').classList.remove('hidden');
             }
         }
 

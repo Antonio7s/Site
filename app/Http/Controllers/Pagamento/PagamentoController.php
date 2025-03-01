@@ -97,61 +97,7 @@ class PagamentoController extends Controller
     }
 
 
-    // Gera cobrança para pagamento via Boleto
-    public function gerarBoleto(Request $request)
-    {
-        $request->validate([
-            'valor' => 'required|numeric',
-            'descricao' => 'required|string'
-        ]);
 
-        $user = Auth::user();
-
-        if (!$user->customer_id) {
-            $cliente = $this->asaasService->criarCliente(
-                $user->name,
-                $user->cpf,
-                $user->email,
-                $user->telefone
-            );
-            $user->update(['customer_id' => $cliente['id']]);
-            $customerId = $cliente['id'];
-        } else {
-            $customerId = $user->customer_id;
-        }
-
-        // Criação da cobrança via boleto
-        $cobranca = $this->asaasService->criarCobranca($customerId, $request->valor, $request->descricao, 'BOLETO');
-
-        if (!isset($cobranca['id'])) {
-            return redirect()->route('pagamento.falhaBoleto');
-        }
-        
-        // Criação do agendamento
-        //obs:
-        $horario = Horario::findOrFail(1); // Aqui você pode alterar conforme necessário
-        $agendamento = new Agendamento();
-        $agendamento->user_id = $user->id;
-        $agendamento->horario_id = $horario->id;
-        $agendamento->data = Carbon::now(); // Isso irá definir data e hora atuais
-        //$agendamento->valor = $request->valor;
-        //$agendamento->descricao = $request->descricao;
-        $agendamento->status = 'pendente';  // pendente indica aguardando pagamento
-        $agendamento->save();
-
-        // Obtém os detalhes do boleto
-        $detalhesBoleto = $this->asaasService->obterBoleto($cobranca['id']);
-
-        if (!isset($detalhesBoleto['bankSlipUrl'])) {
-            return redirect()->route('pagamento.falhaBoleto');
-        }
-
-        // Redireciona para a view de pagamento do boleto
-        return view('pagamento/pagamento-boleto', [
-            'boletoUrl' => $detalhesBoleto['bankSlipUrl'],
-            'valor'     => $request->valor
-        ]);
-    }
 
 
     // Exemplo de finalização de pagamento com Cartão de Crédito
@@ -174,11 +120,6 @@ class PagamentoController extends Controller
     }
 
 
-    public function pagamentoBoleto()
-    {
-        return view('pagamento/pagamento-boleto');
-    }
-
     public function pagamentoPix()
     {
         return view('pagamento/pagamento-pix');
@@ -189,8 +130,25 @@ class PagamentoController extends Controller
         return view('pagamento/falha-pix');
     }
 
-    public function falhaBoleto()
+
+    public function sucessoPix()
     {
-        return view('pagamento/falha-boleto');
+        return view('pagamento/sucesso-pix');
+    }
+
+
+    public function verificarPagamento()
+    {
+        // Obtém o ID do usuário logado
+        $userId = Auth::id();
+
+        // Busca um agendamento do usuário com status "agendado"
+        $agendamento = Agendamento::where('user_id', $userId)
+                            ->where('status', 'agendado')
+                            ->first();
+
+        return response()->json([
+            'aprovado' => $agendamento ? true : false
+        ]);
     }
 }

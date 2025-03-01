@@ -20,4 +20,20 @@
         </div>
     </div>
 </div>
+<script>
+    function verificarPagamento() {
+        fetch('/pagamento/verificar-pagamento')
+            .then(response => response.json())
+            .then(data => {
+                if (data.aprovado) {
+                    window.location.href = "{{ route('pagamento.sucessoPix') }}"; // Redireciona se houver agendamento aprovado
+                }
+            })
+            .catch(error => console.error('Erro ao verificar pagamento:', error));
+    }
+
+    // Verifica o pagamento a cada 3 segundos
+    setInterval(verificarPagamento, 3000);
+</script>
+
 @endsection
