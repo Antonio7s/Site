@@ -16,7 +16,7 @@ class ConfirmablePasswordController2 extends Controller
      */
     public function show(): View
     {
-        return view('auth.confirm-password');
+        return view('auth2.confirm-password');
     }
 
     /**
@@ -35,6 +35,6 @@ class ConfirmablePasswordController2 extends Controller
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('admin-clinica.dashboard.index', absolute: false));
     }
 }

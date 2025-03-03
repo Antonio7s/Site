@@ -93,6 +93,18 @@
         @endif
       </div>
 
+      
+      <!-- cpf -->
+      <div>
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text" name="cpf" value="{{ old('cpf') }}" required maxlength="14" pattern="\d{3}.\d{3}.\d{3}-\d{2}" placeholder="000.000.000-00" autocomplete="off" oninput="formatCPF(this)">
+        @if ($errors->has('cpf'))
+          <div class="error">{{ $errors->first('cpf') }}</div>
+        @endif
+      </div>
+
+
+
       <!-- Senha -->
       <div>
         <label for="password">Senha</label>
@@ -123,4 +135,21 @@
       </div>
     </form>
   </div>
+
+  <script>
+    // Formatar CPF
+    function formatCPF(input) {
+      let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
+      if (value.length <= 3) {
+        input.value = value;
+      } else if (value.length <= 6) {
+        input.value = value.replace(/(\d{3})(\d{1,})/, '$1.$2');
+      } else if (value.length <= 9) {
+        input.value = value.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
+      } else {
+        input.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
+      }
+    }
+  </script>
+
 @endsection

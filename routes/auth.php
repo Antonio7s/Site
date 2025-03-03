@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+
+use App\Http\Controllers\Auth\PerfilController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -56,4 +59,16 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    //Alterar informacao do usuario logado.
+    Route::get('/perfil/editar', [PerfilController::class, 'editarPerfil'])->name('user.perfil.editar');
+    Route::post('/perfil/atualizar', [PerfilController::class, 'atualizarPerfil'])->name('user.atualizar.informacoes');
+
+    //Route::get('/alterar-email', 'mostrarFormularioEmail')->name('user.mostrar.formulario.email');
+    //Route::post('/alterar-email', 'alterarEmail')->name('user.atualizar.email');
+
+    Route::get('/alterar-senha', [NewPasswordController::class, 'create'])->name('user.mostrar.formulario.senha');
+    Route::post('/alterar-senha', [NewPasswordController::class, 'redefinir_senha'])->name('user.atualizar.senha');
+
 });
+

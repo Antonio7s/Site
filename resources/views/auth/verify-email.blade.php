@@ -11,18 +11,23 @@
                 {{ __('Obrigado por se cadastrar! Antes de começarmos, por favor, verifique seu e-mail clicando no link que enviamos. Caso não tenha recebido o e-mail, ficaremos felizes em enviar outro.') }}
             </p>
 
-            <div id="status-message" class="mb-4 text-center text-sm text-green-600 hidden">
-                {{ __('Um novo link de verificação foi enviado para o e-mail que você cadastrou.') }}
-            </div>
+            <!-- Status de envio do link de verificação -->
+            @if (session('status') == 'verification-link-sent')
+                <div class="mb-4 text-center text-sm text-green-600">
+                    {{ __('Um novo link de verificação foi enviado para o e-mail que você cadastrou.') }}
+                </div>
+            @endif
 
             <div class="flex flex-col space-y-1"> 
-                <form id="resend-email-form" method="POST" action="{{ route('verification.send2') }}">
+                <!-- Formulário para reenviar e-mail de verificação -->
+                <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <button type="submit" class="btn-verification" id="resend-email-button">
+                    <button type="submit" class="btn-verification">
                         {{ __('Reenviar E-mail de Verificação') }}
                     </button>
                 </form>
-                <form method="POST" action="{{ route('logout2') }}">
+                <!-- Formulário para sair -->
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn-verification">
                         {{ __('Sair') }}
@@ -31,27 +36,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById("resend-email-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            
-            fetch(this.action, {
-                method: "POST",
-                body: new FormData(this),
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "verification-link-sent") {
-                    document.getElementById("status-message").classList.remove("hidden");
-                }
-            })
-            .catch(error => console.error("Erro ao reenviar e-mail:", error));
-        });
-    </script>
 
     <style>
         .hidden { display: none; }
