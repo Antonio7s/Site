@@ -49,9 +49,13 @@
                         <td>{{ $usuario->endereco ?? 'Não informado' }}</td>
                         <td>{{ $usuario->email ?? 'Não informado' }}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Deletar</button>
-                            <button class="btn btn-info btn-sm">Detalhes</button>
+                            <a href="{{ route('admin.usuarios.edit', $usuario->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('admin.usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                            </form>
+                            <a href="{{ route('admin.usuarios.show', $usuario->id) }}" class="btn btn-info btn-sm">Detalhes</a>
                         </td>
                     </tr>
                 @empty

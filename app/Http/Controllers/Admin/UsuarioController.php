@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User; // Certifique-se de usar o modelo correto de usuários
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -28,4 +28,47 @@ class UsuarioController extends Controller
         // Retornando a view correta (admin/sub-diretorios/usuarios/usuarios.blade.php)
         return view('admin.sub-diretorios.usuarios.usuarios', compact('usuarios'));
     }
+
+    // Método para exibir o formulário de edição de um usuário
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.sub-diretorios.usuarios.edit', compact('user'));
+    }
+
+    // Método para atualizar os dados de um usuário
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validação dos dados
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
+            'cpf' => 'nullable|string|unique:users,cpf,' . $id,
+            'email' => 'nullable|email|unique:users,email,' . $id,
+        ]);
+
+        // Atualiza os dados
+        $user->update($request->all());
+
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuário atualizado com sucesso!');
+    }
+
+    // Método para exibir os detalhes de um usuário
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.sub-diretorios.usuarios.show', compact('user'));
+    }
+
+    // Método para deletar um usuário
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuário deletado com sucesso!');
+    }
+
 }
