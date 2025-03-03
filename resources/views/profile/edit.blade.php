@@ -1,3 +1,5 @@
+<!-- ESSA VIEW TA NOMEADA ERRADA, NAO RENOMEAREI POIS NAO CORRIGIREI BUGS. ESSA DEVERIA SER CHAMAR user_perfil-->
+
 @extends('layouts.appusuarioautentificado') 
 
 @push('styles')

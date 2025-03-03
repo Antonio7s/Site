@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+
 
 class NewPasswordController extends Controller
 {
@@ -20,7 +22,7 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-        return view('auth.reset-password', ['request' => $request]);
+        return view('profile.alterar_senha');
     }
 
     /**
@@ -58,5 +60,26 @@ class NewPasswordController extends Controller
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
+    }
+
+
+    public function redefinir_senha(Request $request){
+        //trata de toda logica de redefinicao de senha, recebe a senha antiga, a senha nova, e a confirmacao da senha nova.
+        $request->validate([
+            'senha_atual' => 'required',
+            'nova_senha' => 'required|min:8',
+            'confirmar_senha' => 'required|same:nova_senha',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->senha_atual, $user->password)) {
+            return redirect()->route('user.mostrar.formulario.senha')->withErrors(['senha_atual' => 'Senha atual incorreta']);
+        }
+
+        $user->password = Hash::make($request->nova_senha);
+        $user->save();
+
+        return redirect()->route('user.mostrar.formulario.senha')->with('success', 'Senha alterada com sucesso!');
     }
 }

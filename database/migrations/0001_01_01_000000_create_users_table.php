@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('access_level')->default('users');
             $table->string('photo_url')->nullable();
+            $table->date('data_nascimento')->nullable();
 
             $table->string('customer_id')->nullable();
             $table->string('cpf')->unique(); // obrigatorio
