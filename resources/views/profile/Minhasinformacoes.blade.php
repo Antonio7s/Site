@@ -100,7 +100,7 @@
           <p><strong>Telefone:</strong> {{ Auth::user()->telefone ?? 'Não informado' }}</p>
           
           <a href="{{ route('user.perfil.editar') }}" class="btn">Alterar Informações Básicas</a>
-          <a href="#" class="btn btn-warning">Alterar E-mail</a>
+          <!-- <a href="#" class="btn btn-warning">Alterar E-mail</a> -->
           <a href="{{ route('user.mostrar.formulario.senha') }}" class="btn btn-danger">Alterar Senha</a>
         </div>
       </div>

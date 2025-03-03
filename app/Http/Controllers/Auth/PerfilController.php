@@ -35,6 +35,6 @@ class PerfilController extends Controller
         $user->save();
 
         // Redirecionar com mensagem de sucesso
-        return redirect()->route('perfil.editar')->with('success', 'Informações atualizadas com sucesso!');
+        return redirect()->route('user.perfil.editar')->with('success', 'Informações atualizadas com sucesso!');
     }
 }
