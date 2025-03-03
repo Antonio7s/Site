@@ -66,6 +66,8 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     // Usuários
     Route::controller(UsuarioController::class)->prefix('usuarios')->group(function (){
         Route::get('/', 'index')->name('admin.usuarios.index');
+        Route::get('/edit', 'edit')->name('admin.usuarios.edit');
+        Route::get('/visualizar', 'show')->name('admin.usuarios.show');
     });
 
     // Especialidades
