@@ -110,7 +110,7 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     // Outros
     Route::get('relatorios', [RelatorioController::class, 'index'])->name('admin.relatorios.index');
 
-    Route::get('contatos', [ContatosController::class, 'index'])->name('admin.contatos.index');
+    Route::get('contatos', [ContatoController::class, 'index'])->name('admin.contatos.index');
 
 
     //homepage
