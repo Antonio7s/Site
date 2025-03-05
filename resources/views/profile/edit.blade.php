@@ -95,99 +95,84 @@
     .side-panel .btn-link:hover {
       background-color: #f0f0f0;
     }
+
+    /* Centralizar os cards */
+    .centered-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .centered-container .card {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* Estilo para o status */
+    .status-finalizado {
+      color: green;
+      font-weight: bold;
+    }
+
+    .status-andamento {
+      color: orange;
+      font-weight: bold;
+    }
   </style>
 @endpush
 
 @section('content')
-  <div class="row">
-    <!-- Card: Últimos Pedidos -->
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          Últimos Pedidos
-        </div>
-        <div class="card-body">
-          @if(isset($purchaseHistory) && $purchaseHistory->isNotEmpty())
-            <ul class="list-group">
-              @foreach($purchaseHistory->take(3) as $purchase)
-                <li class="list-group-item">
-                  <strong>Pedido #{{ $purchase->id }}</strong><br>
-                  <small class="text-muted">Status: {{ ucfirst($purchase->status) }}</small><br>
-                  <span class="text-success">R$ {{ number_format($purchase->total, 2, ',', '.') }}</span>
-                </li>
-              @endforeach
-            </ul>
-            <a href="#" class="btn btn-primary btn-sm mt-3">Ver todos</a>
-          @else
-            <p class="text-center text-muted">Nenhuma compra recente.</p>
-          @endif
-        </div>
+  <div class="centered-container">
+    <!-- Card: Últimos Agendamentos -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        Últimos Agendamentos
+      </div>
+      <div class="card-body">
+        @if(isset($ultimosAgendamentos) && $ultimosAgendamentos->isNotEmpty())
+          <ul class="list-group">
+            @foreach($ultimosAgendamentos->take(3) as $agendamento)
+              <li class="list-group-item">
+                <strong>Agendamento #{{ $agendamento->id }}</strong><br>
+                <small class="text-muted">Data: {{ $agendamento->data_agendamento->format('d/m/Y H:i') }}</small><br>
+                <span class="{{ $agendamento->finalizado ? 'status-finalizado' : 'status-andamento' }}">
+                  {{ $agendamento->finalizado ? 'Finalizado' : 'Em andamento' }}
+                </span>
+              </li>
+            @endforeach
+          </ul>
+          <a href="#" class="btn btn-primary btn-sm mt-3">Ver todos</a>
+        @else
+          <p class="text-center text-muted">Nenhum agendamento recente.</p>
+        @endif
       </div>
     </div>
 
-    <!-- Card: Exames -->
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          Exames
-        </div>
-        <div class="card-body">
-          @if(isset($wishlist) && $wishlist->isNotEmpty())
-            <div class="row g-3">
-              @foreach($wishlist->take(2) as $item)
-                <div class="col-12">
-                  <div class="card">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="{{ $item->image ?? 'https://via.placeholder.com/150' }}" class="img-fluid rounded-start" alt="{{ $item->product_name }}">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body">
-                          <h5 class="card-title">{{ $item->product_name }}</h5>
-                          <p class="card-text text-success">R$ {{ number_format($item->price, 2, ',', '.') }}</p>
-                          <a href="#" class="btn btn-warning btn-sm">Comprar</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-            </div>
-            <a href="#" class="btn btn-info btn-sm mt-3">Ver todos</a>
-          @else
-            <p class="text-center text-muted">Nenhum exame cadastrado.</p>
-          @endif
-        </div>
+    <!-- Card: Profissionais em Destaque -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        Profissionais em Destaque
       </div>
-    </div>
-  </div>
-
-  <!-- Card: Profissionais em Destaque -->
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-          Profissionais em Destaque
-        </div>
-        <div class="card-body">
-          <div class="row">
-            @if(isset($recommendedProducts) && count($recommendedProducts))
-              @foreach($recommendedProducts as $product)
-                <div class="col-md-4">
-                  <div class="card h-100">
-                    <img src="{{ $product->image }}" class="card-img-top" alt="{{ $product->product_name }}">
-                    <div class="card-body text-center">
-                      <h5 class="card-title">{{ $product->product_name }}</h5>
-                      <p class="card-text text-success">R$ {{ number_format($product->price, 2, ',', '.') }}</p>
-                      <a href="#" class="btn btn-warning btn-sm">Comprar</a>
-                    </div>
+      <div class="card-body">
+        <div class="row">
+          @if(isset($recommendedProducts) && count($recommendedProducts))
+            @foreach($recommendedProducts as $product)
+              <div class="col-md-12">
+                <div class="card h-100">
+                  <img src="{{ $product->image }}" class="card-img-top" alt="{{ $product->product_name }}">
+                  <div class="card-body text-center">
+                    <h5 class="card-title">{{ $product->product_name }}</h5>
+                    <p class="card-text text-success">R$ {{ number_format($product->price, 2, ',', '.') }}</p>
+                    <a href="#" class="btn btn-warning btn-sm">Comprar</a>
                   </div>
                 </div>
-              @endforeach
-            @else
-              <p class="text-center text-muted">Nenhum profissional destacado.</p>
-            @endif
-          </div>
+              </div>
+            @endforeach
+          @else
+            <p class="text-center text-muted">Nenhum profissional destacado.</p>
+          @endif
         </div>
       </div>
     </div>
