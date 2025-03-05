@@ -47,7 +47,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect('/dashboard'); // Ajuste para seu redirecionamento
+    return redirect()->route('perfil.edit'); // Ajuste para seu redirecionamento
 })->name('verification.verify');
 
 // Rotas que exigem AUTENTICACAO de user e AUTORIZAÇÃO de admin e têm o prefixo 'admin'.
