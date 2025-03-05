@@ -4,45 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
-class ProfileController extends Controller
+class MeusPedidosController extends Controller
 {
     /**
      * Exibe os agendamentos (meus pedidos) do usuário autenticado.
      *
+     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function meusPedidos(Request $request)
     {
+        // Obtém o usuário autenticado (para testes, certifique-se de que o id seja 2)
         $user = auth()->user();
 
-        $pedidos = DB::table('agendamentos')
-            ->join('horarios', 'agendamentos.horario_id', '=', 'horarios.id')
-            ->join('procedimentos', 'agendamentos.procedimento_id', '=', 'procedimentos.id')
-            ->join('classes', 'agendamentos.classe_id', '=', 'classes.id')
-            ->select(
-                'agendamentos.id',
-                'agendamentos.nome as nome_agendamento',
-                'classes.nome as medico',
-                'procedimentos.nome as procedimento',
-                'agendamentos.data',
-                'horarios.horario',
-                'procedimentos.preco as precos',
-                'agendamentos.status'
-            )
-            ->where('agendamentos.user_id', $user->id)
-            ->orderBy('agendamentos.data', 'desc')
+        // Seleciona apenas os campos existentes na tabela agendamentos
+        $agendamentos = DB::table('agendamentos')
+            ->select('id', 'data', 'status', 'pagamento_id', 'user_id', 'horario_id', 'created_id', 'update_id')
+            ->where('user_id', $user->id)
+            ->orderBy('data', 'desc')
             ->get();
 
-        if ($pedidos->isEmpty()) {
-            $pedidos = collect([]);
+        // Se não houver registros, passa uma coleção vazia
+        if ($agendamentos->isEmpty()) {
+            $agendamentos = collect([]);
         }
 
-        return view('meuspedidos.index', compact('pedidos'));
+        return view('meuspedidos.index', ['agendamentos' => $agendamentos]);
     }
 
     /**
-     * Atualiza o status para Cancelado
+     * Atualiza o status do agendamento para "Cancelado".
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function atualizarStatus(Request $request)
     {
