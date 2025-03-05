@@ -42,15 +42,28 @@ class UsuarioController extends Controller
         $user = User::findOrFail($id);
 
         // Validação dos dados
-        $request->validate([
-            'nome' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|min:6',
+            'access_level' => 'required|string|max:255',
             'cpf' => 'nullable|string|unique:users,cpf,' . $id,
             'email' => 'nullable|email|unique:users,email,' . $id,
+            'data_nascimento' => 'nullable|date',
+            'telefone' => 'nullable|string|max:15',
+            'customer_id' => 'nullable',
         ]);
 
+        // Verifica se foi fornecida uma nova senha
+        if ($request->has('password') && !empty($request->password)) {
+            // Atualiza a senha, com hash de segurança
+            $validatedData['password'] = bcrypt($request->password);
+        }
+
+        // Atualiza os dados apenas com os dados validados
+        $user->update($validatedData);
+
         // Atualiza os dados
-        $user->update($request->all());
+        //$user->update($request->all());
 
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuário atualizado com sucesso!');
     }
