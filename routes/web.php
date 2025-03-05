@@ -40,6 +40,16 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/auth2.php';
 
 
+use Illuminate\Auth\Notifications\VerifyEmail;
+//use Illuminate\Support\Facades\Route;
+
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard'); // Ajuste para seu redirecionamento
+})->name('verification.verify');
+
 // Rotas que exigem AUTENTICACAO de user e AUTORIZAÇÃO de admin e têm o prefixo 'admin'.
 Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(function () {
     
