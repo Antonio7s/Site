@@ -36,6 +36,28 @@ class RegisteredUserController2 extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Clinica::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'documentos'     => 'required|file|mimes:pdf|max:2048',
+
+            'razao_social' => 'required|string|max:255',
+            'nome_fantasia' => 'required|string|max:255',
+            'cnpj_cpf' => 'required|string|unique:clinicas,cnpj_cpf',
+            'telefone' => 'required|string|max:20',
+            'cep' => 'required|string|max:9',
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:10',
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'uf' => 'required|string|max:2',
+            'email_administrativo' => 'required|email',
+            'email_faturamento' => 'required|email',
+            'telefone_local' => 'required|string|max:20',
+            'telefone_financeiro' => 'required|string|max:20',
+            'celular' => 'required|string|max:20',
+            'responsavel_nome' => 'required|string|max:255',
+            'rg' => 'required|string|max:20',
+            'orgao_emissor' => 'required|string|max:50',
+            'data_emissao' => 'required|date_format:d/m/Y',
+            'cpf' => 'required|string|max:14|unique:users,cpf',
+            'estado_civil' => 'required|string|max:50',
         ]);
 
         $documentoPath = null;

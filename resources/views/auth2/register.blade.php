@@ -1,134 +1,271 @@
 @extends('layouts.layout-index')
 
 @section('content')
-
 <!-- Script do reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-<div class="card mx-auto mt-5 shadow" style="max-width: 500px; border: none;">
-    <div class="card-header text-center" style="background: #fff; border-bottom: 1px solid #dee2e6;">
-        <h4 style="color: #007bff; font-weight: bold;">Cadastro de Clínica</h4>
-    </div>
-    <div class="card-body">
-        <form method="POST" action="{{ route('register2') }}" enctype="multipart/form-data">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow mt-5">
+        <div class="card-header text-center bg-white border-bottom">
+          <h4 style="color: #007bff; font-weight: bold;">Cadastro de Clínica</h4>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="{{ route('register2') }}" enctype="multipart/form-data">
             @csrf
 
-            <!-- Razão Social -->
-            <div class="mb-3">
-                <x-input-label for="razao_social" :value="__('Razão Social')" />
+            <!-- Seção: Dados da Clínica -->
+            <h5 class="mb-3">Dados da Clínica</h5>
+            <div class="row">
+              <!-- Razão Social (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="razao_social" :value="__('Razão Social *')" />
                 <x-text-input id="razao_social" class="form-control" type="text" name="razao_social" :value="old('razao_social')" required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('razao_social')" class="mt-2" />
-            </div>
-
-            <!-- Nome Fantasia -->
-            <div class="mb-3">
-                <x-input-label for="nome_fantasia" :value="__('Nome Fantasia (Nome para divulgação)')" />
+              </div>
+              <!-- Nome Fantasia (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="nome_fantasia" :value="__('Nome Fantasia (Nome para divulgação) *')" />
                 <x-text-input id="nome_fantasia" class="form-control" type="text" name="nome_fantasia" :value="old('nome_fantasia')" required autocomplete="nome_fantasia" />
                 <x-input-error :messages="$errors->get('nome_fantasia')" class="mt-2" />
+              </div>
             </div>
 
-            <!-- CNPJ/CPF -->
-            <div class="mb-3">
-                <x-input-label for="cnpj_cpf" :value="__('CNPJ/CPF')" />
+            <div class="row">
+              <!-- CNPJ/CPF (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="cnpj_cpf" :value="__('CNPJ/CPF *')" />
                 <x-text-input id="cnpj_cpf" class="form-control" type="text" name="cnpj_cpf" :value="old('cnpj_cpf')" required autocomplete="cnpj_cpf" />
                 <x-input-error :messages="$errors->get('cnpj_cpf')" class="mt-2" />
-            </div>
-
-            <!-- Telefone -->
-            <div class="mb-3">
-                <x-input-label for="telefone" :value="__('Telefone')" />
+              </div>
+              <!-- Telefone (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="telefone" :value="__('Telefone *')" />
                 <x-text-input id="telefone" class="form-control" type="text" name="telefone" :value="old('telefone')" required autocomplete="tel" />
                 <x-input-error :messages="$errors->get('telefone')" class="mt-2" />
-            </div>
-
-            <!-- Email -->
-            <div class="mb-3">
-                <x-input-label for="email" :value="__('Email')" />
+              </div>
+              <!-- Email (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="email" :value="__('Email *')" />
                 <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autocomplete="username" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
+              </div>
             </div>
 
-            <!-- Senha -->
-            <div class="mb-3">
-                <x-input-label for="password" :value="__('Senha')" />
+            <div class="row">
+              <!-- CEP (Obrigatório) -->
+              <div class="col-sm-3 mb-3">
+                <x-input-label for="cep" :value="__('CEP *')" />
+                <x-text-input id="cep" class="form-control" type="text" name="cep" :value="old('cep')" required autocomplete="cep" />
+                <x-input-error :messages="$errors->get('cep')" class="mt-2" />
+              </div>
+              <!-- Endereço (Obrigatório) -->
+              <div class="col-sm-5 mb-3">
+                <x-input-label for="endereco" :value="__('Endereço *')" />
+                <x-text-input id="endereco" class="form-control" type="text" name="endereco" :value="old('endereco')" required autocomplete="endereco" />
+                <x-input-error :messages="$errors->get('endereco')" class="mt-2" />
+              </div>
+              <!-- Número (Obrigatório) -->
+              <div class="col-sm-2 mb-3">
+                <x-input-label for="numero" :value="__('Número *')" />
+                <x-text-input id="numero" class="form-control" type="text" name="numero" :value="old('numero')" required autocomplete="numero" />
+                <x-input-error :messages="$errors->get('numero')" class="mt-2" />
+              </div>
+              <!-- Complemento (Opcional) -->
+              <div class="col-sm-2 mb-3">
+                <x-input-label for="complemento" :value="__('Complemento (Opcional)')" />
+                <x-text-input id="complemento" class="form-control" type="text" name="complemento" :value="old('complemento')" autocomplete="complemento" />
+                <x-input-error :messages="$errors->get('complemento')" class="mt-2" />
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Bairro (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="bairro" :value="__('Bairro *')" />
+                <x-text-input id="bairro" class="form-control" type="text" name="bairro" :value="old('bairro')" required autocomplete="bairro" />
+                <x-input-error :messages="$errors->get('bairro')" class="mt-2" />
+              </div>
+              <!-- Cidade (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="cidade" :value="__('Cidade *')" />
+                <x-text-input id="cidade" class="form-control" type="text" name="cidade" :value="old('cidade')" required autocomplete="cidade" />
+                <x-input-error :messages="$errors->get('cidade')" class="mt-2" />
+              </div>
+              <!-- UF (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="uf" :value="__('UF *')" />
+                <select id="uf" name="uf" class="form-select" required>
+                  <option value="">{{ __('Selecione') }}</option>
+                  @foreach(['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'] as $uf)
+                    <option value="{{ $uf }}" {{ old('uf') == $uf ? 'selected' : '' }}>{{ $uf }}</option>
+                  @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('uf')" class="mt-2" />
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- E-mail Administrativo (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="email_administrativo" :value="__('E-mail Administrativo *')" />
+                <x-text-input id="email_administrativo" class="form-control" type="email" name="email_administrativo" :value="old('email_administrativo')" required autocomplete="email_administrativo" />
+                <x-input-error :messages="$errors->get('email_administrativo')" class="mt-2" />
+              </div>
+              <!-- E-mail Faturamento (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="email_faturamento" :value="__('E-mail Faturamento *')" />
+                <x-text-input id="email_faturamento" class="form-control" type="email" name="email_faturamento" :value="old('email_faturamento')" required autocomplete="email_faturamento" />
+                <x-input-error :messages="$errors->get('email_faturamento')" class="mt-2" />
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Telefone do Local (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="telefone_local" :value="__('Telefone do Local *')" />
+                <x-text-input id="telefone_local" class="form-control" type="text" name="telefone_local" :value="old('telefone_local')" required autocomplete="telefone_local" />
+                <x-input-error :messages="$errors->get('telefone_local')" class="mt-2" />
+              </div>
+              <!-- Telefone Financeiro (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="telefone_financeiro" :value="__('Telefone Financeiro *')" />
+                <x-text-input id="telefone_financeiro" class="form-control" type="text" name="telefone_financeiro" :value="old('telefone_financeiro')" required autocomplete="telefone_financeiro" />
+                <x-input-error :messages="$errors->get('telefone_financeiro')" class="mt-2" />
+              </div>
+              <!-- Celular (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="celular" :value="__('Celular *')" />
+                <x-text-input id="celular" class="form-control" type="text" name="celular" :value="old('celular')" required autocomplete="celular" />
+                <x-input-error :messages="$errors->get('celular')" class="mt-2" />
+              </div>
+            </div>
+
+            <!-- Seção: Responsável pelo Contrato -->
+            <h5 class="mt-4 mb-3">Responsável pelo Contrato</h5>
+            <div class="row">
+              <!-- Nome Completo (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="responsavel_nome" :value="__('Nome Completo *')" />
+                <x-text-input id="responsavel_nome" class="form-control" type="text" name="responsavel_nome" :value="old('responsavel_nome')" required autocomplete="responsavel_nome" />
+                <x-input-error :messages="$errors->get('responsavel_nome')" class="mt-2" />
+              </div>
+              <!-- RG (Obrigatório) -->
+              <div class="col-sm-3 mb-3">
+                <x-input-label for="rg" :value="__('RG *')" />
+                <x-text-input id="rg" class="form-control" type="text" name="rg" :value="old('rg')" required autocomplete="rg" />
+                <x-input-error :messages="$errors->get('rg')" class="mt-2" />
+              </div>
+              <!-- Órgão Emissor (Obrigatório) -->
+              <div class="col-sm-3 mb-3">
+                <x-input-label for="orgao_emissor" :value="__('Órgão Emissor *')" />
+                <x-text-input id="orgao_emissor" class="form-control" type="text" name="orgao_emissor" :value="old('orgao_emissor')" required autocomplete="orgao_emissor" />
+                <x-input-error :messages="$errors->get('orgao_emissor')" class="mt-2" />
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Data de Emissão (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="data_emissao" :value="__('Data de Emissão *')" />
+                <x-text-input id="data_emissao" class="form-control" type="text" name="data_emissao" :value="old('data_emissao')" required autocomplete="data_emissao" placeholder="dd/mm/aaaa" />
+                <x-input-error :messages="$errors->get('data_emissao')" class="mt-2" />
+              </div>
+              <!-- CPF (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="cpf" :value="__('CPF *')" />
+                <x-text-input id="cpf" class="form-control" type="text" name="cpf" :value="old('cpf')" required autocomplete="cpf" />
+                <x-input-error :messages="$errors->get('cpf')" class="mt-2" />
+              </div>
+              <!-- Estado Civil (Obrigatório) -->
+              <div class="col-sm-4 mb-3">
+                <x-input-label for="estado_civil" :value="__('Estado Civil *')" />
+                <x-text-input id="estado_civil" class="form-control" type="text" name="estado_civil" :value="old('estado_civil')" required autocomplete="estado_civil" />
+                <x-input-error :messages="$errors->get('estado_civil')" class="mt-2" />
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Senha (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="password" :value="__('Senha *')" />
                 <x-text-input id="password" class="form-control" type="password" name="password" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-
-            <!-- Confirmar Senha -->
-            <div class="mb-3">
-                <x-input-label for="password_confirmation" :value="__('Confirmar Senha')" />
+              </div>
+              <!-- Confirmar Senha (Obrigatório) -->
+              <div class="col-sm-6 mb-3">
+                <x-input-label for="password_confirmation" :value="__('Confirmar Senha *')" />
                 <x-text-input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+              </div>
             </div>
 
-            <!-- Botão "i" de Informações -->
+            <!-- Botão "i" de Informações sobre Documentos Necessários -->
             <div class="mb-3">
-                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDocumentos">
-                    <i class="fas fa-info-circle"></i> Documentos Necessários
-                </button>
+              <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDocumentos">
+                <i class="fas fa-info-circle"></i> Documentos Necessários
+              </button>
             </div>
 
             <!-- Modal de Informações sobre os Documentos -->
             <div class="modal fade" id="modalDocumentos" tabindex="-1" aria-labelledby="modalDocumentosLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalDocumentosLabel">Documentos Necessários</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <ul>
-                                <li>Comprovante Bancário</li>
-                                <li>Alvará de Funcionamento</li>
-                                <li>Alvará de Licença Sanitária</li>
-                                <li>Carteira do Conselho do Responsável Técnico</li>
-                                <li>RG, CPF e E-mail do Responsável pelo Contrato</li>
-                                <li>Contrato Social</li>
-                                <li>Diploma</li>
-                                <li>Títulos</li>
-                                <li>Identidade Profissional</li>
-                            </ul>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                        </div>
-                    </div>
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalDocumentosLabel">Documentos Necessários</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <ul>
+                      <li>Comprovante Bancário</li>
+                      <li>Alvará de Funcionamento</li>
+                      <li>Alvará de Licença Sanitária</li>
+                      <li>Carteira do Conselho do Responsável Técnico</li>
+                      <li>RG, CPF e E-mail do Responsável pelo Contrato</li>
+                      <li>Contrato Social</li>
+                      <li>Diploma</li>
+                      <li>Títulos</li>
+                      <li>Identidade Profissional</li>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                  </div>
                 </div>
+              </div>
             </div>
 
-            <!-- Upload de Documentos -->
+            <!-- Upload de Documentos (Obrigatório) -->
             <div class="mb-3">
-                <x-input-label for="documentos" :value="__('Anexar Documento (PDF)')" />
-                <input type="file" id="documentos" name="documentos" class="form-control" accept="application/pdf" required>
-                <small class="text-muted">Envie o documento necessário em formato PDF.</small>
-                <x-input-error :messages="$errors->get('documentos')" class="mt-2" />
+              <x-input-label for="documentos" :value="__('Anexar Documento (PDF) *')" />
+              <input type="file" id="documentos" name="documentos" class="form-control" accept="application/pdf" required>
+              <small class="text-muted">Envie o documento necessário em formato PDF.</small>
+              <x-input-error :messages="$errors->get('documentos')" class="mt-2" />
             </div>
 
             <!-- Widget do reCAPTCHA -->
             <div class="g-recaptcha mt-3" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
             @if ($errors->has('g-recaptcha-response'))
-                <div class="error text-danger">{{ $errors->first('g-recaptcha-response') }}</div>
+              <div class="error text-danger">{{ $errors->first('g-recaptcha-response') }}</div>
             @endif
 
             <!-- Botões -->
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <a class="text-decoration-none" href="{{ route('login2') }}">
-                    {{ __('Já possui cadastro?') }}
-                </a>
-                <x-primary-button class="btn btn-primary">
-                    {{ __('Cadastrar') }}
-                </x-primary-button>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <a class="text-decoration-none" href="{{ route('login2') }}">
+                {{ __('Já possui cadastro?') }}
+              </a>
+              <x-primary-button class="btn btn-primary">
+                {{ __('Cadastrar') }}
+              </x-primary-button>
             </div>
-        </form>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<!-- Bootstrap JS (para modal funcionar) -->
+<!-- Bootstrap JS (para funcionamento do modal) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 @endsection
-
-
-
-

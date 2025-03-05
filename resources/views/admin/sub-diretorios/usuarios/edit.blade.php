@@ -54,8 +54,7 @@
                     <label class="form-label">Nível de Acesso</label>
                     <select class="form-select @error('access_level') is-invalid @enderror" name="access_level">
                         <option value="admin" {{ $user->access_level == 'admin' ? 'selected' : '' }}>Administrador</option>
-                        <option value="user" {{ $user->access_level == 'user' ? 'selected' : '' }}>Usuário</option>
-                        <option value="moderator" {{ $user->access_level == 'moderator' ? 'selected' : '' }}>Moderador</option>
+                        <option value="user" {{ $user->access_level == 'users' ? 'selected' : '' }}>Usuário</option>
                     </select>
                     @error('access_level')
                         <div class="invalid-feedback">{{ $message }}</div>
