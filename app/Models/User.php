@@ -10,7 +10,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-use App\Notifications\CustomVerifyEmail;  // Importa  notificação personalizada
+use App\Notifications\CustomVerifyEmail;  // Importa sua notificação personalizada
 
 class User extends Authenticatable implements MustVerifyEmail
 {
