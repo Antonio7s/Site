@@ -37,9 +37,8 @@ class CustomVerifyEmail extends Notification
     public function toMail($notifiable): MailMessage
     {
         // Gera a URL de verificação do e-mail
-        $verificationUrl = $this->verificationUrl($notifiable);
+        $verificationUrl = $this->getVerificationUrl($notifiable);
 
-        // Retorna a estrutura do e-mail
         return (new MailMessage)
             ->subject('🚀 Confirme seu e-mail na MedExame!')
             ->greeting('Olá, seja bem-vindo(a)! 👋')
@@ -55,10 +54,10 @@ class CustomVerifyEmail extends Notification
      * @param  mixed  $notifiable
      * @return string
      */
-    protected function verificationUrl($notifiable)
+    protected function getVerificationUrl($notifiable)
     {
-        // Gerar a URL de verificação do usuário
-        return $notifiable->verificationUrl();
+        // Gera a URL de verificação usando o método `verificationUrl` do trait
+        return $notifiable->route('verification.verify');
     }
 
     /**
