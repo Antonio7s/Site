@@ -1,4 +1,4 @@
-<?php
+<?php  
 
 namespace App\Http\Controllers;
 
@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Agendamento;
+use App\Models\Clinica;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
-    /**
-     * Exibe o formulário de edição do perfil do usuário.
-     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -21,9 +21,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Exibe a página de informações do perfil do usuário.
-     */
     public function show(Request $request): View
     {
         return view('minhasinformacoes', [
@@ -31,9 +28,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Atualiza as informações do perfil do usuário.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
@@ -48,9 +42,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Deleta a conta do usuário autenticado.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
@@ -59,30 +50,101 @@ class ProfileController extends Controller
 
         $user = $request->user();
         Auth::logout();
-
         $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
     }
 
-
-
-    //
-        public function agendamentos()
+    /**
+     * Método auxiliar para formatar os dados do agendamento.
+     * Extrai o horário de início, o nome do procedimento, o nome do médico
+     * (concatenando profissional_nome e profissional_sobrenome) e a razão social da clínica.
+     * O caminho para obter a clínica é: medicos (clinica_id) - Clinicas (id, razão_social).
+     */
+    private function formatAgendamento($agendamento)
     {
-        return view('profile/agendamentos');
+        $horario = $agendamento->horario;
+        
+        // Pega o horário de início, se existir
+        $agendamento->horario_inicio = $horario ? $horario->horario_inicio : null;
+
+        // Nome do procedimento, se existir
+        $agendamento->procedimento_nome = ($horario && $horario->procedimento)
+            ? $horario->procedimento->nome
+            : null;
+
+        if ($horario && $horario->agenda) {
+            $medico = $horario->agenda->medico;
+            if ($medico) {
+                // Monta o nome completo do médico
+                $agendamento->medico_nome = $medico->profissional_nome . ' ' . $medico->profissional_sobrenome;
+                // Busca o clinica_id do médico e consulta a tabela Clinicas para recuperar a razão_social
+                $clinica = Clinica::find($medico->clinica_id);
+                $agendamento->clinica_nome = $clinica ? $clinica->razao_social : null;
+            } else {
+                $agendamento->medico_nome = null;
+                $agendamento->clinica_nome = null;
+            }
+        } else {
+            $agendamento->medico_nome = null;
+            $agendamento->clinica_nome = null;
+        }
+
+        return $agendamento;
     }
 
-    public function minhasInformacoes()
+    public function agendamentos(): View
     {
-        return view('profile/minhasInformacoes');
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $agendamentos = Agendamento::with([
+            'horario',
+            'horario.procedimento',
+            'horario.agenda.medico'
+        ])
+            ->where('user_id', $user->id)
+            ->get();
+
+        // Formata cada agendamento utilizando o método auxiliar
+        $agendamentos->transform(function ($agendamento) {
+            return $this->formatAgendamento($agendamento);
+        });
+
+        return view('profile.agendamentos', compact('agendamentos'));
     }
 
-    public function meusPedidos()
+    public function minhasInformacoes(): View
     {
-        return view('profile/meuspedidos');
+        return view('profile.minhasInformacoes');
+    }
+
+    public function meusPedidos(): View
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $agendamentos = Agendamento::with([
+            'horario',
+            'horario.procedimento',
+            'horario.agenda.medico'
+        ])
+            ->where('user_id', $user->id)
+            ->where('status', 'agendado')
+            ->orderBy('data', 'desc')
+            ->get();
+
+        // Formata cada agendamento utilizando o método auxiliar
+        $agendamentos->transform(function ($agendamento) {
+            return $this->formatAgendamento($agendamento);
+        });
+
+        return view('profile.meuspedidos', compact('agendamentos'));
     }
 }
