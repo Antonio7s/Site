@@ -48,7 +48,6 @@
     <table class="table table-bordered table-custom">
         <thead>
             <tr>
-                <th>Nome de Agendamento</th>
                 <th>Médico</th>
                 <th>Clínica</th>
                 <th>Procedimento</th>
@@ -62,15 +61,10 @@
         <tbody>
             @forelse($agendamentos as $agendamento)
                 <tr>
-                    <td>{{ 'Agendamento #' . $agendamento->id }}</td>
                     <td>{{ $agendamento->medico_nome ?? '--' }}</td>
                     <td>{{ $agendamento->clinica_nome ?? '--' }}</td>
-                    <td>
-                        {{ $agendamento->horario->procedimento->nome ?? '--' }}
-                    </td>
-                    <td>
-                        {{ $agendamento->data ? \Carbon\Carbon::parse($agendamento->data)->format('d/m/Y') : '--' }}
-                    </td>
+                    <td>{{ $agendamento->procedimento_nome ?? '--' }}</td>
+                    <td>{{ $agendamento->data ? \Carbon\Carbon::parse($agendamento->data)->format('d/m/Y') : '--' }}</td>
                     <td>{{ $agendamento->horario_inicio ?? '--' }}</td>
                     <td>
                         R$ {{ number_format($agendamento->horario->procedimento->valor ?? 0, 2, ',', '.') }}
@@ -85,7 +79,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9">
+                    <td colspan="8">
                         <div class="d-flex justify-content-between align-items-center">
                             <span>Nenhum agendamento disponível.</span>
                             <a href="https://api.whatsapp.com/send?phone=554188322656&text=Olá, tenho uma dúvida sobre meu agendamento" 
