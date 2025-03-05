@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('email', 255)->unique();
             $table->string('conselho_nome', 20)->nullable();
             $table->string('conselho_numero', 20)->unique();
-            $table->string('telefone', 15)->unique();
+            $table->string('telefone', 25)->unique();
             $table->timestamps();
 
         });
