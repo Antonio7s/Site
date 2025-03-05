@@ -2,74 +2,31 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\URL;
 
-class CustomVerifyEmail extends Notification
+class CustomVerifyEmail extends VerifyEmail
 {
-    use Queueable;
-
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    public function toMail($notifiable)
     {
-        //
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via($notifiable): array
-    {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable): MailMessage
-    {
-        // Gera a URL de verificação do e-mail
-        $verificationUrl = $this->getVerificationUrl($notifiable);
-
         return (new MailMessage)
-            ->subject('🚀 Confirme seu e-mail na MedExame!')
-            ->greeting('Olá, seja bem-vindo(a)! 👋')
-            ->line('Estamos quase lá! Para ativar sua conta na MedExame, clique no botão abaixo:')
-            ->action('✅ Confirmar E-mail', $verificationUrl)
-            ->line('Se você não criou esta conta, pode ignorar este e-mail. Nenhuma ação adicional é necessária.')
-            ->salutation('Atenciosamente, Equipe MedExame 🚀');
+            ->subject('Verifique seu endereço de email')
+            ->line('Por favor, clique no botão abaixo para verificar seu email.')
+            ->action('Verificar Email', $this->verificationUrl($notifiable))
+            ->line('Se você não criou uma conta, ignore este email.');
     }
 
-    /**
-     * Get the verification URL for the user.
-     *
-     * @param  mixed  $notifiable
-     * @return string
-     */
-    protected function getVerificationUrl($notifiable)
+    // Método corrigido usando a implementação do Laravel
+    protected function verificationUrl($notifiable)
     {
-        // Gera a URL de verificação usando o método `verificationUrl` do trait
-        return $notifiable->route('verification.verify');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array<string, mixed>
-     */
-    public function toArray($notifiable): array
-    {
-        return [
-            //
-        ];
+        return URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(config('auth.verification.expire', 60)),
+            [
+                'id' => $notifiable->getKey(),
+                'hash' => sha1($notifiable->getEmailForVerification()),
+            ]
+        );
     }
 }
