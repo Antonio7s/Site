@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory; //SEED
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\CustomVerifyEmail;
+
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -43,6 +46,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function agendamentos(): HasMany
     {
         return $this->hasMany(Agendamento::class);
+    }
+
+        /**
+     * Sobrescreve a notificação de verificação de e-mail
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmail());
     }
     
 }
