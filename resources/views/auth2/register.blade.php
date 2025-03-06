@@ -1,12 +1,74 @@
-@extends('layouts.layout-index')
+@extends('layouts.layout-index') 
 
 @section('content')
 <!-- Script do reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+<!-- Script para máscaras de telefone e CPF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+  $(document).ready(function(){
+    // Máscara para Telefone do Local (formato: (00) 0000-0000)
+    $('#telefone_local').mask('(00) 0000-0000');
+
+    // Máscara para Telefone Financeiro (formato: (00) 0000-0000)
+    $('#telefone_financeiro').mask('(00) 0000-0000');
+
+    // Máscara para Celular (formato: (00) 00000-0000)
+    $('#celular').mask('(00) 00000-0000');
+
+    // Máscara para CPF (formato: 000.000.000-00)
+    $('#cpf').mask('000.000.000-00');
+  });
+</script>
+
+<!-- CSS Personalizado para Responsividade -->
+<style>
+  /* Estilos para telas pequenas (celulares) */
+  @media (max-width: 767.98px) {
+    .card {
+      margin-top: 1rem !important; /* Reduz o espaçamento superior */
+    }
+
+    .card-header h4 {
+      font-size: 1.5rem; /* Reduz o tamanho do título */
+    }
+
+    .form-control {
+      font-size: 14px; /* Reduz o tamanho da fonte dos inputs */
+    }
+
+    .btn {
+      width: 100%; /* Botões ocupam 100% da largura */
+      margin-bottom: 0.5rem; /* Adiciona espaçamento entre botões */
+    }
+
+    .g-recaptcha {
+      transform: scale(0.85); /* Reduz o tamanho do reCAPTCHA */
+      transform-origin: left top;
+    }
+
+    .modal-body ul {
+      padding-left: 1rem; /* Ajusta o padding da lista no modal */
+    }
+  }
+
+  /* Estilos para telas médias (tablets) */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .card {
+      margin-top: 2rem;
+    }
+
+    .form-control {
+      font-size: 15px;
+    }
+  }
+</style>
+
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-12 col-md-10 col-lg-8">
       <div class="card shadow mt-5">
         <div class="card-header text-center bg-white border-bottom">
           <h4 style="color: #007bff; font-weight: bold;">Cadastro de Clínica</h4>
@@ -19,13 +81,13 @@
             <h5 class="mb-3">Dados da Clínica</h5>
             <div class="row">
               <!-- Razão Social (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="razao_social" :value="__('Razão Social *')" />
                 <x-text-input id="razao_social" class="form-control" type="text" name="razao_social" :value="old('razao_social')" required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('razao_social')" class="mt-2" />
               </div>
               <!-- Nome Fantasia (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="nome_fantasia" :value="__('Nome Fantasia (Nome para divulgação) *')" />
                 <x-text-input id="nome_fantasia" class="form-control" type="text" name="nome_fantasia" :value="old('nome_fantasia')" required autocomplete="nome_fantasia" />
                 <x-input-error :messages="$errors->get('nome_fantasia')" class="mt-2" />
@@ -34,19 +96,19 @@
 
             <div class="row">
               <!-- CNPJ/CPF (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="cnpj_cpf" :value="__('CNPJ/CPF *')" />
                 <x-text-input id="cnpj_cpf" class="form-control" type="text" name="cnpj_cpf" :value="old('cnpj_cpf')" required autocomplete="cnpj_cpf" />
                 <x-input-error :messages="$errors->get('cnpj_cpf')" class="mt-2" />
               </div>
               <!-- Telefone (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="telefone" :value="__('Telefone *')" />
                 <x-text-input id="telefone" class="form-control" type="text" name="telefone" :value="old('telefone')" required autocomplete="tel" />
                 <x-input-error :messages="$errors->get('telefone')" class="mt-2" />
               </div>
               <!-- Email (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="email" :value="__('Email *')" />
                 <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autocomplete="username" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -55,25 +117,25 @@
 
             <div class="row">
               <!-- CEP (Obrigatório) -->
-              <div class="col-sm-3 mb-3">
+              <div class="col-12 col-md-3 mb-3">
                 <x-input-label for="cep" :value="__('CEP *')" />
                 <x-text-input id="cep" class="form-control" type="text" name="cep" :value="old('cep')" required autocomplete="cep" />
                 <x-input-error :messages="$errors->get('cep')" class="mt-2" />
               </div>
               <!-- Endereço (Obrigatório) -->
-              <div class="col-sm-5 mb-3">
+              <div class="col-12 col-md-5 mb-3">
                 <x-input-label for="endereco" :value="__('Endereço *')" />
                 <x-text-input id="endereco" class="form-control" type="text" name="endereco" :value="old('endereco')" required autocomplete="endereco" />
                 <x-input-error :messages="$errors->get('endereco')" class="mt-2" />
               </div>
               <!-- Número (Obrigatório) -->
-              <div class="col-sm-2 mb-3">
+              <div class="col-12 col-md-2 mb-3">
                 <x-input-label for="numero" :value="__('Número *')" />
                 <x-text-input id="numero" class="form-control" type="text" name="numero" :value="old('numero')" required autocomplete="numero" />
                 <x-input-error :messages="$errors->get('numero')" class="mt-2" />
               </div>
               <!-- Complemento (Opcional) -->
-              <div class="col-sm-2 mb-3">
+              <div class="col-12 col-md-2 mb-3">
                 <x-input-label for="complemento" :value="__('Complemento (Opcional)')" />
                 <x-text-input id="complemento" class="form-control" type="text" name="complemento" :value="old('complemento')" autocomplete="complemento" />
                 <x-input-error :messages="$errors->get('complemento')" class="mt-2" />
@@ -82,19 +144,19 @@
 
             <div class="row">
               <!-- Bairro (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="bairro" :value="__('Bairro *')" />
                 <x-text-input id="bairro" class="form-control" type="text" name="bairro" :value="old('bairro')" required autocomplete="bairro" />
                 <x-input-error :messages="$errors->get('bairro')" class="mt-2" />
               </div>
               <!-- Cidade (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="cidade" :value="__('Cidade *')" />
                 <x-text-input id="cidade" class="form-control" type="text" name="cidade" :value="old('cidade')" required autocomplete="cidade" />
                 <x-input-error :messages="$errors->get('cidade')" class="mt-2" />
               </div>
               <!-- UF (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="uf" :value="__('UF *')" />
                 <select id="uf" name="uf" class="form-select" required>
                   <option value="">{{ __('Selecione') }}</option>
@@ -108,13 +170,13 @@
 
             <div class="row">
               <!-- E-mail Administrativo (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="email_administrativo" :value="__('E-mail Administrativo *')" />
                 <x-text-input id="email_administrativo" class="form-control" type="email" name="email_administrativo" :value="old('email_administrativo')" required autocomplete="email_administrativo" />
                 <x-input-error :messages="$errors->get('email_administrativo')" class="mt-2" />
               </div>
               <!-- E-mail Faturamento (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="email_faturamento" :value="__('E-mail Faturamento *')" />
                 <x-text-input id="email_faturamento" class="form-control" type="email" name="email_faturamento" :value="old('email_faturamento')" required autocomplete="email_faturamento" />
                 <x-input-error :messages="$errors->get('email_faturamento')" class="mt-2" />
@@ -123,21 +185,21 @@
 
             <div class="row">
               <!-- Telefone do Local (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="telefone_local" :value="__('Telefone do Local *')" />
-                <x-text-input id="telefone_local" class="form-control" type="text" name="telefone_local" :value="old('telefone_local')" required autocomplete="telefone_local" />
+                <x-text-input id="telefone_local" class="form-control" type="text" name="telefone_local" :value="old('telefone_local')" required autocomplete="telefone_local" placeholder="(00) 0000-0000" />
                 <x-input-error :messages="$errors->get('telefone_local')" class="mt-2" />
               </div>
               <!-- Telefone Financeiro (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="telefone_financeiro" :value="__('Telefone Financeiro *')" />
-                <x-text-input id="telefone_financeiro" class="form-control" type="text" name="telefone_financeiro" :value="old('telefone_financeiro')" required autocomplete="telefone_financeiro" />
+                <x-text-input id="telefone_financeiro" class="form-control" type="text" name="telefone_financeiro" :value="old('telefone_financeiro')" required autocomplete="telefone_financeiro" placeholder="(00) 0000-0000" />
                 <x-input-error :messages="$errors->get('telefone_financeiro')" class="mt-2" />
               </div>
               <!-- Celular (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="celular" :value="__('Celular *')" />
-                <x-text-input id="celular" class="form-control" type="text" name="celular" :value="old('celular')" required autocomplete="celular" />
+                <x-text-input id="celular" class="form-control" type="text" name="celular" :value="old('celular')" required autocomplete="celular" placeholder="(00) 00000-0000" />
                 <x-input-error :messages="$errors->get('celular')" class="mt-2" />
               </div>
             </div>
@@ -146,19 +208,19 @@
             <h5 class="mt-4 mb-3">Responsável pelo Contrato</h5>
             <div class="row">
               <!-- Nome Completo (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="responsavel_nome" :value="__('Nome Completo *')" />
                 <x-text-input id="responsavel_nome" class="form-control" type="text" name="responsavel_nome" :value="old('responsavel_nome')" required autocomplete="responsavel_nome" />
                 <x-input-error :messages="$errors->get('responsavel_nome')" class="mt-2" />
               </div>
               <!-- RG (Obrigatório) -->
-              <div class="col-sm-3 mb-3">
+              <div class="col-12 col-md-3 mb-3">
                 <x-input-label for="rg" :value="__('RG *')" />
                 <x-text-input id="rg" class="form-control" type="text" name="rg" :value="old('rg')" required autocomplete="rg" />
                 <x-input-error :messages="$errors->get('rg')" class="mt-2" />
               </div>
               <!-- Órgão Emissor (Obrigatório) -->
-              <div class="col-sm-3 mb-3">
+              <div class="col-12 col-md-3 mb-3">
                 <x-input-label for="orgao_emissor" :value="__('Órgão Emissor *')" />
                 <x-text-input id="orgao_emissor" class="form-control" type="text" name="orgao_emissor" :value="old('orgao_emissor')" required autocomplete="orgao_emissor" />
                 <x-input-error :messages="$errors->get('orgao_emissor')" class="mt-2" />
@@ -167,19 +229,19 @@
 
             <div class="row">
               <!-- Data de Emissão (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="data_emissao" :value="__('Data de Emissão *')" />
                 <x-text-input id="data_emissao" class="form-control" type="text" name="data_emissao" :value="old('data_emissao')" required autocomplete="data_emissao" placeholder="dd/mm/aaaa" />
                 <x-input-error :messages="$errors->get('data_emissao')" class="mt-2" />
               </div>
               <!-- CPF (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="cpf" :value="__('CPF *')" />
-                <x-text-input id="cpf" class="form-control" type="text" name="cpf" :value="old('cpf')" required autocomplete="cpf" />
+                <x-text-input id="cpf" class="form-control" type="text" name="cpf" :value="old('cpf')" required autocomplete="cpf" placeholder="000.000.000-00" />
                 <x-input-error :messages="$errors->get('cpf')" class="mt-2" />
               </div>
               <!-- Estado Civil (Obrigatório) -->
-              <div class="col-sm-4 mb-3">
+              <div class="col-12 col-md-4 mb-3">
                 <x-input-label for="estado_civil" :value="__('Estado Civil *')" />
                 <x-text-input id="estado_civil" class="form-control" type="text" name="estado_civil" :value="old('estado_civil')" required autocomplete="estado_civil" />
                 <x-input-error :messages="$errors->get('estado_civil')" class="mt-2" />
@@ -188,13 +250,13 @@
 
             <div class="row">
               <!-- Senha (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="password" :value="__('Senha *')" />
                 <x-text-input id="password" class="form-control" type="password" name="password" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
               </div>
               <!-- Confirmar Senha (Obrigatório) -->
-              <div class="col-sm-6 mb-3">
+              <div class="col-12 col-md-6 mb-3">
                 <x-input-label for="password_confirmation" :value="__('Confirmar Senha *')" />
                 <x-text-input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />

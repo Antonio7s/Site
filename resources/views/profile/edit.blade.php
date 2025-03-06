@@ -1,5 +1,3 @@
-<!-- ESSA VIEW TA NOMEADA ERRADA, NAO RENOMEAREI POIS NAO CORRIGIREI BUGS. ESSA DEVERIA SER CHAMAR user_perfil-->
-
 @extends('layouts.appusuarioautentificado') 
 
 @push('styles')
@@ -133,7 +131,7 @@
       <div class="card-body">
         @if(isset($ultimosAgendamentos) && $ultimosAgendamentos->isNotEmpty())
           <ul class="list-group">
-            @foreach($ultimosAgendamentos->take(3) as $agendamento)
+            @foreach($ultimosAgendamentos as $agendamento)
               <li class="list-group-item">
                 <strong>Agendamento #{{ $agendamento->id }}</strong><br>
                 <small class="text-muted">Data: {{ $agendamento->data_agendamento->format('d/m/Y H:i') }}</small><br>
