@@ -4,6 +4,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Indexinicial\BuscaController;
 
 //use App\Http\Controllers\HomeController;
 
@@ -301,4 +302,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::post('/asaas/webhook', [AsaasController::class, 'webhook']);
 
 
-
+Route::get('/Busca', [BuscaController::class, 'Busca'])->name('index.inicial');
