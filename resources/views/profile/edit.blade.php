@@ -91,6 +91,7 @@
     }
 
     /* Centralizando os cards */
+
     .centered-container {
       display: flex;
       flex-direction: column;
@@ -104,7 +105,9 @@
       max-width: 600px;
     }
 
+
     /* Estilos para o status */
+
     .status-finalizado {
       color: green;
       font-weight: bold;
@@ -146,6 +149,7 @@
 @endpush
 
 @section('content')
+
   @php
     // Seleciona os 3 últimos agendamentos (ou quantos houver)
     $lastAppointments = $agendamentos->take(3);
@@ -154,7 +158,6 @@
     // Certifique-se de que o model App\Models\Medico existe e possui os campos necessários.
     $allDoctors = \App\Models\Medico::all();
   @endphp
-
   <div class="centered-container">
     <!-- Card: Últimos Agendamentos -->
     <div class="card shadow-sm">
