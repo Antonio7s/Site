@@ -1,4 +1,4 @@
-<?php  
+<?php   
 
 namespace App\Http\Controllers;
 
@@ -16,8 +16,24 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        $agendamentos = Agendamento::with([
+            'horario',
+            'horario.procedimento',
+            'horario.agenda.medico'
+        ])
+            ->where('user_id', $user->id)
+            ->where('status', 'agendado')
+            ->orderBy('data', 'desc')
+            ->get();
+
+        $agendamentos->transform(function ($agendamento) {
+            return $this->formatAgendamento($agendamento);
+        });
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'agendamentos' => $agendamentos,
         ]);
     }
 
@@ -57,30 +73,17 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    /**
-     * Método auxiliar para formatar os dados do agendamento.
-     * Extrai o horário de início, o nome do procedimento, o nome do médico
-     * (concatenando profissional_nome e profissional_sobrenome) e a razão social da clínica.
-     * O caminho para obter a clínica é: medicos (clinica_id) - Clinicas (id, razão_social).
-     */
     private function formatAgendamento($agendamento)
     {
         $horario = $agendamento->horario;
         
-        // Pega o horário de início, se existir
         $agendamento->horario_inicio = $horario ? $horario->horario_inicio : null;
-
-        // Nome do procedimento, se existir
-        $agendamento->procedimento_nome = ($horario && $horario->procedimento)
-            ? $horario->procedimento->nome
-            : null;
+        $agendamento->procedimento_nome = ($horario && $horario->procedimento) ? $horario->procedimento->nome : null;
 
         if ($horario && $horario->agenda) {
             $medico = $horario->agenda->medico;
             if ($medico) {
-                // Monta o nome completo do médico
                 $agendamento->medico_nome = $medico->profissional_nome . ' ' . $medico->profissional_sobrenome;
-                // Busca o clinica_id do médico e consulta a tabela Clinicas para recuperar a razão_social
                 $clinica = Clinica::find($medico->clinica_id);
                 $agendamento->clinica_nome = $clinica ? $clinica->razao_social : null;
             } else {
@@ -110,7 +113,6 @@ class ProfileController extends Controller
             ->where('user_id', $user->id)
             ->get();
 
-        // Formata cada agendamento utilizando o método auxiliar
         $agendamentos->transform(function ($agendamento) {
             return $this->formatAgendamento($agendamento);
         });
@@ -140,7 +142,6 @@ class ProfileController extends Controller
             ->orderBy('data', 'desc')
             ->get();
 
-        // Formata cada agendamento utilizando o método auxiliar
         $agendamentos->transform(function ($agendamento) {
             return $this->formatAgendamento($agendamento);
         });

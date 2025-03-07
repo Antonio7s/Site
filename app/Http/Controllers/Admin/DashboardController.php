@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers\Admin;
 
@@ -12,7 +12,6 @@ use App\Models\Horario;
 use App\Models\Procedimento;
 use App\Models\Classe;
 use DB;
-
 
 class DashboardController extends Controller
 {
@@ -36,11 +35,20 @@ class DashboardController extends Controller
         $usuarios = User::latest()->limit(10)->get() ?? collect([]);
         $clinicas = Clinica::latest()->limit(10)->get() ?? collect([]);
 
+        // Verifica o driver para usar a função correta de formatação da data
+        $driver = DB::connection()->getDriverName();
+        $monthExpression = $driver === 'mysql'
+            ? "DATE_FORMAT(created_at, '%m')"
+            : "strftime('%m', created_at)";
+        $dateExpression = $driver === 'mysql'
+            ? "DATE_FORMAT(created_at, '%Y-%m-%d')"
+            : "strftime('%Y-%m-%d', created_at)";
+
         $vendasMensais = Agendamento::select(
-                DB::raw("strftime('%m', created_at) as mes"),
+                DB::raw("$monthExpression as mes"),
                 DB::raw('COUNT(id) as total')
             )
-            ->groupBy(DB::raw("strftime('%m', created_at)"))
+            ->groupBy(DB::raw("$monthExpression"))
             ->pluck('total', 'mes')
             ->toArray();
 
@@ -56,10 +64,10 @@ class DashboardController extends Controller
 
         // Consulta para o Crescimento de Vendas
         $crescimentoVendas = Agendamento::select(
-                DB::raw("strftime('%Y-%m-%d', created_at) as data"),
+                DB::raw("$dateExpression as data"),
                 DB::raw('COUNT(id) as total')
             )
-            ->groupBy(DB::raw("strftime('%Y-%m-%d', created_at)"))
+            ->groupBy(DB::raw("$dateExpression"))
             ->orderBy('data', 'asc')
             ->get();
 

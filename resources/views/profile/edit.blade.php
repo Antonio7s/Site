@@ -1,6 +1,4 @@
-<!-- ESSA VIEW TA NOMEADA ERRADA, NAO RENOMEAREI POIS NAO CORRIGIREI BUGS. ESSA DEVERIA SER CHAMAR user_perfil-->
-
-@extends('layouts.appusuarioautentificado') 
+@extends('layouts.appusuarioautentificado')
 
 @push('styles')
   <style>
@@ -15,11 +13,11 @@
       left: -250px;
       width: 250px;
       height: 100%;
-      background-color: white; /* Fundo branco */
+      background-color: white;
       transition: 0.3s;
       z-index: 1000;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-      color: #007bff; /* Cor do texto azul */
+      color: #007bff;
     }
 
     .side-panel.open {
@@ -30,7 +28,6 @@
       padding: 20px;
     }
 
-    /* Estilo do título "Painel" */
     .side-panel .panel-title {
       font-size: 22px;
       margin-top: 30px;
@@ -39,7 +36,6 @@
       color: #007bff;
     }
 
-    /* Estilo para os links */
     .side-panel a {
       display: block;
       padding: 10px;
@@ -53,7 +49,6 @@
       background-color: #f0f0f0;
     }
 
-    /* Estilo do botão de menu */
     .toggle-btn {
       position: fixed;
       top: 15px;
@@ -78,7 +73,6 @@
       outline: none;
     }
 
-    /* Estilo do botão Sair */
     .side-panel .btn-link {
       color: red !important;
       text-decoration: none;
@@ -96,7 +90,8 @@
       background-color: #f0f0f0;
     }
 
-    /* Centralizar os cards */
+    /* Centralizando os cards */
+
     .centered-container {
       display: flex;
       flex-direction: column;
@@ -110,7 +105,9 @@
       max-width: 600px;
     }
 
-    /* Estilo para o status */
+
+    /* Estilos para o status */
+
     .status-finalizado {
       color: green;
       font-weight: bold;
@@ -120,10 +117,47 @@
       color: orange;
       font-weight: bold;
     }
+
+    /* Carrossel de Médicos em Destaque */
+    .doctor-scroll-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding-bottom: 10px;
+    }
+
+    .doctor-card {
+      flex: 0 0 auto;
+      width: 150px;
+      text-align: center;
+    }
+
+    .doctor-card .doctor-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #eee;
+    }
+
+    .doctor-card .doctor-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 @endpush
 
 @section('content')
+
+  @php
+    // Seleciona os 3 últimos agendamentos (ou quantos houver)
+    $lastAppointments = $agendamentos->take(3);
+
+    // Consulta todos os médicos do banco de dados.
+    // Certifique-se de que o model App\Models\Medico existe e possui os campos necessários.
+    $allDoctors = \App\Models\Medico::all();
+  @endphp
   <div class="centered-container">
     <!-- Card: Últimos Agendamentos -->
     <div class="card shadow-sm">
@@ -131,47 +165,55 @@
         Últimos Agendamentos
       </div>
       <div class="card-body">
-        @if(isset($ultimosAgendamentos) && $ultimosAgendamentos->isNotEmpty())
+        @if(isset($lastAppointments) && $lastAppointments->isNotEmpty())
           <ul class="list-group">
-            @foreach($ultimosAgendamentos->take(3) as $agendamento)
+            @foreach($lastAppointments as $agendamento)
+              @php
+                // Converte a data do agendamento para objeto Carbon
+                $appointmentDate = \Carbon\Carbon::parse($agendamento->data);
+                // Se a data do agendamento for menor ou igual à data atual, considera finalizado.
+                $statusFinalizado = $appointmentDate->lte(\Carbon\Carbon::now());
+                $statusText = $statusFinalizado ? 'Finalizado' : 'Em andamento';
+                $statusClass = $statusFinalizado ? 'status-finalizado' : 'status-andamento';
+              @endphp
               <li class="list-group-item">
-                <strong>Agendamento #{{ $agendamento->id }}</strong><br>
-                <small class="text-muted">Data: {{ $agendamento->data_agendamento->format('d/m/Y H:i') }}</small><br>
-                <span class="{{ $agendamento->finalizado ? 'status-finalizado' : 'status-andamento' }}">
-                  {{ $agendamento->finalizado ? 'Finalizado' : 'Em andamento' }}
+                <strong>{{ $agendamento->clinica_nome ?? '--' }}</strong><br>
+                <small class="text-muted">
+                  Data: {{ $appointmentDate->format('d/m/Y H:i') }}
+                </small><br>
+                <span class="{{ $statusClass }}">
+                  {{ $statusText }}
                 </span>
               </li>
             @endforeach
           </ul>
-          <a href="#" class="btn btn-primary btn-sm mt-3">Ver todos</a>
         @else
           <p class="text-center text-muted">Nenhum agendamento recente.</p>
         @endif
       </div>
     </div>
 
-    <!-- Card: Profissionais em Destaque -->
+    <!-- Card: Médicos em Destaque -->
     <div class="card shadow-sm">
       <div class="card-header bg-primary text-white">
-        Profissionais em Destaque
+        Médicos em Destaque
       </div>
       <div class="card-body">
-        <div class="row">
-          @if(isset($recommendedProducts) && count($recommendedProducts))
-            @foreach($recommendedProducts as $product)
-              <div class="col-md-12">
-                <div class="card h-100">
-                  <img src="{{ $product->image }}" class="card-img-top" alt="{{ $product->product_name }}">
-                  <div class="card-body text-center">
-                    <h5 class="card-title">{{ $product->product_name }}</h5>
-                    <p class="card-text text-success">R$ {{ number_format($product->price, 2, ',', '.') }}</p>
-                    <a href="#" class="btn btn-warning btn-sm">Comprar</a>
-                  </div>
+        <div class="doctor-scroll-container">
+          @if(isset($allDoctors) && $allDoctors->isNotEmpty())
+            @foreach($allDoctors as $doctor)
+              <div class="doctor-card">
+                <div class="doctor-image">
+                  <img src="{{ $doctor->foto ? $doctor->foto : asset('images/default_male.png') }}" 
+                       alt="{{ $doctor->profissional_nome }} {{ $doctor->profissional_sobrenome }}">
                 </div>
+                <h5 style="margin-top: 10px;">
+                  {{ $doctor->profissional_nome }} {{ $doctor->profissional_sobrenome }}
+                </h5>
               </div>
             @endforeach
           @else
-            <p class="text-center text-muted">Nenhum profissional destacado.</p>
+            <p class="text-center text-muted">Nenhum médico destacado.</p>
           @endif
         </div>
       </div>
@@ -181,7 +223,7 @@
   <!-- Botão para abrir o painel lateral (sempre visível) -->
   <button class="toggle-btn" onclick="togglePanel()">&#9776; Menu</button>
 
-  <!-- Painel lateral com apenas os itens solicitados -->
+  <!-- Painel lateral -->
   <div class="side-panel" id="sidePanel">
     <div class="panel-content">
       <div class="panel-title">Painel</div>

@@ -1,367 +1,237 @@
-@extends('layouts.layout-index') <!-- Referencia o layout 'app.blade.php' -->
+@extends('layouts.layout-index')
+
+@push('styles')
+  <style>
+    /* Container geral */
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    /* Área de Pesquisa */
+    .search-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    .search-area form {
+      display: flex;
+      width: 100%;
+      max-width: 800px;
+      gap: 10px;
+      align-items: center;
+    }
+    /* Dropdown customizado (verde e pequeno) */
+    .filter-dropdown {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px;
+      font-size: 14px;
+      width: 140px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    .filter-dropdown option {
+      color: black;
+    }
+    /* Campo de pesquisa */
+    .search-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    /* Botão de pesquisa */
+    .search-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    /* Exibição da consulta realizada */
+    .search-query {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+    /* Cards dos médicos */
+    .doctor-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .doctor-card h2 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .doctor-card p {
+      color: #555;
+      margin: 5px 0;
+      line-height: 1.5;
+    }
+    .doctor-card a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .doctor-card a:hover {
+      text-decoration: underline;
+    }
+    /* Agenda do Médico */
+    .agenda {
+      margin-top: 15px;
+    }
+    .agenda h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .date-picker {
+      margin-bottom: 10px;
+    }
+    .date-picker input[type="date"] {
+      padding: 6px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .schedule {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .hour {
+      background-color: #e1f5fe;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .hour:hover {
+      background-color: #81d4fa;
+    }
+    .save-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+@endpush
+
 @section('content')
-    <style>
-        /* Estilos principais do layout */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 10px;
-        }
+  <div class="container">
+    <!-- Área de Pesquisa com Dropdown -->
+    <div class="search-area">
+      <form action="{{ url()->current() }}" method="GET">
+        <select name="filter" class="filter-dropdown">
+          <option value="todos" selected>Todos</option>
+          <option value="distancia">Distância</option>
+          <option value="especialidade">Especialidade</option>
+          <option value="procedimentos">Procedimentos</option>
+          <option value="profissional">Nome do Profissional</option>
+          <option value="clinica">Nome da Clínica</option>
+        </select>
+        <input type="text" name="query" class="search-input" placeholder="Digite sua pesquisa...">
+        <button type="submit" class="search-btn">Pesquisar</button>
+      </form>
+    </div>
 
-        /* Estilos para a caixa de busca */
-        .search-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 30px;
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .search-bar input[type="text"] {
-            padding: 12px 20px;
-            font-size: 18px;
-            width: 60%;
-            border: 2px solid #007bff;
-            border-radius: 30px;
-            transition: border-color 0.3s ease;
-            outline: none;
-        }
-        .search-bar input[type="text"]:focus {
-            border-color: #0056b3;
-        }
-        .search-bar button {
-            padding: 12px 25px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-size: 18px;
-            margin-left: 15px;
-        }
-        .search-bar button:hover {
-            background-color: #0056b3;
-        }
+    <!-- Exibição da pesquisa realizada -->
+    @if(request('query'))
+      <div class="search-query">
+        Você Buscou por: <strong>{{ request('query') }}</strong>
+      </div>
+    @endif
 
-        /* Estilos para a caixa de informações da pessoa */
-        .person-box {
-            background-color: #ffffff;
-            margin-bottom: 15px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .person-info {
-            max-width: 60%;
-        }
-        .person-info h2 {
-            margin: 0;
-            font-size: 24px;
-            color: #333;
-        }
-        .person-info p {
-            margin: 5px 0;
-            color: #666;
-        }
-        .person-info .clinic-name {
-            font-weight: bold;
-            color: #007bff;
-        }
-        .person-info .address {
-            color: #555;
-            font-size: 14px;
-        }
+    <!-- Cards dos médicos vindos do banco de dados -->
+    @if(isset($medicos) && count($medicos))
+      @foreach($medicos as $medico)
+        <div class="doctor-card">
+          <h2>{{ $medico->nome ?? '--' }}</h2>
+          <p><strong>Especialidade:</strong> {{ $medico->especialidade ?? '--' }}</p>
+          <p><strong>Clínica:</strong> {{ $medico->clinica ?? '--' }}</p>
+          <p><strong>Endereço:</strong> {{ $medico->endereco ?? '--' }}</p>
+          <p>
+            <strong>Localização:</strong>
+            @if(!empty($medico->latitude) && !empty($medico->longitude))
+              <a href="https://www.google.com/maps?q={{ $medico->latitude }},{{ $medico->longitude }}" target="_blank">Ver no Mapa</a>
+            @else
+              --
+            @endif
+          </p>
+          <p><strong>Valor:</strong> R$ {{ !empty($medico->valor) ? number_format($medico->valor, 2, ',', '.') : '--' }}</p>
+          <p><strong>Avaliação:</strong> {{ $medico->avaliacao ?? '--' }}</p>
 
-        /* Estilos para a foto do médico */
-        .person-photo {
-            width: 120px;
-            height: 120px;
-            margin:10px;
-            object-fit: cover;
-            
-        }
-
-        /* Informações extras */
-        .location, .price, .specialty, .rating {
-            margin-top: 10px;
-        }
-
-        /* Estilos para o botão "Ver no mapa" */
-        .location a {
-            color: #007bff;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .location a:hover {
-            text-decoration: underline;
-        }
-
-        
-    </style>
-
-    <style>
-        /* Estilização geral */
-        .agenda h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .agenda p {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        /* Estilo para o layout dos horários */
-        .schedule {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .column {
-            width: 23%; /* Para dividir igualmente a largura da área */
-        }
-
-        /* Estilo para cada horário */
-        .hour {
-            background-color:rgb(145, 222, 245);
-            padding: 12px;
-            text-align: center;
-            margin-bottom: 8px;
-            border-radius: 4px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        /* Efeito ao passar o mouse sobre os horários */
-        .hour:hover {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
-        }
-
-
-        /* Efeito de hover em cada horário */
-        .hour:hover {
-            background-color:rgb(58, 119, 177);
-            transform: scale(1.05);
-        }
-    </style>
-
-    <body>
-        <div class="container">
-            <!-- Formulário de busca -->
-            <div class="search-bar">
-                <input type="text" placeholder="Digite o nome da pessoa...">
-                <button type="button">Buscar</button>
+          <!-- Agenda do Médico -->
+          <div class="agenda">
+            <h3>Horário</h3>
+            <div class="date-picker">
+              <input type="date" id="date-input-{{ $medico->id }}" onchange="updateDate({{ $medico->id }})">
+              <p><strong>Data:</strong> <span id="selected-date-{{ $medico->id }}">03/02/2025</span></p>
             </div>
-
-            <h1>Resultados da Busca</h1>
-            <p>Buscando por: <strong>Dermatologista</strong></p>
-
-            <!-- Exemplo 1 -->
-            <div class="person-box">
-                <img src="{{ asset('images/medico-1.jpg') }}" alt="Foto do Médico" class="person-photo">
-                <div class="person-info">
-                    <h2>Dr. João Silva</h2>
-                    <p class="specialty"><strong>Especialidade:</strong> Cardiologia</p>
-                    <p class="clinic-name"><strong>Clínica:</strong> Saúde Total</p>
-                    <p class="address"><strong>Endereço:</strong> Rua das Flores, 123 - São Paulo, SP</p>
-                    <p class="location"><strong>Localização:</strong> <a href="https://www.google.com/maps?q=-23.55052,-46.633308" target="_blank">Ver no Mapa</a></p>
-                    <p class="price"><strong>Valor:</strong> R$ 200</p>
-                    <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐ (4.5/5)</p>
-                </div>
-
-                <div class="agenda">
-                    <h3>Horário</h3>                    
-                    <div class="date-picker">
-                        <input type="date" id="date-input" onchange="updateDate()">
-                        <p id="date-display"><strong>Data:</strong> <span id="selected-date">03/02/2025</span></p>
-                    </div>
-
-                    <div class="schedule">
-                        <div class="column">
-                            <div class="hour" onclick="selectHour('08:00')">08:00</div>
-                            <div class="hour" onclick="selectHour('09:00')">09:00</div>
-                            <div class="hour" onclick="selectHour('10:00')">10:00</div>
-                            <div class="hour" onclick="selectHour('11:00')">11:00</div>
-                            <div class="hour" onclick="selectHour('12:00')">12:00</div>
-                        </div>
-                        <div class="column">
-                            <div class="hour" onclick="selectHour('10:00')">10:00</div>
-                            <div class="hour" onclick="selectHour('11:00')">11:00</div>
-                            <div class="hour" onclick="selectHour('12:00')">12:00</div>
-                            <div class="hour" onclick="selectHour('13:00')">13:00</div>
-                            <div class="hour" onclick="selectHour('14:00')">14:00</div>
-                        </div>
-                        <div class="column">
-                            <div class="hour" onclick="selectHour('11:00')">11:00</div>
-                            <div class="hour" onclick="selectHour('12:00')">12:00</div>
-                            <div class="hour" onclick="selectHour('13:00')">13:00</div>
-                            <div class="hour" onclick="selectHour('14:00')">14:00</div>
-                            <div class="hour" onclick="selectHour('15:00')">15:00</div>
-                        </div>
-                        <div class="column">
-                            <div class="hour" onclick="selectHour('13:00')">13:00</div>
-                            <div class="hour" onclick="selectHour('14:00')">14:00</div>
-                            <div class="hour" onclick="selectHour('15:00')">15:00</div>
-                            <div class="hour" onclick="selectHour('16:00')">16:00</div>
-                            <div class="hour" onclick="selectHour('17:00')">17:00</div>
-                        </div>
-                    </div>
-                    <button onclick="saveSchedule()">Salvar Horário</button>
-                </div>
-
+            <div class="schedule">
+              @if(!empty($medico->horarios))
+                @foreach($medico->horarios as $horario)
+                  <div class="hour" onclick="selectHour({{ $medico->id }}, '{{ $horario }}')">
+                    {{ $horario }}
+                  </div>
+                @endforeach
+              @else
+                <p>Sem horários disponíveis</p>
+              @endif
             </div>
-
-            <!-- Exemplo 2 -->
-            <div class="person-box">
-                <img src="{{ asset('images/medico-2.jpg') }}" alt="Foto do Médico" class="person-photo">
-                <div class="person-info">
-                    <h2>Maria Oliveira</h2>
-                    <p class="specialty"><strong>Especialidade:</strong> Dermatologia</p>
-                    <p class="clinic-name"><strong>Clínica:</strong> Pele Saudável</p>
-                    <p class="address"><strong>Endereço:</strong> Av. Brasil, 456 - Rio de Janeiro, RJ</p>
-                    <p class="location"><strong>Localização:</strong> <a href="https://www.google.com/maps?q=-22.906847,-43.172896" target="_blank">Ver no Mapa</a></p>
-                    <p class="price"><strong>Valor:</strong> R$ 150</p>
-                    <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐ (4.2/5)</p>
-                </div>
-                <div class="agenda">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>08:00 - 09:00</td></tr>
-                            <tr><td>10:00 - 11:00</td></tr>
-                            <tr><td class="booked">11:00 - 12:00 (Indisponível)</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Exemplo 3 -->
-            <div class="person-box">
-                <img src="{{ asset('images/medico-3.jpg') }}" alt="Foto do Médico" class="person-photo">
-                <div class="person-info">
-                    <h2>Pedro Santos</h2>
-                    <p class="specialty"><strong>Especialidade:</strong> Ortopedia</p>
-                    <p class="clinic-name"><strong>Clínica:</strong> Ossos Fortes</p>
-                    <p class="address"><strong>Endereço:</strong> Rua das Palmeiras, 789 - Brasília, DF</p>
-                    <p class="location"><strong>Localização:</strong> <a href="https://www.google.com/maps?q=-15.794229,-47.882166" target="_blank">Ver no Mapa</a></p>
-                    <p class="price"><strong>Valor:</strong> R$ 180</p>
-                    <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐ (4.0/5)</p>
-                </div>
-                <div class="agenda">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>08:00 - 09:00</td></tr>
-                            <tr><td>09:00 - 10:00</td></tr>
-                            <tr><td>10:00 - 11:00</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Exemplo 4 -->
-            <div class="person-box">
-                <img src="{{ asset('images/medico-4.jpg') }}" alt="Foto do Médico" class="person-photo">
-                <div class="person-info">
-                    <h2>Carla Souza</h2>
-                    <p class="specialty"><strong>Especialidade:</strong> Pediatria</p>
-                    <p class="clinic-name"><strong>Clínica:</strong> Criança Feliz</p>
-                    <p class="address"><strong>Endereço:</strong> Av. Paulista, 1010 - São Paulo, SP</p>
-                    <p class="location"><strong>Localização:</strong> <a href="https://www.google.com/maps?q=-19.916681,-43.934493" target="_blank">Ver no Mapa</a></p>
-                    <p class="price"><strong>Valor:</strong> R$ 220</p>
-                    <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐⭐ (5.0/5)</p>
-                </div>
-                <div class="agenda">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>09:00 - 10:00</td></tr>
-                            <tr><td>11:00 - 12:00</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Exemplo 5 -->
-            <div class="person-box">
-                <img src="{{ asset('images/medico-5.jpg') }}" alt="Foto do Médico" class="person-photo">
-                <div class="person-info">
-                    <h2>Ana Lima</h2>
-                    <p class="specialty"><strong>Especialidade:</strong> Ginecologia</p>
-                    <p class="clinic-name"><strong>Clínica:</strong> Saúde da Mulher</p>
-                    <p class="address"><strong>Endereço:</strong> Rua das Acácias, 567 - Curitiba, PR</p>
-                    <p class="location"><strong>Localização:</strong> <a href="https://www.google.com/maps?q=-25.428954,-49.267137" target="_blank">Ver no Mapa</a></p>
-                    <p class="price"><strong>Valor:</strong> R$ 130</p>
-                    <p class="rating"><strong>Avaliação:</strong> ⭐⭐⭐⭐ (4.3/5)</p>
-                </div>
-                <div class="agenda">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>08:00 - 09:00</td></tr>
-                            <tr><td>09:00 - 10:00</td></tr>
-                            <tr><td>10:00 - 11:00</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <button class="save-btn" onclick="saveSchedule({{ $medico->id }})">Salvar Horário</button>
+          </div>
         </div>
+      @endforeach
+    @else
+      <p class="search-query">Nenhum médico encontrado.</p>
+    @endif
+  </div>
 
-        <script>
-            function updateDate() {
-                const dateInput = document.getElementById('date-input');
-                const selectedDate = document.getElementById('selected-date');
-                selectedDate.textContent = dateInput.value.split('-').reverse().join('/');
-            }
-
-            let selectedHour = null;
-
-            function selectHour(hour) {
-                selectedHour = hour;
-                alert(`Horário selecionado: ${hour}`);
-            }
-
-            function saveSchedule() {
-                const date = document.getElementById('date-input').value;
-                if (date && selectedHour) {
-                    alert(`Horário salvo: ${date} às ${selectedHour}`);
-                } else {
-                    alert('Por favor, selecione uma data e um horário.');
-                }
-            }
-        </script>
-    </body>
-    </html>
+  @push('scripts')
+    <script>
+      // Atualiza a data selecionada para cada médico
+      function updateDate(id) {
+        const dateInput = document.getElementById('date-input-' + id);
+        const selectedDate = document.getElementById('selected-date-' + id);
+        selectedDate.textContent = dateInput.value.split('-').reverse().join('/');
+      }
+      // Armazena o horário selecionado para cada médico
+      let selectedHours = {};
+      function selectHour(id, hour) {
+        selectedHours[id] = hour;
+        alert(`Horário selecionado: ${hour}`);
+      }
+      function saveSchedule(id) {
+        const date = document.getElementById('date-input-' + id).value;
+        const hour = selectedHours[id];
+        if (date && hour) {
+          alert(`Horário salvo: ${date} às ${hour}`);
+        } else {
+          alert('Por favor, selecione uma data e um horário.');
+        }
+      }
+    </script>
+  @endpush
 @endsection
