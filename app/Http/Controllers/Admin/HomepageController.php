@@ -45,7 +45,8 @@ class HomepageController extends Controller
             \Log::info('Dados validados com sucesso:', $validatedData);
 
             // Salvar ou atualizar configurações gerais
-            $settings = HomepageSetting::firstOrNew();
+            $settings = HomepageSetting::first() ?? new HomepageSetting();
+            
             if ($request->hasFile('logo')) {
                 // Remove o logo antigo, se existir
                 if ($settings->logo_path && Storage::exists($settings->logo_path)) {
@@ -110,8 +111,8 @@ class HomepageController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao salvar as configurações: ' . $e->getMessage(),
-                'trace' => $e->getTraceAsString(), // Adiciona o trace do erro para depuração
-            ], 500); // Retorna status 500 para erros internos do servidor
+                'trace' => $e->getTraceAsString(),
+            ], 500);
         }
     }
 }
