@@ -13,12 +13,16 @@ class EmailVerificationNotificationController2 extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if ($request->clinica()->hasVerifiedEmail()) {
-            return redirect()->intended(route('admin-clinica', absolute: false));
+        // Use auth('clinic') para acessar o usuário autenticado da clínica
+        $clinica = auth('clinic')->user();
+
+        if ($clinica->hasVerifiedEmail()) {
+            return redirect()->intended(route('admin-clinica.dashboard.index', absolute: false));
         }
 
-        $request->clinica()->sendEmailVerificationNotification();
+        $clinica->sendEmailVerificationNotification();
 
         return back()->with('status', 'verification-link-sent');
     }
 }
+
