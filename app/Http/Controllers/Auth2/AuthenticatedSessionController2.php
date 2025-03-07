@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Clinica;
 
 class AuthenticatedSessionController2 extends Controller
 {
@@ -24,11 +25,22 @@ class AuthenticatedSessionController2 extends Controller
      */
     public function store(LoginRequest2 $request): RedirectResponse
     {
+        // Realiza a autenticação com a guard 'clinic'
         $request->authenticate();
 
+        // Regenera a sessão
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin-clinica.dashboard.index', absolute: false));
+        // Verifique se o usuário está autenticado na guard 'clinic'
+        $user = Auth::guard('clinic')->user();
+
+        // Verifique se o e-mail do usuário está verificado
+        if ($user && !$user->hasVerifiedEmail()) {
+            return redirect()->route('clinica.verification.notice'); // Rota de verificação de e-mail da clínica
+        }
+
+        // Caso o e-mail esteja verificado, redirecione para o painel administrativo da clínica
+        return redirect()->route('admin-clinica.dashboard.index');
     }
 
     /**
@@ -45,3 +57,4 @@ class AuthenticatedSessionController2 extends Controller
         return redirect('/');
     }
 }
+

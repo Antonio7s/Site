@@ -44,12 +44,29 @@ require __DIR__ . '/auth2.php';
 use Illuminate\Auth\Notifications\VerifyEmail;
 //use Illuminate\Support\Facades\Route;
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Foundation\Auth2\EmailVerificationRequest;
 
+
+//OBS: USER
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect()->route('perfil.edit'); // Ajuste para seu redirecionamento
 })->name('verification.verify');
+
+use App\Http\Controllers\Auth2\ClinicaVerificationController;
+
+Route::middleware(['auth:clinic'])->group(function () {
+    Route::get('/clinica/email/verify', [ClinicaVerificationController::class, 'show'])
+        ->name('clinica.verification.notice');
+    Route::get('/clinica/email/verify/{id}/{hash}', [ClinicaVerificationController::class, 'verify'])
+        ->middleware('signed')
+        ->name('clinica.verification.verify');
+    Route::post('/clinica/email/verification-notification', [ClinicaVerificationController::class, 'resend'])
+        ->middleware('throttle:6,1')
+        ->name('clinica.verification.send');
+});
+
+//
 
 // Rotas que exigem AUTENTICACAO de user e AUTORIZAÇÃO de admin e têm o prefixo 'admin'.
 Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(function () {
