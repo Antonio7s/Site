@@ -49,4 +49,12 @@ class Clinica extends Authenticatable implements MustVerifyEmail
         $this->notify(new VerifyClinicaEmail());
     }
 
+    /**
+     * Define o relacionamento de uma clínica com seus serviços diferenciados.
+     */
+    public function servicosDiferenciados()
+    {
+        return $this->hasMany(ServicoDiferenciado::class);
+    }
+
 }

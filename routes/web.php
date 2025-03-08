@@ -44,7 +44,7 @@ require __DIR__ . '/auth2.php';
 use Illuminate\Auth\Notifications\VerifyEmail;
 //use Illuminate\Support\Facades\Route;
 
-use Illuminate\Foundation\Auth2\EmailVerificationRequest;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 //OBS: USER
