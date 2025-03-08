@@ -1,4 +1,4 @@
-@extends('layouts.layout-index') 
+@extends('layouts.layout-index')
 
 @section('content')
 <!-- Script do reCAPTCHA -->
@@ -11,13 +11,10 @@
   $(document).ready(function(){
     // Máscara para Telefone do Local (formato: (00) 0000-0000)
     $('#telefone_local').mask('(00) 0000-0000');
-
     // Máscara para Telefone Financeiro (formato: (00) 0000-0000)
     $('#telefone_financeiro').mask('(00) 0000-0000');
-
     // Máscara para Celular (formato: (00) 00000-0000)
     $('#celular').mask('(00) 00000-0000');
-
     // Máscara para CPF (formato: 000.000.000-00)
     $('#cpf').mask('000.000.000-00');
   });
@@ -28,38 +25,31 @@
   /* Estilos para telas pequenas (celulares) */
   @media (max-width: 767.98px) {
     .card {
-      margin-top: 1rem !important; /* Reduz o espaçamento superior */
+      margin-top: 1rem !important;
     }
-
     .card-header h4 {
-      font-size: 1.5rem; /* Reduz o tamanho do título */
+      font-size: 1.5rem;
     }
-
     .form-control {
-      font-size: 14px; /* Reduz o tamanho da fonte dos inputs */
+      font-size: 14px;
     }
-
     .btn {
-      width: 100%; /* Botões ocupam 100% da largura */
-      margin-bottom: 0.5rem; /* Adiciona espaçamento entre botões */
+      width: 100%;
+      margin-bottom: 0.5rem;
     }
-
     .g-recaptcha {
-      transform: scale(0.85); /* Reduz o tamanho do reCAPTCHA */
+      transform: scale(0.85);
       transform-origin: left top;
     }
-
     .modal-body ul {
-      padding-left: 1rem; /* Ajusta o padding da lista no modal */
+      padding-left: 1rem;
     }
   }
-
   /* Estilos para telas médias (tablets) */
   @media (min-width: 768px) and (max-width: 991.98px) {
     .card {
       margin-top: 2rem;
     }
-
     .form-control {
       font-size: 15px;
     }
@@ -74,6 +64,8 @@
           <h4 style="color: #007bff; font-weight: bold;">Cadastro de Clínica</h4>
         </div>
         <div class="card-body">
+          <!-- Legenda para os campos -->
+          <p class="mb-4"><small>Campos marcados com <span class="text-danger">*</span> são obrigatórios. Os demais são opcionais.</small></p>
           <form method="POST" action="{{ route('register2') }}" enctype="multipart/form-data">
             @csrf
 

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class RegisteredUserController2 extends Controller
 {
@@ -30,59 +31,95 @@ class RegisteredUserController2 extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'razao_social' => ['required', 'string', 'max:255'],
-            'nome_fantasia' => ['required', 'string', 'max:255'],  // Nome Fantasia
-            'cnpj_cpf' => ['required', 'string', 'max:18', 'unique:clinicas'],  // CNPJ/CPF
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Clinica::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'documentos'     => 'required|file|mimes:pdf|max:2048',
+            // Validação dos campos
+            'razao_social'         => ['required', 'string', 'max:255', 'unique:clinicas,razao_social'],
+            'nome_fantasia'        => ['required', 'string', 'max:255'],
+            'cnpj_cpf'             => ['required', 'string', 'max:18', 'unique:clinicas,cnpj_cpf'],
+            'email'                => ['required', 'string', 'email', 'max:255', 'unique:clinicas,email'],
+            'password'             => ['required', 'confirmed', Rules\Password::defaults()],
+            'documentos'           => 'required|file|mimes:pdf|max:2048',
 
-            'razao_social' => 'required|string|max:255',
-            'nome_fantasia' => 'required|string|max:255',
-            'cnpj_cpf' => 'required|string|unique:clinicas,cnpj_cpf',
-            'telefone' => 'required|string|max:20',
-            'cep' => 'required|string|max:9',
-            'endereco' => 'required|string|max:255',
-            'numero' => 'required|string|max:10',
-            'bairro' => 'required|string|max:255',
-            'cidade' => 'required|string|max:255',
-            'uf' => 'required|string|max:2',
-            'email_administrativo' => 'required|email',
-            'email_faturamento' => 'required|email',
-            'telefone_local' => 'required|string|max:20',
-            'telefone_financeiro' => 'required|string|max:20',
-            'celular' => 'required|string|max:20',
-            'responsavel_nome' => 'required|string|max:255',
-            'rg' => 'required|string|max:20',
-            'orgao_emissor' => 'required|string|max:50',
-            'data_emissao' => 'required|date_format:d/m/Y',
-            'cpf' => 'required|string|max:14|unique:users,cpf',
-            'estado_civil' => 'required|string|max:50',
+            // Dados de endereço e contato
+            'telefone'             => 'required|string|max:20',
+            'cep'                  => 'required|string|max:9',
+            'endereco'             => 'required|string|max:255',
+            'numero'               => 'required|string|max:10',
+            'complemento'          => 'nullable|string|max:255',
+            'bairro'               => 'required|string|max:255',
+            'cidade'               => 'required|string|max:255',
+            'uf'                   => 'required|string|max:2',
+
+            // Contatos administrativos e financeiros
+            'email_administrativo' => 'required|email|max:255',
+            'email_faturamento'    => 'required|email|max:255',
+            'telefone_local'       => 'required|string|max:20',
+            'telefone_financeiro'  => 'required|string|max:20',
+            'celular'              => 'required|string|max:20',
+
+            // Dados do responsável pelo contrato
+            'responsavel_nome'     => 'required|string|max:255',
+            'rg'                   => 'required|string|max:20',
+            'orgao_emissor'        => 'required|string|max:50',
+            'data_emissao'         => 'required|date_format:d/m/Y',
+            'cpf'                  => 'required|string|max:14', // Mapeado para responsavel_cpf
+            'estado_civil'         => 'required|string|max:50',
         ]);
 
+        // Processa o upload do documento (PDF)
         $documentoPath = null;
         if ($request->hasFile('documentos')) {
             $file = $request->file('documentos');
-            // Gera um nome único para o arquivo
             $nomeArquivo = time() . '_' . $file->getClientOriginalName();
-            // Armazena o arquivo no disco 'private' dentro da pasta 'uploads/documentos'
             $documentoPath = $file->storeAs('uploads/documentos', $nomeArquivo, 'private');
         }
 
-        $clinica = Clinica::create([
-            'razao_social' => $request->razao_social,
-            'nome_fantasia' => $request->nome_fantasia,  // Nome Fantasia
-            'cnpj_cpf' => $request->cnpj_cpf,  // CNPJ/CPF
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'documentos'     => $documentoPath, // Salva o caminho do arquivo PDF
-        ]);
+        // Converte a data de emissão do formato d/m/Y para Y-m-d
+        $dataEmissao = \Carbon\Carbon::createFromFormat('d/m/Y', $request->data_emissao)->format('Y-m-d');
+
+        try {
+            // Tenta criar a clínica com todos os campos
+            $clinica = Clinica::create([
+                'razao_social'         => $request->razao_social,
+                'nome_fantasia'        => $request->nome_fantasia,
+                'cnpj_cpf'             => $request->cnpj_cpf,
+                'email'                => $request->email,
+                'password'             => Hash::make($request->password),
+                'documentos'           => $documentoPath,
+                'telefone'             => $request->telefone,
+                'cep'                  => $request->cep,
+                'endereco'             => $request->endereco,
+                'numero'               => $request->numero,
+                'complemento'          => $request->complemento,
+                'bairro'               => $request->bairro,
+                'cidade'               => $request->cidade,
+                'uf'                   => $request->uf,
+                'email_administrativo' => $request->email_administrativo,
+                'email_faturamento'    => $request->email_faturamento,
+                'telefone_local'       => $request->telefone_local,
+                'telefone_financeiro'  => $request->telefone_financeiro,
+                'celular'              => $request->celular,
+                'responsavel_nome'     => $request->responsavel_nome,
+                'rg'                   => $request->rg,
+                'orgao_emissor'        => $request->orgao_emissor,
+                'data_emissao'         => $dataEmissao,
+                'responsavel_cpf'      => $request->cpf,
+                'estado_civil'         => $request->estado_civil,
+            ]);
+        } catch (\Illuminate\Database\QueryException $ex) {
+            // Verifica se o erro é de violação de unicidade para o campo 'razao_social'
+            if (strpos($ex->getMessage(), 'clinicas.razao_social') !== false) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors([
+                        'razao_social' => 'Já existe uma clínica com essa Razão Social. Por favor, escolha outra.',
+                    ]);
+            }
+            throw $ex;
+        }
 
         event(new Registered($clinica));
-
         Auth::guard('clinic')->login($clinica);
 
-
-        return redirect(route('admin-clinica.dashboard.index', absolute: false));
+        return redirect(route('admin-clinica.dashboard.index', [], false));
     }
 }
