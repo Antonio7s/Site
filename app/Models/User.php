@@ -39,7 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return isset($this->attributes['photo_url']) && $this->attributes['photo_url']
             ? asset('storage/' . $this->attributes['photo_url'])
-            : asset('images/default-photo.png');
+            : asset('images/icone-usuario.png');
     }
 
     // Um paciente pode ter vários agendamentos

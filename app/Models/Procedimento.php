@@ -19,5 +19,10 @@ class Procedimento extends Model
     {
         return $this->belongsToMany(Medico::class, 'medico_procedimento');
     }
+
+    public function servicosDiferenciados()
+    {
+        return $this->hasMany(ServicoDiferenciado::class);
+    }
 }
 
