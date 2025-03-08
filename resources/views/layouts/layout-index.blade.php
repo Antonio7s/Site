@@ -204,35 +204,45 @@
         <!-- Estado e Informações do Usuário/Clínica -->
         <div class="user-container">
             <span id="estadoSelecionado" class="badge bg-info" style="cursor: pointer;" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
-            @if(!auth()->check())
+
+            @if(auth()->guard('clinic')->check())
+                {{-- Usuário autenticado como clínica --}}
+                <div id="clinicInfo">
+                    <img id="clinicPhoto" src="{{ !empty(auth()->guard('clinic')->user()->photo_url) ? auth()->guard('clinic')->user()->photo_url : asset('images/icone-usuario.png') }}" alt="Foto da Clínica">
+                    <span id="clinicName">{{ auth()->guard('clinic')->user()->name }}</span>
+                    <div id="clinicDropdown">
+                        <a href="{{ route('admin-clinica.dashboard.index')}}">Página da Clínica</a>
+                        <ul>
+                            <li>
+                                <form method="POST" action="{{ route('logout2') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        Sair
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            @elseif(auth()->guard('web')->check())
+                {{-- Usuário autenticado como usuário comum --}}
+                <div id="userInfo">
+                    <img id="userPhoto" src="{{ !empty(auth()->guard('web')->user()->photo_url) ? auth()->guard('web')->user()->photo_url : asset('images/icone-usuario.png') }}" alt="Foto do Usuário">
+                    <span id="userName">{{ auth()->guard('web')->user()->name }}</span>
+                    <div id="userDropdown">
+                        <a href="/perfil">Página do Usuário</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            @else
+                {{-- Usuário não autenticado --}}
                 <div id="authButtons" class="d-flex align-items-center">
                     <a href="{{ route('login') }}" id="loginButton" class="btn btn-outline-light btn-sm me-2">Login</a>
                     <a href="{{ route('register') }}" id="registerButton" class="btn btn-light btn-sm">Cadastro</a>
                 </div>
-            @else
-                @if(auth()->user()->is_clinic)
-                    <div id="clinicInfo">
-                        <img id="clinicPhoto" src="{{ !empty(auth()->user()->photo_url) ? auth()->user()->photo_url : asset('images/default_clinic.png') }}" alt="Foto da Clínica">
-                        <span id="clinicName">{{ auth()->user()->name }}</span>
-                        <div id="clinicDropdown">
-                            <a href="/clinic-profile">Página da Clínica</a>
-                            <a href="#" onclick="logout()">Logout</a>
-                        </div>
-                    </div>
-                    @else
-    <div id="userInfo">
-        <img id="userPhoto" src="{{ !empty(auth()->user()->photo_url) ? auth()->user()->photo_url : asset('images/default_user.png') }}" alt="Foto do Usuário">
-        <span id="userName">{{ auth()->user()->name }}</span>
-        <div id="userDropdown">
-            <a href="/perfil">Página do Usuário</a>
-            <a href="#" onclick="logout()">Logout</a>
-        </div>
-    </div>
-                    </div>
-                @endif
             @endif
         </div>
-    </div>
+
 
     <!-- Menu de Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark w-100" style="background-color: #007bff;">
