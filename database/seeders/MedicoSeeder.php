@@ -28,7 +28,7 @@ class MedicoSeeder extends Seeder
                 'profissional_sobrenome' => $faker->lastName(),
                 'foto_url' => $faker->imageUrl(),
                 'email' => $faker->unique()->safeEmail(),
-                'conselho_nome' => 'CRM', // Exemplo, use o conselho correto
+                'conselho_nome' => 'CRM',
                 'conselho_numero' => $faker->unique()->numerify('#########'),
                 'telefone' => $faker->phoneNumber(),
             ]);
@@ -42,7 +42,7 @@ class MedicoSeeder extends Seeder
                 'profissional_sobrenome' => $faker->lastName(),
                 'foto_url' => $faker->imageUrl(),
                 'email' => $faker->unique()->safeEmail(),
-                'conselho_nome' => 'CRM', // Exemplo
+                'conselho_nome' => 'CRM',
                 'conselho_numero' => $faker->unique()->numerify('#########'),
                 'telefone' => $faker->phoneNumber(),
             ]);

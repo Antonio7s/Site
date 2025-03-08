@@ -49,8 +49,28 @@ return new class extends Migration
             'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'), 
             'access_level' => 'admin',
-            'cpf' =>'023.456.789-01',
+            'cpf' =>'523.456.789-01',
             'telefone'=>'85997220523',
+        ]);
+
+        // Cria o usuário Antonio, 
+        DB::table('users')->insert([
+            'name' => 'Jose',
+            'email' => 'antoniolprogramador@gmail.com',
+            'password' => Hash::make('12345678'),
+            'access_level' => 'admin',
+            'cpf' =>'023.456.789-01',
+            'telefone'=>'88997220523',
+        ]);
+
+        // Cria o usuário Vinicius,
+        DB::table('users')->insert([
+            'name' => 'Jose',
+            'email' => 'viniciusdasilva1819@gmail.com',
+            'password' => Hash::make('12345678'),
+            'access_level' => 'admin',
+            'cpf' =>'223.456.789-01',
+            'telefone'=>'88997220523',
         ]);
 
         // Cria o usuário Jose, um cliente qualquer
@@ -59,7 +79,7 @@ return new class extends Migration
             'email' => 'jose@gmail.com',
             'password' => Hash::make('12345678'),
             'access_level' => 'users',
-            'cpf' =>'123.456.789-01',
+            'cpf' =>'323.456.789-01',
             'telefone'=>'88997220523',
         ]);
 
