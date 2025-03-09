@@ -1,5 +1,4 @@
 @extends('layouts.layout-index')
-<!-- Referencia o layout 'app.blade.php' -->
 
 @section('content')
 
@@ -293,7 +292,11 @@
     <body>
         <!-- Banner -->
         <div class="banner container text-center p-0" style="min-height: 300px;">
-            <img src="https://i.postimg.cc/mgnYdk30/banner-site-JPG.png" alt="banner-site-JPG" style="width: 100%; height: 100%; object-fit: cover; object-position: 0 -60px;" class="rounded-2">
+            @if(isset($settings) && !empty($settings->banner_path))
+                <img src="{{ Storage::url($settings->banner_path) }}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
+            @else
+                <img src="{{ asset('images/default-banner.jpg') }}" alt="Banner Padrão" style="width: 100%; height: 100%; object-fit: cover;">
+            @endif
         </div>
 
         <!-- Informações básicas -->
@@ -346,62 +349,61 @@
         </div>
 
         <!-- Barra de Busca -->
-<div class="container mt-5">
-    <div class="row justify-content-center mb-4">
-        <div class="custom-search-bar">
-            <div class="input-group">
-                <input type="text" class="form-control form-control-lg" placeholder="Pesquisar..." aria-label="Pesquisar">
-                <a href="busca" class="btn btn-primary btn-lg" type="button">
-                    <i class="fas fa-search"></i>
-                </a>
+        <div class="container mt-5">
+            <div class="row justify-content-center mb-4">
+                <div class="custom-search-bar">
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg" placeholder="Pesquisar..." aria-label="Pesquisar">
+                        <a href="busca" class="btn btn-primary btn-lg" type="button">
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-            <!-- Especialidades Mais Buscadas -->
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <h3 class="text-center mb-4">Especialidades Mais Buscadas</h3>
-                    <div class="row g-4">
-                        <!-- Card 1 -->
-                        <div class="col-md-3">
-                            <div class="card h-100 text-center shadow-sm">
-                                <div class="card-body">
-                                    <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
-                                    <h5 class="card-title">Cardiologia</h5>
-                                    <p class="card-text">Cuide do seu coração com os melhores especialistas.</p>
-                                </div>
+        <!-- Especialidades Mais Buscadas -->
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h3 class="text-center mb-4">Especialidades Mais Buscadas</h3>
+                <div class="row g-4">
+                    <!-- Card 1 -->
+                    <div class="col-md-3">
+                        <div class="card h-100 text-center shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
+                                <h5 class="card-title">Cardiologia</h5>
+                                <p class="card-text">Cuide do seu coração com os melhores especialistas.</p>
                             </div>
                         </div>
-                        <!-- Card 2 -->
-                        <div class="col-md-3">
-                            <div class="card h-100 text-center shadow-sm">
-                                <div class="card-body">
-                                    <i class="fas fa-brain fa-3x text-info mb-3"></i>
-                                    <h5 class="card-title">Neurologia</h5>
-                                    <p class="card-text">Especialistas em saúde do sistema nervoso.</p>
-                                </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="col-md-3">
+                        <div class="card h-100 text-center shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-brain fa-3x text-info mb-3"></i>
+                                <h5 class="card-title">Neurologia</h5>
+                                <p class="card-text">Especialistas em saúde do sistema nervoso.</p>
                             </div>
                         </div>
-                        <!-- Card 3 -->
-                        <div class="col-md-3">
-                            <div class="card h-100 text-center shadow-sm">
-                                <div class="card-body">
-                                    <i class="fas fa-baby fa-3x text-warning mb-3"></i>
-                                    <h5 class="card-title">Pediatria</h5>
-                                    <p class="card-text">Cuidados especiais para os pequenos.</p>
-                                </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="col-md-3">
+                        <div class="card h-100 text-center shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-baby fa-3x text-warning mb-3"></i>
+                                <h5 class="card-title">Pediatria</h5>
+                                <p class="card-text">Cuidados especiais para os pequenos.</p>
                             </div>
                         </div>
-                        <!-- Card 4 -->
-                        <div class="col-md-3">
-                            <div class="card h-100 text-center shadow-sm">
-                                <div class="card-body">
-                                    <i class="fas fa-tooth fa-3x text-success mb-3"></i>
-                                    <h5 class="card-title">Odontologia</h5>
-                                    <p class="card-text">Sorria com saúde e confiança.</p>
-                                </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="col-md-3">
+                        <div class="card h-100 text-center shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-tooth fa-3x text-success mb-3"></i>
+                                <h5 class="card-title">Odontologia</h5>
+                                <p class="card-text">Sorria com saúde e confiança.</p>
                             </div>
                         </div>
                     </div>
