@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Indexinicial\BuscaController;
 
+
 //use App\Http\Controllers\HomeController;
 
 //Importacao de controller de pagamento
@@ -289,11 +290,7 @@ Route::get('/clinica-negado', function () {
 
 Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.usuarios.index');
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
-});
-
-
+Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
 
 // Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
 // Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
