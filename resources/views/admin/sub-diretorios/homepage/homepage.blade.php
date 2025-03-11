@@ -1,122 +1,218 @@
 @extends('layouts.painel-admin')
-@section('header_title', 'Homepage') <!-- Alterando o h1 -->
+
+@section('header_title', 'Homepage')
+
 @section('content')
-    <div class="form-section ms-2">
-        <h3>Configurações da Página Inicial</h3>
-        <form id="formPaginaInicial">
+<style>
+    .form-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .form-section h4 {
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+    .btn-outline-primary {
+        border-radius: 20px;
+    }
+    @media (max-width: 768px) {
+        .form-section {
+            padding: 15px;
+        }
+        .category-item .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .category-item .col-md-4,
+        .category-item .col-md-3 {
+            width: 100%;
+        }
+        .category-item .col-md-1 {
+            width: auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .category-item .btn-danger {
+            width: auto;
+            padding: 5px 10px;
+        }
+        .btn-outline-primary, .btn-primary {
+            width: 100%;
+        }
+    }
+    @media (max-width: 576px) {
+        .category-item .row {
+            flex-direction: column;
+            gap: 5px;
+        }
+        .category-item .btn-danger {
+            width: 100%;
+        }
+    }
+</style>
 
-            <!-- Seção Modificar Logo -->
-            <div class="form-section">
-                <h4>Modificar Logo</h4>
-                <div class="mb-3">
-                    <label for="logo" class="form-label">Escolha uma nova imagem para a Logo</label>
-                    <input type="file" id="logo" class="form-control" accept="image/*">
-                </div>
+<div class="form-section ms-2">
+    <h3>Configurações da Página Inicial</h3>
+    <form id="formPaginaInicial" method="POST" action="{{ route('admin.homepage.save') }}" enctype="multipart/form-data">
+        @csrf
+
+        <!-- Seção Modificar Logo -->
+        <div class="form-section">
+            <h4>Modificar Logo</h4>
+            <div class="mb-3">
+                <label for="logo" class="form-label">Escolha uma nova imagem para a Logo</label>
+                <input type="file" id="logo" name="logo" class="form-control" accept="image/*">
             </div>
+        </div>
 
-            <hr>
+        <hr>
 
-            <!-- Seção Modificar Banner -->
-            <div class="form-section">
-                <h4>Modificar Banner</h4>
-                <div class="mb-3">
-                    <label for="banner" class="form-label">Escolha uma nova imagem para o Banner</label>
-                    <input type="file" id="banner" class="form-control" accept="image/*">
-                </div>
+        <!-- Seção Modificar Banner -->
+        <div class="form-section">
+            <h4>Modificar Banner</h4>
+            <div class="mb-3">
+                <label for="banner" class="form-label">Escolha uma nova imagem para o Banner</label>
+                <input type="file" id="banner" name="banner" class="form-control" accept="image/*">
             </div>
+        </div>
 
-            <hr>
+        <hr>
 
-            <!-- Seção Modificar ou Criar Novas Categorias de Agendamento -->
-            <div class="form-section">
-                <h4>Modificar ou Criar Categorias de Agendamento</h4>
-                <div id="categoriesList">
-                    <!-- Categorias existentes -->
-                    <div class="category-item mb-3">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="categoryTitle1" class="form-label">Título da Categoria</label>
-                                <input type="text" id="categoryTitle1" class="form-control" value="Consultas presenciais" placeholder="Nome da categoria">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="categoryIcon1" class="form-label">Ícone da Categoria</label>
-                                <input type="text" id="categoryIcon1" class="form-control" value="👨‍⚕️" placeholder="Ícone (ex: 👨‍⚕️)">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="categoryColor1" class="form-label">Cor da Categoria</label>
-                                <input type="color" id="categoryColor1" class="form-control" value="#17a2b8">
-                            </div>
+        <!-- Seção Categorias de Agendamento -->
+        <div class="form-section">
+            <h4>Modificar ou Criar Categorias de Agendamento</h4>
+            <div id="categoriesList">
+                <div class="category-item mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="categoryTitle0" class="form-label">Título da Categoria</label>
+                            <input type="text" id="categoryTitle0" name="categories[0][title]" class="form-control" value="Consultas presenciais" placeholder="Nome da categoria">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="categoryIcon0" class="form-label">Ícone da Categoria</label>
+                            <input type="text" id="categoryIcon0" name="categories[0][icon]" class="form-control" value="👨‍⚕️" placeholder="Ícone (ex: 👨‍⚕️)">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="categoryColor0" class="form-label">Cor da Categoria</label>
+                            <input type="color" id="categoryColor0" name="categories[0][color]" class="form-control" value="#17a2b8">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger" onclick="removeCategory(this)">X</button>
                         </div>
                     </div>
-
-                    <!-- Adicione mais categorias conforme necessário -->
-                </div>
-
-                <!-- Botão para Adicionar Nova Categoria -->
-                <div class="mb-3">
-                    <button type="button" class="btn btn-outline-primary" onclick="addNewCategory()">Adicionar Nova Categoria</button>
                 </div>
             </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-outline-primary" onclick="addNewCategory()">Adicionar Nova Categoria</button>
+            </div>
+        </div>
 
-            <hr>
+        <hr>
 
-            <!-- Seção FAQ -->
-            <div class="form-section">
-                <h4>Perguntas Frequentes (FAQ)</h4>
-                <!-- Pergunta 1 -->
-                <div class="mb-3">
-                    <label for="faqQuestion1" class="form-label">Pergunta 1</label>
-                    <input type="text" id="faqQuestion1" class="form-control" value="O que é o MedExame?" placeholder="Insira a pergunta">
-                </div>
-                <div class="mb-3">
-                    <label for="faqAnswer1" class="form-label">Resposta 1</label>
-                    <textarea id="faqAnswer1" class="form-control" rows="5" placeholder="Insira a resposta">O MedExame é um sistema que permite que clínicas se cadastrem e ofereçam serviços como exames e consultas de forma prática e eficiente.</textarea>
-                </div>
-
-                <!-- Pergunta 2 -->
-                <div class="mb-3">
-                    <label for="faqQuestion2" class="form-label">Pergunta 2</label>
-                    <input type="text" id="faqQuestion2" class="form-control" value="Como posso me cadastrar no sistema?" placeholder="Insira a pergunta">
-                </div>
-                <div class="mb-3">
-                    <label for="faqAnswer2" class="form-label">Resposta 2</label>
-                    <textarea id="faqAnswer2" class="form-control" rows="5" placeholder="Insira a resposta">Para se cadastrar, basta acessar a página inicial, clicar no botão "Cadastro" e preencher o formulário com seus dados.</textarea>
-                </div>
-
-                <!-- Botão para Adicionar Nova Pergunta -->
-                <div class="mb-3">
-                    <button type="button" class="btn btn-outline-primary" onclick="addFaqQuestion()">Adicionar Nova Pergunta</button>
+        <!-- Seção FAQ -->
+        <div class="form-section">
+            <h4>Perguntas Frequentes (FAQ)</h4>
+            <div id="faqList">
+                <div class="faq-item">
+                    <div class="mb-3">
+                        <label for="faqQuestion0" class="form-label">Pergunta 1</label>
+                        <input type="text" id="faqQuestion0" name="faq[0][question]" class="form-control" value="O que é o MedExame?" placeholder="Insira a pergunta">
+                    </div>
+                    <div class="mb-3">
+                        <label for="faqAnswer0" class="form-label">Resposta 1</label>
+                        <textarea id="faqAnswer0" name="faq[0][answer]" class="form-control" rows="5" placeholder="Insira a resposta">O MedExame é um sistema que permite que clínicas se cadastrem e ofereçam serviços como exames e consultas de forma prática e eficiente.</textarea>
+                    </div>
                 </div>
             </div>
-            
-            <hr>
+            <div class="mb-3">
+                <button type="button" class="btn btn-outline-primary" onclick="addFaqQuestion()">Adicionar Nova Pergunta</button>
+            </div>
+        </div>
+        
+        <hr>
 
-            <!-- Seção Informações Básicas -->
-            <div class="form-section">
-                <h4>Informações Básicas da Clínica</h4>
-                <div class="mb-3">
-                    <label for="infoBasicas" class="form-label">Informações sobre a clínica</label>
-                    <textarea id="infoBasicas" class="form-control" rows="5" placeholder="Insira as informações básicas da clínica"></textarea>
+        <!-- Seção Informações Básicas -->
+        <div class="form-section">
+            <h4>Informações Básicas da Clínica</h4>
+            <div class="mb-3">
+                <label for="infoBasicas" class="form-label">Informações sobre a clínica</label>
+                <textarea id="infoBasicas" name="infoBasicas" class="form-control" rows="5" placeholder="Insira as informações básicas da clínica"></textarea>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Seção Links do App -->
+        <div class="form-section">
+            <h4>Modificar Links do App</h4>
+            <div class="mb-3">
+                <label for="playStoreLink" class="form-label">Link do App na Play Store</label>
+                <input type="url" id="playStoreLink" name="playStoreLink" class="form-control" placeholder="Insira o link do app na Play Store">
+            </div>
+            <div class="mb-3">
+                <label for="apkLink" class="form-label">Link do APK</label>
+                <input type="url" id="apkLink" name="apkLink" class="form-control" placeholder="Insira o link direto do APK">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function addNewCategory() {
+        const categoryIndex = document.querySelectorAll('.category-item').length;
+        const categoryList = document.getElementById('categoriesList');
+        const newCategory = document.createElement('div');
+        newCategory.classList.add('category-item', 'mb-3');
+        newCategory.innerHTML = `
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="categoryTitle${categoryIndex}" class="form-label">Título da Categoria</label>
+                    <input type="text" id="categoryTitle${categoryIndex}" name="categories[${categoryIndex}][title]" class="form-control" placeholder="Nome da categoria">
+                </div>
+                <div class="col-md-4">
+                    <label for="categoryIcon${categoryIndex}" class="form-label">Ícone da Categoria</label>
+                    <input type="text" id="categoryIcon${categoryIndex}" name="categories[${categoryIndex}][icon]" class="form-control" placeholder="Ícone (ex: 👨‍⚕️)">
+                </div>
+                <div class="col-md-3">
+                    <label for="categoryColor${categoryIndex}" class="form-label">Cor da Categoria</label>
+                    <input type="color" id="categoryColor${categoryIndex}" name="categories[${categoryIndex}][color]" class="form-control" value="#17a2b8">
+                </div>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger" onclick="removeCategory(this)">X</button>
                 </div>
             </div>
+        `;
+        categoryList.appendChild(newCategory);
+    }
 
-            <hr>
+    function removeCategory(button) {
+        button.closest('.category-item').remove();
+    }
 
-            <!-- Seção QR Code -->
-            <div class="form-section">
-                <h4>Modificar Links do App</h4>
-                <div class="mb-3">
-                    <label for="playStoreLink" class="form-label">Link do App na Play Store</label>
-                    <input type="url" id="playStoreLink" class="form-control" placeholder="Insira o link do app na Play Store">
-                </div>
-                <div class="mb-3">
-                    <label for="apkLink" class="form-label">Link do APK</label>
-                    <input type="url" id="apkLink" class="form-control" placeholder="Insira o link direto do APK">
-                </div>
+    function addFaqQuestion() {
+        const faqIndex = document.querySelectorAll('#faqList .faq-item').length;
+        const faqList = document.getElementById('faqList');
+        const newFaq = document.createElement('div');
+        newFaq.classList.add('faq-item');
+        newFaq.innerHTML = `
+            <div class="mb-3">
+                <label for="faqQuestion${faqIndex}" class="form-label">Pergunta ${faqIndex + 1}</label>
+                <input type="text" id="faqQuestion${faqIndex}" name="faq[${faqIndex}][question]" class="form-control" placeholder="Insira a pergunta">
             </div>
-
-            <!-- Botão Salvar -->
-            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-        </form>
-    </div>
+            <div class="mb-3">
+                <label for="faqAnswer${faqIndex}" class="form-label">Resposta ${faqIndex + 1}</label>
+                <textarea id="faqAnswer${faqIndex}" name="faq[${faqIndex}][answer]" class="form-control" rows="5" placeholder="Insira a resposta"></textarea>
+            </div>
+        `;
+        faqList.appendChild(newFaq);
+    }
+</script>
 @endsection
