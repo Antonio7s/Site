@@ -1,7 +1,6 @@
 @extends('layouts.painel-clinica')
 @section('header_title', 'Agendamento')
 @section('content')
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -28,7 +27,7 @@
     #customDateFields {
       display: none;
     }
-    /* Estilo para timeline na agenda dos médicos */
+    /* Timeline na agenda dos médicos */
     .timeline {
       border-left: 2px solid #dee2e6;
       margin-left: 20px;
@@ -51,7 +50,6 @@
   </style>
 </head>
 <body>
-
   <!-- Container Principal -->
   <div class="container">
     <!-- Filtro de Período -->
@@ -122,11 +120,11 @@
     <!-- Agenda dos Médicos com Visualização Aprimorada -->
     <div class="card">
       <div class="card-header">
-        Agenda dos Profissionais - <span id="dashboardDate"></span>
+        Agenda dos Profissionais - <span id="dashboardDate">{{ $hojeStr ?? date('Y-m-d') }}</span>
       </div>
       <div class="card-body">
         <div class="row" id="doctorsCards">
-          <!-- Cards dos médicos serão inseridos via JavaScript -->
+          <!-- Os cards dos médicos serão inseridos via JavaScript com os dados do banco -->
         </div>
       </div>
     </div>
@@ -134,59 +132,35 @@
 
   <!-- Bootstrap JS Bundle com Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Dados dinâmicos vindos do banco de dados (passados pelo controller) -->
+  <script>
+    let dashboardData = {
+      hoje: {
+        categoryData: @json($categoryDataHoje),
+        salesData: @json($salesDataHoje), // Estrutura: { labels: [...], data: [...] }
+        doctorsAgenda: @json($doctorsAgendaHoje),
+        dashboardLabel: @json($hojeStr)
+      },
+      semana: {
+        categoryData: @json($categoryDataSemana),
+        salesData: @json($salesDataSemana),
+        doctorsAgenda: @json($doctorsAgendaSemana),
+        dashboardLabel: "Semana Atual"
+      },
+      mes: {
+        categoryData: @json($categoryDataMes),
+        salesData: @json($salesDataMes),
+        doctorsAgenda: @json($doctorsAgendaMes),
+        dashboardLabel: "Mês Atual"
+      }
+    };
+  </script>
 
   <!-- Script para atualizar o Dashboard -->
   <script>
-    // Função para formatar data no padrão AAAA-MM-DD
-    function formatDate(date) {
-      return date.toISOString().split('T')[0];
-    }
-
-    // Data de hoje
-    const hoje = new Date();
-    const hojeStr = formatDate(hoje);
-    document.getElementById('dashboardDate').innerText = hojeStr;
-
-    // Dados padrão para "Hoje"
-    let categoryDataHoje = [8, 5, 3, 4]; // Consultas, Exames, Checkup, Odontologia
-    let salesDataHoje = {
-      labels: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-      data: [2, 4, 3, 5, 2, 3]
-    };
-
-    // Dados da agenda dos médicos (exemplo)
-    let doctorsAgendaHoje = [
-      {
-        medico: 'Dr. João',
-        foto: 'https://via.placeholder.com/50',
-        agenda: [
-          { horario: '08:30', paciente: 'Ana Paula', status: 'Confirmado' },
-          { horario: '10:00', paciente: 'Marcos Vinícius', status: 'Pendente' }
-        ]
-      },
-      {
-        medico: 'Dra. Maria',
-        foto: 'https://via.placeholder.com/50',
-        agenda: [
-          { horario: '09:00', paciente: 'Carlos Silva', status: 'Confirmado' },
-          { horario: '11:15', paciente: 'Beatriz Costa', status: 'Cancelado' },
-          { horario: '13:00', paciente: 'Pedro Henrique', status: 'Confirmado' }
-        ]
-      },
-      {
-        medico: 'Dr. Pedro',
-        foto: 'https://via.placeholder.com/50',
-        agenda: [
-          { horario: '08:45', paciente: 'Fernanda Souza', status: 'Confirmado' },
-          { horario: '12:30', paciente: 'Rafael Lima', status: 'Pendente' }
-        ]
-      }
-    ];
-
-    // Variáveis para instâncias dos gráficos
     let categoryChart, salesChart;
 
-    // Atualiza ou cria o gráfico de agendamentos por categoria
     function updateCategoryChart(data) {
       const ctx = document.getElementById('categoryChart').getContext('2d');
       if (categoryChart) {
@@ -224,7 +198,6 @@
       }
     }
 
-    // Atualiza ou cria o gráfico de vendas/agendamentos por período
     function updateSalesChart(dataObj) {
       const ctx = document.getElementById('salesChart').getContext('2d');
       if (salesChart) {
@@ -252,7 +225,6 @@
       }
     }
 
-    // Atualiza a visualização da agenda dos médicos usando cards e timeline
     function updateDoctorsCards(doctors) {
       const container = document.getElementById('doctorsCards');
       container.innerHTML = '';
@@ -262,14 +234,14 @@
         const card = document.createElement('div');
         card.className = 'card h-100';
         
-        // Cabeçalho do card com foto e nome do médico
+        // Cabeçalho com foto e nome do médico
         const cardHeader = document.createElement('div');
         cardHeader.className = 'card-header d-flex align-items-center';
         cardHeader.innerHTML = `<img src="${doc.foto}" alt="${doc.medico}" class="rounded-circle me-2" width="50" height="50">
                                 <strong>${doc.medico}</strong>`;
         card.appendChild(cardHeader);
         
-        // Corpo do card com timeline dos compromissos
+        // Corpo com timeline dos compromissos
         const cardBody = document.createElement('div');
         cardBody.className = 'card-body';
         const timeline = document.createElement('div');
@@ -277,9 +249,17 @@
         doc.agenda.forEach(apt => {
           const item = document.createElement('div');
           item.className = 'timeline-item';
+          let badgeClass = 'secondary';
+          if (apt.status === 'Confirmado') {
+            badgeClass = 'success';
+          } else if (apt.status === 'Pendente') {
+            badgeClass = 'warning';
+          } else if (apt.status === 'Cancelado') {
+            badgeClass = 'danger';
+          }
           item.innerHTML = `<div>
-                              <strong>${apt.horario}</strong> - ${apt.paciente} 
-                              <span class="badge bg-${apt.status === 'Confirmado' ? 'success' : apt.status === 'Pendente' ? 'warning' : 'danger'}">${apt.status}</span>
+                              <strong>${apt.horario}</strong> - ${apt.paciente}
+                              <span class="badge bg-${badgeClass}">${apt.status}</span>
                             </div>`;
           timeline.appendChild(item);
         });
@@ -291,68 +271,44 @@
       });
     }
 
-    // Função para aplicar o filtro e atualizar o dashboard
     function applyFilter() {
       const filterValue = document.querySelector('input[name="filterOption"]:checked').value;
-      let categoryData, salesData, doctorsData, dashboardLabel;
-
-      // Simulação de dados conforme o filtro selecionado
-      if(filterValue === 'hoje') {
-        categoryData = categoryDataHoje;
-        salesData = salesDataHoje;
-        doctorsData = doctorsAgendaHoje;
-        dashboardLabel = hojeStr;
-      } else if(filterValue === 'semana') {
-        categoryData = [40, 25, 20, 15];
-        salesData = {
-          labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-          data: [5, 6, 7, 8, 6, 4, 3]
-        };
-        doctorsData = doctorsAgendaHoje; // Exemplo: dados diferentes no backend
-        dashboardLabel = 'Semana Atual';
-      } else if(filterValue === 'mes') {
-        categoryData = [160, 100, 80, 60];
-        salesData = {
-          labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-          data: [20, 25, 18, 22]
-        };
-        doctorsData = doctorsAgendaHoje;
-        dashboardLabel = 'Mês Atual';
-      } else if(filterValue === 'custom') {
+      if (filterValue === 'custom') {
         const start = document.getElementById('startDate').value;
         const end = document.getElementById('endDate').value;
         if (!start || !end) {
           alert('Selecione as duas datas para o filtro personalizado.');
           return;
         }
-        categoryData = [10, 8, 6, 4];
-        salesData = {
-          labels: [start, '', end],
-          data: [10, 15, 12]
-        };
-        doctorsData = doctorsAgendaHoje;
-        dashboardLabel = `${start} a ${end}`;
+        // Requisição AJAX para dados personalizados (implemente o endpoint no controller)
+        fetch(`/dashboard/custom?start=${start}&end=${end}`)
+          .then(response => response.json())
+          .then(data => {
+            updateCategoryChart(data.categoryData);
+            updateSalesChart(data.salesData);
+            updateDoctorsCards(data.doctorsAgenda);
+            document.getElementById('dashboardDate').innerText = data.dashboardLabel;
+          })
+          .catch(error => console.error(error));
+      } else {
+        let data = dashboardData[filterValue];
+        updateCategoryChart(data.categoryData);
+        updateSalesChart(data.salesData);
+        updateDoctorsCards(data.doctorsAgenda);
+        document.getElementById('dashboardDate').innerText = data.dashboardLabel;
       }
-
-      // Atualiza gráficos e cards dos médicos
-      updateCategoryChart(categoryData);
-      updateSalesChart(salesData);
-      updateDoctorsCards(doctorsData);
-      document.getElementById('dashboardDate').innerText = dashboardLabel;
     }
 
-    // Evento para exibir/esconder os campos de data quando "Personalizado" é selecionado
+    // Exibe ou oculta os campos para filtro personalizado
     document.querySelectorAll('input[name="filterOption"]').forEach(radio => {
       radio.addEventListener('change', function() {
         document.getElementById('customDateFields').style.display = (this.value === 'custom') ? 'flex' : 'none';
       });
     });
 
-    // Inicializa o dashboard com os dados de hoje
+    // Inicializa o dashboard com os dados de "hoje"
     applyFilter();
   </script>
 </body>
 </html>
-
-
 @endsection
