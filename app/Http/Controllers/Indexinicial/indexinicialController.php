@@ -25,7 +25,7 @@ class IndexInicialController extends Controller
         // Recupera todas as perguntas frequentes.
         $faqs = Faq::all();
 
-        // Retorna a view "home" passando as variáveis.
+        // Retorna a view "home" passando as variáveis
         return view('home', compact('settings', 'categories', 'faqs'));
     }
 }

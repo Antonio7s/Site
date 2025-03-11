@@ -1,7 +1,6 @@
 @extends('layouts.layout-index')
 
 @section('content')
-
     <head>
         <!-- Inclua as bibliotecas necessárias -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -44,9 +43,9 @@
             .custom-search-bar .form-select {
                 border-radius: 50px;
                 margin-right: 10px;
-                padding: 6px 10px; /* Reduzido o padding */
-                font-size: 0.8rem; /* Reduzido o tamanho da fonte */
-                width: 15%; /* Reduzido o tamanho do select para 30% do tamanho atual */
+                padding: 6px 10px;
+                font-size: 0.8rem;
+                width: 15%;
             }
         </style>
 
@@ -95,7 +94,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                margin: 0 auto 15px auto;
+                margin: 0 auto 15px;
             }
             .qr-code {
                 margin: 20px 0;
@@ -293,7 +292,7 @@
         <!-- Banner -->
         <div class="banner container text-center p-0" style="min-height: 300px;">
             @if(isset($settings) && !empty($settings->banner_path))
-                <img src="{{ Storage::url($settings->banner_path) }}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="{{ asset($settings->banner_path) }}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
             @else
                 <img src="{{ asset('images/default-banner.jpg') }}" alt="Banner Padrão" style="width: 100%; height: 100%; object-fit: cover;">
             @endif
@@ -557,7 +556,9 @@
             window.addEventListener('scroll', function() {
                 const scrollPosition = window.pageYOffset;
                 const parallaxImage = document.querySelector('.parallax img');
-                parallaxImage.style.transform = `translateY(${scrollPosition * 0.2}px)`;
+                if (parallaxImage) {
+                    parallaxImage.style.transform = `translateY(${scrollPosition * 0.2}px)`;
+                }
             });
         </script>
 
