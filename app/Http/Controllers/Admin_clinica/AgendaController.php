@@ -70,17 +70,59 @@ class AgendaController extends Controller
     
     /////
 
-    // Método para 
-    public function horario_show(Request $request)
+    // Método para exibir os horarios
+    public function horario_show(Request $request, $medicoId)
     {
-        return view('/admin-clinica/agenda/horario/show');
+        // Busca o médico pelo ID
+        $profissional = Medico::findOrFail($medicoId);
+
+        // Busca os horários desse médico, considerando a agenda associada
+        $horarios = Horario::with('agenda') // Carregar a relação com 'agenda'
+        ->whereHas('agenda', function($query) use ($medicoId) {
+            // Filtra apenas horários que pertencem à agenda do médico
+            $query->where('medico_id', $medicoId);
+        })
+        ->get();
+
+        // Retorna a view com os dados do médico e os horários
+        return view('admin-clinica.agenda.horario.show', compact('profissional', 'horarios'));
     }
 
     //
-    public function horario_create(Request $request)
+    public function horario_create(Request $request , $medicoId)
     {
-        return view('/admin-clinica/agenda/horario/create');
+
+        // Verifica se o médico existe
+        $profissional = Medico::findOrFail($medicoId); // Encontra o médico pelo ID
+
+        // Busca todas as agendas que o médico pode ter
+        $agendas = Agenda::where('medico_id', $medicoId)->get(); // Aqui, é uma suposição de relacionamento, ajuste conforme necessário
+
+        return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendas'));
     }
+
+    public function salvarHorarios(Request $request)
+    {
+        $horarios = $request->input('horarios'); // Ex.: array de horários
+        // Validação básica (melhor usar FormRequest para regras mais robustas)
+        if (!$horarios || !is_array($horarios)) {
+            return response()->json(['message' => 'Dados inválidos'], 400);
+        }
+        
+        foreach ($horarios as $horarioData) {
+            // Aqui, lembre-se de associar o horário à agenda e procedimento, se necessário.
+            Horario::create([
+                'data' => $horarioData['data'],
+                'horario_inicio' => substr($horarioData['inicio'], 11, 5),
+                'duracao' => intval(str_replace(' minutos', '', $horarioData['duracao'])),
+                // Exemplo: agenda_id e procedimento_id devem ser enviados ou definidos
+                'agenda_id' => $horarioData['agenda_id'] ?? 1, // Ajuste conforme a lógica
+                'procedimento_id' => $horarioData['procedimento_id'] ?? 1
+            ]);
+        }
+        return response()->json(['message' => 'Horários salvos com sucesso'], 200);
+    }
+
 
 
 

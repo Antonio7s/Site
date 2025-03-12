@@ -53,11 +53,20 @@
         </div>
     </div>
 
+    <!-- Botão Salvar Horários inicialmente oculto -->
+    <a id="btnSalvarHorarios" href="javascript:void(0);" class="btn btn-primary" onclick="salvarHorarios()" style="display: none;">Salvar Horários</a>
+
     <!-- Carregar o Flatpickr e a folha de estilo CSS do Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <!-- Certifique-se de ter o token CSRF disponível -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <script>
+        // Variável global para armazenar os horários gerados
+        let horariosGerados = [];
+
         // Inicializa o calendário para seleção de múltiplas datas
         document.addEventListener('DOMContentLoaded', function() {
             initializeCalendar(); // Chama a função para inicializar o Flatpickr
@@ -68,11 +77,14 @@
                 mode: "multiple", 
                 dateFormat: "Y-m-d", 
                 onClose: function(selectedDates) {
-                    document.getElementById('datas').value = selectedDates.map(date => date.toISOString().split('T')[0]).join(', ');
+                    document.getElementById('datas').value = selectedDates
+                        .map(date => date.toISOString().split('T')[0])
+                        .join(', ');
                 }
             });
         }
 
+        // Função que gera os horários e exibe-os na tela
         function gerarHorarios() {
             const horaInicio = document.getElementById('horaInicio').value;
             const horaFim = document.getElementById('horaFim').value;
@@ -84,16 +96,15 @@
                 return;
             }
 
-            const horarios = [];
-            let inicio = new Date(`2025-02-20T${horaInicio}:00`); // Data fixada para geração de horários
-            const fim = new Date(`2025-02-20T${horaFim}:00`); // Fim do intervalo
+            // Limpa os horários anteriores
+            horariosGerados = [];
 
-            // Gerar horários com base no intervalo de tempo
+            // Gerar horários com base no intervalo de tempo para cada data
             datas.forEach(data => {
                 let dataAtual = new Date(`${data}T${horaInicio}:00`);
                 while (dataAtual < new Date(`${data}T${horaFim}:00`)) {
                     const fimConsulta = new Date(dataAtual.getTime() + duracao * 60000); // Duração em milissegundos
-                    horarios.push({
+                    horariosGerados.push({
                         data: data,
                         hora: dataAtual.toTimeString().slice(0, 5),
                         duracao: `${duracao} minutos`,
@@ -105,7 +116,7 @@
             });
 
             // Agrupar os horários por data
-            const groupedHorarios = groupByDate(horarios);
+            const groupedHorarios = groupByDate(horariosGerados);
             const groupedContainer = document.getElementById('horariosGrouped');
             groupedContainer.innerHTML = ''; // Limpar antes de exibir os dados
 
@@ -116,9 +127,15 @@
                 groupedContainer.appendChild(createSection(date, table));
             }
 
-            // Exibir a seção de horários e ocultar a seção de formulários
+            // Exibir a seção de horários e ocultar a seção de formulário
             document.getElementById('horariosSection').style.display = 'block';
             document.getElementById('formHorarioSection').style.display = 'none';
+
+            // Exibe o botão "Salvar Horários"
+            document.getElementById('btnSalvarHorarios').style.display = 'block';
+
+            // Retorna os horários gerados (caso seja necessário)
+            return horariosGerados;
         }
 
         // Função para agrupar os horários por data
@@ -164,9 +181,7 @@
         function createSection(date, table) {
             const section = document.createElement('div');
             section.classList.add('mb-4');
-            section.innerHTML = `
-                <h5>${date}</h5>
-            `;
+            section.innerHTML = `<h5>${date}</h5>`;
             section.appendChild(table);
             return section;
         }
@@ -180,6 +195,35 @@
         // Função para editar um horário (exemplo simples de editar hora)
         function editarHorario() {
             alert('Editar horário (funcionalidade de exemplo)');
+        }
+
+        // Função para enviar os horários para o back-end via AJAX
+        function salvarHorarios() {
+            if (horariosGerados.length === 0) {
+                alert("Não há horários para salvar. Gere os horários primeiro.");
+                return;
+            }
+
+            fetch("{{ route('admin-clinica.agenda.horarios') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ horarios: horariosGerados })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{{ route('admin-clinica.agenda.agendamento.index') }}";
+                } else {
+                    alert('Erro ao salvar os horários');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao salvar os horários');
+            });
         }
     </script>
 @endsection
