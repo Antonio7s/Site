@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\VerifyClinicaEmail;
 
-class Clinica extends Authenticatable implements MustVerifyEmail
+class Clinica extends Authenticatable //implements MustVerifyEmail
 {
     use Notifiable;
     use HasFactory;
@@ -25,10 +25,31 @@ class Clinica extends Authenticatable implements MustVerifyEmail
         'cnpj_cpf', // Novo campo para CNPJ ou CPF
         'email',
         'password',
+        
         'documentos', // caminho do arquivo
         'wallet_id',
         'porcentagem_lucro',
         'valor_fixo_lucro',
+
+        'telefone',
+        'cep',
+        'endereco',
+        'numero',
+        'complemento',
+        'bairro',
+        'cidade',
+        'uf',
+        'email_administrativo',
+        'email_faturamento',
+        'telefone_local',
+        'telefone_financeiro',
+        'celular',
+        'responsavel_nome',
+        'rg',
+        'orgao_emissor',
+        'data_emissao',
+        'responsavel_cpf',
+        'estado_civil',
     ];
 
     // Campos a serem ocultados (não aparecerão nas respostas de JSON, por exemplo)
@@ -47,6 +68,14 @@ class Clinica extends Authenticatable implements MustVerifyEmail
     {
         //$this->notify(new \App\Notifications\VerifyEmailClinica());
         $this->notify(new VerifyClinicaEmail());
+    }
+
+    /**
+     * Define o relacionamento de uma clínica com seus serviços diferenciados.
+     */
+    public function servicosDiferenciados()
+    {
+        return $this->hasMany(ServicoDiferenciado::class);
     }
 
 }

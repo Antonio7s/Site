@@ -211,17 +211,12 @@
                     <img id="clinicPhoto" src="{{ !empty(auth()->guard('clinic')->user()->photo_url) ? auth()->guard('clinic')->user()->photo_url : asset('images/icone-usuario.png') }}" alt="Foto da Clínica">
                     <span id="clinicName">{{ auth()->guard('clinic')->user()->name }}</span>
                     <div id="clinicDropdown">
-                        <a href="{{ route('admin-clinica.dashboard.index')}}">Página da Clínica</a>
-                        <ul>
-                            <li>
-                                <form method="POST" action="{{ route('logout2') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">
-                                        Sair
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
+                        <a href="{{ route('admin-clinica.dashboard.index')}}" class="dropdown-item">Página da Clínica</a>
+                        <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('clinic-logout-form').submit();">Sair</a>
+                        <!-- Formulário oculto -->
+                        <form id="clinic-logout-form" action="{{ route('logout2') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             @elseif(auth()->guard('web')->check())
@@ -445,6 +440,9 @@
             console.error('Erro ao fazer logout:', error);
         });
     }
+
+
+    
 </script>
 
 </body>

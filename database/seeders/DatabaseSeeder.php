@@ -35,6 +35,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AgendaSeeder::class);
         $this->call(HorarioSeeder::class);
         $this->call(AgendamentoSeeder::class);
-
+        $this->call(ServicoDiferenciadoSeeder::class);
     }
 }

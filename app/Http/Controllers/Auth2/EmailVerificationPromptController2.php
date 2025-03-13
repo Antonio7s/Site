@@ -16,6 +16,6 @@ class EmailVerificationPromptController2 extends Controller
     {
         return $request->clinica()->hasVerifiedEmail()
                     ? redirect()->intended(route('admin-clinica', absolute: false))
-                    : view('auth2.verify-email2');
+                    : view('auth2.verify-email');
     }
 }
