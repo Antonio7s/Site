@@ -71,7 +71,7 @@
         .person-photo {
             width: 120px;
             height: 120px;
-            background-color: #ddd; /* Cor de fundo do quadrado sem foto */
+            background-color: #ddd;
             border-radius: 10px;
             margin-right: 20px;
             display: flex;
@@ -98,10 +98,10 @@
         }
         .agenda {
             margin-bottom: 10px;
-            display: none; /* Oculta os horários inicialmente */
+            display: none;
         }
         .agenda.active {
-            display: block; /* Exibe os horários quando ativo */
+            display: block;
         }
         .agenda-date {
             font-weight: bold;
@@ -171,12 +171,12 @@
             @if($fallbackMedicos->isNotEmpty())
                 @foreach($fallbackMedicos as $medico)
                     <div class="person-box">
-                        <div class="person-photo">Sem Foto</div> <!-- Quadrado sem foto -->
+                        <div class="person-photo">Sem Foto</div>
                         <div class="person-info">
-                            <h2>{{ $medico->profissional_nome }} {{ $medico->profissional_sobrenome }}</h2>
-                            <p><strong>Especialidade:</strong> {{ !empty($medico->medico_especialidade) ? $medico->medico_especialidade : '--' }}</p>
-                            <p><strong>Clínica:</strong> {{ ($medico->clinica && !empty($medico->clinica->razao_social)) ? $medico->clinica->razao_social : 'Clínica Exemplo Ltda' }}</p>
-                            <p><strong>Endereço:</strong> {{ !empty($medico->endereco) ? $medico->endereco : '--' }}</p>
+                            <h2>{{ $medico->nome_completo }}</h2>
+                            <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
+                            <p><strong>Clínica:</strong> {{ $medico->clinica_nome }}</p>
+                            <p><strong>Endereço:</strong> {{ $medico->endereco }}</p>
                             <p>
                                 <strong>Localização:</strong>
                                 @if(!empty($medico->latitude) && !empty($medico->longitude))
@@ -185,6 +185,7 @@
                                     Ver no Mapa
                                 @endif
                             </p>
+                            <p><strong>Valor:</strong> {{ $medico->valor }}</p>
                         </div>
                         <div class="appointment-info">
                             <button type="button" class="btn-agendamento" data-medico-id="{{ $medico->id }}">Agendar</button>
@@ -216,12 +217,12 @@
             @if(isset($medicos) && $medicos->isNotEmpty())
                 @foreach($medicos as $medico)
                     <div class="person-box">
-                        <div class="person-photo">Sem Foto</div> <!-- Quadrado sem foto -->
+                        <div class="person-photo">Sem Foto</div>
                         <div class="person-info">
-                            <h2>{{ $medico->profissional_nome }} {{ $medico->profissional_sobrenome }}</h2>
-                            <p><strong>Especialidade:</strong> {{ !empty($medico->medico_especialidade) ? $medico->medico_especialidade : '--' }}</p>
-                            <p><strong>Clínica:</strong> {{ ($medico->clinica && !empty($medico->clinica->razao_social)) ? $medico->clinica->razao_social : 'Clínica Exemplo Ltda' }}</p>
-                            <p><strong>Endereço:</strong> {{ !empty($medico->endereco) ? $medico->endereco : '--' }}</p>
+                            <h2>{{ $medico->nome_completo }}</h2>
+                            <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
+                            <p><strong>Clínica:</strong> {{ $medico->clinica_nome }}</p>
+                            <p><strong>Endereço:</strong> {{ $medico->endereco }}</p>
                             <p>
                                 <strong>Localização:</strong>
                                 @if(!empty($medico->latitude) && !empty($medico->longitude))
@@ -230,6 +231,7 @@
                                     Ver no Mapa
                                 @endif
                             </p>
+                            <p><strong>Valor:</strong> {{ $medico->valor }}</p>
                         </div>
                         <div class="appointment-info">
                             <button type="button" class="btn-agendamento" data-medico-id="{{ $medico->id }}">Agendar</button>
@@ -262,35 +264,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Seleciona todos os botões de agendamento
+            // Alterna a exibição dos agendamentos
             const agendamentoButtons = document.querySelectorAll('.btn-agendamento');
-
             agendamentoButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    const medicoId = this.getAttribute('data-medico-id');
-                    const agenda = this.nextElementSibling; // Seleciona o elemento .agenda
-
-                    // Alterna a visibilidade dos horários
-                    if (agenda.style.display === 'none' || !agenda.style.display) {
-                        agenda.style.display = 'block';
-                    } else {
-                        agenda.style.display = 'none';
-                    }
+                    const agenda = this.nextElementSibling;
+                    agenda.style.display = (!agenda.style.display || agenda.style.display === 'none') ? 'block' : 'none';
                 });
             });
 
-            // Seleciona todos os botões de horário
+            // Seleção dos horários
             const hourBoxes = document.querySelectorAll('.hour-box');
-
             hourBoxes.forEach(hourBox => {
                 hourBox.addEventListener('click', function () {
-                    // Remove a seleção de todos os horários do mesmo médico
                     const medicoId = this.getAttribute('data-medico-id');
                     document.querySelectorAll(`.hour-box[data-medico-id="${medicoId}"]`).forEach(box => {
                         box.classList.remove('selected');
                     });
-
-                    // Marca o horário selecionado
                     this.classList.add('selected');
                 });
             });

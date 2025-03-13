@@ -1,314 +1,141 @@
-@extends('layouts.painel-clinica')
-@section('header_title', 'Agendamento')
-@section('content')
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard - Clínica Admin</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .card {
-      margin-bottom: 20px;
-    }
-    .chart-container {
-      padding: 20px;
-    }
-    .filter-group {
-      margin-bottom: 20px;
-    }
-    #customDateFields {
-      display: none;
-    }
-    /* Timeline na agenda dos médicos */
-    .timeline {
-      border-left: 2px solid #dee2e6;
-      margin-left: 20px;
-      padding-left: 10px;
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: 15px;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -11px;
-      top: 0;
-      width: 10px;
-      height: 10px;
-      background-color: #0d6efd;
-      border-radius: 50%;
-    }
-  </style>
-</head>
-<body>
-  <!-- Container Principal -->
-  <div class="container">
-    <!-- Filtro de Período -->
-    <div class="card">
-      <div class="card-header">
-        Filtrar Período
-      </div>
-      <div class="card-body">
-        <div class="filter-group">
-          <div class="btn-group" role="group" aria-label="Filtro de período">
-            <input type="radio" class="btn-check" name="filterOption" id="filterHoje" autocomplete="off" value="hoje" checked>
-            <label class="btn btn-outline-primary" for="filterHoje">Hoje</label>
-  
-            <input type="radio" class="btn-check" name="filterOption" id="filterSemana" autocomplete="off" value="semana">
-            <label class="btn btn-outline-primary" for="filterSemana">Esta Semana</label>
-  
-            <input type="radio" class="btn-check" name="filterOption" id="filterMes" autocomplete="off" value="mes">
-            <label class="btn btn-outline-primary" for="filterMes">Este Mês</label>
-  
-            <input type="radio" class="btn-check" name="filterOption" id="filterCustom" autocomplete="off" value="custom">
-            <label class="btn btn-outline-primary" for="filterCustom">Personalizado</label>
-          </div>
-        </div>
-        <!-- Campos de data para filtro personalizado -->
-        <div id="customDateFields" class="row">
-          <div class="col-md-6">
-            <label for="startDate" class="form-label">Data Início</label>
-            <input type="date" class="form-control" id="startDate">
-          </div>
-          <div class="col-md-6">
-            <label for="endDate" class="form-label">Data Fim</label>
-            <input type="date" class="form-control" id="endDate">
-          </div>
-        </div>
-        <!-- Botão para aplicar o filtro -->
-        <div class="mt-3">
-          <button class="btn btn-primary" onclick="applyFilter()">Aplicar Filtro</button>
-        </div>
-      </div>
-    </div>
+<?php
 
-    <!-- Linha de Gráficos -->
-    <div class="row">
-      <!-- Gráfico de Agendamentos por Categoria -->
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Agendamentos por Categoria
-          </div>
-          <div class="card-body chart-container">
-            <canvas id="categoryChart"></canvas>
-          </div>
-        </div>
-      </div>
-      <!-- Gráfico de Vendas / Agendamentos por Período -->
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header">
-            Vendas / Agendamentos por Período
-          </div>
-          <div class="card-body chart-container">
-            <canvas id="salesChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
+namespace App\Http\Controllers\Admin_clinica;
 
-    <!-- Agenda dos Médicos com Visualização Aprimorada -->
-    <div class="card">
-      <div class="card-header">
-        Agenda dos Profissionais - <span id="dashboardDate">{{ $hojeStr ?? date('Y-m-d') }}</span>
-      </div>
-      <div class="card-body">
-        <div class="row" id="doctorsCards">
-          <!-- Os cards dos médicos serão inseridos via JavaScript com os dados do banco -->
-        </div>
-      </div>
-    </div>
-  </div>
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Procedimento;
+use App\Models\Agendamento;
+use App\Models\Classe;
+use Carbon\Carbon;
+use DB;
 
-  <!-- Bootstrap JS Bundle com Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Dados dinâmicos vindos do banco de dados (passados pelo controller) -->
-  <script>
-    let dashboardData = {
-      hoje: {
-        categoryData: @json($categoryDataHoje),
-        salesData: @json($salesDataHoje), // Estrutura: { labels: [...], data: [...] }
-        doctorsAgenda: @json($doctorsAgendaHoje),
-        dashboardLabel: @json($hojeStr)
-      },
-      semana: {
-        categoryData: @json($categoryDataSemana),
-        salesData: @json($salesDataSemana),
-        doctorsAgenda: @json($doctorsAgendaSemana),
-        dashboardLabel: "Semana Atual"
-      },
-      mes: {
-        categoryData: @json($categoryDataMes),
-        salesData: @json($salesDataMes),
-        doctorsAgenda: @json($doctorsAgendaMes),
-        dashboardLabel: "Mês Atual"
-      }
-    };
-  </script>
+class DashboardClinicaController extends Controller
+{
+    public function index(Request $request)
+    {
+        // Filtro de período (hoje, semana, mês, personalizado)
+        $filter = $request->input('filter', 'hoje'); // Valor padrão: hoje
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
 
-  <!-- Script para atualizar o Dashboard -->
-  <script>
-    let categoryChart, salesChart;
-
-    function updateCategoryChart(data) {
-      const ctx = document.getElementById('categoryChart').getContext('2d');
-      if (categoryChart) {
-        categoryChart.data.datasets[0].data = data;
-        categoryChart.update();
-      } else {
-        categoryChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: ['Consultas', 'Exames', 'Checkup', 'Odontologia'],
-            datasets: [{
-              label: 'Agendamentos',
-              data: data,
-              backgroundColor: [
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(153, 102, 255, 0.7)'
-              ],
-              borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              y: { beginAtZero: true }
-            }
-          }
-        });
-      }
-    }
-
-    function updateSalesChart(dataObj) {
-      const ctx = document.getElementById('salesChart').getContext('2d');
-      if (salesChart) {
-        salesChart.data.labels = dataObj.labels;
-        salesChart.data.datasets[0].data = dataObj.data;
-        salesChart.update();
-      } else {
-        salesChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: dataObj.labels,
-            datasets: [{
-              label: 'Agendamentos',
-              data: dataObj.data,
-              fill: false,
-              borderColor: 'rgba(255,99,132,1)',
-              tension: 0.1
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: { y: { beginAtZero: true } }
-          }
-        });
-      }
-    }
-
-    function updateDoctorsCards(doctors) {
-      const container = document.getElementById('doctorsCards');
-      container.innerHTML = '';
-      doctors.forEach(doc => {
-        const col = document.createElement('div');
-        col.className = 'col-md-4';
-        const card = document.createElement('div');
-        card.className = 'card h-100';
-        
-        // Cabeçalho com foto e nome do médico
-        const cardHeader = document.createElement('div');
-        cardHeader.className = 'card-header d-flex align-items-center';
-        cardHeader.innerHTML = `<img src="${doc.foto}" alt="${doc.medico}" class="rounded-circle me-2" width="50" height="50">
-                                <strong>${doc.medico}</strong>`;
-        card.appendChild(cardHeader);
-        
-        // Corpo com timeline dos compromissos
-        const cardBody = document.createElement('div');
-        cardBody.className = 'card-body';
-        const timeline = document.createElement('div');
-        timeline.className = 'timeline';
-        doc.agenda.forEach(apt => {
-          const item = document.createElement('div');
-          item.className = 'timeline-item';
-          let badgeClass = 'secondary';
-          if (apt.status === 'Confirmado') {
-            badgeClass = 'success';
-          } else if (apt.status === 'Pendente') {
-            badgeClass = 'warning';
-          } else if (apt.status === 'Cancelado') {
-            badgeClass = 'danger';
-          }
-          item.innerHTML = `<div>
-                              <strong>${apt.horario}</strong> - ${apt.paciente}
-                              <span class="badge bg-${badgeClass}">${apt.status}</span>
-                            </div>`;
-          timeline.appendChild(item);
-        });
-        cardBody.appendChild(timeline);
-        card.appendChild(cardBody);
-        
-        col.appendChild(card);
-        container.appendChild(col);
-      });
-    }
-
-    function applyFilter() {
-      const filterValue = document.querySelector('input[name="filterOption"]:checked').value;
-      if (filterValue === 'custom') {
-        const start = document.getElementById('startDate').value;
-        const end = document.getElementById('endDate').value;
-        if (!start || !end) {
-          alert('Selecione as duas datas para o filtro personalizado.');
-          return;
+        // Define o intervalo de datas com base no filtro
+        $hoje = Carbon::today();
+        switch ($filter) {
+            case 'semana':
+                $startDate = $hoje->copy()->startOfWeek();
+                $endDate = $hoje->copy()->endOfWeek();
+                break;
+            case 'mes':
+                $startDate = $hoje->copy()->startOfMonth();
+                $endDate = $hoje->copy()->endOfMonth();
+                break;
+            case 'custom':
+                if ($startDate && $endDate) {
+                    $startDate = Carbon::parse($startDate);
+                    $endDate = Carbon::parse($endDate);
+                } else {
+                    // Se não houver datas personalizadas, usa o dia atual
+                    $startDate = $hoje;
+                    $endDate = $hoje;
+                }
+                break;
+            default: // Hoje
+                $startDate = $hoje;
+                $endDate = $hoje;
+                break;
         }
-        // Requisição AJAX para dados personalizados (implemente o endpoint no controller)
-        fetch(`/dashboard/custom?start=${start}&end=${end}`)
-          .then(response => response.json())
-          .then(data => {
-            updateCategoryChart(data.categoryData);
-            updateSalesChart(data.salesData);
-            updateDoctorsCards(data.doctorsAgenda);
-            document.getElementById('dashboardDate').innerText = data.dashboardLabel;
-          })
-          .catch(error => console.error(error));
-      } else {
-        let data = dashboardData[filterValue];
-        updateCategoryChart(data.categoryData);
-        updateSalesChart(data.salesData);
-        updateDoctorsCards(data.doctorsAgenda);
-        document.getElementById('dashboardDate').innerText = data.dashboardLabel;
-      }
+
+        // Consulta para "Agendamentos por Categoria":
+        // classes(nome) -> procedimento -> horario -> agendamento(somente os que estiverem agendados)
+        $vendasPorCategoria = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado') // Filtra apenas agendamentos com status "agendado"
+            ->whereBetween('ag.data', [$startDate, $endDate]) // Filtra agendamentos no intervalo de datas
+            ->select('c.nome as categoria', DB::raw('COUNT(ag.id) as total'))
+            ->groupBy('c.nome')
+            ->get();
+
+        // Consulta para "Detalhes dos Agendamentos":
+        // classes(nome) -> procedimento -> horario -> agendamento(somente os que estiverem agendados)
+        $detalhesAgendamentos = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado') // Filtra apenas agendamentos com status "agendado"
+            ->whereBetween('ag.data', [$startDate, $endDate]) // Filtra agendamentos no intervalo de datas
+            ->select(
+                'c.nome as classe_nome',
+                'p.nome as procedimento_nome',
+                'ag.data as data_agendamento'
+            )
+            ->orderBy('ag.data', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Retornando a view correta com os dados
+        return view('admin-clinica.dashboard.index', [
+            'vendasPorCategoria'   => $vendasPorCategoria,
+            'detalhesAgendamentos' => $detalhesAgendamentos,
+            'hojeStr'              => $hoje->format('Y-m-d'), // Data formatada para exibição
+            'filter'               => $filter, // Filtro atual
+            'startDate'            => $startDate->format('Y-m-d'), // Data de início formatada
+            'endDate'              => $endDate->format('Y-m-d'), // Data de fim formatada
+        ]);
     }
 
-    // Exibe ou oculta os campos para filtro personalizado
-    document.querySelectorAll('input[name="filterOption"]').forEach(radio => {
-      radio.addEventListener('change', function() {
-        document.getElementById('customDateFields').style.display = (this.value === 'custom') ? 'flex' : 'none';
-      });
-    });
+    // Endpoint para filtro personalizado (requisição AJAX)
+    public function customFilter(Request $request)
+    {
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
 
-    // Inicializa o dashboard com os dados de "hoje"
-    applyFilter();
-  </script>
-</body>
-</html>
-@endsection
+        // Valida as datas
+        if (!$startDate || !$endDate) {
+            return response()->json(['error' => 'Datas inválidas.'], 400);
+        }
+
+        // Define o intervalo de datas
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        // Consulta para "Agendamentos por Categoria":
+        $vendasPorCategoria = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado')
+            ->whereBetween('ag.data', [$startDate, $endDate])
+            ->select('c.nome as categoria', DB::raw('COUNT(ag.id) as total'))
+            ->groupBy('c.nome')
+            ->get();
+
+        // Consulta para "Detalhes dos Agendamentos":
+        $detalhesAgendamentos = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado')
+            ->whereBetween('ag.data', [$startDate, $endDate])
+            ->select(
+                'c.nome as classe_nome',
+                'p.nome as procedimento_nome',
+                'ag.data as data_agendamento'
+            )
+            ->orderBy('ag.data', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Retorna os dados em formato JSON
+        return response()->json([
+            'categoryData' => $vendasPorCategoria,
+            'salesData'   => [
+                'labels' => $detalhesAgendamentos->pluck('data_agendamento')->map(fn($date) => Carbon::parse($date)->format('d/m/Y')),
+                'data'   => $detalhesAgendamentos->pluck('data_agendamento')->map(fn() => 1), // Contagem de agendamentos
+            ],
+            'dashboardLabel' => "Período Personalizado: {$startDate->format('d/m/Y')} - {$endDate->format('d/m/Y')}",
+        ]);
+    }
+}
