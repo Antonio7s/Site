@@ -70,17 +70,82 @@ class AgendaController extends Controller
     
     /////
 
-    // Método para 
-    public function horario_show(Request $request)
+    // Método para exibir os horarios
+    public function horario_show(Request $request, $medicoId)
     {
-        return view('/admin-clinica/agenda/horario/show');
+        // Busca o médico pelo ID
+        $profissional = Medico::findOrFail($medicoId);
+
+        // Busca os horários desse médico, considerando a agenda associada
+        $horarios = Horario::with('agenda') // Carregar a relação com 'agenda'
+        ->whereHas('agenda', function($query) use ($medicoId) {
+            // Filtra apenas horários que pertencem à agenda do médico
+            $query->where('medico_id', $medicoId);
+        })
+        ->get();
+
+        // Retorna a view com os dados do médico e os horários
+        return view('admin-clinica.agenda.horario.show', compact('profissional', 'horarios'));
     }
 
     //
-    public function horario_create(Request $request)
+    public function horario_create(Request $request , $medicoId)
     {
-        return view('/admin-clinica/agenda/horario/create');
+
+        // Verifica se o médico existe
+        $profissional = Medico::findOrFail($medicoId); // Encontra o médico pelo ID
+
+        // Busca todas as agendas que o médico pode ter
+        $agendas = Agenda::where('medico_id', $medicoId)->get();
+
+        return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendas'));
     }
+
+    public function salvarHorarios(Request $request)
+    {
+        try {
+            $horarios = $request->input('horarios'); // Ex.: array de horários
+            
+            // Validação básica
+            if (!$horarios || !is_array($horarios)) {
+                return response()->json(['message' => 'Dados inválidos. O formato esperado é um array de horários.'], 400);
+            }
+            
+            // Loop para salvar os horários
+            foreach ($horarios as $horarioData) {
+                // Verifica se os dados estão completos
+                if (!isset($horarioData['data'], $horarioData['inicio'], $horarioData['duracao'], $horarioData['agenda_id'])) {
+                    return response()->json(['message' => 'Dados de horário incompletos.'], 400);
+                }
+        
+                // Certifique-se de que os valores estão no formato correto
+                $horarioInicio = substr($horarioData['inicio'], 0, 5); // Ajuste para garantir que o horário tem o formato correto 'HH:MM'
+        
+                $duracao = intval(str_replace(' minutos', '', $horarioData['duracao'])); // Remover o texto ' minutos' se existir
+        
+                // Criação do horário no banco de dados
+                Horario::create([
+                    'data' => $horarioData['data'],  // A data deve ser no formato 'Y-m-d'
+                    'horario_inicio' => $horarioInicio,  // O horário de início no formato correto
+                    'duracao' => $duracao,  // A duração em minutos
+                    'agenda_id' => $horarioData['agenda_id'],  // O ID da agenda
+                    'procedimento_id' => $horarioData['procedimento_id'] ?? null,  // O ID do procedimento, se existir
+                ]);
+            }
+        
+            return response()->json(['message' => 'Horários salvos com sucesso!'], 200);
+        } catch (\Exception $e) {
+            // Retorna o erro completo no formato JSON
+            return response()->json([
+                'message' => 'Erro ao salvar os horários',
+                'error' => $e->getMessage(),  // Captura a mensagem do erro
+                'trace' => $e->getTraceAsString()  // Captura o trace completo do erro
+            ], 500);
+        }
+    }
+    
+    
+
 
 
 

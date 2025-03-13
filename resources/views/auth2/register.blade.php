@@ -66,7 +66,7 @@
         <div class="card-body">
           <!-- Legenda para os campos -->
           <p class="mb-4"><small>Campos marcados com <span class="text-danger">*</span> são obrigatórios. Os demais são opcionais.</small></p>
-          <form method="POST" action="{{ route('register2') }}" enctype="multipart/form-data">
+          <form method="POST" action="{{ route('register2.store') }}" enctype="multipart/form-data">
             @csrf
 
             <!-- Seção: Dados da Clínica -->

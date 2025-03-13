@@ -54,6 +54,8 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect()->route('perfil.edit'); // Ajuste para seu redirecionamento
 })->name('verification.verify');
 
+
+//OBS:
 use App\Http\Controllers\Auth2\ClinicaVerificationController;
 
 Route::middleware(['auth:clinic'])->group(function () {
@@ -170,7 +172,13 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
     Route::get('/servicos', [ServicosController::class,'index'])->name('admin-clinica.servicos.index'); // Listagem de serviços
     
     //Sobre
-    Route::get('/sobre', [AdminClinicaController::class,'index'])->name('admin-clinica.sobre.index'); //SOBRE A CLÍNICA
+    //Route::get('/sobre', [AdminClinicaController::class,'index'])->name('admin-clinica.sobre.index'); //SOBRE A CLÍNICA
+
+    //Route::get('/informacoes', [AdminClinicaController::class, 'show'])->name('clinica.info.show');
+    Route::get('/informacoes', [AdminClinicaController::class, 'edit'])->name('clinica.info.edit');
+    Route::put('/informacoes', [AdminClinicaController::class, 'update'])->name('clinica.info.update');
+
+
         
     // Profissionais
     Route::controller(ProfissionaisController::class)->prefix('profissionais')->group(function () {
@@ -194,8 +202,11 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
 
         //Horario
         //Route::get('/horario/index', 'horario_index')->name('admin-clinica.agenda.horario.index');
-        Route::get('/horario/create', 'horario_create')->name('admin-clinica.agenda.horario.create');
-        Route::get('/horario/show', 'horario_show')->name('admin-clinica.agenda.horario.show');
+        Route::get('/horario/create/{medicoId}', 'horario_create')->name('admin-clinica.agenda.horario.create');
+        Route::get('/horario/show/{medicoId}', 'horario_show')->name('admin-clinica.agenda.horario.show');
+
+        //salvar o horario no bd.
+        Route::post('/horarios', [AgendaController::class, 'salvarHorarios'])->name('admin-clinica.agenda.horarios');
 
         /*
         Route::get('/search-medicos', [AgendaController::class, 'search'])->name('admin-clinica.agenda.search');
