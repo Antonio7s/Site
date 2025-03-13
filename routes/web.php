@@ -172,7 +172,13 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
     Route::get('/servicos', [ServicosController::class,'index'])->name('admin-clinica.servicos.index'); // Listagem de serviços
     
     //Sobre
-    Route::get('/sobre', [AdminClinicaController::class,'index'])->name('admin-clinica.sobre.index'); //SOBRE A CLÍNICA
+    //Route::get('/sobre', [AdminClinicaController::class,'index'])->name('admin-clinica.sobre.index'); //SOBRE A CLÍNICA
+
+    //Route::get('/informacoes', [AdminClinicaController::class, 'show'])->name('clinica.info.show');
+    Route::get('/informacoes', [AdminClinicaController::class, 'edit'])->name('clinica.info.edit');
+    Route::put('/informacoes', [AdminClinicaController::class, 'update'])->name('clinica.info.update');
+
+
         
     // Profissionais
     Route::controller(ProfissionaisController::class)->prefix('profissionais')->group(function () {
