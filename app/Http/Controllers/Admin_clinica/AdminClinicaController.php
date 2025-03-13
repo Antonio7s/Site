@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin_clinica;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Clinica;
+use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class AdminClinicaController extends Controller
 {

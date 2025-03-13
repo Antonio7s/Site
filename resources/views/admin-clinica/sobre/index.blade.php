@@ -26,9 +26,6 @@
   <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
       <h4 class="m-0 font-weight-bold text-primary">Editar Cadastro da Clínica</h4>
-      <a href="#" class="btn btn-secondary btn-sm">
-        <i class="fas fa-arrow-left"></i> Voltar
-      </a>
     </div>
     <div class="card-body">
       <form method="POST" action="{{ route('clinica.info.update', $clinica->id) }}" enctype="multipart/form-data">
@@ -271,6 +268,19 @@
             </div>
           </div>
         </div>
+
+        <!-- Seção: Pagamento -->
+        <!-- <h3 class="section-title">Pagamento</h3>
+            <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3">
+                <label for="wallet_id" class="form-label">Wallet id do Asaas<span class="required-asterisk">*</span></label>
+                <input type="text" id="wallet_id" class="form-control" name="wallet_id" 
+                        value="{{ old('wallet_id', $clinica->wallet_id) }}">
+                @error('wallet_id')<div class="text-danger">{{ $message }}</div>@enderror
+                </div>
+            </div>
+        </div> -->
 
         <!-- Botão de Atualização -->
         <div class="d-flex justify-content-end mt-5">
