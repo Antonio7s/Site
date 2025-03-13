@@ -40,6 +40,12 @@ class AdminClinicaController extends Controller
                 ->store('clinicas/documentos', 'public');
         }
 
+        if ($request->filled('password')) {
+            $clinicaData['password'] = Hash::make($request->password);
+        } else {
+            unset($clinicaData['password']); // Remove do array
+        }
+
         $clinica->update($clinicaData);
 
         return redirect()->route('clinica.info.edit')
@@ -123,7 +129,8 @@ class AdminClinicaController extends Controller
             '_token', 
             '_method', 
             'password_confirmation', 
-            'documentos'
+            'documentos',
+            'password'
         ]);
 
         // Formatar data de emissão

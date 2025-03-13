@@ -105,11 +105,11 @@
             <td>{{ $clinica->email ?? 'Não informado' }}</td>
             <td>
               <a href="{{ route('admin.clinicas.edit', $clinica->id) }}" class="btn btn-warning btn-sm">Editar</a>
-              <form action="{{ route('admin.clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
+              <!-- <form action="{{ route('admin.clinicas.destroy', $clinica->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
-              </form>
+              </form> -->
               <a href="{{ route('admin.clinicas.show', $clinica->id) }}" class="btn btn-info btn-sm">Detalhes</a>
             </td>
           </tr>

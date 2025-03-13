@@ -12,4 +12,18 @@ class ServicoDiferenciado extends Model
     {
         return $this->belongsTo(Procedimento::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($servico) {
+            // Exemplo: não permitir a deleção se o serviço estiver vinculado a um procedimento.
+            if ($servico->procedimento()->exists()) {
+                throw new Exception("Não é possível deletar o serviço diferenciado pois ele está vinculado a um procedimento.");
+            }
+
+            // Se houver outros relacionamentos ou regras de negócio, adicione aqui a verificação.
+        });
+    }
 }
