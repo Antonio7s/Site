@@ -198,7 +198,7 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         Route::get('/horario/show/{medicoId}', 'horario_show')->name('admin-clinica.agenda.horario.show');
 
         //salvar o horario no bd.
-        Route::post('/admin-clinica/agenda/horarios', [AgendaController::class, 'salvarHorarios'])->name('admin-clinica.agenda.horarios');
+        Route::post('/horarios', [AgendaController::class, 'salvarHorarios'])->name('admin-clinica.agenda.horarios');
 
         /*
         Route::get('/search-medicos', [AgendaController::class, 'search'])->name('admin-clinica.agenda.search');

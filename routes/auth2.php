@@ -12,10 +12,10 @@ use App\Http\Controllers\Auth2\VerifyEmailController2;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:clinic')->group(function () {
-    Route::get('register2', [RegisteredUserController2::class, 'create'])
+    Route::get('cadastro-clinica', [RegisteredUserController2::class, 'create'])
         ->name('register2');
 
-    Route::post('register2', [RegisteredUserController2::class, 'store']);
+    Route::post('register2', [RegisteredUserController2::class, 'store'])->name('register2.store');;
 
     Route::get('login2', [AuthenticatedSessionController2::class, 'create'])
         ->name('login2');

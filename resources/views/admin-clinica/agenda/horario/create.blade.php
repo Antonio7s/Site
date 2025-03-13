@@ -204,6 +204,9 @@
                 return;
             }
 
+            console.log(horariosGerados); // Verifique o conteúdo da variável
+
+
             fetch("{{ route('admin-clinica.agenda.horarios') }}", {
                 method: "POST",
                 headers: {
