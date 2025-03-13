@@ -54,6 +54,8 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect()->route('perfil.edit'); // Ajuste para seu redirecionamento
 })->name('verification.verify');
 
+
+//OBS:
 use App\Http\Controllers\Auth2\ClinicaVerificationController;
 
 Route::middleware(['auth:clinic'])->group(function () {
