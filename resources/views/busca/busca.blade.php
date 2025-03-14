@@ -146,6 +146,20 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+        .btn-confirmar {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        .btn-confirmar:hover {
+            background-color: #0056b3;
+        }
         /* Estilos responsivos */
         @media (max-width: 768px) {
             .search-bar {
@@ -279,6 +293,7 @@
                             @else
                                 <p>Sem horários disponíveis</p>
                             @endif
+                            <button type="button" class="btn-confirmar" data-medico-id="{{ $medico->id }}">Confirmar</button>
                         </div>
                     </div>
                 @endforeach
@@ -325,6 +340,7 @@
                             @else
                                 <p>Sem horários disponíveis</p>
                             @endif
+                            <button type="button" class="btn-confirmar" data-medico-id="{{ $medico->id }}">Confirmar</button>
                         </div>
                     </div>
                 @endforeach
@@ -352,7 +368,7 @@
                 });
             });
 
-            // Seleção dos horários
+            // Seleção dos horários e exibição do botão "Confirmar"
             const hourBoxes = document.querySelectorAll('.hour-box');
             hourBoxes.forEach(hourBox => {
                 hourBox.addEventListener('click', function () {
@@ -361,6 +377,26 @@
                         box.classList.remove('selected');
                     });
                     this.classList.add('selected');
+
+                    // Exibe o botão "Confirmar" para o médico correspondente
+                    const confirmButton = document.querySelector(`.btn-confirmar[data-medico-id="${medicoId}"]`);
+                    confirmButton.style.display = 'inline-block';
+                });
+            });
+
+            // Lógica para o botão "Confirmar"
+            const confirmButtons = document.querySelectorAll('.btn-confirmar');
+            confirmButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const medicoId = this.getAttribute('data-medico-id');
+                    const selectedHour = document.querySelector(`.hour-box.selected[data-medico-id="${medicoId}"]`);
+                    if (selectedHour) {
+                        const slot = selectedHour.getAttribute('data-slot');
+                        alert(`Horário confirmado: ${slot} para o médico ID ${medicoId}`);
+                        // Aqui você pode adicionar a lógica para confirmar o agendamento
+                    } else {
+                        alert('Por favor, selecione um horário antes de confirmar.');
+                    }
                 });
             });
         });

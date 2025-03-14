@@ -148,11 +148,8 @@ class BuscaController extends Controller
 
         // Se o campo medico_especialidade estiver preenchido, ele terá prioridade.
         // Se existir uma segunda especialidade (medico_especialidade2), ambas serão exibidas.
-        if (!empty($medico->medico_especialidade) || !empty($medico->medico_especialidade2)) {
-            $especialidades = [];
-            if (!empty($medico->medico_especialidade)) {
-                $especialidades[] = $medico->medico_especialidade;
-            }
+        if (!empty($medico->medico_especialidade)) {
+            $especialidades = [$medico->medico_especialidade];
             if (!empty($medico->medico_especialidade2)) {
                 $especialidades[] = $medico->medico_especialidade2;
             }
@@ -166,13 +163,13 @@ class BuscaController extends Controller
             $medico->clinica_nome = $medico->clinica->nome_fantasia;
             $medico->latitude = $medico->clinica->latitude;
             $medico->longitude = $medico->clinica->longitude;
+            $medico->endereco = $medico->clinica->endereco; // Adiciona o endereço da clínica
         } else {
             $medico->clinica_nome = 'Clínica não informada';
             $medico->latitude = null;
             $medico->longitude = null;
+            $medico->endereco = '--';
         }
-
-        $medico->endereco = '--';
 
         return $medico;
     }
