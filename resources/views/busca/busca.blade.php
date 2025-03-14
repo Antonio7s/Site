@@ -15,6 +15,7 @@
         }
         .search-bar {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
@@ -35,11 +36,12 @@
         .search-bar input[type="text"] {
             padding: 12px 20px;
             font-size: 18px;
-            width: 60%;
+            flex-grow: 1;
             border: 2px solid #007bff;
             border-radius: 30px;
             transition: border-color 0.3s ease;
             outline: none;
+            min-width: 200px;
         }
         .search-bar input[type="text"]:focus {
             border-color: #0056b3;
@@ -79,6 +81,7 @@
             justify-content: center;
             color: #666;
             font-size: 14px;
+            flex-shrink: 0;
         }
         .person-info {
             flex: 2;
@@ -143,6 +146,75 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-bar select,
+            .search-bar input[type="text"],
+            .search-bar button {
+                width: 100%;
+                margin: 5px 0;
+            }
+            .person-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .appointment-info {
+                text-align: left;
+                margin-top: 10px;
+                width: 100%;
+            }
+            .horarios {
+                justify-content: flex-start;
+            }
+        }
+        /* Estilos para paginação */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .pagination .page-item {
+            margin: 0 1px;
+        }
+        .pagination .page-link {
+            padding: 2px 8px;
+            font-size: 20px;
+            border: 1px solid #007bff;
+            border-radius: 3px;
+            color: #007bff;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .pagination .page-link:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            border-color: #dee2e6;
+            pointer-events: none;
+        }
+        .pagination .page-item:first-child .page-link,
+        .pagination .page-item:last-child .page-link {
+            font-size: 16px;
+            padding: 0 4px;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 
     <div class="container">
@@ -152,12 +224,12 @@
                 <select class="filter-select" name="filter">
                     <option value="todos" {{ ($filter ?? 'todos') === 'todos' ? 'selected' : '' }}>Todos</option>
                     <option value="especialidade" {{ ($filter ?? 'todos') === 'especialidade' ? 'selected' : '' }}>Especialidade</option>
-                    <option value="procedimentos" {{ ($filter ?? 'todos') === 'procedimentos' ? 'selected' : '' }}>Procedimentos</option>
+                    <option value="localizacao" {{ ($filter ?? 'todos') === 'localizacao' ? 'selected' : '' }}>Localização</option>
                     <option value="profissional" {{ ($filter ?? 'todos') === 'profissional' ? 'selected' : '' }}>Nome do Profissional</option>
                     <option value="clinica" {{ ($filter ?? 'todos') === 'clinica' ? 'selected' : '' }}>Nome da Clínica</option>
                 </select>
-                <input type="text" name="query" placeholder="Digite o nome da pessoa..." value="{{ $searchTerm ?? '' }}" style="flex-grow: 1;">
-                <button type="submit" style="margin-left: auto;">Buscar</button>
+                <input type="text" name="query" placeholder="Digite o termo de pesquisa..." value="{{ $searchTerm ?? '' }}">
+                <button type="submit">Buscar</button>
             </form>
         </div>
 
@@ -259,6 +331,13 @@
             @else
                 <p>Nenhum dado disponível.</p>
             @endif
+        @endif
+
+        <!-- Paginação -->
+        @if(isset($medicos))
+            <div class="pagination">
+                {{ $medicos->onEachSide(1)->links('pagination::bootstrap-4') }}
+            </div>
         @endif
     </div>
 

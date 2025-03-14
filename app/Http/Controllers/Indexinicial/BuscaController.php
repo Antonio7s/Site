@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Indexinicial;
 
 use App\Http\Controllers\Controller;
@@ -7,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Medico;
 use App\Models\Agendamento;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BuscaController extends Controller
 {
@@ -15,45 +15,78 @@ class BuscaController extends Controller
         $filter = $request->input('filter', 'todos');
         $searchTerm = $request->input('query', '');
 
-        // Inicia a query com o relacionamento com a clínica
+        // Inicia a query com todos os médicos
         $medicosQuery = Medico::with('clinica')->select('medicos.*');
 
+        // Aplica o filtro conforme o valor selecionado
         if (!empty($searchTerm)) {
-            if ($filter === 'especialidade') {
-                $medicosQuery->where('medico_especialidade', 'like', "%{$searchTerm}%");
-            } elseif ($filter === 'procedimentos') {
-                $medicosQuery->where('procedimentos', 'like', "%{$searchTerm}%");
-            } elseif ($filter === 'profissional') {
-                $medicosQuery->where(function ($q) use ($searchTerm) {
-                    $q->where('profissional_nome', 'like', "%{$searchTerm}%")
-                      ->orWhere('profissional_sobrenome', 'like', "%{$searchTerm}%");
-                });
-            } elseif ($filter === 'clinica') {
-                $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
-                    $query->where('razao_social', 'like', "%{$searchTerm}%");
-                });
-            } else {
-                $medicosQuery->where(function ($q) use ($searchTerm) {
-                    $q->where('medico_especialidade', 'like', "%{$searchTerm}%")
-                      ->orWhere('procedimentos', 'like', "%{$searchTerm}%")
-                      ->orWhere('profissional_nome', 'like', "%{$searchTerm}%")
-                      ->orWhere('profissional_sobrenome', 'like', "%{$searchTerm}%")
-                      ->orWhereHas('clinica', function ($query) use ($searchTerm) {
-                          $query->where('razao_social', 'like', "%{$searchTerm}%");
-                      });
-                });
+            switch ($filter) {
+                case 'especialidade':
+                    // Busca em ambos os campos de especialidade
+                    $medicosQuery->where(function($query) use ($searchTerm) {
+                        $query->where('medico_especialidade', 'like', "%{$searchTerm}%")
+                              ->orWhere('medico_especialidade2', 'like', "%{$searchTerm}%");
+                    });
+                    break;
+                case 'localizacao':
+                    // Busca no campo 'endereco' da clínica
+                    $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
+                        $query->where('endereco', 'like', "%{$searchTerm}%");
+                    });
+                    break;
+                case 'profissional':
+                    // Busca no nome completo do profissional
+                    $medicosQuery->where(function($query) use ($searchTerm) {
+                        $query->where(DB::raw("CONCAT(profissional_nome, ' ', profissional_sobrenome)"), 'like', "%{$searchTerm}%")
+                              ->orWhere('profissional_nome', 'like', "%{$searchTerm}%")
+                              ->orWhere('profissional_sobrenome', 'like', "%{$searchTerm}%");
+                    });
+                    break;
+                case 'clinica':
+                    // Busca no nome da clínica (razao_social)
+                    $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
+                        $query->where('razao_social', 'like', "%{$searchTerm}%");
+                    });
+                    break;
+                default: // 'todos'
+                    $medicosQuery->where(function ($q) use ($searchTerm) {
+                        $q->where('medico_especialidade', 'like', "%{$searchTerm}%")
+                          ->orWhere('medico_especialidade2', 'like', "%{$searchTerm}%")
+                          ->orWhereExists(function ($query) use ($searchTerm) {
+                              $query->select(DB::raw(1))
+                                    ->from('agendamentos')
+                                    ->join('horarios', 'horarios.id', '=', 'agendamentos.horario_id')
+                                    ->join('procedimentos', 'procedimentos.id', '=', 'horarios.procedimento_id')
+                                    ->join('agendas', 'agendas.id', '=', 'horarios.agenda_id')
+                                    ->whereRaw('agendas.medico_id = medicos.id')
+                                    ->where('procedimentos.nome', 'like', "%{$searchTerm}%");
+                          })
+                          ->orWhereHas('clinica', function ($query) use ($searchTerm) {
+                              $query->where('endereco', 'like', "%{$searchTerm}%");
+                          })
+                          ->orWhere(function($query) use ($searchTerm) {
+                              $query->where(DB::raw("CONCAT(profissional_nome, ' ', profissional_sobrenome)"), 'like', "%{$searchTerm}%")
+                                    ->orWhere('profissional_nome', 'like', "%{$searchTerm}%")
+                                    ->orWhere('profissional_sobrenome', 'like', "%{$searchTerm}%");
+                          })
+                          ->orWhereHas('clinica', function ($query) use ($searchTerm) {
+                              $query->where('razao_social', 'like', "%{$searchTerm}%");
+                          });
+                    });
+                    break;
             }
         }
 
-        $medicos = $medicosQuery->get();
+        // Paginação para limitar a 7 médicos por página
+        $medicos = $medicosQuery->paginate(7);
 
-        // Se não houver resultados, usa fallback
+        // Se não houver resultados, exibe 22 médicos como fallback
         $fallbackMedicos = collect();
-        if (!empty($searchTerm) && $medicos->isEmpty()) {
-            $fallbackMedicos = Medico::with('clinica')->select('medicos.*')->limit(5)->get();
+        if ($medicos->isEmpty()) {
+            $fallbackMedicos = Medico::with('clinica')->select('medicos.*')->limit(22)->get();
         }
 
-        // Para cada médico, anexa os agendamentos (caso existam) e formata os dados
+        // Processa agendamentos e formata os dados
         foreach ($medicos as $medico) {
             $this->attachAgendamentos($medico);
             $this->formatMedico($medico);
@@ -71,23 +104,16 @@ class BuscaController extends Controller
         ]);
     }
 
-    /**
-     * Anexa os agendamentos do médico e gera os slots calculados.
-     */
     private function attachAgendamentos($medico)
     {
-        $agendamentos = Agendamento::with('horario')
+        $agendamentos = Agendamento::with(['horario', 'horario.procedimento'])
             ->whereHas('horario.agenda', function ($q) use ($medico) {
                 $q->where('medico_id', $medico->id);
             })
             ->get();
 
         foreach ($agendamentos as $agendamento) {
-            if (
-                $agendamento->horario &&
-                $agendamento->horario->horario_inicio &&
-                isset($agendamento->horario->duracao)
-            ) {
+            if ($agendamento->horario && $agendamento->horario->horario_inicio && isset($agendamento->horario->duracao)) {
                 $duracao = $agendamento->horario->duracao;
                 $slots = [];
                 $startTime = Carbon::parse($agendamento->horario->horario_inicio);
@@ -103,32 +129,41 @@ class BuscaController extends Controller
         $medico->agendamentos = $agendamentos;
     }
 
-    /**
-     * Formata os dados do médico para exibição, seguindo o mesmo caminho dos meusPedidos.
-     * - "Especialidade": exibe o conteúdo da chave "procedimentos" do JSON do campo procedimentos ou "--".
-     * - "Valor": exibe o valor presente na chave "valor" do JSON ou "--".
-     * - "Clínica": exibe o nome da clínica associada.
-     * - "Endereço": fixo como "--".
-     * - "Localização": utiliza os dados da clínica (latitude/longitude) para o link "Ver no Mapa".
-     */
     private function formatMedico($medico)
     {
-        // Nome completo
         $medico->nome_completo = trim($medico->profissional_nome . ' ' . $medico->profissional_sobrenome);
 
-        // "Especialidade" e "Valor" a partir do campo procedimentos (JSON)
-        if (!empty($medico->procedimentos)) {
-            $procedimentoData = json_decode($medico->procedimentos, true);
-            $medico->especialidade = isset($procedimentoData['procedimentos']) ? $procedimentoData['procedimentos'] : '--';
-            $medico->valor = isset($procedimentoData['valor']) ? $procedimentoData['valor'] : '--';
-        } else {
-            $medico->especialidade = '--';
-            $medico->valor = '--';
+        // Obtém o nome e valor do procedimento, se houver
+        $procedureName = null;
+        $procedureValor = null;
+        if ($medico->agendamentos && $medico->agendamentos->isNotEmpty()) {
+            foreach ($medico->agendamentos as $agendamento) {
+                if ($agendamento->horario && $agendamento->horario->procedimento) {
+                    $procedureName = $agendamento->horario->procedimento->nome;
+                    $procedureValor = $agendamento->horario->procedimento->valor ?? '--';
+                    break;
+                }
+            }
         }
 
-        // "Clínica": pelo relacionamento
+        // Se o campo medico_especialidade estiver preenchido, ele terá prioridade.
+        // Se existir uma segunda especialidade (medico_especialidade2), ambas serão exibidas.
+        if (!empty($medico->medico_especialidade) || !empty($medico->medico_especialidade2)) {
+            $especialidades = [];
+            if (!empty($medico->medico_especialidade)) {
+                $especialidades[] = $medico->medico_especialidade;
+            }
+            if (!empty($medico->medico_especialidade2)) {
+                $especialidades[] = $medico->medico_especialidade2;
+            }
+            $medico->especialidade = implode(', ', $especialidades);
+        } else {
+            $medico->especialidade = $procedureName ? $procedureName : '--';
+        }
+        $medico->valor = $procedureValor ? $procedureValor : '--';
+
         if ($medico->clinica) {
-            $medico->clinica_nome = $medico->clinica->razao_social;
+            $medico->clinica_nome = $medico->clinica->nome_fantasia;
             $medico->latitude = $medico->clinica->latitude;
             $medico->longitude = $medico->clinica->longitude;
         } else {
@@ -137,7 +172,6 @@ class BuscaController extends Controller
             $medico->longitude = null;
         }
 
-        // "Endereço": fixo
         $medico->endereco = '--';
 
         return $medico;
