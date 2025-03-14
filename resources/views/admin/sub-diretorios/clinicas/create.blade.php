@@ -7,7 +7,8 @@
                 <div class="form-section">
                     <h3>Ficha Cadastral de clinica</h3>
                     <!-- Formulário de Cadastro Completo -->
-                    <form>
+                    <form method="POST" action="{{ route('register2.store') }}" enctype="multipart/form-data">
+                        @csrf
                         <!-- Informações Básicas -->
                         <h4 class="mb-3">Informações Básicas</h4>
                         <div class="row mb-3">
@@ -140,13 +141,74 @@
                                 <input type="text" class="form-control" id="orgaoEmissor" placeholder="Informe o órgão emissor" required>
                             </div>
 
-                            <!-- DATA DA EMISSAO -->
-                            <!-- CPF DO RESPONSAVEL PELO CONTRATO -->
-                            <!-- ESTADO CIVIL DO RESPONSAVEL PELO CONTRATO -->
+                        <!-- DATA DA EMISSAO -->
+                        <div class="col-md-3">
+                                <label for="dataEmissao" class="form-label">Data de Emissão</label>
+                                <input type="date" class="form-control" id="dataEmissao" required>
+                        </div>
+
+                        <!-- CPF DO RESPONSAVEL PELO CONTRATO -->
+                        <div class="col-md-3">
+                            <label for="cpfResponsavel" class="form-label">CPF</label>
+                            <input type="text" class="form-control" id="cpfResponsavel" placeholder="Informe o CPF" required>
+                        </div>
+
+                        <!-- ESTADO CIVIL DO RESPONSAVEL PELO CONTRATO -->
+                        <div class="col-md-3">
+                            <label for="estadoCivil" class="form-label">Estado Civil</label>
+                            <select class="form-control" id="estadoCivil" required>
+                                <option value="">Selecione o estado civil</option>
+                                <option value="solteiro">Solteiro</option>
+                                <option value="casado">Casado</option>
+                                <option value="divorciado">Divorciado</option>
+                                <option value="viuvo">Viúvo</option>
+                            </select>
+                        </div>
 
                         </div>
-        
-                        <hr>
+
+                        <!-- Botão "i" de Informações sobre Documentos Necessários -->
+            <div class="mb-3">
+              <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDocumentos">
+                <i class="fas fa-info-circle"></i> Documentos Necessários
+              </button>
+            </div>
+
+            <!-- Modal de Informações sobre os Documentos -->
+            <div class="modal fade" id="modalDocumentos" tabindex="-1" aria-labelledby="modalDocumentosLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalDocumentosLabel">Documentos Necessários</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <ul>
+                      <li>Comprovante Bancário</li>
+                      <li>Alvará de Funcionamento</li>
+                      <li>Alvará de Licença Sanitária</li>
+                      <li>Carteira do Conselho do Responsável Técnico</li>
+                      <li>RG, CPF e E-mail do Responsável pelo Contrato</li>
+                      <li>Contrato Social</li>
+                      <li>Diploma</li>
+                      <li>Títulos</li>
+                      <li>Identidade Profissional</li>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+                    <!-- Upload de Documentos (Obrigatório) -->
+                    <div class="mb-3">
+                    <x-input-label for="documentos" :value="__('Anexar Documento (PDF) *')" />
+                    <input type="file" id="documentos" name="documentos" class="form-control" accept="application/pdf" required>
+                    <small class="text-muted">Envie o documento necessário em formato PDF.</small>
+                    <x-input-error :messages="$errors->get('documentos')" class="mt-2" />
+                    </div>
 
                         <!-- Dados Bancários
                         <h4 class="mb-3">Dados Bancários</h4>
@@ -168,6 +230,22 @@
                                 <input type="text" class="form-control" id="contaCorrente" placeholder="00000-0" required>
                             </div>
                         </div> -->
+
+                    <hr>
+                    <div class="row">
+                    <!-- Senha (Obrigatório) -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <x-input-label for="password" :value="__('Senha *')" />
+                        <x-text-input id="password" class="form-control" type="password" name="password" required autocomplete="new-password" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    </div>
+                    <!-- Confirmar Senha (Obrigatório) -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <x-input-label for="password_confirmation" :value="__('Confirmar Senha *')" />
+                        <x-text-input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password" />
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    </div>
+                    </div>
         
                         <!-- Botão de Envio -->
                         <div class="d-flex justify-content-end">
