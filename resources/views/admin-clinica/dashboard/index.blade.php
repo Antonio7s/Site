@@ -1,5 +1,7 @@
 @extends('layouts.painel-clinica')
+
 @section('header_title', 'Agendamento')
+
 @section('content')
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -137,21 +139,21 @@
   <script>
     let dashboardData = {
       hoje: {
-        categoryData: @json($categoryDataHoje),
-        salesData: @json($salesDataHoje), // Estrutura: { labels: [...], data: [...] }
-        doctorsAgenda: @json($doctorsAgendaHoje),
-        dashboardLabel: @json($hojeStr)
+        categoryData: @json($vendasPorCategoria ?? []),
+        salesData: @json($detalhesAgendamentos ?? []), // Estrutura: { labels: [...], data: [...] }
+        doctorsAgenda: @json($doctorsAgendaHoje ?? []),
+        dashboardLabel: @json($hojeStr ?? date('Y-m-d'))
       },
       semana: {
-        categoryData: @json($categoryDataSemana),
-        salesData: @json($salesDataSemana),
-        doctorsAgenda: @json($doctorsAgendaSemana),
+        categoryData: @json($categoryDataSemana ?? []),
+        salesData: @json($salesDataSemana ?? []),
+        doctorsAgenda: @json($doctorsAgendaSemana ?? []),
         dashboardLabel: "Semana Atual"
       },
       mes: {
-        categoryData: @json($categoryDataMes),
-        salesData: @json($salesDataMes),
-        doctorsAgenda: @json($doctorsAgendaMes),
+        categoryData: @json($categoryDataMes ?? []),
+        salesData: @json($salesDataMes ?? []),
+        doctorsAgenda: @json($doctorsAgendaMes ?? []),
         dashboardLabel: "Mês Atual"
       }
     };

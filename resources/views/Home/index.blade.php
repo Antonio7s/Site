@@ -289,16 +289,16 @@
     </head>
 
     <body>
-        <!-- Banner -->
+        <!-- Banner: Exibe o banner definido na tabela homepage_settings -->
         <div class="banner container text-center p-0" style="min-height: 300px;">
-            @if(isset($settings) && !empty($settings->banner_path))
-                <img src="{{ asset($settings->banner_path) }}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
+            @if(!empty($homepageSettings->banner_path))
+                <img src="{{ asset($homepageSettings->banner_path) }}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
             @else
-                <img src="{{ asset('images/default-banner.jpg') }}" alt="Banner Padrão" style="width: 100%; height: 100%; object-fit: cover;">
+                <p>Nenhum banner configurado.</p>
             @endif
         </div>
 
-        <!-- Informações básicas -->
+        <!-- Informações Básicas -->
         <div class="info-section container mt-4">
             <h2>Informações Básicas</h2>
             <p>Aqui você pode adicionar informações sobre o site, descrição de serviços ou qualquer outro conteúdo relevante.</p>
@@ -353,7 +353,7 @@
                 <div class="custom-search-bar">
                     <div class="input-group">
                         <input type="text" class="form-control form-control-lg" placeholder="Pesquisar..." aria-label="Pesquisar">
-                        <a href="busca" class="btn btn-primary btn-lg" type="button">
+                        <a href="busca" class="btn btn-primary btn-lg">
                             <i class="fas fa-search"></i>
                         </a>
                     </div>
@@ -534,7 +534,7 @@
             }
 
             // Detectar visibilidade usando IntersectionObserver
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const counterSection = document.getElementById('counter-section');
                     if (entry.isIntersecting) {
