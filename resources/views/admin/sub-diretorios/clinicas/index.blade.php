@@ -10,7 +10,7 @@
 
   <!-- Botões de Ação -->
   <div class="d-flex justify-content-between mb-3">
-    <a href="{{ route('admin.clinicas.create') }}" class="btn btn-primary">Adicionar Clínica</a>
+    <!-- <a href="{{ route('admin.clinicas.create') }}" class="btn btn-primary">Adicionar Clínica</a> -->
     <a href="{{ route('admin.clinicas.solicitacoes') }}" class="btn btn-secondary">Ver Solicitações de Cadastro</a>
   </div>
 

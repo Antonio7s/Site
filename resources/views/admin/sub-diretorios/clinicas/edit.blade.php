@@ -8,14 +8,20 @@
             @method('PUT') <!-- Especifica que estamos fazendo uma atualização -->
 
             <h3>Dados da Clínica</h3>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Status</label>
-                    <input type="text" class="form-control @error('status') is-invalid @enderror" name="status" value="{{ old('status', $clinica->status) }}">
-                    @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-control @error('status') is-invalid @enderror" name="status">
+                    <option value="" disabled {{ old('status', $clinica->status) == '' ? 'selected' : '' }}>Selecione o status</option>
+                    <option value="ativo" {{ old('status', $clinica->status) == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
+                    <option value="inativo" {{ old('status', $clinica->status) == 'negado' ? 'selected' : '' }}>Negado</option>
+                    <option value="pendente" {{ old('status', $clinica->status) == 'pendente' ? 'selected' : '' }}>Pendente</option>
+                </select>
+                @error('status')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+
                 <div class="col-md-6">
                     <label class="form-label">CNPJ</label>
                     <input type="text" class="form-control @error('cnpj_cpf') is-invalid @enderror" name="cnpj_cpf" value="{{ old('cnpj_cpf', $clinica->cnpj_cpf) }}">
@@ -98,6 +104,10 @@
                     @enderror
                 </div>
             </div>
+
+            <hr>
+            <!-- Contatos -->
+            <h4 class="mb-3">Contatos</h4>
 
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -264,11 +274,16 @@
                 <h3> Taxa de Serviço da MedExame </h3>
                 <div class="col-md-2">
                             <label class="form-label">Taxa em %</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
+                            <input type="text" class="form-control" value="{{ $clinica->porcentagem_lucroficar ?? 'Não informado' }}" >
                 </div>
                 <div class="col-md-2">
                             <label class="form-label">Taxa fixa EM R$</label>
-                            <input type="text" class="form-control" value="{{ $clinica->modificar ?? 'Não informado' }}" >
+                            <input type="text" class="form-control" value="{{ $clinica->valor_fixo_lucro ?? 'Não informado' }}" >
+                </div>
+
+                <div class="col-md-2">
+                            <label class="form-label">Wallet Id da Clínica</label>
+                            <input type="text" class="form-control" value="{{ $clinica->wallet_id ?? 'Não informado' }}" >
                 </div>
             </div>
 
