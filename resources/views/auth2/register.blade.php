@@ -160,6 +160,8 @@
               </div>
             </div>
 
+            <hr>
+            <h5 class="mb-3">Informações de contato</h5>
             <div class="row">
               <!-- E-mail Administrativo (Obrigatório) -->
               <div class="col-12 col-md-6 mb-3">
@@ -197,6 +199,7 @@
             </div>
 
             <!-- Seção: Responsável pelo Contrato -->
+            <hr>
             <h5 class="mt-4 mb-3">Responsável pelo Contrato</h5>
             <div class="row">
               <!-- Nome Completo (Obrigatório) -->
@@ -240,6 +243,7 @@
               </div>
             </div>
 
+            <hr>
             <div class="row">
               <!-- Senha (Obrigatório) -->
               <div class="col-12 col-md-6 mb-3">
