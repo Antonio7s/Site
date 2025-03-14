@@ -22,7 +22,7 @@
                                 <input type="text" class="form-control" id="razaoSocial" placeholder="Informe a razão social" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="nomeFantasia" class="form-label">Nome para divulgação</label>
+                                <label for="nomeFantasia" class="form-label">Nome Fantasia (Nome de Divulgação)</label>
                                 <input type="text" class="form-control" id="nomeFantasia" placeholder="Informe o nome fantasia" required>
                             </div>
                         </div>
@@ -91,10 +91,6 @@
                                     <option>TO</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label for="inscMunicipal" class="form-label">Insc. Municipal</label>
-                                <input type="text" class="form-control" id="inscMunicipal" placeholder="Informe a inscrição municipal">
-                            </div>
                         </div>
                         
                         <hr>
@@ -129,7 +125,7 @@
                         <hr>
 
                         <!-- Responsável por Assinar o Contrato -->
-                        <h4 class="mb-3">Responsável por Assinar o Contrato</h4>
+                        <h4 class="mb-3">Responsável pelo Contrato</h4>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="nomeResponsavel" class="form-label">Nome Completo</label>
@@ -143,26 +139,16 @@
                                 <label for="orgaoEmissor" class="form-label">Órgão Emissor</label>
                                 <input type="text" class="form-control" id="orgaoEmissor" placeholder="Informe o órgão emissor" required>
                             </div>
+
+                            <!-- DATA DA EMISSAO -->
+                            <!-- CPF DO RESPONSAVEL PELO CONTRATO -->
+                            <!-- ESTADO CIVIL DO RESPONSAVEL PELO CONTRATO -->
+
                         </div>
         
                         <hr>
 
-                        <!-- Dados do Responsável Técnico -->
-                        <h4 class="mb-3">Dados do Responsável Técnico</h4>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="nomeTecnico" class="form-label">Nome Completo</label>
-                                <input type="text" class="form-control" id="nomeTecnico" placeholder="Informe o nome completo" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="formacao" class="form-label">Formação Profissional</label>
-                                <input type="text" class="form-control" id="formacao" placeholder="Informe a formação profissional" required>
-                            </div>
-                        </div>
-        
-                        <hr>
-
-                        <!-- Dados Bancários -->
+                        <!-- Dados Bancários
                         <h4 class="mb-3">Dados Bancários</h4>
                         <div class="row mb-3">
                             <div class="col-md-4">
@@ -181,7 +167,7 @@
                                 <label for="contaCorrente" class="form-label">Conta Corrente (com dígito)</label>
                                 <input type="text" class="form-control" id="contaCorrente" placeholder="00000-0" required>
                             </div>
-                        </div>
+                        </div> -->
         
                         <!-- Botão de Envio -->
                         <div class="d-flex justify-content-end">
