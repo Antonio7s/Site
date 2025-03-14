@@ -18,4 +18,15 @@ class Especialidade extends Model
     {
         return $this->belongsToMany(Medico::class, 'medico_especialidade');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($especialidade) {
+            if ($especialidade->medicos()->exists()) {
+                throw new Exception("Não é possível deletar a especialidade pois ela está vinculada a um ou mais médicos.");
+            }
+        });
+    }
 }

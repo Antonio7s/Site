@@ -167,7 +167,9 @@
                 </ul>
 
                 <div class="d-flex justify-content-end mt-4">
-                    <button class="btn btn-warning me-2">Entrar em Contato</button> 
+                    <!-- <button class="btn btn-warning me-2">Entrar em Contato</button> -->
+                    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#emailModal">Entrar em Contato</button>
+
                     <form action="{{ route('admin.clinicas.solicitacoes-de-cadastro.analise', $clinica->id) }}" method="POST">
                         @csrf
                         <button type="submit" name="acao" value="aprovar" class="btn btn-success">Aceitar</button>
@@ -175,6 +177,44 @@
                     </form>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emailModalLabel">Contato - Clínica</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                        E-mail: 
+                        <a id="clinicEmailLink" href="#" target="_blank">admin@saudenova.com</a>
+                        </p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                // Defina os valores:
+                var email = "admin@saudenova.com"; // ou pegue esse valor dinamicamente se necessário
+                var assunto = "Envio de Documentos Faltantes";
+                var corpo = "Prezado(a),\n\nFavor enviar os documentos faltantes conforme a lista:\n- Documento A\n- Documento B\n- Documento C\n\nAtenciosamente,\nMedExame";
+
+                // Codifique os parâmetros para a URL
+                var subjectEncoded = encodeURIComponent(assunto);
+                var bodyEncoded = encodeURIComponent(corpo);
+
+                // Construa a URL para abrir o compose do Gmail
+                var gmailUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=" + email + "&su=" + subjectEncoded + "&body=" + bodyEncoded;
+                
+                // Defina o href do link no modal
+                document.getElementById('clinicEmailLink').setAttribute('href', gmailUrl);
+            });
+        </script>
+
       </div>
     </div>
   </div>

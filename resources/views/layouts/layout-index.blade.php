@@ -250,11 +250,11 @@
                     Sou Paciente
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="menuCliente">
-                    <li><a class="dropdown-item" href="/login-paciente">Fazer Login</a></li>
+                    <li><a class="dropdown-item" href="{{ route('register') }}">Fazer Login</a></li>
                     <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
                     <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
                     <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
-                    <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
+                    <li><a class="dropdown-item" href=" {{ route('public.fale-conosco') }} ">Fale Conosco</a></li>
                 </ul>
             </div>
             <div class="nav-item dropdown">
@@ -264,7 +264,7 @@
                 <ul class="dropdown-menu" aria-labelledby="menuProfissional">
                     <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
                     <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
-                    <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li>
+                    <!-- <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li> -->
                     <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                 </ul>
             </div>
