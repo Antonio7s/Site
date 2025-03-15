@@ -15,7 +15,14 @@ class ProfissionaisController extends Controller
 {
     public function index(Request $request)
     {
-        $profissionais = Medico::paginate(20);
+        // $profissionais = Medico::paginate(20);
+
+        // Obtém a clínica autenticada via guard 'clinic'
+        $clinicaId = auth()->guard('clinic')->user()->id;
+
+        // Filtra os profissionais que pertencem à clínica autenticada e pagina os resultados
+        $profissionais = Medico::where('clinica_id', $clinicaId)->paginate(20);
+
         return view('admin-clinica.profissionais-associados.index', compact('profissionais'));
     }
 
