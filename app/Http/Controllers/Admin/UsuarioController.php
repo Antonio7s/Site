@@ -53,10 +53,14 @@ class UsuarioController extends Controller
             'customer_id' => 'nullable',
         ]);
 
+
         // Verifica se foi fornecida uma nova senha
         if ($request->has('password') && !empty($request->password)) {
             // Atualiza a senha, com hash de segurança
             $validatedData['password'] = bcrypt($request->password);
+        } else {
+            // Se não foi fornecida senha, não altere o campo 'password'
+            unset($validatedData['password']);
         }
 
         // Atualiza os dados apenas com os dados validados
