@@ -1,11 +1,9 @@
-<?php
+<?php  
 namespace App\Http\Controllers\Indexinicial;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Medico;
-use App\Models\Agendamento;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class BuscaController extends Controller
@@ -22,20 +20,17 @@ class BuscaController extends Controller
         if (!empty($searchTerm)) {
             switch ($filter) {
                 case 'especialidade':
-                    // Busca em ambos os campos de especialidade
                     $medicosQuery->where(function($query) use ($searchTerm) {
                         $query->where('medico_especialidade', 'like', "%{$searchTerm}%")
                               ->orWhere('medico_especialidade2', 'like', "%{$searchTerm}%");
                     });
                     break;
                 case 'localizacao':
-                    // Busca no campo 'endereco' da clínica
                     $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
                         $query->where('endereco', 'like', "%{$searchTerm}%");
                     });
                     break;
                 case 'profissional':
-                    // Busca no nome completo do profissional
                     $medicosQuery->where(function($query) use ($searchTerm) {
                         $query->where(DB::raw("CONCAT(profissional_nome, ' ', profissional_sobrenome)"), 'like', "%{$searchTerm}%")
                               ->orWhere('profissional_nome', 'like', "%{$searchTerm}%")
@@ -43,7 +38,6 @@ class BuscaController extends Controller
                     });
                     break;
                 case 'clinica':
-                    // Busca no nome da clínica (razao_social)
                     $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
                         $query->where('razao_social', 'like', "%{$searchTerm}%");
                     });
@@ -88,11 +82,11 @@ class BuscaController extends Controller
 
         // Processa agendamentos e formata os dados
         foreach ($medicos as $medico) {
-            $this->attachAgendamentos($medico);
+            $this->attachHorarios($medico);
             $this->formatMedico($medico);
         }
         foreach ($fallbackMedicos as $medico) {
-            $this->attachAgendamentos($medico);
+            $this->attachHorarios($medico);
             $this->formatMedico($medico);
         }
 
@@ -104,66 +98,50 @@ class BuscaController extends Controller
         ]);
     }
 
-    private function attachAgendamentos($medico)
+    private function attachHorarios($medico)
     {
-        $agendamentos = Agendamento::with(['horario', 'horario.procedimento'])
-            ->whereHas('horario.agenda', function ($q) use ($medico) {
-                $q->where('medico_id', $medico->id);
+        // 1. Buscar todos os horários do médico com especialidade e valor
+        $horarios = DB::table('horarios')
+            ->join('agendas', 'agendas.id', '=', 'horarios.agenda_id')
+            ->join('procedimentos', 'procedimentos.id', '=', 'horarios.procedimento_id')
+            ->leftJoin('agendamentos', function ($join) {
+                $join->on('horarios.id', '=', 'agendamentos.horario_id')
+                     ->where('agendamentos.status', 'agendado');
             })
+            ->where('agendas.medico_id', $medico->id)
+            ->select(
+                'horarios.id as horario_id',
+                'horarios.horario_inicio',
+                'procedimentos.nome as especialidade',
+                'procedimentos.valor',
+                'agendamentos.id as agendamento_id'
+            )
             ->get();
 
-        foreach ($agendamentos as $agendamento) {
-            if ($agendamento->horario && $agendamento->horario->horario_inicio && isset($agendamento->horario->duracao)) {
-                $duracao = $agendamento->horario->duracao;
-                $slots = [];
-                $startTime = Carbon::parse($agendamento->horario->horario_inicio);
-                for ($i = 0; $i < 8; $i++) {
-                    $slots[] = $startTime->format('H:i');
-                    $startTime->addMinutes($duracao);
-                }
-                $agendamento->calculated_slots = $slots;
-            } else {
-                $agendamento->calculated_slots = [];
-            }
-        }
-        $medico->agendamentos = $agendamentos;
+        // 2. Filtrar apenas os horários que **não** estão agendados
+        $horariosDisponiveis = $horarios->filter(function ($horario) {
+            return is_null($horario->agendamento_id);
+        });
+
+        // 3. Pegar a primeira especialidade e valor (independentemente de ter agendado ou não)
+        $especialidade = $horarios->first()->especialidade ?? '--';
+        $valor = $horarios->first()->valor ?? '--';
+
+        // 4. Atribuir ao médico
+        $medico->horarios_disponiveis = $horariosDisponiveis;
+        $medico->especialidade = $especialidade;
+        $medico->valor = $valor;
     }
 
     private function formatMedico($medico)
     {
         $medico->nome_completo = trim($medico->profissional_nome . ' ' . $medico->profissional_sobrenome);
 
-        // Obtém o nome e valor do procedimento, se houver
-        $procedureName = null;
-        $procedureValor = null;
-        if ($medico->agendamentos && $medico->agendamentos->isNotEmpty()) {
-            foreach ($medico->agendamentos as $agendamento) {
-                if ($agendamento->horario && $agendamento->horario->procedimento) {
-                    $procedureName = $agendamento->horario->procedimento->nome;
-                    $procedureValor = $agendamento->horario->procedimento->valor ?? '--';
-                    break;
-                }
-            }
-        }
-
-        // Se o campo medico_especialidade estiver preenchido, ele terá prioridade.
-        // Se existir uma segunda especialidade (medico_especialidade2), ambas serão exibidas.
-        if (!empty($medico->medico_especialidade)) {
-            $especialidades = [$medico->medico_especialidade];
-            if (!empty($medico->medico_especialidade2)) {
-                $especialidades[] = $medico->medico_especialidade2;
-            }
-            $medico->especialidade = implode(', ', $especialidades);
-        } else {
-            $medico->especialidade = $procedureName ? $procedureName : '--';
-        }
-        $medico->valor = $procedureValor ? $procedureValor : '--';
-
         if ($medico->clinica) {
             $medico->clinica_nome = $medico->clinica->nome_fantasia;
             $medico->latitude = $medico->clinica->latitude;
             $medico->longitude = $medico->clinica->longitude;
-            $medico->endereco = $medico->clinica->endereco; // Adiciona o endereço da clínica
+            $medico->endereco = $medico->clinica->endereco;
         } else {
             $medico->clinica_nome = 'Clínica não informada';
             $medico->latitude = null;

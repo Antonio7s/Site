@@ -11,12 +11,19 @@ class IndexInicialController extends Controller
 {
     public function index()
     {
-        // Buscando os dados do banco de dados
+        // Buscando o primeiro registro das configurações da homepage
         $homepageSettings = HomepageSetting::first();
+
+        // Se existir um registro e o campo banner_path estiver vazio,
+        // mas houver o campo path, atribuímos esse valor a banner_path.
+        if ($homepageSettings && empty($homepageSettings->banner_path) && !empty($homepageSettings->path)) {
+            $homepageSettings->banner_path = $homepageSettings->path;
+        }
+
         $faqs = Faq::all();
         $categories = Category::all();
 
-        // Passando os dados para a view
+        // Passa os dados para a view
         return view('index', compact('homepageSettings', 'faqs', 'categories'));
     }
 }
