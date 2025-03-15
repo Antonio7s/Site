@@ -95,12 +95,20 @@ class AgendaController extends Controller
         // Verifica se o médico existe
         $profissional = Medico::findOrFail($medicoId); // Encontra o médico pelo ID
 
-        // Busca todas as agendas que o médico pode ter
-        $agendas = Agenda::where('medico_id', $medicoId)->get();
+        // Recupera a agenda do médico (supondo que ele tenha apenas uma)
+        $agendaId = $profissional->agenda->id ?? null;
 
-        return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendas'));
+        // Se necessário, verifique se a agenda foi encontrada
+        if (!$agendaId) {
+            return redirect()->back()->withErrors("Agenda não encontrada para esse médico.");
+        }
+
+        return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendaId'));
     }
 
+
+
+    //SALVAR OS HORARIOS NO BD
     public function salvarHorarios(Request $request)
     {
         try {
@@ -119,10 +127,17 @@ class AgendaController extends Controller
                 }
         
                 // Certifique-se de que os valores estão no formato correto
-                $horarioInicio = substr($horarioData['inicio'], 0, 5); // Ajuste para garantir que o horário tem o formato correto 'HH:MM'
+                // $horarioInicio = substr($horarioData['inicio'], 0, 5); // Ajuste para garantir que o horário tem o formato correto 'HH:MM'
         
-                $duracao = intval(str_replace(' minutos', '', $horarioData['duracao'])); // Remover o texto ' minutos' se existir
+
+                // Corrige a extração do horário de início
+                $horarioInicio = date("H:i", strtotime($horarioData['inicio']));
+
+                //$duracao = intval(str_replace(' minutos', '', $horarioData['duracao'])); // Remover o texto ' minutos' se existir
         
+                $duracao = intval(str_replace(' minutos', '', $horarioData['duracao']));
+
+
                 // Criação do horário no banco de dados
                 Horario::create([
                     'data' => $horarioData['data'],  // A data deve ser no formato 'Y-m-d'

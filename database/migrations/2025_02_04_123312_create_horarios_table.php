@@ -17,7 +17,7 @@ return new class extends Migration
             $table->time('horario_inicio'); // Campo para o horário
             $table->integer('duracao'); // Campo para a duração em minutos
 
-            $table->unsignedBigInteger('procedimento_id');
+            $table->unsignedBigInteger('procedimento_id')->nullable(); // null somente para testes
             $table->foreign('procedimento_id')->references('id')->on('procedimentos')->onDelete('cascade');
 
 
