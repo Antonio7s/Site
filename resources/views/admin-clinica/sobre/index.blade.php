@@ -150,6 +150,26 @@
         <!-- Seção: Contatos -->
         <h3 class="section-title">Contatos</h3>
         <div class="row">
+          <!-- E-mail Administrativo (Obrigatório) -->
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="email_administrativo" class="form-label">E-mail Administrativo <span class="required-asterisk">*</span></label>
+              <input type="email" id="email_administrativo" class="form-control" name="email_administrativo" 
+                    value="{{ old('email_administrativo', $clinica->email_administrativo) }}" required>
+              @error('email_administrativo')<div class="text-danger">{{ $message }}</div>@enderror
+            </div>
+          </div>
+
+          <!-- E-mail Faturamento (Obrigatório) -->
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="email_faturamento" class="form-label">E-mail Faturamento <span class="required-asterisk">*</span></label>
+              <input type="email" id="email_faturamento" class="form-control" name="email_faturamento" 
+                    value="{{ old('email_faturamento', $clinica->email_faturamento) }}" required>
+              @error('email_faturamento')<div class="text-danger">{{ $message }}</div>@enderror
+            </div>
+          </div>
+
           <div class="col-md-4">
             <div class="mb-3">
               <label for="telefone_local" class="form-label">Telefone Local <span class="required-asterisk">*</span></label>
@@ -217,8 +237,8 @@
           <div class="col-md-4">
             <div class="mb-3">
               <label for="cpf" class="form-label">CPF <span class="required-asterisk">*</span></label>
-              <input type="text" id="cpf" class="form-control" name="cpf" 
-                     value="{{ old('cpf', $clinica->cpf) }}" required>
+              <input type="text" id="cpf" class="form-control" name="responsavel_cpf" 
+                     value="{{ old('responsavel_cpf', $clinica->responsavel_cpf) }}" required>
               @error('cpf')<div class="text-danger">{{ $message }}</div>@enderror
             </div>
           </div>

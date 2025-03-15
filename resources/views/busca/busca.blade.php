@@ -367,7 +367,7 @@
                     agenda.style.display = (!agenda.style.display || agenda.style.display === 'none') ? 'block' : 'none';
                 });
             });
-
+        
             // Seleção dos horários e exibição do botão "Confirmar"
             const hourBoxes = document.querySelectorAll('.hour-box');
             hourBoxes.forEach(hourBox => {

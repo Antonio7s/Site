@@ -74,7 +74,7 @@ class RegisteredUserController2 extends Controller
         }
 
         // Converte a data de emissão do formato d/m/Y para Y-m-d
-        $dataEmissao = \Carbon\Carbon::createFromFormat('d/m/Y', $request->data_emissao)->format('Y-m-d');
+        //$dataEmissao = \Carbon\Carbon::createFromFormat('d/m/Y', $request->data_emissao)->format('Y-m-d');
 
         try {
             // Tenta criar a clínica com todos os campos
