@@ -4,76 +4,146 @@ namespace App\Http\Controllers\Admin_clinica;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Procedimento;
+use App\Models\Agendamento;
+use App\Models\Classe;
+use Carbon\Carbon;
+use DB;
 
 class DashboardClinicaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Data de hoje no formato AAAA-MM-DD
-        $hojeStr = date('Y-m-d');
+        // Filtro de período (hoje, semana, mês, personalizado)
+        $filter = $request->input('filter', 'hoje'); // Valor padrão: hoje
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
 
-        // Dados de exemplo para "hoje"
-        $categoryDataHoje = [8, 5, 3, 4]; // Ex.: Consultas, Exames, Checkup, Odontologia
-        $salesDataHoje = [
-            'labels' => ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00'],
-            'data'   => [2, 4, 3, 5, 2, 3]
-        ];
-        $doctorsAgendaHoje = [
-            [
-                'medico' => 'Dr. João',
-                'foto'   => 'https://via.placeholder.com/50',
-                'agenda' => [
-                    ['horario' => '08:30', 'paciente' => 'Ana Paula', 'status' => 'Confirmado'],
-                    ['horario' => '10:00', 'paciente' => 'Marcos Vinícius', 'status' => 'Pendente']
-                ]
-            ],
-            [
-                'medico' => 'Dra. Maria',
-                'foto'   => 'https://via.placeholder.com/50',
-                'agenda' => [
-                    ['horario' => '09:00', 'paciente' => 'Carlos Silva', 'status' => 'Confirmado'],
-                    ['horario' => '11:15', 'paciente' => 'Beatriz Costa', 'status' => 'Cancelado'],
-                    ['horario' => '13:00', 'paciente' => 'Pedro Henrique', 'status' => 'Confirmado']
-                ]
-            ],
-            [
-                'medico' => 'Dr. Pedro',
-                'foto'   => 'https://via.placeholder.com/50',
-                'agenda' => [
-                    ['horario' => '08:45', 'paciente' => 'Fernanda Souza', 'status' => 'Confirmado'],
-                    ['horario' => '12:30', 'paciente' => 'Rafael Lima', 'status' => 'Pendente']
-                ]
-            ]
-        ];
+        // Define o intervalo de datas com base no filtro
+        $hoje = Carbon::today();
+        switch ($filter) {
+            case 'semana':
+                $startDate = $hoje->copy()->startOfWeek();
+                $endDate = $hoje->copy()->endOfWeek();
+                break;
+            case 'mes':
+                $startDate = $hoje->copy()->startOfMonth();
+                $endDate = $hoje->copy()->endOfMonth();
+                break;
+            case 'custom':
+                if ($startDate && $endDate) {
+                    $startDate = Carbon::parse($startDate);
+                    $endDate = Carbon::parse($endDate);
+                } else {
+                    // Se não houver datas personalizadas, usa o dia atual
+                    $startDate = $hoje;
+                    $endDate = $hoje;
+                }
+                break;
+            default: // Hoje
+                $startDate = $hoje;
+                $endDate = $hoje;
+                break;
+        }
 
-        // Dados de exemplo para "semana"
-        $categoryDataSemana = [40, 25, 20, 15];
-        $salesDataSemana = [
-            'labels' => ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-            'data'   => [5, 6, 7, 8, 6, 4, 3]
-        ];
-        // Para exemplo, reutilizamos a agenda de hoje
-        $doctorsAgendaSemana = $doctorsAgendaHoje;
+        // Consulta para "Agendamentos por Categoria":
+        // Agrupa os agendamentos com status "agendado" por categoria (classe) e conta o número de registros
+        $vendasPorCategoria = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado') // Filtra apenas agendamentos com status "agendado"
+            ->whereBetween('ag.data', [$startDate, $endDate]) // Filtra agendamentos no intervalo de datas
+            ->select('c.nome as categoria', DB::raw('COUNT(ag.id) as total'))
+            ->groupBy('c.nome')
+            ->get();
 
-        // Dados de exemplo para "mês"
-        $categoryDataMes = [160, 100, 80, 60];
-        $salesDataMes = [
-            'labels' => ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-            'data'   => [20, 25, 18, 22]
-        ];
-        $doctorsAgendaMes = $doctorsAgendaHoje;
+        // Consulta para "Vendas / Agendamentos por Período":
+        // Busca os registros detalhados dos agendamentos com status "agendado" e informações da classe, procedimento, horário e data do agendamento
+        $detalhesAgendamentos = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado') // Filtra apenas agendamentos com status "agendado"
+            ->whereBetween('ag.data', [$startDate, $endDate]) // Filtra agendamentos no intervalo de datas
+            ->select(
+                'c.id as classe_id',
+                'c.nome as classe_nome',
+                'p.id as procedimento_id',
+                'p.nome as procedimento_nome',
+                'h.id as horario_id',
+                'ag.id as agendamento_id',
+                'ag.data as data_agendamento'
+            )
+            ->orderBy('ag.data', 'desc')
+            ->limit(10)
+            ->get();
 
-        return view('admin-clinica.dashboard.index', compact(
-            'categoryDataHoje',
-            'salesDataHoje',
-            'doctorsAgendaHoje',
-            'hojeStr',
-            'categoryDataSemana',
-            'salesDataSemana',
-            'doctorsAgendaSemana',
-            'categoryDataMes',
-            'salesDataMes',
-            'doctorsAgendaMes'
-        ));
+        // Retornando a view correta com os dados
+        return view('admin-clinica.dashboard.index', [
+            'vendasPorCategoria'   => $vendasPorCategoria,
+            'detalhesAgendamentos' => $detalhesAgendamentos,
+            'hojeStr'              => $hoje->format('Y-m-d'), // Data formatada para exibição
+            'filter'               => $filter, // Filtro atual
+            'startDate'            => $startDate->format('Y-m-d'), // Data de início formatada
+            'endDate'              => $endDate->format('Y-m-d'), // Data de fim formatada
+        ]);
     }
-} 
+
+    // Endpoint para filtro personalizado (requisição AJAX)
+    public function customFilter(Request $request)
+    {
+        $startDate = $request->input('start');
+        $endDate = $request->input('end');
+
+        // Valida as datas
+        if (!$startDate || !$endDate) {
+            return response()->json(['error' => 'Datas inválidas.'], 400);
+        }
+
+        // Define o intervalo de datas
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        // Consulta para "Agendamentos por Categoria":
+        $vendasPorCategoria = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado')
+            ->whereBetween('ag.data', [$startDate, $endDate])
+            ->select('c.nome as categoria', DB::raw('COUNT(ag.id) as total'))
+            ->groupBy('c.nome')
+            ->get();
+
+        // Consulta para "Vendas / Agendamentos por Período":
+        $detalhesAgendamentos = DB::table('classes as c')
+            ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
+            ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
+            ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
+            ->where('ag.status', '=', 'agendado')
+            ->whereBetween('ag.data', [$startDate, $endDate])
+            ->select(
+                'c.id as classe_id',
+                'c.nome as classe_nome',
+                'p.id as procedimento_id',
+                'p.nome as procedimento_nome',
+                'h.id as horario_id',
+                'ag.id as agendamento_id',
+                'ag.data as data_agendamento'
+            )
+            ->orderBy('ag.data', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Retorna os dados em formato JSON
+        return response()->json([
+            'categoryData' => $vendasPorCategoria,
+            'salesData'   => [
+                'labels' => $detalhesAgendamentos->pluck('data_agendamento')->map(fn($date) => Carbon::parse($date)->format('d/m/Y')),
+                'data'   => $detalhesAgendamentos->pluck('agendamento_id')->map(fn() => 1),
+            ],
+            'dashboardLabel' => "Período Personalizado: {$startDate->format('d/m/Y')} - {$endDate->format('d/m/Y')}",
+        ]);
+    }
+}
