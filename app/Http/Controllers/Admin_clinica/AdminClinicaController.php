@@ -82,16 +82,19 @@ class AdminClinicaController extends Controller
             'uf' => 'required|string|size:2',
             
             // Contatos
+            'email_administrativo' => 'required|email|max:255',
+            'email_faturamento'    => 'required|email|max:255',
             'telefone_local' => 'required|string|max:20',
             'telefone_financeiro' => 'required|string|max:20',
             'celular' => 'required|string|max:20',
             
-            // Responsável
+            // Responsável PELO CONTATO
+
             'responsavel_nome' => 'required|string|max:255',
             'rg' => 'required|string|max:20',
             'orgao_emissor' => 'required|string|max:50',
             'data_emissao' => 'required|date_format:d/m/Y',
-            'cpf' => [
+            'responsavel_cpf' => [
                 'required',
                 'string',
                 'max:14',
@@ -133,13 +136,13 @@ class AdminClinicaController extends Controller
             'password'
         ]);
 
-        // Formatar data de emissão
-        if ($request->data_emissao) {
-            $data['data_emissao'] = Carbon::createFromFormat(
-                'd/m/Y', 
-                $request->data_emissao
-            )->format('Y-m-d');
-        }
+        // // Formatar data de emissão
+        // if ($request->data_emissao) {
+        //     $data['data_emissao'] = Carbon::createFromFormat(
+        //         'd/m/Y', 
+        //         $request->data_emissao
+        //     )->format('Y-m-d');
+        // }
 
         // Manter documento atual se não for alterado
         if (!$request->hasFile('documentos') && $clinica->documentos) {
