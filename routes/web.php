@@ -160,6 +160,9 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     Route::get('/homepage', [HomepageController::class, 'index'])->name('admin.homepage.index');
     
     Route::get('mensagens', [InboxController::class], 'index')->name('admin.mensagens.index');
+
+    //API-KEY
+    Route::get('api-key', [PagamentoController::class, 'apikey_edit'])->name('admin.apikey.index');
 });
 
 // Rotas que exigem autenticação de clínica e têm o prefixo 'admin-clinica'
@@ -216,6 +219,9 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         Route::get('/agenda/getHorarios', [AgendaController::class, 'getHorarios'])->name('admin-clinica.agenda.getHorarios');
         */
     });
+
+
+
 
 });
 

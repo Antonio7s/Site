@@ -177,4 +177,10 @@ class PagamentoController extends Controller
             'aprovado' => $agendamento ? true : false
         ]);
     }
+
+
+    public function apikey_edit()
+    {
+        return view ('admin/sub-diretorios/api_key');
+    }
 }
