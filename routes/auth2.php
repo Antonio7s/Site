@@ -36,16 +36,16 @@ Route::middleware('guest:clinic')->group(function () {
 });
 
 Route::middleware('auth:clinic')->group(function () {
-    // Route::get('verify-email2', EmailVerificationPromptController2::class)
-    //     ->name('verification.notice2');
+     Route::get('verify-email2', EmailVerificationPromptController2::class)
+         ->name('verification.notice2');
 
-    // Route::get('verify-email2/{id}/{hash}', VerifyEmailController2::class)
-    //     ->middleware(['signed', 'throttle:6,1'])
-    //     ->name('verification.verify2');
+     Route::get('verify-email2/{id}/{hash}', VerifyEmailController2::class)
+         ->middleware(['signed', 'throttle:6,1'])
+         ->name('verification.verify2');
 
-    // Route::post('email/verification-notification2', [EmailVerificationNotificationController2::class, 'store'])
-    //     ->middleware('throttle:6,1')
-    //     ->name('verification.send2');
+     Route::post('email/verification-notification2', [EmailVerificationNotificationController2::class, 'store'])
+         ->middleware('throttle:6,1')
+         ->name('verification.send2');
 
     Route::get('confirm-password2', [ConfirmablePasswordController2::class, 'show'])
         ->name('password.confirm2');
