@@ -254,6 +254,18 @@
             fim do comentario-->
 
 
+            <!-- Senha -->
+            <h3>Alterar Senha (Opcional)</h3>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nova Senha</label>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Deixe em branco para não alterar">
+                    @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
             <!-- Seção de Documentos -->
             <hr class="my-4">
             <div>

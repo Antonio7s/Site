@@ -49,7 +49,7 @@ class ClinicaController extends Controller
         $clinica = Clinica::findOrFail($id);
 
         // Validação dos dados
-        $request->validate([
+        $validatedData = $request->validate([
             'razao_social' => 'required|string|max:255',
             'status' => 'required|string|max:255',
             'cnpj_cpf' => 'nullable|string|unique:clinicas,cnpj_cpf,' . $id,
@@ -74,9 +74,25 @@ class ClinicaController extends Controller
             'cpf' => 'nullable|string|max:14',
             'estado_civil' => 'nullable|string|max:20',
         ]);
+            //Informacoes de taxa
+            //
 
+
+            //Atualizar senha.
+            // Verifica se foi fornecida uma nova senha
+            if ($request->has('password') && !empty($request->password)) {
+                // Atualiza a senha, com hash de segurança
+                $validatedData['password'] = bcrypt($request->password);
+            } else {
+                // Se não foi fornecida senha, não altere o campo 'password'
+                unset($validatedData['password']);
+            }
+            
+            
         // Atualiza os dados
-        $clinica->update($request->all());
+        //$clinica->update($request->all());
+        // Atualiza os dados apenas com os dados validados
+        $clinica->update($validatedData);
 
         return redirect()->route('admin.clinicas.index')->with('success', 'Clínica atualizada com sucesso!');
     }
