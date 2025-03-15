@@ -112,49 +112,47 @@ class AgendaController extends Controller
     public function salvarHorarios(Request $request)
     {
         try {
-            $horarios = $request->input('horarios'); // Ex.: array de horários
+            $horarios = $request->input('horarios');
             
             // Validação básica
             if (!$horarios || !is_array($horarios)) {
-                return response()->json(['message' => 'Dados inválidos. O formato esperado é um array de horários.'], 400);
+                return response()->json([
+                    'success' => false, // Adicionado
+                    'message' => 'Dados inválidos. O formato esperado é um array de horários.'
+                ], 400);
             }
             
             // Loop para salvar os horários
             foreach ($horarios as $horarioData) {
                 // Verifica se os dados estão completos
                 if (!isset($horarioData['data'], $horarioData['inicio'], $horarioData['duracao'], $horarioData['agenda_id'])) {
-                    return response()->json(['message' => 'Dados de horário incompletos.'], 400);
+                    return response()->json([
+                        'success' => false, // Adicionado
+                        'message' => 'Dados de horário incompletos.'
+                    ], 400);
                 }
         
-                // Certifique-se de que os valores estão no formato correto
-                // $horarioInicio = substr($horarioData['inicio'], 0, 5); // Ajuste para garantir que o horário tem o formato correto 'HH:MM'
-        
-
-                // Corrige a extração do horário de início
-                $horarioInicio = date("H:i", strtotime($horarioData['inicio']));
-
-                //$duracao = intval(str_replace(' minutos', '', $horarioData['duracao'])); // Remover o texto ' minutos' se existir
-        
-                $duracao = intval(str_replace(' minutos', '', $horarioData['duracao']));
-
-
                 // Criação do horário no banco de dados
                 Horario::create([
-                    'data' => $horarioData['data'],  // A data deve ser no formato 'Y-m-d'
-                    'horario_inicio' => $horarioInicio,  // O horário de início no formato correto
-                    'duracao' => $duracao,  // A duração em minutos
-                    'agenda_id' => $horarioData['agenda_id'],  // O ID da agenda
-                    'procedimento_id' => $horarioData['procedimento_id'] ?? null,  // O ID do procedimento, se existir
+                    'data' => $horarioData['data'],
+                    'horario_inicio' => date("H:i", strtotime($horarioData['inicio'])),
+                    'duracao' => intval(str_replace(' minutos', '', $horarioData['duracao'])),
+                    'agenda_id' => $horarioData['agenda_id'],
+                    'procedimento_id' => $horarioData['procedimento_id'] ?? null,
                 ]);
             }
         
-            return response()->json(['message' => 'Horários salvos com sucesso!'], 200);
-        } catch (\Exception $e) {
-            // Retorna o erro completo no formato JSON
             return response()->json([
+                'success' => true, // Adicionado
+                'message' => 'Horários salvos com sucesso!'
+            ]); // Código 200 é padrão
+        
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false, // Adicionado
                 'message' => 'Erro ao salvar os horários',
-                'error' => $e->getMessage(),  // Captura a mensagem do erro
-                'trace' => $e->getTraceAsString()  // Captura o trace completo do erro
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ], 500);
         }
     }
