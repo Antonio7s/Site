@@ -224,7 +224,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "{{ route('admin-clinica.agenda.agendamento.index') }}";
+                    window.location.href = "{{ route('admin-clinica.agenda.index') }}";
                 } else {
                     alert('Erro ao salvar os horários - create');
                 }
