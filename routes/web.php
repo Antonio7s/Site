@@ -243,7 +243,10 @@ Route::middleware('auth', 'verified')->group(function () {
 
     //Rotas de checkout
     Route::controller(PagamentoController::class)->prefix('pagamento')->group(function () {
-        Route::get('/', 'index')->name('pagamento.index');
+        //Route::get('/compra/{clinica_id}', 'index')->name('pagamento.index');
+        // Rota para receber o POST da compra
+        Route::post('/compra', 'store')->name('compra.store');
+
         Route::post('/pagamento/gerar-pix', 'gerarPix')->name('pagamento.gerarPix');
         Route::post('/pagamento/gerar-boleto', 'gerarBoleto')->name('pagamento.gerarBoleto');
         Route::post('/finalizar-cartao', 'finalizarCartao')->name('pagamento.finalizarCartao');

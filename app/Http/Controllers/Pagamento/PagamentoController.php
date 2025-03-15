@@ -25,17 +25,43 @@ class PagamentoController extends Controller
         $this->asaasService = $asaasService;
     }
 
-    // Exibe a tela de checkout
-    public function index()
-    {
-        $horario = Horario::findOrFail(1);
-        $user = Auth::user();
-        $agenda = $horario->agenda;
-        $medico = $horario->agenda->medico;
-        $clinica = $horario->agenda->medico->clinica;
-        $procedimento = $horario->procedimento;
+    // // Exibe a tela de checkout
+    // public function index()
+    // {
+    //     $horario = Horario::findOrFail(1);
+    //     $user = Auth::user();
+    //     $agenda = $horario->agenda;
+    //     $medico = $horario->agenda->medico;
+    //     $clinica = $horario->agenda->medico->clinica;
+    //     $procedimento = $horario->procedimento;
 
-        return view('pagamento.checkout', compact('horario', 'agenda', 'clinica', 'medico', 'procedimento', 'user'));
+    //     return view('pagamento.checkout', compact('horario', 'agenda', 'clinica', 'medico', 'procedimento', 'user'));
+    // }
+
+
+    public function index(Request $request, $clinica_id)
+    {
+        // Pegue os dados enviados via query (ex: horário, data, ID do médico, etc.)
+        $horario = $request->query('horario');
+        $medico_id = $request->query('medico_id');
+        $data = $request->query('data');
+
+        // Aqui você pode buscar informações extras no banco se necessário
+        // e então exibir a view de compra com os dados.
+
+        return view('pagamento.checkout', compact('clinica_id', 'horario', 'medico_id', 'data'));
+    }
+
+    public function store(Request $request)
+    {
+        // Recupere os dados enviados via POST
+        $clinica_id = $request->input('clinica_id');
+        $medico_id = $request->input('medico_id');
+        $horario   = $request->input('horario');
+        $data      = $request->input('data');
+
+        // Aqui você pode fazer a lógica para salvar o agendamento ou preparar a view de confirmação/compra
+        return view('pagamento.checkout', compact('clinica_id', 'medico_id', 'horario', 'data'));
     }
 
     // Gera cobrança para pagamento via PIX

@@ -400,5 +400,50 @@
                 });
             });
         });
+
+
+        // Lógica para o botão "Confirmar" com envio por POST
+        const confirmButtons = document.querySelectorAll('.btn-confirmar');
+        confirmButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const medicoId = this.getAttribute('data-medico-id');
+                const clinicaId = this.getAttribute('data-clinica-id'); // Certifique-se de que esse atributo esteja no botão
+                const selectedHour = document.querySelector(`.hour-box.selected[data-medico-id="${medicoId}"]`);
+
+                if (selectedHour) {
+                    const slot = selectedHour.getAttribute('data-slot');
+                    const agendaElement = selectedHour.closest('.agenda');
+                    const agendaDate = agendaElement.querySelector('.agenda-date').textContent.trim();
+
+                    // Cria um formulário oculto
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route("compra.store") }}';
+
+                    // Cria os campos ocultos e adiciona os dados
+                    const fields = {
+                        clinica_id: clinicaId,
+                        medico_id: medicoId,
+                        horario: slot,
+                        data: agendaDate,
+                        _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token para Laravel
+                    };
+
+                    for (const name in fields) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = name;
+                        input.value = fields[name];
+                        form.appendChild(input);
+                    }
+
+                    document.body.appendChild(form);
+                    form.submit();
+                } else {
+                    alert('Por favor, selecione um horário antes de confirmar.');
+                }
+            });
+        });
+
     </script>
 @endsection
