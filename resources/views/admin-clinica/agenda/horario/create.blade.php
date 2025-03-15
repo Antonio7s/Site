@@ -3,6 +3,9 @@
 @section('content')
     <!-- Seção para definir o intervalo de horários (para criar horários) -->
     <div id="formHorarioSection" class="card p-4 mt-4">
+        <!-- agenda id -->
+        <input type="hidden" id="agendaId" value="{{ $agendaId }}">
+
         <h5>Definir Intervalo de Horários para <span id="doctorName"></span></h5>
         <form id="formHorario">
             <div class="mb-3">
@@ -90,6 +93,8 @@
             const horaFim = document.getElementById('horaFim').value;
             const duracao = parseInt(document.getElementById('duracao').value);
             const datas = document.getElementById('datas').value.split(',').map(data => data.trim());
+            const agendaId = document.getElementById('agendaId').value; // Pega o id da agenda
+
 
             if (!horaInicio || !horaFim || !duracao || !datas.length) {
                 alert("Por favor, preencha todos os campos corretamente.");
@@ -106,10 +111,11 @@
                     const fimConsulta = new Date(dataAtual.getTime() + duracao * 60000); // Duração em milissegundos
                     horariosGerados.push({
                         data: data,
-                        hora: dataAtual.toTimeString().slice(0, 5),
-                        duracao: `${duracao} minutos`,
-                        inicio: dataAtual.toISOString(),
-                        fim: fimConsulta.toISOString()
+                        //hora: dataAtual.toTimeString().slice(0, 5),
+                        duracao: duracao,
+                        inicio: dataAtual.toTimeString().slice(0, 5),  // Formato 'HH:MM'
+                        fim: fimConsulta.toTimeString().slice(0, 5),     // Formato 'HH:MM'
+                        agenda_id: agendaId  // Adiciona o id da agenda
                     });
                     dataAtual = fimConsulta; // Atualiza para o próximo horário
                 }
@@ -164,7 +170,7 @@
                 <tbody>
                     ${horarios.map(horario => `
                         <tr>
-                            <td>${horario.hora}</td>
+                            <td>${horario.inicio}</td>
                             <td>${horario.duracao}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm" onclick="editarHorario()">Editar</button>
@@ -218,9 +224,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "{{ route('admin-clinica.agenda.agendamento.index') }}";
+                    window.location.href = "{{ route('admin-clinica.agenda.index') }}";
                 } else {
-                    alert('Erro ao salvar os horários');
+                    alert('Erro ao salvar os horários - create');
                 }
             })
             .catch(error => {
