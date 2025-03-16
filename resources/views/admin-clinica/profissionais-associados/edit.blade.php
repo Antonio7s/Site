@@ -23,12 +23,12 @@
 
             <div class="mb-3">
                 <label for="profissional_nome" class="form-label">Primeiro nome do Profissional</label>
-                <input type="text" id="profissional_nome" name="profissional_nome" class="form-control" placeholder="Nome do profissional" value="{{ old('profissional_nome') }}" required>
+                <input type="text" id="profissional_nome" name="profissional_nome" class="form-control" placeholder="Nome do profissional" value="{{ old('profissional_nome', $profissional->profissional_nome) }}" required>
             </div>
 
             <div class="mb-3">
                 <label for="profissional_sobrenome" class="form-label">Segundo nome do Profissional</label>
-                <input type="text" id="profissional_sobrenome" name="profissional_sobrenome" class="form-control" placeholder="Sobreome do profissional" value="{{ old('profissional_sobrenome') }}" required>
+                <input type="text" id="profissional_sobrenome" name="profissional_sobrenome" class="form-control" placeholder="Sobreome do profissional" value="{{ old('profissional_sobrenome', $profissional->profissional_sobrenome) }}" required>
             </div>
             
             <div class="mb-3">
@@ -56,7 +56,7 @@
 
             <div class="mb-3">
                 <label for="employeeEmail" class="form-label">E-mail</label>
-                <input type="email" id="employeeEmail" name="email" class="form-control" placeholder="E-mail do profissional" value="{{ old('email') }}" required>
+                <input type="email" id="employeeEmail" name="email" class="form-control" placeholder="E-mail do profissional" value="{{ old('email', $profissional->email) }}" required>
             </div>
             
             <div class="mb-3">
