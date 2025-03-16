@@ -39,7 +39,7 @@ class ServicoDiferenciadoSeeder extends Seeder
                         'preco_customizado' => $procedimento->valor * 0.9,
                         'data_inicial'      => Carbon::now()->format('Y-m-d'),
                         'data_final'        => Carbon::now()->addMonths(6)->format('Y-m-d'),
-                        'codigo'            => mt_rand(10000000, 99999999),
+                        //'codigo'            => mt_rand(10000000, 99999999),
                     ]);
                 }
             }
@@ -71,7 +71,7 @@ class ServicoDiferenciadoSeeder extends Seeder
                     'preco_customizado' => $procedimento->valor * 0.9,
                     'data_inicial'      => Carbon::now()->format('Y-m-d'),
                     'data_final'        => Carbon::now()->addMonths(6)->format('Y-m-d'),
-                    'codigo'            => mt_rand(10000000, 99999999),
+                    //'codigo'            => mt_rand(10000000, 99999999),
                 ]);
             }
         }

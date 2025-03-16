@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Clinica;
 use App\Models\ServicoDiferenciado;
 use App\Models\Procedimento;
+use Exception;
 
 class ServicoDiferenciadoController extends Controller
 {
@@ -41,7 +42,7 @@ class ServicoDiferenciadoController extends Controller
                'dataInicial'     => 'required|date',
                'dataFinal'       => 'nullable|date',
                'procedimento_id' => 'required|exists:procedimentos,id',
-               'valor'           => 'required|numeric',
+               'preco_customizado' => 'required|numeric',
            ]);
    
            // Cria o novo serviço diferenciado
@@ -50,7 +51,7 @@ class ServicoDiferenciadoController extends Controller
                'data_inicial'    => $validated['dataInicial'],
                'data_final'      => $validated['dataFinal'],
                'procedimento_id' => $validated['procedimento_id'],
-               'valor'           => $validated['valor'],
+               'preco_customizado'           => $validated['preco_customizado'],
            ]);
    
            return redirect()->route('admin.servicos-diferenciados.index')
@@ -74,7 +75,7 @@ class ServicoDiferenciadoController extends Controller
                'dataInicial' => 'required|date',
                'dataFinal' => 'nullable|date',
                'procedimento_id' => 'required|exists:procedimentos,id',
-               'valor' => 'required|numeric|min:0' // Campo correto (nome do input do formulário)
+               'preco_customizado' => 'required|numeric|min:0' // Campo correto (nome do input do formulário)
            ]);
        
            // Busca o serviço
@@ -86,7 +87,7 @@ class ServicoDiferenciadoController extends Controller
                'data_inicial' => $validated['dataInicial'],
                'data_final' => $validated['dataFinal'],
                'procedimento_id' => $validated['procedimento_id'],
-               'valor' => $validated['valor']
+               'preco_customizado' => $validated['preco_customizado']
            ]);
        
            return redirect()->route('admin.servicos-diferenciados.index')

@@ -19,7 +19,7 @@
                 <tr>
                     <td>{{ $servico->data_inicial ?? '-' }}</td>
                     <td>{{ $servico->data_final ?? '-' }}</td>
-                    <td>{{ $servico->codigo ?? '-' }}</td>
+                    <!-- <td>{{ $servico->codigo ?? '-' }}</td> -->
                     <!-- Verifique se o $servico é um objeto de serviço diferenciado ou um procedimento -->
                     <td>{{ isset($servico->procedimento) ? $servico->procedimento->nome : $servico->nome }}</td>
                     <td>R$ {{ number_format($servico->preco_customizado ?? $servico->valor, 2, ',', '.') }}</td>

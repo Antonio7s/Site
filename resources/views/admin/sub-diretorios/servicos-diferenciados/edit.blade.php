@@ -49,8 +49,8 @@
         
         <div class="mb-3">
             <label for="valor" class="form-label">Valor</label>
-            <input type="number" name="valor" id="valor" class="form-control"
-                   step="0.01" value="{{ $servico->valor }}" required>
+            <input type="number" name="preco_customizado" id="valor" class="form-control"
+                   step="0.01" value="{{ $servico->preco_customizado }}" required>
         </div>
         
         <button type="submit" class="btn btn-primary">Atualizar</button>

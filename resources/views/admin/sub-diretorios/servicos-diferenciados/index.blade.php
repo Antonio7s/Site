@@ -13,10 +13,11 @@
                 <th>Clínica vinculada</th>
                 <th>Data Inicial</th>
                 <th>Data Final</th>
-                <th>Código</th>
+                <th>Status</th>
+                <!-- <th>Código</th> -->
                 <th>Procedimento</th>
                 <th>Valor</th>
-                <th>Ações</th> <!-- Nova coluna para ações -->
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -27,13 +28,24 @@
                             <td>{{ $clinica->razao_social }}</td>
                             <td>{{ $servico->data_inicial ?? '-' }}</td>
                             <td>{{ $servico->data_final ?? '-' }}</td>
-                            <td>{{ $servico->codigo ?? '-' }}</td>
+                            <td>
+                                @php
+                                    $today = date('Y-m-d');
+                                    $dataInicial = $servico->data_inicial;
+                                    $dataFinal = $servico->data_final;
+                                    $status = 'Inativo';
+                                    if ($dataInicial && $dataFinal) {
+                                        if ($today >= $dataInicial && $today <= $dataFinal) {
+                                            $status = 'Ativo';
+                                        }
+                                    }
+                                    echo $status;
+                                @endphp
+                            </td>
                             <td>{{ $servico->procedimento->nome }}</td>
                             <td>R$ {{ number_format($servico->preco_customizado, 2, ',', '.') }}</td>
                             <td>
-                                <!-- Botões de ação -->
                                 <a href="{{ route('admin.servicos-diferenciados.edit', $servico->id) }}" class="btn btn-warning btn-sm">✏ Editar</a>
-
                                 <form action="{{ route('admin.servicos-diferenciados.destroy', $servico->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')

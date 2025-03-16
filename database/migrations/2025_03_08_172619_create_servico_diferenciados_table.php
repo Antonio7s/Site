@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('preco_customizado', 8, 2);
             $table->date('data_inicial')->nullable();
             $table->date('data_final')->nullable();
-            $table->string('codigo')->unique();
+            //$table->string('codigo')->unique();
 
             // Outros campos de personalização podem ser adicionados aqui
             $table->timestamps();
