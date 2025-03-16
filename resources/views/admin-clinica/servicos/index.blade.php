@@ -9,7 +9,7 @@
             <tr>
                 <th>Data Inicial</th>
                 <th>Data Final</th>
-                <th>Código</th>
+                <!-- <th>Código</th> -->
                 <th>Procedimento</th>
                 <th>Valor</th>
             </tr>
