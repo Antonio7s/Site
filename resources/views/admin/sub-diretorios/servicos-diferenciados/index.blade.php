@@ -34,13 +34,18 @@
                                     $dataInicial = $servico->data_inicial;
                                     $dataFinal = $servico->data_final;
                                     $status = 'Inativo';
+                                    $cor = 'danger'; // Cor padrão para "Inativo"
+                                    
                                     if ($dataInicial && $dataFinal) {
                                         if ($today >= $dataInicial && $today <= $dataFinal) {
                                             $status = 'Ativo';
+                                            $cor = 'success'; // Cor para "Ativo"
                                         }
                                     }
-                                    echo $status;
                                 @endphp
+                                <span class="badge bg-{{ $cor }} text-white py-2 px-3 rounded-pill">
+                                    {{ $status }}
+                                </span>
                             </td>
                             <td>{{ $servico->procedimento->nome }}</td>
                             <td>R$ {{ number_format($servico->preco_customizado, 2, ',', '.') }}</td>
