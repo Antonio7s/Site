@@ -1,4 +1,4 @@
-<?php  
+<?php   
 namespace App\Http\Controllers\Indexinicial;
 
 use App\Http\Controllers\Controller;
@@ -148,6 +148,9 @@ class BuscaController extends Controller
             $medico->longitude = null;
             $medico->endereco = '--';
         }
+
+        // Adição do campo de foto se existir na tabela medicos
+        $medico->foto = !empty($medico->foto_url) ? $medico->foto_url : null;
 
         return $medico;
     }
