@@ -10,6 +10,7 @@ use App\Models\Medico;
 use App\Models\Especialidade;
 use App\Models\Procedimento;
 use App\Models\Agenda;
+use App\Models\MedicoEspecialidade;
 
 class ProfissionaisController extends Controller
 {
