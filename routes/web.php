@@ -140,6 +140,11 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     Route::controller(ServicoDiferenciadoController::class)->prefix('servicos-diferenciados')->group(function () {
         Route::get('/', 'index')->name('admin.servicos-diferenciados.index');
         Route::get('/create', 'create')->name('admin.servicos-diferenciados.create');
+
+        Route::post('servicos-diferenciados', 'store')->name('admin.servicos-diferenciados.store');
+        Route::get('servicos-diferenciados/{id}/edit', 'edit')->name('admin.servicos-diferenciados.edit');
+        Route::put('servicos-diferenciados/{id}', 'update')->name('admin.servicos-diferenciados.update');
+        Route::delete('servicos-diferenciados/{id}',  'destroy')->name('admin.servicos-diferenciados.destroy');
     });
 
     // Outros

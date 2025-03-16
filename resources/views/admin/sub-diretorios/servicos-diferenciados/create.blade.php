@@ -4,7 +4,8 @@
 
     <div class="container mt-5 ms-2">        
         <!-- Formulário de Cadastro -->
-        <form>
+        <form action="{{ route('servicos-diferenciados.store') }}" method="POST">
+            @csrf
 
             <div class="mb-3">
                 <label for="clinica" class="form-label">Clínica vinculada</label>
