@@ -337,7 +337,7 @@
             <form action="{{ route('index.inicial') }}" method="GET" style="display: flex; align-items: center; width: 100%;">
                 <select class="filter-select" name="filter">
                     <option value="todos" {{ ($filter ?? 'todos') === 'todos' ? 'selected' : '' }}>Todos</option>
-                    <option value="especialidade" {{ ($filter ?? 'todos') === 'especialidade' ? 'selected' : '' }}>Especialidade</option>
+                    <option value="procedimentos" {{ ($filter ?? 'todos') === 'procedimentos' ? 'selected' : '' }}>Procedimentos</option>
                     <option value="localizacao" {{ ($filter ?? 'todos') === 'localizacao' ? 'selected' : '' }}>Localização</option>
                     <option value="profissional" {{ ($filter ?? 'todos') === 'profissional' ? 'selected' : '' }}>Nome do Profissional</option>
                     <option value="clinica" {{ ($filter ?? 'todos') === 'clinica' ? 'selected' : '' }}>Nome da Clínica</option>
@@ -363,7 +363,15 @@
                     </div>
                     <div class="person-info">
                         <h2>{{ $medico->nome_completo }}</h2>
-                        <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
+                        <p><strong>Procedimentos:</strong> 
+                            @if(isset($medico->procedimentos) && $medico->procedimentos->count() > 0)
+                                @foreach($medico->procedimentos as $procedimento)
+                                    {{ $procedimento->nome }}{{ !$loop->last ? ', ' : '' }}
+                                @endforeach
+                            @else
+                                Nenhum procedimento cadastrado
+                            @endif
+                        </p>
                         <p><strong>Clínica:</strong> {{ $medico->clinica_nome }}</p>
                         <p><strong>Endereço:</strong> {{ $medico->endereco }}</p>
                         <p><strong>Localização:</strong> {{ $medico->localizacao }}</p>
