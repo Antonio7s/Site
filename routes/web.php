@@ -204,7 +204,7 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         //Agendamento
         Route::get('/index','index')->name('admin-clinica.agenda.index');
 
-        Route::get('agendamento/index', 'agendamento_index')->name('admin-clinica.agenda.agendamento.index'); 
+        Route::get('agendamento/{medicoId}', 'agendamento_index')->name('admin-clinica.agenda.agendamento.index'); 
         //Route::get('agendamento/create', 'agendamento_create')->name('admin-clinica.agenda.agendamento.create'); 
         //Route::get('agendamento/show', 'agendamento_show')->name('admin-clinica.agenda.agendamento.create');
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin_clinica;
 
 use App\Models\Medico;
 use App\Models\Agenda;
+use App\Models\Agendamento;
 use App\Models\Horario;
 
 
@@ -54,12 +55,19 @@ class AgendaController extends Controller
 
 
     // 
-    public function agendamento_index(Request $request)
+    public function agendamento_index(Request $request, $medicoId)
     {
         // BUSCA TODOS OS AGENDAMENTO VINCULADO A UM PROFISSIONAL
-        //code
 
-        return view('/admin-clinica/agenda/agendamento/index');
+        // Busca o médico pelo ID
+        $profissional = Medico::findOrFail($medicoId);
+
+        // Busca os agendamentos desse médico
+        $agendamentos = Agendamento::whereHas('horario.agenda', function ($query) use ($medicoId) {
+            $query->where('medico_id', $medicoId);
+        })->with(['horario', 'user'])->get();
+
+        return view('/admin-clinica/agenda/agendamento/index', compact('profissional', 'agendamentos'));
     }
 
     public function agendamento_edit(Request $request)

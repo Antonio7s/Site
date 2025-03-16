@@ -17,7 +17,7 @@
                     <td>{{$profissional->profissional_nome}}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Ações">
-                            <a href="{{ route('admin-clinica.agenda.agendamento.index') }}" class="btn btn-info btn-sm">Ver Agendamentos</a>
+                            <a href="{{ route('admin-clinica.agenda.agendamento.index', $profissional->id) }}" class="btn btn-info btn-sm">Ver Agendamentos</a>
                             <a href="{{ route('admin-clinica.agenda.horario.show', $profissional->id)  }}" class="btn btn-primary btn-sm">Ver Horários</a>
                             <a href="{{ route('admin-clinica.agenda.horario.create', $profissional->id) }}" class="btn btn-success btn-sm">Criar Horário</a>
                         </div>
