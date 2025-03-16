@@ -2,6 +2,7 @@
 
 @section('content')
     <style>
+        /* Estilos CSS (mantidos iguais) */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
@@ -161,6 +162,11 @@
         .btn-confirmar:hover {
             background-color: #0056b3;
         }
+        .selected-date {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
         /* Estilos responsivos */
         @media (max-width: 768px) {
             .search-bar {
@@ -230,6 +236,99 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Novos estilos para exibição dos horários lado a lado */
+        .horarios-container-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Largura máxima para 3 dias */
+            margin: 0 auto;
+        }
+
+        .horarios-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            overflow-x: hidden; /* Esconde o overflow */
+            scroll-behavior: smooth; /* Rolagem suave */
+        }
+
+        .dia-container {
+            border: 1px solid #007bff;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+            min-width: 120px; /* Largura mínima para cada dia */
+            flex: 0 0 calc(33.33% - 10px); /* Exibe 3 dias por vez */
+        }
+
+        .dia-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .dia-data {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .horarios-dia {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hour-box {
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #e9f5ff;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .hour-box.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .hour-box.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Estilos para as setas de navegação */
+        .scroll-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .scroll-button.left {
+            left: -15px;
+        }
+
+        .scroll-button.right {
+            right: -15px;
+        }
+
+        .scroll-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 
     <div class="container">
@@ -238,7 +337,7 @@
             <form action="{{ route('index.inicial') }}" method="GET" style="display: flex; align-items: center; width: 100%;">
                 <select class="filter-select" name="filter">
                     <option value="todos" {{ ($filter ?? 'todos') === 'todos' ? 'selected' : '' }}>Todos</option>
-                    <option value="especialidade" {{ ($filter ?? 'todos') === 'especialidade' ? 'selected' : '' }}>Especialidade</option>
+                    <option value="procedimentos" {{ ($filter ?? 'todos') === 'procedimentos' ? 'selected' : '' }}>Procedimentos</option>
                     <option value="localizacao" {{ ($filter ?? 'todos') === 'localizacao' ? 'selected' : '' }}>Localização</option>
                     <option value="profissional" {{ ($filter ?? 'todos') === 'profissional' ? 'selected' : '' }}>Nome do Profissional</option>
                     <option value="clinica" {{ ($filter ?? 'todos') === 'clinica' ? 'selected' : '' }}>Nome da Clínica</option>
@@ -252,118 +351,91 @@
         <p>Buscando por: <strong>{{ $searchTerm ?? 'Nenhum termo pesquisado' }}</strong></p>
         <p>Filtro selecionado: <strong>{{ ucfirst($filter ?? 'todos') }}</strong></p>
 
-        @if(isset($medicos) && !empty($searchTerm) && $medicos->isEmpty())
-            <p>Nenhum médico encontrado para sua busca.</p>
-            <h2>Outros Médicos:</h2>
-            @if($fallbackMedicos->isNotEmpty())
-                @foreach($fallbackMedicos as $medico)
-                    <div class="person-box">
-                        <div class="person-photo">
-                            @if(!empty($medico->foto))
-                                <img src="{{ $medico->foto }}" alt="{{ $medico->nome_completo }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
-                            @else
-                                Sem Foto
-                            @endif
-                        </div>
-                        <div class="person-info">
-                            <h2>{{ $medico->nome_completo }}</h2>
-                            <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
-                            <p><strong>Clínica:</strong> {{ $medico->clinica_nome }}</p>
-                            <p><strong>Endereço:</strong> {{ $medico->endereco }}</p>
-                            <p>
-                                <strong>Localização:</strong>
-                                @if(!empty($medico->latitude) && !empty($medico->longitude))
-                                    <a href="https://www.google.com/maps?q={{ $medico->latitude }},{{ $medico->longitude }}" target="_blank">Ver no Mapa</a>
-                                @else
-                                    Ver no Mapa
-                                @endif
-                            </p>
-                            <p><strong>Valor:</strong> {{ $medico->valor }}</p>
-                        </div>
-                        <div class="appointment-info">
-                            <button type="button" class="btn-agendamento" data-medico-id="{{ $medico->id }}">Agendar</button>
-                            @if(isset($medico->agendamentos) && $medico->agendamentos->count() > 0)
-                                @foreach($medico->agendamentos as $agendamento)
-                                    <div class="agenda">
-                                        <p class="agenda-date">{{ $agendamento->data ?? '--' }}</p>
-                                        <div class="horarios">
-                                            @if(isset($agendamento->calculated_slots) && !empty($agendamento->calculated_slots))
-                                                @foreach($agendamento->calculated_slots as $slot)
-                                                    <button class="hour-box" data-medico-id="{{ $medico->id }}" data-slot="{{ $slot }}">{{ $slot }}</button>
-                                                @endforeach
-                                            @else
-                                                <button class="hour-box" disabled>--</button>
-                                            @endif
-                                        </div>
-                                    </div>
+        @if(isset($medicos) && $medicos->isNotEmpty())
+            @foreach($medicos as $medico)
+                <div class="person-box">
+                    <div class="person-photo">
+                        @if(!empty($medico->foto))
+                            <img src="{{ $medico->foto }}" alt="{{ $medico->nome_completo }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                        @else
+                            Sem Foto
+                        @endif
+                    </div>
+                    <div class="person-info">
+                        <h2>{{ $medico->nome_completo }}</h2>
+                        <p><strong>Procedimentos:</strong> 
+                            @if(isset($medico->procedimentos) && $medico->procedimentos->count() > 0)
+                                @foreach($medico->procedimentos as $procedimento)
+                                    {{ $procedimento->nome }}{{ !$loop->last ? ', ' : '' }}
                                 @endforeach
                             @else
-                                <p>Sem horários disponíveis</p>
+                                Nenhum procedimento cadastrado
                             @endif
-                            <button type="button" class="btn-confirmar" data-medico-id="{{ $medico->id }}">Confirmar</button>
-                        </div>
+                        </p>
+                        <p><strong>Clínica:</strong> {{ $medico->clinica_nome }}</p>
+                        <p><strong>Endereço:</strong> {{ $medico->endereco }}</p>
+                        <p><strong>Localização:</strong> {{ $medico->localizacao }}</p>
+                        <p><strong>Valor:</strong> {{ $medico->valor }}</p>
                     </div>
-                @endforeach
-            @else
-                <p>Nenhum médico disponível.</p>
-            @endif
+                    <div class="appointment-info">
+                        <button type="button" class="btn-agendamento" data-medico-id="{{ $medico->id }}">Agendar</button>
+                        @if(isset($medico->horarios) && $medico->horarios->count() > 0)
+                            <div class="horarios-container-wrapper">
+                                <button class="scroll-button left" onclick="scrollHorarios('left', {{ $medico->id }})">&#10094;</button>
+                                <div class="horarios-container" id="horarios-container-{{ $medico->id }}">
+                                    @php
+                                        // Agrupa os horários por data
+                                        $horariosAgrupados = $medico->horarios->groupBy('data');
+                                    @endphp
+
+                                    @foreach($horariosAgrupados as $data => $horarios)
+                                        <div class="dia-container">
+                                            <div class="dia-header">
+                                                @php
+                                                    $diaSemana = \Carbon\Carbon::parse($data)->isoFormat('ddd');
+                                                    $diaSemanaPt = [
+                                                        'Mon' => 'Seg',
+                                                        'Tue' => 'Ter',
+                                                        'Wed' => 'Qua',
+                                                        'Thu' => 'Qui',
+                                                        'Fri' => 'Sex',
+                                                        'Sat' => 'Sáb',
+                                                        'Sun' => 'Dom'
+                                                    ][$diaSemana];
+                                                @endphp
+                                                {{ $diaSemanaPt }}
+                                            </div>
+                                            <div class="dia-data">
+                                                {{ \Carbon\Carbon::parse($data)->format('d/m') }}
+                                            </div>
+                                            <div class="horarios-dia">
+                                                @foreach($horarios as $slot)
+                                                    <button class="hour-box {{ $slot->bloqueado ? 'disabled' : '' }}" data-medico-id="{{ $medico->id }}" data-slot="{{ $slot->horario_inicio }}" data-date="{{ $slot->data }}" {{ $slot->bloqueado ? 'disabled' : '' }}>
+                                                        {{ \Carbon\Carbon::parse($slot->horario_inicio)->format('H:i') }}
+                                                    </button>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <button class="scroll-button right" onclick="scrollHorarios('right', {{ $medico->id }})">&#10095;</button>
+                            </div>
+                        @else
+                            <p>Sem horários disponíveis</p>
+                        @endif
+                        <div class="selected-date" id="selected-date-{{ $medico->id }}" style="display: none;">
+                            <strong>Data selecionada:</strong> <span id="date-{{ $medico->id }}"></span>
+                        </div>
+                        <button type="button" class="btn-confirmar" data-medico-id="{{ $medico->id }}" style="display:none;">Confirmar</button>
+                    </div>
+                </div>
+            @endforeach
         @else
-            @if(isset($medicos) && $medicos->isNotEmpty())
-                @foreach($medicos as $medico)
-                    <div class="person-box">
-                        <div class="person-photo">
-                            @if(!empty($medico->foto))
-                                <img src="{{ $medico->foto }}" alt="{{ $medico->nome_completo }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
-                            @else
-                                Sem Foto
-                            @endif
-                        </div>
-                        <div class="person-info">
-                            <h2>{{ $medico->nome_completo }}</h2>
-                            <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
-                            <p><strong>Clínica:</strong> {{ $medico->clinica_nome }}</p>
-                            <p><strong>Endereço:</strong> {{ $medico->endereco }}</p>
-                            <p>
-                                <strong>Localização:</strong>
-                                @if(!empty($medico->latitude) && !empty($medico->longitude))
-                                    <a href="https://www.google.com/maps?q={{ $medico->latitude }},{{ $medico->longitude }}" target="_blank">Ver no Mapa</a>
-                                @else
-                                    Ver no Mapa
-                                @endif
-                            </p>
-                            <p><strong>Valor:</strong> {{ $medico->valor }}</p>
-                        </div>
-                        <div class="appointment-info">
-                            <button type="button" class="btn-agendamento" data-medico-id="{{ $medico->id }}">Agendar</button>
-                            @if(isset($medico->agendamentos) && $medico->agendamentos->count() > 0)
-                                @foreach($medico->agendamentos as $agendamento)
-                                    <div class="agenda">
-                                        <p class="agenda-date">{{ $agendamento->data ?? '--' }}</p>
-                                        <div class="horarios">
-                                            @if(isset($agendamento->calculated_slots) && !empty($agendamento->calculated_slots))
-                                                @foreach($agendamento->calculated_slots as $slot)
-                                                    <button class="hour-box" data-medico-id="{{ $medico->id }}" data-slot="{{ $slot }}">{{ $slot }}</button>
-                                                @endforeach
-                                            @else
-                                                <button class="hour-box" disabled>--</button>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <p>Sem horários disponíveis</p>
-                            @endif
-                            <button type="button" class="btn-confirmar" data-medico-id="{{ $medico->id }}">Confirmar</button>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <p>Nenhum dado disponível.</p>
-            @endif
+            <p>Nenhum médico encontrado.</p>
         @endif
 
         <!-- Paginação -->
-        @if(isset($medicos))
+        @if(isset($medicos) && $medicos->hasPages())
             <div class="pagination">
                 {{ $medicos->onEachSide(1)->links('pagination::bootstrap-4') }}
             </div>
@@ -380,16 +452,27 @@
                     agenda.style.display = (!agenda.style.display || agenda.style.display === 'none') ? 'block' : 'none';
                 });
             });
-        
-            // Seleção dos horários e exibição do botão "Confirmar"
+
+            // Seleção dos horários e exibição da data
             const hourBoxes = document.querySelectorAll('.hour-box');
             hourBoxes.forEach(hourBox => {
                 hourBox.addEventListener('click', function () {
                     const medicoId = this.getAttribute('data-medico-id');
+                    const slotDate = this.getAttribute('data-date');
+
+                    // Remove a seleção de todos os horários do mesmo médico
                     document.querySelectorAll(`.hour-box[data-medico-id="${medicoId}"]`).forEach(box => {
                         box.classList.remove('selected');
                     });
+
+                    // Adiciona a classe 'selected' ao horário clicado
                     this.classList.add('selected');
+
+                    // Exibe a data do slot selecionado
+                    const selectedDateElement = document.getElementById(`selected-date-${medicoId}`);
+                    const dateElement = document.getElementById(`date-${medicoId}`);
+                    selectedDateElement.style.display = 'block';
+                    dateElement.textContent = slotDate;
 
                     // Exibe o botão "Confirmar" para o médico correspondente
                     const confirmButton = document.querySelector(`.btn-confirmar[data-medico-id="${medicoId}"]`);
@@ -405,7 +488,8 @@
                     const selectedHour = document.querySelector(`.hour-box.selected[data-medico-id="${medicoId}"]`);
                     if (selectedHour) {
                         const slot = selectedHour.getAttribute('data-slot');
-                        alert(`Horário confirmado: ${slot} para o médico ID ${medicoId}`);
+                        const slotDate = selectedHour.getAttribute('data-date');
+                        alert(`Horário confirmado: ${slot} - Data: ${slotDate} para o médico ID ${medicoId}`);
                         // Aqui você pode adicionar a lógica para confirmar o agendamento
                     } else {
                         alert('Por favor, selecione um horário antes de confirmar.');
@@ -414,47 +498,15 @@
             });
         });
 
-        // Lógica para o botão "Confirmar" com envio por POST
-        const confirmButtons = document.querySelectorAll('.btn-confirmar');
-        confirmButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const medicoId = this.getAttribute('data-medico-id');
-                const clinicaId = this.getAttribute('data-clinica-id'); // Certifique-se de que esse atributo esteja no botão
-                const selectedHour = document.querySelector(`.hour-box.selected[data-medico-id="${medicoId}"]`);
-
-                if (selectedHour) {
-                    const slot = selectedHour.getAttribute('data-slot');
-                    const agendaElement = selectedHour.closest('.agenda');
-                    const agendaDate = agendaElement.querySelector('.agenda-date').textContent.trim();
-
-                    // Cria um formulário oculto
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '{{ route("compra.store") }}';
-
-                    // Cria os campos ocultos e adiciona os dados
-                    const fields = {
-                        clinica_id: clinicaId,
-                        medico_id: medicoId,
-                        horario: slot,
-                        data: agendaDate,
-                        _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF Token para Laravel
-                    };
-
-                    for (const name in fields) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = name;
-                        input.value = fields[name];
-                        form.appendChild(input);
-                    }
-
-                    document.body.appendChild(form);
-                    form.submit();
-                } else {
-                    alert('Por favor, selecione um horário antes de confirmar.');
-                }
-            });
-        });
+        // Função para rolar os horários
+        function scrollHorarios(direction, medicoId) {
+            const container = document.getElementById(`horarios-container-${medicoId}`);
+            const scrollAmount = 200; // Quantidade de rolagem
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
     </script>
 @endsection
