@@ -106,9 +106,29 @@ class AgendaController extends Controller
         return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendaId'));
     }
 
-    public function excluirHorario()
+    public function excluirHorario($id)
     {
+        try {
+            $horario = Horario::findOrFail($id);
+
+            $horario->delete();
+    
+            return redirect()->back()
+                ->with('success', 'Horário excluído com sucesso!');
+    
+        } catch (QueryException $e) {
+            // Código 23000: violação de integridade referencial (foreign key)
+            if ($e->getCode() === '23000') {
+                return redirect()->back()
+                    ->with('error', 'Erro ao excluir horário: Existem registros vinculados que impedem a exclusão.');
+            }
+            return redirect()->back()
+                ->with('error', 'Erro ao excluir horário: ' . $e->getMessage());
         
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao excluir horário: ' . $e->getMessage());
+        }
     }
 
     //SALVAR OS HORARIOS NO BD

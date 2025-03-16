@@ -58,16 +58,16 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 //OBS:
 use App\Http\Controllers\Auth2\ClinicaVerificationController;
 
-Route::middleware(['auth:clinic'])->group(function () {
-    Route::get('/clinica/email/verify', [ClinicaVerificationController::class, 'show'])
-        ->name('clinica.verification.notice');
-    Route::get('/clinica/email/verify/{id}/{hash}', [ClinicaVerificationController::class, 'verify'])
-        ->middleware('signed')
-        ->name('clinica.verification.verify');
-    Route::post('/clinica/email/verification-notification', [ClinicaVerificationController::class, 'resend'])
-        ->middleware('throttle:6,1')
-        ->name('clinica.verification.send');
-});
+// Route::middleware(['auth:clinic'])->group(function () {
+//     Route::get('/clinica/email/verify', [ClinicaVerificationController::class, 'show'])
+//         ->name('clinica.verification.notice');
+//     Route::get('/clinica/email/verify/{id}/{hash}', [ClinicaVerificationController::class, 'verify'])
+//         ->middleware('signed')
+//         ->name('clinica.verification.verify');
+//     Route::post('/clinica/email/verification-notification', [ClinicaVerificationController::class, 'resend'])
+//         ->middleware('throttle:6,1')
+//         ->name('clinica.verification.send');
+// });
 
 //
 
@@ -207,7 +207,7 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         //Route::get('/horario/index', 'horario_index')->name('admin-clinica.agenda.horario.index');
         Route::get('/horario/create/{medicoId}', 'horario_create')->name('admin-clinica.agenda.horario.create');
         Route::get('/horario/show/{medicoId}', 'horario_show')->name('admin-clinica.agenda.horario.show');
-
+        Route::delete('/horario/{id}', 'excluirHorario')->name('admin-clinica.agenda.excluir-horario');
         //salvar o horario no bd.
         Route::post('/horarios', [AgendaController::class, 'salvarHorarios'])->name('admin-clinica.agenda.horarios');
 

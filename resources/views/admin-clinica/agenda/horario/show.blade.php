@@ -46,7 +46,7 @@
                                             {{ $schedule->procedimento->nome }}
                                         </span>
                                     </div>
-                                    <form method="POST" action="#" class="delete-form">
+                                    <form method="POST" action="{{ route('admin-clinica.agenda.excluir-horario', $schedule->id) }}" class="delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este horário?')">
