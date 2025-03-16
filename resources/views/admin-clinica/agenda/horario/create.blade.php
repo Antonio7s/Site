@@ -25,6 +25,32 @@
                 <input type="text" class="form-control" id="datas" placeholder="Selecione as datas" readonly required>
                 <small class="form-text text-muted">Escolha múltiplas datas.</small>
             </div>
+
+            <div class="accordion" id="procedimentosAccordion">
+                @foreach ($profissional->procedimentos as $procedimento)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ $procedimento->id }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ $procedimento->id }}" aria-expanded="false"
+                                aria-controls="collapse{{ $procedimento->id }}">
+                                <input type="checkbox" class="procedimento-checkbox me-2"
+                                    id="procedimento{{ $procedimento->id }}"
+                                    value="{{ $procedimento->id }}">
+                                {{ $procedimento->nome }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ $procedimento->id }}" class="accordion-collapse collapse"
+                            aria-labelledby="heading{{ $procedimento->id }}" data-bs-parent="#procedimentosAccordion">
+                            <div class="accordion-body">
+                                <strong>Valor:</strong> R$ {{ number_format($procedimento->valor, 2, ',', '.') }}<br>
+                                <strong>Classe ID:</strong> {{ $procedimento->classe_id }}
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+
             <button type="button" class="btn btn-success" onclick="gerarHorarios()">Gerar Horários</button>
         </form>
     </div>
@@ -95,6 +121,13 @@
             const datas = document.getElementById('datas').value.split(',').map(data => data.trim());
             const agendaId = document.getElementById('agendaId').value; // Pega o id da agenda
 
+            // Capturar o procedimento selecionado
+            const procedimentoSelecionado = document.querySelector(".procedimento-checkbox:checked");
+            if (!procedimentoSelecionado) {
+                alert("Por favor, selecione um procedimento.");
+                return;
+            }
+            const procedimentoId = procedimentoSelecionado.value; // ID do procedimento selecionado
 
             if (!horaInicio || !horaFim || !duracao || !datas.length) {
                 alert("Por favor, preencha todos os campos corretamente.");
@@ -115,7 +148,9 @@
                         duracao: duracao,
                         inicio: dataAtual.toTimeString().slice(0, 5),  // Formato 'HH:MM'
                         fim: fimConsulta.toTimeString().slice(0, 5),     // Formato 'HH:MM'
-                        agenda_id: agendaId  // Adiciona o id da agenda
+                        agenda_id: agendaId,  // Adiciona o id da agenda
+                        procedimento_id: procedimentoId // Adiciona o procedimento ao envio
+
                     });
                     dataAtual = fimConsulta; // Atualiza para o próximo horário
                 }
@@ -210,9 +245,6 @@
                 return;
             }
 
-            console.log(horariosGerados); // Verifique o conteúdo da variável
-
-
             fetch("{{ route('admin-clinica.agenda.horarios') }}", {
                 method: "POST",
                 headers: {
@@ -221,17 +253,25 @@
                 },
                 body: JSON.stringify({ horarios: horariosGerados })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 409) { // Conflito de horário duplicado
+                    alert('Erro: Horário duplicado!');
+                } else if (!response.ok) {
+                    alert('Erro ao salvar horários!');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
+                    alert('Sucesso: ' + data.message);
                     window.location.href = "{{ route('admin-clinica.agenda.index') }}";
-                } else {
-                    alert('Erro ao salvar os horários - create');
+                } else if (data.message) {
+                    alert('Erro: ' + data.message); // Exibe mensagem de erro do servidor
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert('Erro ao salvar os horários');
+                alert('Erro de rede ao salvar horários');
             });
         }
     </script>

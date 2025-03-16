@@ -27,6 +27,12 @@ return new class extends Migration
             
             $table->timestamps();
 
+            //(Restrição única)
+            $table->unique(
+                ['data', 'horario_inicio', 'procedimento_id', 'agenda_id'],
+                'horario_unique'
+            );
+
         });
     }
 

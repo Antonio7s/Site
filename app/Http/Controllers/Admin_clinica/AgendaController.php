@@ -106,7 +106,10 @@ class AgendaController extends Controller
         return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendaId'));
     }
 
-
+    public function excluirHorario()
+    {
+        
+    }
 
     //SALVAR OS HORARIOS NO BD
     public function salvarHorarios(Request $request)
@@ -130,6 +133,21 @@ class AgendaController extends Controller
                         'success' => false, // Adicionado
                         'message' => 'Dados de horário incompletos.'
                     ], 400);
+                }
+
+                // Verificação de duplicidade via código
+                $horarioExistente = Horario::where('data', $horarioData['data'])
+                    ->where('horario_inicio', date("H:i", strtotime($horarioData['inicio'])))
+                    ->where('agenda_id', $horarioData['agenda_id'])
+                    ->where('procedimento_id', $horarioData['procedimento_id'] ?? null)
+                    ->exists();
+            
+
+                if ($horarioExistente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Já existe um horário marcado para $data às $horarioInicio."
+                    ], 409); // Código 409 = Conflito
                 }
         
                 // Criação do horário no banco de dados
