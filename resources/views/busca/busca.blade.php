@@ -82,6 +82,7 @@
             color: #666;
             font-size: 14px;
             flex-shrink: 0;
+            overflow: hidden;
         }
         .person-info {
             flex: 2;
@@ -257,7 +258,13 @@
             @if($fallbackMedicos->isNotEmpty())
                 @foreach($fallbackMedicos as $medico)
                     <div class="person-box">
-                        <div class="person-photo">Sem Foto</div>
+                        <div class="person-photo">
+                            @if(!empty($medico->foto))
+                                <img src="{{ $medico->foto }}" alt="{{ $medico->nome_completo }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                            @else
+                                Sem Foto
+                            @endif
+                        </div>
                         <div class="person-info">
                             <h2>{{ $medico->nome_completo }}</h2>
                             <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
@@ -304,7 +311,13 @@
             @if(isset($medicos) && $medicos->isNotEmpty())
                 @foreach($medicos as $medico)
                     <div class="person-box">
-                        <div class="person-photo">Sem Foto</div>
+                        <div class="person-photo">
+                            @if(!empty($medico->foto))
+                                <img src="{{ $medico->foto }}" alt="{{ $medico->nome_completo }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                            @else
+                                Sem Foto
+                            @endif
+                        </div>
                         <div class="person-info">
                             <h2>{{ $medico->nome_completo }}</h2>
                             <p><strong>Especialidade:</strong> {{ $medico->especialidade }}</p>
@@ -401,7 +414,6 @@
             });
         });
 
-
         // Lógica para o botão "Confirmar" com envio por POST
         const confirmButtons = document.querySelectorAll('.btn-confirmar');
         confirmButtons.forEach(button => {
@@ -444,6 +456,5 @@
                 }
             });
         });
-
     </script>
 @endsection
