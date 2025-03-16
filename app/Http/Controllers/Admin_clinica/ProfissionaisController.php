@@ -11,6 +11,8 @@ use App\Models\Especialidade;
 use App\Models\Procedimento;
 use App\Models\Agenda;
 use App\Models\MedicoEspecialidade;
+use App\Models\MedicoProcedimento;
+
 
 class ProfissionaisController extends Controller
 {
