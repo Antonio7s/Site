@@ -14,3 +14,4 @@ class MedicoEspecialidade extends Pivot
     // Se tiver campos extras, adicione-os aqui, por exemplo:
     // protected $fillable = ['medico_id', 'especialidade_id', 'data_atribuicao'];
 }
+//
