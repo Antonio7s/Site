@@ -1,4 +1,5 @@
-<?php   
+<?php
+
 namespace App\Http\Controllers\Indexinicial;
 
 use App\Http\Controllers\Controller;
@@ -21,8 +22,8 @@ class BuscaController extends Controller
             switch ($filter) {
                 case 'especialidade':
                     $medicosQuery->where(function($query) use ($searchTerm) {
-                        $query->where('medico_especialidade', 'like', "%{$searchTerm}%")
-                              ->orWhere('medico_especialidade2', 'like', "%{$searchTerm}%");
+                        $query->where('especialidade', 'like', "%{$searchTerm}%")
+                              ->orWhere('especialidade2', 'like', "%{$searchTerm}%");
                     });
                     break;
                 case 'localizacao':
@@ -44,8 +45,8 @@ class BuscaController extends Controller
                     break;
                 default: // 'todos'
                     $medicosQuery->where(function ($q) use ($searchTerm) {
-                        $q->where('medico_especialidade', 'like', "%{$searchTerm}%")
-                          ->orWhere('medico_especialidade2', 'like', "%{$searchTerm}%")
+                        $q->where('especialidade', 'like', "%{$searchTerm}%")
+                          ->orWhere('especialidade2', 'like', "%{$searchTerm}%")
                           ->orWhereExists(function ($query) use ($searchTerm) {
                               $query->select(DB::raw(1))
                                     ->from('agendamentos')
@@ -75,32 +76,26 @@ class BuscaController extends Controller
         $medicos = $medicosQuery->paginate(7);
 
         // Se não houver resultados, exibe 22 médicos como fallback
-        $fallbackMedicos = collect();
         if ($medicos->isEmpty()) {
-            $fallbackMedicos = Medico::with('clinica')->select('medicos.*')->limit(22)->get();
+            $medicos = Medico::with('clinica')->select('medicos.*')->limit(22)->get();
         }
 
-        // Processa agendamentos e formata os dados
+        // Processa agendamentos (slots) e formata os dados
         foreach ($medicos as $medico) {
-            $this->attachHorarios($medico);
-            $this->formatMedico($medico);
-        }
-        foreach ($fallbackMedicos as $medico) {
             $this->attachHorarios($medico);
             $this->formatMedico($medico);
         }
 
         return view('busca.busca', [
-            'medicos'         => $medicos,
-            'fallbackMedicos' => $fallbackMedicos,
-            'searchTerm'      => $searchTerm,
-            'filter'          => $filter,
+            'medicos'    => $medicos,
+            'searchTerm' => $searchTerm,
+            'filter'     => $filter,
         ]);
     }
 
     private function attachHorarios($medico)
     {
-        // 1. Buscar todos os horários do médico com especialidade e valor
+        // Busca todos os horários do médico, sem excluir os agendados
         $horarios = DB::table('horarios')
             ->join('agendas', 'agendas.id', '=', 'horarios.agenda_id')
             ->join('procedimentos', 'procedimentos.id', '=', 'horarios.procedimento_id')
@@ -109,26 +104,34 @@ class BuscaController extends Controller
                      ->where('agendamentos.status', 'agendado');
             })
             ->where('agendas.medico_id', $medico->id)
+            ->orderBy('horarios.horario_inicio', 'asc')
             ->select(
                 'horarios.id as horario_id',
                 'horarios.horario_inicio',
+                'horarios.data', // A coluna data está na tabela horarios
                 'procedimentos.nome as especialidade',
                 'procedimentos.valor',
                 'agendamentos.id as agendamento_id'
             )
             ->get();
 
-        // 2. Filtrar apenas os horários que **não** estão agendados
-        $horariosDisponiveis = $horarios->filter(function ($horario) {
-            return is_null($horario->agendamento_id);
+        // Para cada horário, adiciona a flag 'bloqueado' se existir um agendamento com status "agendado"
+        $horarios->transform(function ($horario) {
+            $horario->bloqueado = !is_null($horario->agendamento_id);
+            return $horario;
         });
 
-        // 3. Pegar a primeira especialidade e valor (independentemente de ter agendado ou não)
-        $especialidade = $horarios->first()->especialidade ?? '--';
-        $valor = $horarios->first()->valor ?? '--';
+        // Define a especialidade e o valor com base no primeiro slot (se existir)
+        if ($horarios->isNotEmpty()) {
+            $especialidade = $horarios->first()->especialidade;
+            $valor = $horarios->first()->valor;
+        } else {
+            $especialidade = '--';
+            $valor = '--';
+        }
 
-        // 4. Atribuir ao médico
-        $medico->horarios_disponiveis = $horariosDisponiveis;
+        // Atribui todos os horários (com a flag) ao médico
+        $medico->horarios = $horarios;
         $medico->especialidade = $especialidade;
         $medico->valor = $valor;
     }
@@ -149,7 +152,7 @@ class BuscaController extends Controller
             $medico->endereco = '--';
         }
 
-        // Adição do campo de foto se existir na tabela medicos
+        // Adiciona o campo de foto, se existir
         $medico->foto = !empty($medico->foto_url) ? $medico->foto_url : null;
 
         return $medico;
