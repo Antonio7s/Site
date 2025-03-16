@@ -90,7 +90,7 @@ class BuscaController extends Controller
             $this->formatMedico($medico);
         }
 
-        return view('Busca.Busca', [
+        return view('busca.busca', [
             'medicos'         => $medicos,
             'fallbackMedicos' => $fallbackMedicos,
             'searchTerm'      => $searchTerm,
