@@ -34,10 +34,10 @@ class AuthenticatedSessionController2 extends Controller
         // Verifique se o usuário está autenticado na guard 'clinic'
         $user = Auth::guard('clinic')->user();
 
-        // Verifique se o e-mail do usuário está verificado
-        if ($user && !$user->hasVerifiedEmail()) {
-            return redirect()->route('clinica.verification.notice'); // Rota de verificação de e-mail da clínica
-        }
+        // // Verifique se o e-mail do usuário está verificado
+        // if ($user && !$user->hasVerifiedEmail()) {
+        //     return redirect()->route('clinica.verification.notice'); // Rota de verificação de e-mail da clínica
+        // }
 
         // Caso o e-mail esteja verificado, redirecione para o painel administrativo da clínica
         return redirect()->route('admin-clinica.dashboard.index');

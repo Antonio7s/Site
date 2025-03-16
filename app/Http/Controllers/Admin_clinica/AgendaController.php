@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin_clinica;
 
 use App\Models\Medico;
 use App\Models\Agenda;
+use App\Models\Agendamento;
 use App\Models\Horario;
 
 
@@ -54,12 +55,19 @@ class AgendaController extends Controller
 
 
     // 
-    public function agendamento_index(Request $request)
+    public function agendamento_index(Request $request, $medicoId)
     {
         // BUSCA TODOS OS AGENDAMENTO VINCULADO A UM PROFISSIONAL
-        //code
 
-        return view('/admin-clinica/agenda/agendamento/index');
+        // Busca o médico pelo ID
+        $profissional = Medico::findOrFail($medicoId);
+
+        // Busca os agendamentos desse médico
+        $agendamentos = Agendamento::whereHas('horario.agenda', function ($query) use ($medicoId) {
+            $query->where('medico_id', $medicoId);
+        })->with(['horario', 'user'])->get();
+
+        return view('/admin-clinica/agenda/agendamento/index', compact('profissional', 'agendamentos'));
     }
 
     public function agendamento_edit(Request $request)
@@ -106,7 +114,30 @@ class AgendaController extends Controller
         return view('/admin-clinica/agenda/horario/create', compact('profissional', 'agendaId'));
     }
 
+    public function excluirHorario($id)
+    {
+        try {
+            $horario = Horario::findOrFail($id);
 
+            $horario->delete();
+    
+            return redirect()->back()
+                ->with('success', 'Horário excluído com sucesso!');
+    
+        } catch (QueryException $e) {
+            // Código 23000: violação de integridade referencial (foreign key)
+            if ($e->getCode() === '23000') {
+                return redirect()->back()
+                    ->with('error', 'Erro ao excluir horário: Existem registros vinculados que impedem a exclusão.');
+            }
+            return redirect()->back()
+                ->with('error', 'Erro ao excluir horário: ' . $e->getMessage());
+        
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao excluir horário: ' . $e->getMessage());
+        }
+    }
 
     //SALVAR OS HORARIOS NO BD
     public function salvarHorarios(Request $request)
@@ -130,6 +161,21 @@ class AgendaController extends Controller
                         'success' => false, // Adicionado
                         'message' => 'Dados de horário incompletos.'
                     ], 400);
+                }
+
+                // Verificação de duplicidade via código
+                $horarioExistente = Horario::where('data', $horarioData['data'])
+                    ->where('horario_inicio', date("H:i", strtotime($horarioData['inicio'])))
+                    ->where('agenda_id', $horarioData['agenda_id'])
+                    ->where('procedimento_id', $horarioData['procedimento_id'] ?? null)
+                    ->exists();
+            
+
+                if ($horarioExistente) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Já existe um horário marcado para $data às $horarioInicio."
+                    ], 409); // Código 409 = Conflito
                 }
         
                 // Criação do horário no banco de dados

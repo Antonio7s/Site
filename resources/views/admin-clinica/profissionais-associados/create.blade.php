@@ -84,7 +84,7 @@
                 <label for="conselho_numero" class="form-label">Número do Conselho/UF</label>
                 <input type="text" id="conselho_numero" name="conselho_numero" class="form-control" placeholder="Número do Conselho/UF" value="{{ old('conselho_numero') }}" required>
             </div>
-            
+<!--
             <div class="mb-3">
                 <label for="consulta_retorno" class="form-label">Consulta de Retorno</label>
                 <select id="consulta_retorno" class="form-select" name="consulta_retorno" required onchange="toggleReturnDays()">
@@ -93,12 +93,12 @@
                     <option value="nao" {{ old('consulta_retorno') == 'nao' ? 'selected' : '' }}>Não</option>
                 </select>
             </div>
-            
+
             <div class="mb-3" id="returnDaysField" style="display: {{ old('consulta_retorno') == 'sim' ? 'block' : 'none' }};">
                 <label for="employeeReturnDays" class="form-label">Dias para Retorno</label>
                 <input type="number" id="employeeReturnDays" name="dias_retorno" class="form-control" placeholder="Informe os dias para retorno" value="{{ old('dias_retorno') }}">
             </div>
-            
+-->           
             <button type="submit" class="btn btn-primary">Adicionar Profissional</button>
         </form>
     </div>

@@ -88,7 +88,7 @@
       <div class="d-flex align-items-center">
         @auth
           <span class="me-2">{{ auth()->user()->name }}</span>
-          <img src="{{ auth()->user()->profile_photo_url ?? 'https://via.placeholder.com/40' }}" alt="{{ auth()->user()->name }}" class="rounded-circle" width="40" height="40">
+          <!-- <img src="{{ auth()->user()->photo_url ?? 'https://via.placeholder.com/40' }}" alt="{{ auth()->user()->name }}" class="rounded-circle" width="40" height="40"> -->
         @else
           <a href="{{ url('/login') }}" class="me-2">Login</a>
           <a href="{{ url('/register') }}">Cadastro</a>

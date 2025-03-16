@@ -106,13 +106,14 @@ class ProfissionaisController extends Controller
 
         // Validação dos dados enviados
         $request->validate([
-            'id_clinica'      => 'required|exists:clinicas,id',
-            'primeiro_nome'   => 'required|string|max:255',
-            'segundo_nome'    => 'nullable|string|max:255',
+            'clinica_id'      => 'required|exists:clinicas,id',
+            'profissional_nome'   => 'required|string|max:255',
+            'profissional_sobrenome'    => 'nullable|string|max:255',
             'foto_url'        => 'nullable|image|max:2048',
             'email'           => "required|email|unique:medicos,email,{$id}",
             'telefone'        => 'required|string|max:20',
-            'crm'             => "required|string|unique:medicos,crm,{$id}",
+            'conselho_nome'   => "required|string|unique:medicos,crm,{$id}",
+            'conselho_numero' => 'required|string|max:20',
             'especialidades'  => 'required|array',
             'especialidades.*'=> 'exists:especialidades,id',
             'procedimentos'   => 'required|array',

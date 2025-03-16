@@ -58,16 +58,16 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 //OBS:
 use App\Http\Controllers\Auth2\ClinicaVerificationController;
 
-Route::middleware(['auth:clinic'])->group(function () {
-    Route::get('/clinica/email/verify', [ClinicaVerificationController::class, 'show'])
-        ->name('clinica.verification.notice');
-    Route::get('/clinica/email/verify/{id}/{hash}', [ClinicaVerificationController::class, 'verify'])
-        ->middleware('signed')
-        ->name('clinica.verification.verify');
-    Route::post('/clinica/email/verification-notification', [ClinicaVerificationController::class, 'resend'])
-        ->middleware('throttle:6,1')
-        ->name('clinica.verification.send');
-});
+// Route::middleware(['auth:clinic'])->group(function () {
+//     Route::get('/clinica/email/verify', [ClinicaVerificationController::class, 'show'])
+//         ->name('clinica.verification.notice');
+//     Route::get('/clinica/email/verify/{id}/{hash}', [ClinicaVerificationController::class, 'verify'])
+//         ->middleware('signed')
+//         ->name('clinica.verification.verify');
+//     Route::post('/clinica/email/verification-notification', [ClinicaVerificationController::class, 'resend'])
+//         ->middleware('throttle:6,1')
+//         ->name('clinica.verification.send');
+// });
 
 //
 
@@ -140,6 +140,11 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
     Route::controller(ServicoDiferenciadoController::class)->prefix('servicos-diferenciados')->group(function () {
         Route::get('/', 'index')->name('admin.servicos-diferenciados.index');
         Route::get('/create', 'create')->name('admin.servicos-diferenciados.create');
+
+        Route::post('servicos-diferenciados', 'store')->name('admin.servicos-diferenciados.store');
+        Route::get('servicos-diferenciados/{id}/edit', 'edit')->name('admin.servicos-diferenciados.edit');
+        Route::put('servicos-diferenciados/{id}', 'update')->name('admin.servicos-diferenciados.update');
+        Route::delete('servicos-diferenciados/{id}',  'destroy')->name('admin.servicos-diferenciados.destroy');
     });
 
     // Outros
@@ -199,7 +204,7 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         //Agendamento
         Route::get('/index','index')->name('admin-clinica.agenda.index');
 
-        Route::get('agendamento/index', 'agendamento_index')->name('admin-clinica.agenda.agendamento.index'); 
+        Route::get('agendamento/{medicoId}', 'agendamento_index')->name('admin-clinica.agenda.agendamento.index'); 
         //Route::get('agendamento/create', 'agendamento_create')->name('admin-clinica.agenda.agendamento.create'); 
         //Route::get('agendamento/show', 'agendamento_show')->name('admin-clinica.agenda.agendamento.create');
 
@@ -207,7 +212,7 @@ Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('
         //Route::get('/horario/index', 'horario_index')->name('admin-clinica.agenda.horario.index');
         Route::get('/horario/create/{medicoId}', 'horario_create')->name('admin-clinica.agenda.horario.create');
         Route::get('/horario/show/{medicoId}', 'horario_show')->name('admin-clinica.agenda.horario.show');
-
+        Route::delete('/horario/{id}', 'excluirHorario')->name('admin-clinica.agenda.excluir-horario');
         //salvar o horario no bd.
         Route::post('/horarios', [AgendaController::class, 'salvarHorarios'])->name('admin-clinica.agenda.horarios');
 

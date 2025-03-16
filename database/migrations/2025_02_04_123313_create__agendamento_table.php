@@ -28,7 +28,7 @@ return new class extends Migration
 
             // Chaves estrangeiras 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('cascade');
+            $table->foreign('horario_id')->references('id')->on('horarios')->onDelete('restrict'); // restrict
         });
     }
 
