@@ -11,7 +11,7 @@
                 <th>Horário</th>
                 <th>Cliente</th>
                 <th>Procedimento</th>
-                <th>Valor</th>
+                <!-- <th>Valor</th> -->
                 <th>Status</th>
                 <!--<th>Ações</th> -->
             </tr>
@@ -23,7 +23,7 @@
                     <td>{{ date('H:i', strtotime($agendamento->horario->horario_inicio)) }}</td>
                     <td>{{ $agendamento->user->name }}</td>
                     <td>{{ $agendamento->horario->procedimento->nome ?? 'N/A' }}</td>
-                    <td>R$ {{ number_format($agendamento->horario->procedimento->valor ?? 0, 2, ',', '.') }}</td>
+                    <!-- <td>R$ {{ number_format($agendamento->horario->procedimento->valor ?? 0, 2, ',', '.') }}</td> -->
                     <td>{{ ucfirst($agendamento->status) }}</td>
                     <!-- <td>
                         <a href="#" class="btn btn-info btn-sm">Visualizar</a>
