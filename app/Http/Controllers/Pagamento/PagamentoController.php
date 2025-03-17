@@ -39,18 +39,41 @@ class PagamentoController extends Controller
     // }
 
 
-    public function index(Request $request, $clinica_id)
+    public function index(Request $request)
     {
-        // Pegue os dados enviados via query (ex: horário, data, ID do médico, etc.)
-        $horario = $request->query('horario');
-        $medico_id = $request->query('medico_id');
-        $data = $request->query('data');
+        // Obter o ID do horário via POST
+        $horario_id = $request->input('horario_id');
 
-        // Aqui você pode buscar informações extras no banco se necessário
-        // e então exibir a view de compra com os dados.
+        // Busque as informações do horário no banco de dados
+        $horario = Horario::with(['agenda.medico.clinica', 'procedimento'])
+                        ->where('id', $horario_id)
+                        ->first();
 
-        return view('pagamento.checkout', compact('clinica_id', 'horario', 'medico_id', 'data'));
+        // Se o horário não for encontrado, redirecione ou trate o erro
+        if (!$horario) {
+            return redirect()->back()->with('error', 'Horário não encontrado.');
+        }
+
+        // Pegue todos os dados do procedimento relacionado ao horário
+        $procedimento = $horario->procedimento;  // Acesso completo ao objeto 'procedimento'
+        
+        
+        // A partir do horário, você pode acessar a agenda e a clínica
+        $agenda = $horario->agenda;         // Agenda associada ao horário
+        $medico = $agenda->medico;
+        $clinica = $medico->clinica;        // Clinica associada à agenda
+
+        // Pegue os dados da agenda e do procedimento relacionados
+        //$agenda_id = $horario->agenda_id;
+        //$procedimento_id = $horario->procedimento_id;
+        $medico_id = $horario->agenda->medico_id; // Supondo que 'agenda' tenha uma relação com 'medico'
+        $data = $horario->data; // Ou qualquer outra informação que você precise
+        $clinica_id = $horario->agenda->clinica_id;
+        // Agora, você pode passar os dados para a view
+
+        return view('pagamento.checkout', compact('clinica', 'horario', 'medico', 'data', 'procedimento', 'agenda'));
     }
+
 
     public function store(Request $request)
     {
@@ -73,6 +96,7 @@ class PagamentoController extends Controller
         ]);
 
         $user = Auth::user();
+        $horario = Horario::findOrFail($request->horario_id); // Usa o ID do request
 
         // Verifica se o usuário já possui customer_id, se não, cria o cliente no Asaas
         if (!$user->customer_id) {
@@ -88,8 +112,16 @@ class PagamentoController extends Controller
             $customerId = $user->customer_id;
         }
 
+        $clinica_id = $request->input('clinica_id');
+
         // Cria a cobrança PIX
-        $cobranca = $this->asaasService->criarCobranca($customerId, $request->valor, $request->descricao, 'PIX');
+        $cobranca = $this->asaasService->criarCobrancaPix(
+            $customerId,
+            $request->valor,
+            $request->descricao,
+            $clinica_id,
+            $user->cpf
+        );
 
         if (!isset($cobranca['id'])) {
             return redirect()->route('pagamento.falhaPix');
@@ -97,7 +129,7 @@ class PagamentoController extends Controller
 
         // Criação do agendamento
         //obs:
-        $horario = Horario::findOrFail(1); // Aqui você pode alterar conforme necessário
+        //$horario = Horario::findOrFail(1); // Aqui você pode alterar conforme necessário
         $agendamento = new Agendamento();
         $agendamento->user_id = $user->id;
         $agendamento->horario_id = $horario->id;

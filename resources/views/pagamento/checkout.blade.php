@@ -60,14 +60,6 @@
                         <form id="formCartao" action="{{ route('pagamento.finalizarCartao') }}" method="POST">
                             @csrf
                             <div id="creditCardSection">
-                                <div class="mb-3">
-                                    <label for="savedCardSelect" class="form-label">Cartões Salvos</label>
-                                    <select class="form-select" id="savedCardSelect" name="savedCard">
-                                        <option value="new">Novo Cartão</option>
-                                        <option value="card1" data-name="Carlos Oliveira" data-number="**** **** **** 1234" data-expiry="12/27">Visa - 1234</option>
-                                        <option value="card2" data-name="Carlos Oliveira" data-number="**** **** **** 5678" data-expiry="07/26">MasterCard - 5678</option>
-                                    </select>
-                                </div>
                                 <div id="cardDetails">
                                     <div class="mb-3">
                                         <label for="cardName" class="form-label">Nome do Titular</label>
@@ -99,6 +91,7 @@
                                     </select>
                                 </div>
 
+                                    <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
 
                                 <button type="submit" class="btn btn-primary w-100">Finalizar Pagamento</button>
                             </div>
@@ -107,6 +100,7 @@
                         <!-- Seção Pix -->
                         <form id="formPix" action="{{ route('pagamento.gerarPix') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="horario_id" value="{{ $horario->id }}">
                             <input type="hidden" name="valor" value="{{ $procedimento->valor }}">
                             <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
                             <div id="pixSection" class="hidden">

@@ -410,9 +410,14 @@
                                             </div>
                                             <div class="horarios-dia">
                                                 @foreach($horarios as $slot)
-                                                    <button class="hour-box {{ $slot->bloqueado ? 'disabled' : '' }}" data-medico-id="{{ $medico->id }}" data-slot="{{ $slot->horario_inicio }}" data-date="{{ $slot->data }}" {{ $slot->bloqueado ? 'disabled' : '' }}>
-                                                        {{ \Carbon\Carbon::parse($slot->horario_inicio)->format('H:i') }}
-                                                    </button>
+                                                <button class="hour-box {{ $slot->bloqueado ? 'disabled' : '' }}"
+                                                        data-medico-id="{{ $medico->id }}"
+                                                        data-slot="{{ $slot->horario_inicio }}"
+                                                        data-date="{{ $slot->data }}"
+                                                        data-horario-id="{{ $slot->horario_id }}"
+                                                        {{ $slot->bloqueado ? 'disabled' : '' }}>
+                                                    {{ \Carbon\Carbon::parse($slot->horario_inicio)->format('H:i') }}
+                                                </button>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -481,21 +486,46 @@
             });
 
             // Lógica para o botão "Confirmar"
+            // Lógica para o botão "Confirmar"
             const confirmButtons = document.querySelectorAll('.btn-confirmar');
             confirmButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     const medicoId = this.getAttribute('data-medico-id');
                     const selectedHour = document.querySelector(`.hour-box.selected[data-medico-id="${medicoId}"]`);
                     if (selectedHour) {
-                        const slot = selectedHour.getAttribute('data-slot');
-                        const slotDate = selectedHour.getAttribute('data-date');
-                        alert(`Horário confirmado: ${slot} - Data: ${slotDate} para o médico ID ${medicoId}`);
-                        // Aqui você pode adicionar a lógica para confirmar o agendamento
+                        // Aqui pegamos o id do horário
+                        const horarioId = selectedHour.getAttribute('data-horario-id');
+                        // Agora, vamos enviar esse valor para outra view
+                        enviarHorario(horarioId);
                     } else {
                         alert('Por favor, selecione um horário antes de confirmar.');
                     }
                 });
             });
+
+            function enviarHorario(horarioId) {
+                // Cria um formulário oculto para enviar o id do horário via POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route("compra.index") }}'; // Altere para a rota desejada
+
+                // Campo do token CSRF
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '_token';
+                tokenInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                form.appendChild(tokenInput);
+
+                // Campo com o id do horário
+                const horarioIdInput = document.createElement('input');
+                horarioIdInput.type = 'hidden';
+                horarioIdInput.name = 'horario_id';
+                horarioIdInput.value = horarioId;
+                form.appendChild(horarioIdInput);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
         });
 
         // Função para rolar os horários
