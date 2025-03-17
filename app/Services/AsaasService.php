@@ -21,11 +21,11 @@ class AsaasService
 
 
     // Método para criar cobrança Pix
-    public function criarCobrancaPix($customerId, $valor, $descricao)
+    public function criarCobrancaPix($customerId, $valor, $descricao,  $clinica_id, $cpfCliente)
     {
         // Buscar os splits no banco de dados (ajuste conforme o nome da sua tabela e os campos)
         //$splitsData = Clinica::where('customer_id', $customerId)->get();
-        $splitsData = Clinica::where('id', 1)->get();
+        $splitsData = Clinica::where('id',  $clinica_id)->get();
 
         // Prepara o array de splits com base nos dados do banco de dados.
         $splits = [];
@@ -36,10 +36,9 @@ class AsaasService
                 'fixedValue'     => $split->valor_fixo_lucro,  // Valor fixo
                 'percentualValue'=> $split->porcentagem_lucro, // Percentual
                 //'totalFixedValue'=> $split->total_fixed_value, // Total fixo
-                'description'    => 'SPLIT MEDEXAME',       // Descrição
+                'description'    => $descricao,       // Descrição
             ];
         }
-
 
         $response = $this->client->post("{$this->baseUrl}payments", [
             'headers' => [
@@ -49,9 +48,9 @@ class AsaasService
             ],
             'json' => [
                 'customer'    => $customerId,
-                'billingType' => $billingType, // Pode ser 'PIX' ou 'BOLETO'
+                'billingType' => 'PIX', // Pode ser 'PIX' ou 'BOLETO'
                 'value'       => $valor,
-                'cpfCnpj'   => '071.275.153-01', //chumbado
+                'cpfCnpj'   => $cpfCliente, //000.000.000-00
                 'description' => $descricao,
                 'dueDate'     => now()->addDays(5)->format('Y-m-d'),
                 'splits'      => $splits, // Passa o array de splits aqui

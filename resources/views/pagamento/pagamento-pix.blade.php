@@ -33,7 +33,7 @@
     }
 
     // Verifica o pagamento a cada 3 segundos
-    setInterval(verificarPagamento, 3000);
+    setInterval(verificarPagamento, 15000);
 </script>
 
 @endsection
