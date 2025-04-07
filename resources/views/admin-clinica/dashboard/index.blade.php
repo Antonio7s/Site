@@ -1,4 +1,4 @@
-@extends('layouts.painel-clinica')
+@extends('layouts.painel-clinica') 
 
 @section('header_title', 'Agendamento')
 
@@ -139,8 +139,9 @@
   <script>
     let dashboardData = {
       hoje: {
+        // O controller passa os dados como array de objetos com {categoria, total} e os detalhes dos agendamentos
         categoryData: @json($vendasPorCategoria ?? []),
-        salesData: @json($detalhesAgendamentos ?? []), // Estrutura: { labels: [...], data: [...] }
+        salesData: @json($detalhesAgendamentos ?? []),
         doctorsAgenda: @json($doctorsAgendaHoje ?? []),
         dashboardLabel: @json($hojeStr ?? date('Y-m-d'))
       },
@@ -163,19 +164,25 @@
   <script>
     let categoryChart, salesChart;
 
-    function updateCategoryChart(data) {
+    // Atualiza o gráfico de Agendamentos por Categoria
+    function updateCategoryChart(categoryData) {
+      // Transforma o array de objetos para arrays separados de rótulos e valores
+      let labels = categoryData.map(item => item.categoria);
+      let totals = categoryData.map(item => parseInt(item.total));
+
       const ctx = document.getElementById('categoryChart').getContext('2d');
       if (categoryChart) {
-        categoryChart.data.datasets[0].data = data;
+        categoryChart.data.labels = labels;
+        categoryChart.data.datasets[0].data = totals;
         categoryChart.update();
       } else {
         categoryChart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: ['Consultas', 'Exames', 'Checkup', 'Odontologia'],
+            labels: labels,
             datasets: [{
               label: 'Agendamentos',
-              data: data,
+              data: totals,
               backgroundColor: [
                 'rgba(54, 162, 235, 0.7)',
                 'rgba(255, 206, 86, 0.7)',
@@ -200,20 +207,36 @@
       }
     }
 
+    // Atualiza o gráfico de Vendas / Agendamentos por Período
     function updateSalesChart(dataObj) {
+      // Verifica se os dados já estão agregados (labels e data) ou se precisam ser extraídos dos detalhes
+      let labels = dataObj.labels;
+      let data = dataObj.data;
+      
+      // Caso venha como array de objetos, agregue os dados conforme a data (aqui é um exemplo simples)
+      if (!labels || !data) {
+        labels = dataObj.map(item => {
+          // Formata a data se necessário (assumindo que item.data_agendamento esteja no formato Y-m-d)
+          let parts = item.data_agendamento.split('-');
+          return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        });
+        // Se cada agendamento vale 1 unidade, mapeamos para 1
+        data = dataObj.map(item => 1);
+      }
+      
       const ctx = document.getElementById('salesChart').getContext('2d');
       if (salesChart) {
-        salesChart.data.labels = dataObj.labels;
-        salesChart.data.datasets[0].data = dataObj.data;
+        salesChart.data.labels = labels;
+        salesChart.data.datasets[0].data = data;
         salesChart.update();
       } else {
         salesChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: dataObj.labels,
+            labels: labels,
             datasets: [{
               label: 'Agendamentos',
-              data: dataObj.data,
+              data: data,
               fill: false,
               borderColor: 'rgba(255,99,132,1)',
               tension: 0.1
@@ -227,6 +250,7 @@
       }
     }
 
+    // Atualiza os cards dos médicos (caso haja dados)
     function updateDoctorsCards(doctors) {
       const container = document.getElementById('doctorsCards');
       container.innerHTML = '';
@@ -273,6 +297,7 @@
       });
     }
 
+    // Função para aplicar o filtro e atualizar o dashboard
     function applyFilter() {
       const filterValue = document.querySelector('input[name="filterOption"]:checked').value;
       if (filterValue === 'custom') {
@@ -282,7 +307,7 @@
           alert('Selecione as duas datas para o filtro personalizado.');
           return;
         }
-        // Requisição AJAX para dados personalizados (implemente o endpoint no controller)
+        // Requisição AJAX para dados personalizados (endpoint customFilter no controller)
         fetch(`/dashboard/custom?start=${start}&end=${end}`)
           .then(response => response.json())
           .then(data => {
