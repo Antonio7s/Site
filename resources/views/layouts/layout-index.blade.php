@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>   
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -132,60 +132,60 @@
             margin-left: auto;
         }
 
-     /* Estilos responsivos */
-@media (max-width: 768px) {
-    .logo {
-        font-size: 20px;
-    }
-    .nav-link {
-        margin: 0 5px;
-        font-size: 14px;
-    }
-    .banner {
-        font-size: 24px;
-        height: 200px;
-    }
-    .info-section {
-        padding: 15px;
-    }
-    footer .social-icons a {
-        font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
-    }
-    .user-container {
-        flex-direction: column;
-        align-items: flex-end;
-    }
-    #userInfo, #clinicInfo {
-        margin-top: 10px;
-    }
-    /* Aumentando o tamanho da fonte dos menus específicos */
-    .nav-link, 
-    .dropdown-toggle {
-        font-size: 17px; /* Aumentado para 17px */
-    }
-}
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 20px;
+            }
+            .nav-link {
+                margin: 0 5px;
+                font-size: 14px;
+            }
+            .banner {
+                font-size: 24px;
+                height: 200px;
+            }
+            .info-section {
+                padding: 15px;
+            }
+            footer .social-icons a {
+                font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
+            }
+            .user-container {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            #userInfo, #clinicInfo {
+                margin-top: 10px;
+            }
+            /* Aumentando o tamanho da fonte dos menus específicos */
+            .nav-link, 
+            .dropdown-toggle {
+                font-size: 17px; /* Aumentado para 17px */
+            }
+        }
 
-@media (max-width: 576px) {
-    .logo {
-        font-size: 18px;
-    }
-    .nav-link {
-        font-size: 17px; /* Mantendo 17px para melhor visibilidade */
-    }
-    .banner {
-        font-size: 20px;
-        height: 150px;
-    }
-    .info-section {
-        padding: 10px;
-    }
-    footer .social-icons a {
-        font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
-    }
-    .user-container {
-        align-items: center;
-    }
-}
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 18px;
+            }
+            .nav-link {
+                font-size: 17px; /* Mantendo 17px para melhor visibilidade */
+            }
+            .banner {
+                font-size: 20px;
+                height: 150px;
+            }
+            .info-section {
+                padding: 10px;
+            }
+            footer .social-icons a {
+                font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
+            }
+            .user-container {
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -238,40 +238,40 @@
             @endif
         </div>
 
-
-    <!-- Menu de Navegação -->
-    <nav class="navbar navbar-expand-lg navbar-dark w-100" style="background-color: #007bff;">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse w-100" id="navbarNav">
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sou Paciente
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="menuCliente">
-                    <li><a class="dropdown-item" href="{{ route('register') }}">Fazer Login</a></li>
-                    <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
-                    <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
-                    <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
-                    <li><a class="dropdown-item" href=" {{ route('public.fale-conosco') }} ">Fale Conosco</a></li>
-                </ul>
+        <!-- Menu de Navegação -->
+        <nav class="navbar navbar-expand-lg navbar-dark w-100" style="background-color: #007bff;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse w-100" id="navbarNav">
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sou Paciente
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="menuCliente">
+                        <li><a class="dropdown-item" href="{{ route('register') }}">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
+                        <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
+                        <li><a class="dropdown-item" href=" {{ route('public.fale-conosco') }} ">Fale Conosco</a></li>
+                    </ul>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sou Profissional de saúde
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="menuProfissional">
+                        <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
+                        <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
+                        <!-- <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li> -->
+                        <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
+                    </ul>
+                </div>
+                <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
+                <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
             </div>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
-                    Sou Profissional de saúde
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="menuProfissional">
-                    <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
-                    <li><a class="dropdown-item" href="{{ route('register2') }}">Fazer Cadastro</a></li>
-                    <!-- <li><a class="dropdown-item" href="em-construcao">Quero ser Parceiro</a></li> -->
-                    <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
-                </ul>
-            </div>
-            <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
-            <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
-        </div>
-    </nav>
+        </nav>
+    </div>
 </div>
 </header>
 
@@ -440,9 +440,6 @@
             console.error('Erro ao fazer logout:', error);
         });
     }
-
-
-    
 </script>
 
 </body>

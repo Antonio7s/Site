@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileController2;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Indexinicial\BuscaController;
+use App\Http\Controllers\Indexinicial\IndexInicialController;
 
 
 //use App\Http\Controllers\HomeController;
@@ -294,7 +295,7 @@ Route::middleware('auth:clinic')->group(function () {
 
 // Páginas públicas (Index e outras estáticas)
 Route::name('public.')->group(function () {
-    Route::view('/', 'Home/index')->name('index');
+   
     Route::view('fale-conosco', 'Home/fale-conosco')->name('fale-conosco');
     Route::view('politicas-de-privacidade', 'Home/politicas-de-privacidade')->name('politicas');
     Route::view('sobre-a-medexame', 'Home/sobre-a-medexame')->name('sobre');
@@ -321,7 +322,7 @@ Route::get('/admin/usuarios', [UsuarioController::class, 'index'])->name('admin.
 
 Route::post('/admin/homepage/save', [HomepageController::class, 'save'])->name('admin.homepage.save');
 
-// Route::get('/admin/home', [HomeController::class, 'index'])->name('admin.home.index');
+ //Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 // Route::post('/admin/home/save', [HomeController::class, 'save'])->name('admin.homepage.save');
 
 //Asaas
@@ -329,3 +330,7 @@ Route::post('/asaas/webhook', [AsaasController::class, 'webhook']);
 
 
 Route::get('/Busca', [BuscaController::class, 'Busca'])->name('index.inicial');
+
+Route::get('/', [\App\Http\Controllers\Indexinicial\IndexInicialController::class, 'index'])->name('index');
+
+

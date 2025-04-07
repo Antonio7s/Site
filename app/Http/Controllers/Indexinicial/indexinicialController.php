@@ -1,7 +1,8 @@
-<?php
+<?php 
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Indexinicial;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\HomepageSetting;
 use App\Models\Faq;
@@ -11,11 +12,10 @@ class IndexInicialController extends Controller
 {
     public function index()
     {
-        // Buscando o primeiro registro das configurações da homepage
+        // Busca o primeiro registro de configurações da homepage
         $homepageSettings = HomepageSetting::first();
 
-        // Se existir um registro e o campo banner_path estiver vazio,
-        // mas houver o campo path, atribuímos esse valor a banner_path.
+        // Se existir um registro, e o campo banner_path estiver vazio e houver um valor em path, atribuímos esse valor a banner_path.
         if ($homepageSettings && empty($homepageSettings->banner_path) && !empty($homepageSettings->path)) {
             $homepageSettings->banner_path = $homepageSettings->path;
         }
@@ -24,6 +24,6 @@ class IndexInicialController extends Controller
         $categories = Category::all();
 
         // Passa os dados para a view
-        return view('index', compact('homepageSettings', 'faqs', 'categories'));
+        return view('home.index', compact('homepageSettings', 'faqs', 'categories'));
     }
 }

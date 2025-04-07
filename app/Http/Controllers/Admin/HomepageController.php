@@ -48,45 +48,31 @@ class HomepageController extends Controller
 
             // Upload do logo
             if ($request->hasFile('logo')) {
-                // Remove o logo antigo, se existir
                 if ($settings->logo_path && file_exists(public_path($settings->logo_path))) {
                     unlink(public_path($settings->logo_path));
                 }
-
-                // Define o arquivo e o diretório de destino
                 $logoFile = $request->file('logo');
                 $destinationPath = public_path('images');
                 $logoName = time() . '-' . $logoFile->getClientOriginalName();
-
-                // Move o arquivo para public/images
                 $logoFile->move($destinationPath, $logoName);
-
-                // Salva o caminho relativo no banco de dados (ex: images/nomedoarquivo.ext)
                 $settings->logo_path = 'images/' . $logoName;
                 \Log::info('Logo salvo com sucesso:', ['path' => $settings->logo_path]);
             }
 
             // Upload do banner
             if ($request->hasFile('banner')) {
-                // Remove o banner antigo, se existir
                 if ($settings->banner_path && file_exists(public_path($settings->banner_path))) {
                     unlink(public_path($settings->banner_path));
                 }
-
-                // Define o arquivo e o diretório de destino
                 $bannerFile = $request->file('banner');
-                $destinationPath = public_path('images/banners'); // Alterado para salvar em public/images/banners
+                $destinationPath = public_path('images/banners');
                 $bannerName = time() . '-' . $bannerFile->getClientOriginalName();
-
-                // Move o arquivo para public/images/banners
                 $bannerFile->move($destinationPath, $bannerName);
-
-                // Salva o caminho relativo no banco de dados (ex: images/banners/nomedoarquivo.ext)
                 $settings->banner_path = 'images/banners/' . $bannerName;
                 \Log::info('Banner salvo com sucesso:', ['path' => $settings->banner_path]);
             }
 
-            // Salva as outras configurações
+            // Atualiza as demais configurações
             $settings->info_basicas    = $request->input('infoBasicas');
             $settings->play_store_link = $request->input('playStoreLink');
             $settings->apk_link        = $request->input('apkLink');
@@ -95,18 +81,19 @@ class HomepageController extends Controller
 
             // Salva as categorias
             if ($request->has('categories')) {
-                Category::truncate(); // Remove todas as categorias existentes
+                // Remove todas as categorias existentes
+                Category::truncate();
                 foreach ($request->input('categories') as $categoryData) {
-                    Category::create($categoryData); // Cria novas categorias
+                    Category::create($categoryData);
                 }
                 \Log::info('Categorias salvas com sucesso:', $request->input('categories'));
             }
 
             // Salva as perguntas frequentes (FAQ)
             if ($request->has('faq')) {
-                Faq::truncate(); // Remove todas as FAQs existentes
+                Faq::truncate();
                 foreach ($request->input('faq') as $faqData) {
-                    Faq::create($faqData); // Cria novas FAQs
+                    Faq::create($faqData);
                 }
                 \Log::info('FAQ salvo com sucesso:', $request->input('faq'));
             }
