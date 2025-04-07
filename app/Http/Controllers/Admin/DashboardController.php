@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers\Admin;
 
@@ -34,6 +34,13 @@ class DashboardController extends Controller
 
         $usuarios = User::latest()->limit(10)->get() ?? collect([]);
         $clinicas = Clinica::latest()->limit(10)->get() ?? collect([]);
+        
+        // Nova consulta para clínicas aprovadas
+        $clinicasAprovadas = Clinica::where('status', 'aprovado')
+            ->select('nome_fantasia', 'endereco', 'created_at')
+            ->latest()
+            ->limit(10)
+            ->get() ?? collect([]);
 
         // Verifica o driver para usar a função correta de formatação da data
         $driver = DB::connection()->getDriverName();
@@ -91,6 +98,7 @@ class DashboardController extends Controller
             'totalAgendamentos'  => $totalAgendamentos,
             'usuarios'           => $usuarios, 
             'clinicas'           => $clinicas,
+            'clinicasAprovadas'  => $clinicasAprovadas,
             'vendasMensais'      => $vendasMensais,
             'vendasPorCategoria' => $vendasPorCategoria,
             'crescimentoVendas'  => $crescimentoVendas,

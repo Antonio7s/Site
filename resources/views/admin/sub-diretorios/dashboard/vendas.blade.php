@@ -1,4 +1,4 @@
-@extends('layouts.painel-admin')
+@extends('layouts.painel-admin') 
 
 @section('header_title', 'Dashboard')
 
@@ -199,11 +199,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if(isset($clinicas) && $clinicas->count() > 0)
-                                                @foreach ($clinicas as $clinica)
+                                            @if(isset($clinicasAprovadas) && $clinicasAprovadas->count() > 0)
+                                                @foreach ($clinicasAprovadas as $clinica)
                                                     <tr>
-                                                        <td>{{ $clinica->nome ?? 'N/A' }}</td>
-                                                        <td>{{ $clinica->localizacao ?? 'N/A' }}</td>
+                                                        <td>{{ $clinica->nome_fantasia ?? 'N/A' }}</td>
+                                                        <td>{{ $clinica->endereco ?? 'N/A' }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($clinica->created_at)->format('d/m/Y') ?? 'N/A' }}</td>
                                                     </tr>
                                                 @endforeach
