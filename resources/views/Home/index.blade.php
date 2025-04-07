@@ -451,9 +451,6 @@
                     <div class="promo-logo">MedExame</div>
                     <h1>Baixe nosso App</h1>
                     <p>Marque suas consultas rapidamente de qualquer lugar.</p>
-                    <div class="qr-code" style="margin: 20px auto; width: 150px;">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" alt="QR Code" class="img-fluid">
-                    </div>
                     <div class="store-buttons" style="margin-top: 20px;">
                         <a href="{{ isset($homepageSettings) && !empty($homepageSettings->play_store_link) ? $homepageSettings->play_store_link : 'https://play.google.com/store/apps/details?id=com.seuapp' }}" target="_blank">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
