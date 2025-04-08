@@ -60,17 +60,6 @@
         <h3>Configurações da Página Inicial</h3>
         <form id="formPaginaInicial" enctype="multipart/form-data">
 
-            <!-- Seção Modificar Logo -->
-            <div class="form-section">
-                <h4>Modificar Logo</h4>
-                <div class="mb-3">
-                    <label for="logo" class="form-label">Escolha uma nova imagem para a Logo</label>
-                    <input type="file" id="logo" name="logo" class="form-control" accept="image/*">
-                </div>
-            </div>
-
-            <hr>
-
             <!-- Seção Modificar Banner -->
             <div class="form-section">
                 <h4>Modificar Banner</h4>
@@ -82,38 +71,7 @@
 
             <hr>
 
-            <!-- Seção Modificar ou Criar Novas Categorias de Agendamento -->
-            <div class="form-section">
-                <h4>Modificar ou Criar Categorias de Agendamento</h4>
-                <div id="categoriesList">
-                    <div class="category-item mb-3">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="categoryTitle1" class="form-label">Título da Categoria</label>
-                                <input type="text" id="categoryTitle1" name="categories[0][title]" class="form-control" value="Consultas presenciais" placeholder="Nome da categoria">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="categoryIcon1" class="form-label">Ícone da Categoria</label>
-                                <input type="text" id="categoryIcon1" name="categories[0][icon]" class="form-control" value="👨‍⚕️" placeholder="Ícone (ex: 👨‍⚕️)">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="categoryColor1" class="form-label">Cor da Categoria</label>
-                                <input type="color" id="categoryColor1" name="categories[0][color]" class="form-control" value="#17a2b8">
-                            </div>
-                            <div class="col-md-1 d-flex align-items-end">
-                                <button type="button" class="btn btn-danger" onclick="removeCategory(this)">X</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button type="button" class="btn btn-outline-primary" onclick="addNewCategory()">Adicionar Nova Categoria</button>
-                </div>
-            </div>
-
-            <hr>
-
-            <!-- Seção FAQ -->
+            <!-- Seção Perguntas Frequentes (FAQ) -->
             <div class="form-section">
                 <h4>Perguntas Frequentes (FAQ)</h4>
                 <div id="faqList">
@@ -133,18 +91,7 @@
             
             <hr>
 
-            <!-- Seção Informações Básicas -->
-            <div class="form-section">
-                <h4>Informações Básicas da Clínica</h4>
-                <div class="mb-3">
-                    <label for="infoBasicas" class="form-label">Informações sobre a clínica</label>
-                    <textarea id="infoBasicas" name="infoBasicas" class="form-control" rows="5" placeholder="Insira as informações básicas da clínica"></textarea>
-                </div>
-            </div>
-
-            <hr>
-
-            <!-- Seção QR Code -->
+            <!-- Seção Modificar Links do App -->
             <div class="form-section">
                 <h4>Modificar Links do App</h4>
                 <div class="mb-3">
@@ -165,37 +112,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Adicionar nova categoria
-        function addNewCategory() {
-            const categoryIndex = document.querySelectorAll('.category-item').length;
-            const categoryList = document.getElementById('categoriesList');
-
-            const newCategory = document.createElement('div');
-            newCategory.classList.add('category-item', 'mb-3');
-            newCategory.innerHTML = `
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="categoryTitle${categoryIndex}" class="form-label">Título da Categoria</label>
-                        <input type="text" id="categoryTitle${categoryIndex}" name="categories[${categoryIndex}][title]" class="form-control" placeholder="Nome da categoria">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="categoryIcon${categoryIndex}" class="form-label">Ícone da Categoria</label>
-                        <input type="text" id="categoryIcon${categoryIndex}" name="categories[${categoryIndex}][icon]" class="form-control" placeholder="Ícone (ex: 👨‍⚕️)">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="categoryColor${categoryIndex}" class="form-label">Cor da Categoria</label>
-                        <input type="color" id="categoryColor${categoryIndex}" name="categories[${categoryIndex}][color]" class="form-control" value="#17a2b8">
-                    </div>
-                    <div class="col-md-1 d-flex align-items-end">
-                        <button type="button" class="btn btn-danger" onclick="removeCategory(this)">X</button>
-                    </div>
-                </div>
-            `;
-
-            categoryList.appendChild(newCategory);
-        }
-
-        // Adicionar nova pergunta FAQ
+        // Função para adicionar nova pergunta FAQ
         function addFaqQuestion() {
             const faqIndex = document.querySelectorAll('#faqList .mb-3').length / 2;
             const faqList = document.getElementById('faqList');
@@ -213,11 +130,6 @@
             `;
 
             faqList.appendChild(newFaq);
-        }
-
-        // Remover categoria
-        function removeCategory(button) {
-            button.closest('.category-item').remove();
         }
 
         // Envio do formulário via AJAX

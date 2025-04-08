@@ -130,21 +130,7 @@
       align-items: center;
       margin-left: auto;
     }
-    .navbar .user-info .notifications, .navbar .user-info .email {
-      margin-right: 20px;
-      position: relative;
-      color: #fff;
-      cursor: pointer;
-    }
-    .navbar .user-info .notifications .badge {
-      position: absolute;
-      top: -5px;
-      right: -10px;
-      background-color: #d9534f;
-      color: #fff;
-      font-size: 10px;
-      padding: 3px 6px;
-    }
+    /* Botão de Notificações e E-mail removidos */
     .navbar .user-info .profile {
       display: flex;
       align-items: center;
@@ -271,20 +257,6 @@
         <button class="navbar-toggler navbar-toggler-custom d-block d-md-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="notifications" onclick="toggleMessageCard()">
-          <i class="bi bi-bell"></i>
-          <span class="badge">3</span>
-        </div>
-        <div class="email" onclick="toggleDropdown('email')">
-          <i class="bi bi-envelope"></i>
-          <div class="dropdown-menu" id="email-dropdown">
-            <ul>
-              <li>E-mail 1</li>
-              <li>E-mail 2</li>
-              <li>E-mail 3</li>
-            </ul>
-          </div>
-        </div>
         <div class="profile" onclick="toggleDropdown('profile')">
           <span>{{ Auth::user()->name }}</span>
           <img src="{{ asset('images/icone-usuario.png') }}" alt="User Avatar">
