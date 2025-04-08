@@ -1,5 +1,4 @@
 @extends('layouts.layout-index')
-@section('header_title', 'Agendamento')
 @section('content') 
     <style>
         body { background-color: #f8f9fa; }
@@ -83,11 +82,9 @@
                                 <div class="mb-3">
                                     <label for="installments" class="form-label">Parcelamento</label>
                                     <select class="form-select" id="installments" name="installments">
-                                        @for ($i = 1; $i <= 12; $i++)
-                                            <option value="{{ $i }}">
-                                                {{ $i }}x de R$ {{ number_format($procedimento->valor / $i, 2, ',', '.') }}
-                                            </option>
-                                        @endfor
+                                        <option value="1">
+                                            1x de R$ {{ number_format($procedimento->valor ) }}
+                                        </option>
                                     </select>
                                 </div>
 
