@@ -92,6 +92,15 @@
                                     <input type="hidden" name="amount" value="{{ $procedimento->valor }}">
                                     <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
 
+                                    <div class="mb-3">
+                                        <label for="postalCode" class="form-label">Cep da Cidade</label>
+                                        <input type="text" class="form-control" id="postalCode" name="postalCode">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="addressNumber" class="form-label">Número do endereço</label>
+                                        <input type="text" class="form-control" id="addressNumber" name="addressNumber">
+                                    </div>
                                 <button type="submit" class="btn btn-primary w-100">Finalizar Pagamento</button>
                             </div>
                         </form>

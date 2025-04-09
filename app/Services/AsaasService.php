@@ -40,6 +40,9 @@ class AsaasService
             ];
         }
 
+        // Captura o remoteIp, por exemplo:
+        $remoteIp = request()->ip(); // ou use $_SERVER['REMOTE_ADDR'] se preferir
+
         $response = $this->client->post("{$this->baseUrl}payments", [
             'headers' => [
                 'accept'        => 'application/json',
@@ -61,7 +64,7 @@ class AsaasService
     }
 
     // Novo método para criar cobrança via Cartão de Crédito
-    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id, $installments = 1)
+    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id)
     {
         // Buscar os dados dos splits conforme a clínica
         $splitsData = Clinica::where('id', $clinica_id)->get();
@@ -76,6 +79,9 @@ class AsaasService
             ];
         }
 
+        $remoteIp = request()->ip(); // Captura o IP remoto
+
+
         $response = $this->client->post("{$this->baseUrl}payments", [
             'headers' => [
                 'accept'       => 'application/json',
@@ -89,13 +95,23 @@ class AsaasService
                 'description'      => $descricao,
                 // Dados do cartão
                 'creditCard'       => [
-                    'creditCardNumber'          => $creditCard['number'],
-                    'creditCardHolderName'      => $creditCard['holderName'],
-                    'creditCardExpirationMonth' => $creditCard['expirationMonth'],
-                    'creditCardExpirationYear'  => $creditCard['expirationYear'],
-                    'creditCardCVV'             => $creditCard['cvv'],
+                    'number'          => $creditCard['number'],
+                    'holderName'      => $creditCard['holderName'],
+                    'expiryMonth' => $creditCard['expirationMonth'],
+                    'expiryYear'  => $creditCard['expirationYear'],
+                    'ccv'             => $creditCard['cvv'],
                 ],
-                'installmentCount' => $installments,
+                // Se a API exigir informações adicionais do titular, inclua:
+                'creditCardHolderInfo' => [
+                    'name'         => $creditCard['holderName'],
+                    'email'        => $creditCard['holderEmail'] ?? '',
+                    'cpfCnpj'      => $creditCard['cpf'] ?? '',
+                    'postalCode'   => $creditCard['postalCode'] ?? '',
+                    'addressNumber'=> $creditCard['addressNumber'] ?? '',
+                    'phone'        => $creditCard['phone'] ?? '',
+                ],
+                //'installmentCount' => $installments,
+                'remoteIp'    => $remoteIp, // Captura o remoteIp
                 'splits'           => $splits, // Inclui os splits se necessário
             ],
         ]);
