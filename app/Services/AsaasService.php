@@ -64,7 +64,7 @@ class AsaasService
     }
 
     // Novo método para criar cobrança via Cartão de Crédito
-    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id)
+    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id, $postalCode, $addressNumber, $nomeCliente, $cpfCliente, $emailCliente, $telefoneCliente )
     {
         // Buscar os dados dos splits conforme a clínica
         $splitsData = Clinica::where('id', $clinica_id)->get();
@@ -103,12 +103,12 @@ class AsaasService
                 ],
                 // Se a API exigir informações adicionais do titular, inclua:
                 'creditCardHolderInfo' => [
-                    'name'         => $creditCard['holderName'],
-                    'email'        => $creditCard['holderEmail'] ?? '',
-                    'cpfCnpj'      => $creditCard['cpf'] ?? '',
-                    'postalCode'   => $creditCard['postalCode'] ?? '',
-                    'addressNumber'=> $creditCard['addressNumber'] ?? '',
-                    'phone'        => $creditCard['phone'] ?? '',
+                    'name'         => $nomeCliente,
+                    'email'        => $emailCliente?? '',
+                    'cpfCnpj'      => $cpfCliente ?? '',
+                    'postalCode'   => $postalCode ?? '',
+                    'addressNumber'=> $addressNumber ?? '',
+                    'phone'        => $telefoneCliente ?? '',
                 ],
                 //'installmentCount' => $installments,
                 'remoteIp'    => $remoteIp, // Captura o remoteIp

@@ -204,7 +204,15 @@ class PagamentoController extends Controller
                 $request->descricao,
                 $creditCard,
                 $request->clinica_id,
-                //$request->installments para cobranca avulsa (1x) nao e necessario somente o value.
+
+                $request->postalCode, //cep
+                $request->addressNumber, //numero
+
+                //dados do user
+                $user->name,
+                $user->cpf,
+                $user->email,
+                $user->telefone,
             );
 
             // Verifica a resposta da API, por exemplo, se o status for CONFIRMED (ajuste conforme a resposta real)
