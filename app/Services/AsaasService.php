@@ -60,6 +60,49 @@ class AsaasService
         return json_decode($response->getBody(), true);
     }
 
+    // Novo método para criar cobrança via Cartão de Crédito
+    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id, $installments = 1)
+    {
+        // Buscar os dados dos splits conforme a clínica
+        $splitsData = Clinica::where('id', $clinica_id)->get();
+        $splits = [];
+
+        foreach ($splitsData as $split) {
+            $splits[] = [
+                'walletId'        => $split->wallet_id,
+                'fixedValue'      => $split->valor_fixo_lucro,
+                'percentualValue' => $split->porcentagem_lucro,
+                'description'     => $descricao,
+            ];
+        }
+
+        $response = $this->client->post("{$this->baseUrl}payments", [
+            'headers' => [
+                'accept'       => 'application/json',
+                'content-type' => 'application/json',
+                'access_token' => $this->apiKey,
+            ],
+            'json' => [
+                'customer'         => $customerId,
+                'billingType'      => 'CREDIT_CARD', // Define pagamento via cartão de crédito
+                'value'            => $valor,
+                'description'      => $descricao,
+                // Dados do cartão
+                'creditCard'       => [
+                    'creditCardNumber'          => $creditCard['number'],
+                    'creditCardHolderName'      => $creditCard['holderName'],
+                    'creditCardExpirationMonth' => $creditCard['expirationMonth'],
+                    'creditCardExpirationYear'  => $creditCard['expirationYear'],
+                    'creditCardCVV'             => $creditCard['cvv'],
+                ],
+                'installmentCount' => $installments,
+                'splits'           => $splits, // Inclui os splits se necessário
+            ],
+        ]);
+
+        return json_decode($response->getBody(), true);
+    }
+
     // Método para criar cliente no Asaas
     public function criarCliente($nome, $cpf, $email, $telefone)
     {
@@ -93,20 +136,6 @@ class AsaasService
 
         return json_decode($response->getBody(), true);
     }
-
-    public function obterBoleto($paymentId)
-    {
-        $url = $this->baseUrl . "payments/{$paymentId}";
-
-        $response = $this->client->get($url, [
-            'headers' => [
-                'accept' => 'application/json',
-                'access_token' => $this->apiKey,
-            ],
-        ]);
-
-        return json_decode($response->getBody(), true);
-}
 
 
 }

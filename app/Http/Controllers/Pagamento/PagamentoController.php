@@ -155,27 +155,83 @@ class PagamentoController extends Controller
     }
 
 
-
-
-
-    // Exemplo de finalização de pagamento com Cartão de Crédito
+    // Método para gerar o pagamento  com o cartão
     public function finalizarCartao(Request $request)
     {
         $request->validate([
-            'cardName'    => 'required|string',
-            'cardNumber'  => 'required|string',
-            'cardExpiry'  => 'required|string',
-            'cardCVV'     => 'required|string',
-            'installments'=> 'required|integer',
+            'cardName'      => 'required|string',
+            'cardNumber'    => 'required|string',
+            'cardExpiry'    => 'required|string', // Exemplo: "12/25"
+            'cardCVV'       => 'required|string',
+           // 'installments'  => 'required|integer',
+            'amount'        => 'required|numeric',  // Valor a ser cobrado
+            'descricao'     => 'required|string',   // Descrição do pagamento
+            'clinica_id'    => 'required|integer',  // Necessário para recuperar os splits
         ]);
 
-        // Aqui você integraria com o serviço de pagamento com cartão.
-        // Esta é apenas uma simulação.
-        return response()->json([
-            'status'  => 'sucesso',
-            'message' => 'Pagamento com cartão finalizado com sucesso.'
-        ]);
+        $user = Auth::user();
+
+        // Verifica se o usuário já possui customer_id; se não, cria um cliente no Asaas
+        if (!$user->customer_id) {
+            $cliente = $this->asaasService->criarCliente(
+                $user->name,
+                $user->cpf,
+                $user->email,
+                $user->telefone
+            );
+            $user->update(['customer_id' => $cliente['id']]);
+            $customerId = $cliente['id'];
+        } else {
+            $customerId = $user->customer_id;
+        }
+
+        // Extrair os dados do cartão (dividindo a validade em mês e ano)
+        $cardExpiry = explode('/', $request->cardExpiry);
+
+        $creditCard = [
+            'number'         => $request->cardNumber,
+            'holderName'     => $request->cardName,
+            'expirationMonth'=> trim($cardExpiry[0]),
+            'expirationYear' => trim($cardExpiry[1]),
+            'cvv'            => $request->cardCVV,
+        ];
+
+        try {
+            // Chama o método para criar a cobrança via cartão, enviando também o clinica_id para os splits
+            $cobranca = $this->asaasService->criarCobrancaCartao(
+                $customerId,
+                $request->amount,
+                $request->descricao,
+                $creditCard,
+                $request->clinica_id,
+                //$request->installments para cobranca avulsa (1x) nao e necessario somente o value.
+            );
+
+            // Verifica a resposta da API, por exemplo, se o status for CONFIRMED (ajuste conforme a resposta real)
+            if (isset($cobranca['id']) && isset($cobranca['status']) && $cobranca['status'] === 'CONFIRMED') {
+                // Exemplo de criação de agendamento ou atualização do pagamento
+                $agendamento = new Agendamento();
+                $agendamento->user_id     = $user->id;
+                $agendamento->horario_id  = $request->input('horario_id') ?? null; // Ajuste conforme seu fluxo
+                $agendamento->data        = Carbon::now();
+                $agendamento->pagamento_id = $cobranca['id'];
+                $agendamento->status      = 'aprovado';
+                $agendamento->save();
+
+
+                    // Redireciona para a view de sucesso com o ID do pagamento
+                    return redirect()->route('pagamento.sucessoCartao', ['payment_id' => $cobranca['id']]);
+                } else {
+                    // Redireciona para a view de falha com mensagem
+                    return redirect()->route('pagamento.falhaCartao')->with('error', 'Pagamento não confirmado.');
+                }
+            } catch (\Exception $e) {
+                // Redireciona para a view de falha com mensagem de erro
+                return redirect()->route('pagamento.falha')->with('error', 'Erro: ' . $e->getMessage());
+            }
     }
+
+
 
 
     public function pagamentoPix()
@@ -194,6 +250,17 @@ class PagamentoController extends Controller
         return view('pagamento/sucesso-pix');
     }
 
+    public function falhaCartao()
+    {
+        return view('pagamento/falha-pix');
+    }
+
+
+    public function sucessoCartao()
+    {
+        return view('pagamento/sucesso-cartao');
+    }
+    
 
     public function verificarPagamento()
     {

@@ -264,17 +264,18 @@ Route::middleware('auth', 'verified')->group(function () {
         //Route::post('/compra', 'store')->name('compra.store');
 
         Route::post('/pagamento/gerar-pix', 'gerarPix')->name('pagamento.gerarPix');
-        Route::post('/pagamento/gerar-boleto', 'gerarBoleto')->name('pagamento.gerarBoleto');
+        //Route::post('/pagamento/gerar-boleto', 'gerarBoleto')->name('pagamento.gerarBoleto');
         Route::post('/finalizar-cartao', 'finalizarCartao')->name('pagamento.finalizarCartao');
 
         // Views de pagamento
         Route::get('pagamento-pix', 'pagamentoPix')->name('pagamento.pagamentoPix');
-        Route::get('pagamento-boleto', 'pagamentoBoleto')->name('pagamento.pagamentoBoleto');
+        //Route::get('pagamento-boleto', 'pagamentoBoleto')->name('pagamento.pagamentoBoleto');
         
         // Views de falha no pagamento
         Route::get('falha-pix', 'falhaPix')->name('pagamento.falhaPix');
-        Route::get('falha-boleto', 'falhaBoleto')->name('pagamento.falhaBoleto');
-        
+        //Route::get('falha-boleto', 'falhaBoleto')->name('pagamento.falhaBoleto');
+        Route::get('falha-cartao', 'falhaCartao')->name('pagamento.falhaCartao');
+
         //Views de Sucesso
         Route::get('sucesso-pix', 'sucessoPix')->name('pagamento.sucessoPix');
         
