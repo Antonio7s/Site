@@ -227,7 +227,7 @@ class PagamentoController extends Controller
                 }
             } catch (\Exception $e) {
                 // Redireciona para a view de falha com mensagem de erro
-                return redirect()->route('pagamento.falha')->with('error', 'Erro: ' . $e->getMessage());
+                return redirect()->route('pagamento.falhaCartao')->with('error', 'Erro: ' . $e->getMessage());
             }
     }
 
@@ -247,12 +247,12 @@ class PagamentoController extends Controller
 
     public function sucessoPix()
     {
-        return view('pagamento/sucesso-pix');
+        return view('pagamento/sucesso-cartao');
     }
 
     public function falhaCartao()
     {
-        return view('pagamento/falha-pix');
+        return view('pagamento/falha-cartao');
     }
 
 

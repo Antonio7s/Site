@@ -278,7 +278,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
         //Views de Sucesso
         Route::get('sucesso-pix', 'sucessoPix')->name('pagamento.sucessoPix');
-        
+        Route::get('sucesso-cartao', 'sucessoCartao')->name('pagamento.sucessoCartao');
         //Aguardando pagamento
         Route::get('/verificar-pagamento', 'verificarPagamento');
     });
