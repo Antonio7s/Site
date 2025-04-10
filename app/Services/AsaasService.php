@@ -44,6 +44,7 @@ class AsaasService
         $remoteIp = request()->ip(); // ou use $_SERVER['REMOTE_ADDR'] se preferir
 
         $response = $this->client->post("{$this->baseUrl}payments", [
+            'debug'   => true,
             'headers' => [
                 'accept'        => 'application/json',
                 'content-type'  => 'application/json',
@@ -83,6 +84,7 @@ class AsaasService
 
 
         $response = $this->client->post("{$this->baseUrl}payments", [
+            'debug' => true, // Esta opção imprime detalhes da requisição e resposta
             'headers' => [
                 'accept'       => 'application/json',
                 'content-type' => 'application/json',
@@ -101,7 +103,7 @@ class AsaasService
                     'expiryYear'  => $creditCard['expirationYear'],
                     'ccv'             => $creditCard['cvv'],
                 ],
-                // Se a API exigir informações adicionais do titular, inclua:
+                //informações do titular
                 'creditCardHolderInfo' => [
                     'name'         => $nomeCliente,
                     'email'        => $emailCliente?? '',
