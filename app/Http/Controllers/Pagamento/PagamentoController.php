@@ -176,6 +176,12 @@ class PagamentoController extends Controller
         $user = Auth::user();
         $horario = Horario::findOrFail($request->horario_id); // Usa o ID do request
 
+         // Verifica se já existe um agendamento para esse horário
+        if (Agendamento::where('horario_id', $horario->id)->exists()) {
+            return redirect()->route('pagamento.horarioIndisponivel')
+                ->with('error', 'Já existe um agendamento para esse horário.');
+        }
+
         // Verifica se o usuário já possui customer_id; se não, cria um cliente no Asaas
         if (!$user->customer_id) {
             $cliente = $this->asaasService->criarCliente(
@@ -301,6 +307,12 @@ class PagamentoController extends Controller
     public function sucessoCartao()
     {
         return view('pagamento/sucesso-cartao');
+    }
+    
+
+    public function horarioIndisponivel()
+    {
+        return view('pagamento/horario-indisponivel');
     }
     
 
