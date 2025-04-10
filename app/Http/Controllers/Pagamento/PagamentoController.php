@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Horario;
 use App\Models\Agendamento;
 use App\Models\User;
+use Illuminate\Support\Arr;
 
 
 use Illuminate\Http\Request;
@@ -167,9 +168,13 @@ class PagamentoController extends Controller
             'amount'        => 'required|numeric',  // Valor a ser cobrado
             'descricao'     => 'required|string',   // Descrição do pagamento
             'clinica_id'    => 'required|integer',  // Necessário para recuperar os splits
+            // 'horario_id'    => 'required|integer',  // ID do horário
+            // 'postalCode'    => 'required|string',   // CEP
+            // 'addressNumber' => 'required|string',   // Número do endereço
         ]);
 
         $user = Auth::user();
+        $horario = Horario::findOrFail($request->horario_id); // Usa o ID do request
 
         // Verifica se o usuário já possui customer_id; se não, cria um cliente no Asaas
         if (!$user->customer_id) {
@@ -215,28 +220,57 @@ class PagamentoController extends Controller
                 $user->telefone,
             );
 
-            // Verifica a resposta da API, por exemplo, se o status for CONFIRMED (ajuste conforme a resposta real)
-            if (isset($cobranca['id']) && isset($cobranca['status']) && $cobranca['status'] === 'CONFIRMED') {
-                // Exemplo de criação de agendamento ou atualização do pagamento
-                $agendamento = new Agendamento();
-                $agendamento->user_id     = $user->id;
-                $agendamento->horario_id  = $request->input('horario_id') ?? null; // Ajuste conforme seu fluxo
-                $agendamento->data        = Carbon::now();
-                $agendamento->pagamento_id = $cobranca['id'];
-                $agendamento->status      = 'aprovado';
-                $agendamento->save();
+
+            // 4) Debug: log de status
+            \Log::info('Pagamento recebido no controller', [
+                'id'     => $cobranca['id'] ?? null,
+                'status' => $cobranca['status'] ?? null,
+            ]);
 
 
-                    // Redireciona para a view de sucesso com o ID do pagamento
-                    return redirect()->route('pagamento.sucessoCartao', ['payment_id' => $cobranca['id']]);
-                } else {
-                    // Redireciona para a view de falha com mensagem
-                    return redirect()->route('pagamento.falhaCartao')->with('error', 'Pagamento não confirmado.');
-                }
-            } catch (\Exception $e) {
-                // Redireciona para a view de falha com mensagem de erro
-                return redirect()->route('pagamento.falhaCartao')->with('error', 'Erro: ' . $e->getMessage());
+            // 5) Verifica status
+            if (
+                isset($cobranca['id'], $cobranca['status'])
+                && strtoupper($cobranca['status']) === 'CONFIRMED'
+            ) {
+
+                \Log::info('Status CONFIRMED detectado, iniciando criação de agendamento.', [
+                    'pagamento_id' => $cobranca['id']
+                ]);
+
+
+                \Log::info('Dados recebidos para salvar agendamento', $request->all());
+
+                // 6) Cria agendamento com status “agendado”
+                $ag = new Agendamento();
+                $ag->user_id      = $user->id;
+                $ag->horario_id = $horario->id;
+                $ag->data         = Carbon::now();
+                $ag->pagamento_id = $cobranca['id'];
+                $ag->status       = 'agendado';
+                $ag->save();
+
+                return redirect()
+                    ->route('pagamento.sucessoCartao', ['payment_id' => $cobranca['id']]);
             }
+
+            return redirect()
+                ->route('pagamento.falhaCartao')
+                ->with('error', 'Pagamento não confirmado.');
+
+        } catch (\Exception $e) {
+
+            \Log::error('Erro ao processar pagamento com cartão', [
+                'mensagem' => $e->getMessage(),
+                'trace'    => $e->getTraceAsString()
+            ]);
+            
+            return redirect()
+                ->route('pagamento.falhaCartao')
+                ->with('error', 'Erro ao processar pagamento: ' . $e->getMessage());
+        }
+
+
     }
 
 
@@ -255,7 +289,7 @@ class PagamentoController extends Controller
 
     public function sucessoPix()
     {
-        return view('pagamento/sucesso-cartao');
+        return view('pagamento/sucesso-pix');
     }
 
     public function falhaCartao()

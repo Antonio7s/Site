@@ -44,7 +44,7 @@ class AsaasService
         $remoteIp = request()->ip(); // ou use $_SERVER['REMOTE_ADDR'] se preferir
 
         $response = $this->client->post("{$this->baseUrl}payments", [
-            'debug'   => true,
+            'debug'   => fopen('php://stdout', 'w'),
             'headers' => [
                 'accept'        => 'application/json',
                 'content-type'  => 'application/json',
@@ -64,13 +64,12 @@ class AsaasService
         return json_decode($response->getBody(), true);
     }
 
-    // Novo método para criar cobrança via Cartão de Crédito
-    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id, $postalCode, $addressNumber, $nomeCliente, $cpfCliente, $emailCliente, $telefoneCliente )
+    public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id, $postalCode, $addressNumber, $nomeCliente, $cpfCliente, $emailCliente, $telefoneCliente)
     {
         // Buscar os dados dos splits conforme a clínica
         $splitsData = Clinica::where('id', $clinica_id)->get();
         $splits = [];
-
+    
         foreach ($splitsData as $split) {
             $splits[] = [
                 'walletId'        => $split->wallet_id,
@@ -79,47 +78,81 @@ class AsaasService
                 'description'     => $descricao,
             ];
         }
-
+    
         $remoteIp = request()->ip(); // Captura o IP remoto
-
-
-        $response = $this->client->post("{$this->baseUrl}payments", [
-            'debug' => true, // Esta opção imprime detalhes da requisição e resposta
-            'headers' => [
-                'accept'       => 'application/json',
-                'content-type' => 'application/json',
-                'access_token' => $this->apiKey,
+    
+        // Monta o payload da requisição
+        $payload = [
+            'customer'         => $customerId,
+            'billingType'      => 'CREDIT_CARD',
+            'value'            => $valor,
+            'dueDate'     => now()->addDays(5)->format('Y-m-d'),
+            'description'      => $descricao,
+            'creditCard'       => [
+                'number'      => $creditCard['number'],
+                'holderName'  => $creditCard['holderName'],
+                'expiryMonth' => $creditCard['expirationMonth'],
+                'expiryYear'  => $creditCard['expirationYear'],
+                'ccv'         => $creditCard['cvv'],
             ],
-            'json' => [
-                'customer'         => $customerId,
-                'billingType'      => 'CREDIT_CARD', // Define pagamento via cartão de crédito
-                'value'            => $valor,
-                'description'      => $descricao,
-                // Dados do cartão
-                'creditCard'       => [
-                    'number'          => $creditCard['number'],
-                    'holderName'      => $creditCard['holderName'],
-                    'expiryMonth' => $creditCard['expirationMonth'],
-                    'expiryYear'  => $creditCard['expirationYear'],
-                    'ccv'             => $creditCard['cvv'],
-                ],
-                //informações do titular
-                'creditCardHolderInfo' => [
-                    'name'         => $nomeCliente,
-                    'email'        => $emailCliente?? '',
-                    'cpfCnpj'      => $cpfCliente ?? '',
-                    'postalCode'   => $postalCode ?? '',
-                    'addressNumber'=> $addressNumber ?? '',
-                    'phone'        => $telefoneCliente ?? '',
-                ],
-                //'installmentCount' => $installments,
-                'remoteIp'    => $remoteIp, // Captura o remoteIp
-                'splits'           => $splits, // Inclui os splits se necessário
+            'creditCardHolderInfo' => [
+                'name'          => $nomeCliente,
+                'email'         => $emailCliente ?? '',
+                'cpfCnpj'       => $cpfCliente ?? '',
+                'postalCode'    => $postalCode ?? '',
+                'addressNumber' => $addressNumber ?? '',
+                'phone'         => $telefoneCliente ?? '',
             ],
-        ]);
-
-        return json_decode($response->getBody(), true);
+            'remoteIp' => $remoteIp,
+            'splits'   => $splits,
+        ];
+    
+        // Exibe o payload no console
+        echo "\n\n=== PAYLOAD ENVIADO AO ASAAS ===\n";
+        echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        echo "\n==========================\n";
+    
+        \Log::info('=== PAYLOAD ENVIADO AO ASAAS ===', $payload);
+    
+        try {
+            $response = $this->client->post("{$this->baseUrl}payments", [
+                'debug' => fopen('php://stdout', 'w'),
+                'headers' => [
+                    'accept'       => 'application/json',
+                    'content-type' => 'application/json',
+                    'access_token' => $this->apiKey,
+                ],
+                'json' => $payload,
+            ]);
+    
+            $responseBody = json_decode($response->getBody(), true);
+    
+            echo "\n\n=== RESPOSTA DO ASAAS ===\n";
+            print_r($responseBody);
+            echo "\n==========================\n";
+    
+            \Log::info('=== RESPOSTA DO ASAAS -SERVICE ===', $responseBody);
+    
+            return $responseBody;
+    
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            echo "\n\n=== ERRO NA REQUISIÇÃO ===\n";
+    
+            if ($e->hasResponse()) {
+                $errorBody = (string) $e->getResponse()->getBody();
+                echo $errorBody;
+                \Log::error('Erro na requisição ao Asaas', ['response' => $errorBody]);
+            } else {
+                echo $e->getMessage();
+                \Log::error('Erro sem resposta do Asaas', ['exception' => $e]);
+            }
+    
+            echo "\n==========================\n";
+    
+            return ['error' => 'Erro ao realizar a requisição', 'detalhes' => $e->getMessage()];
+        }
     }
+    
 
     // Método para criar cliente no Asaas
     public function criarCliente($nome, $cpf, $email, $telefone)

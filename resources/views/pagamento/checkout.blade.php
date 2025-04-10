@@ -87,7 +87,7 @@
                                         </option>
                                     </select>
                                 </div>
-
+                                    <input type="hidden" name="horario_id" value="{{ $horario->id }}">
                                     <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
                                     <input type="hidden" name="amount" value="{{ $procedimento->valor }}">
                                     <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
