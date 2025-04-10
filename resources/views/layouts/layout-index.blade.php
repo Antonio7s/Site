@@ -1,4 +1,4 @@
-<!DOCTYPE html>   
+<!DOCTYPE html>    
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -25,6 +25,8 @@
             background-color: #007bff;
             padding: 10px 0;
             color: white;
+            position: relative; /* Adicionado para criar contexto de empilhamento */
+            z-index: 2000;      /* Garante que o cabeçalho (e seus dropdowns) fique acima do banner */
         }
         .logo {
             font-size: 24px;
@@ -100,6 +102,7 @@
             height: 30px;
             border-radius: 50%;
         }
+        /* Aumentado o z-index para os dropdowns */
         #userDropdown, #clinicDropdown {
             display: none;
             position: absolute;
@@ -109,7 +112,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            z-index: 2100;
         }
         #userDropdown a, #clinicDropdown a {
             display: block;
@@ -212,7 +215,7 @@
                     <span id="clinicName">{{ auth()->guard('clinic')->user()->name }}</span>
                     <div id="clinicDropdown">
                         <a href="{{ route('admin-clinica.dashboard.index')}}" class="dropdown-item">Página da Clínica</a>
-                        <a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('clinic-logout-form').submit();">Sair</a>
+                        <a href="javascript:void(0)" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('clinic-logout-form').submit();">Sair</a>
                         <!-- Formulário oculto -->
                         <form id="clinic-logout-form" action="{{ route('logout2') }}" method="POST" style="display: none;">
                             @csrf
@@ -226,7 +229,7 @@
                     <span id="userName">{{ auth()->guard('web')->user()->name }}</span>
                     <div id="userDropdown">
                         <a href="/perfil">Página do Usuário</a>
-                        <a href="#" onclick="logout()">Logout</a>
+                        <a href="javascript:void(0)" onclick="logout()">Logout</a>
                     </div>
                 </div>
             @else
@@ -245,7 +248,7 @@
             </button>
             <div class="collapse navbar-collapse w-100" id="navbarNav">
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="javascript:void(0)" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
                         Sou Paciente
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuCliente">
@@ -253,11 +256,11 @@
                         <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
                         <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
-                        <li><a class="dropdown-item" href=" {{ route('public.fale-conosco') }} ">Fale Conosco</a></li>
+                        <li><a class="dropdown-item" href="{{ route('public.fale-conosco') }}">Fale Conosco</a></li>
                     </ul>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="javascript:void(0)" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
                         Sou Profissional de saúde
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuProfissional">

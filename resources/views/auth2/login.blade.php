@@ -1,4 +1,4 @@
-@extends('layouts.layout-index')
+@extends('layouts.layout-index') 
 
 @section('content')
 <div class="d-flex justify-content-center align-items-center" style="min-height: 90vh; background-color: #f4f6f9; padding-top: 20px; padding-bottom: 20px;">
@@ -39,20 +39,6 @@
             <div class="position-relative my-3">
                 <hr>
                 <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted">ou</span>
-            </div>
-
-            <!-- Botão "Entrar com Google" -->
-            <div class="mb-2">
-                <button type="button" class="btn btn-outline-danger w-100 py-2">
-                    <i class="bi bi-google me-2"></i> Entrar com Google
-                </button>
-            </div>
-
-            <!-- Botão "Entrar com Facebook" -->
-            <div class="mb-3">
-                <button type="button" class="btn btn-outline-primary w-100 py-2">
-                    <i class="bi bi-facebook me-2"></i> Entrar com Facebook
-                </button>
             </div>
 
             <!-- Link para Cadastro -->
