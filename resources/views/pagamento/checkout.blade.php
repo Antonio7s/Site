@@ -1,5 +1,4 @@
 @extends('layouts.layout-index')
-@section('header_title', 'Agendamento')
 @section('content') 
     <style>
         body { background-color: #f8f9fa; }
@@ -83,16 +82,25 @@
                                 <div class="mb-3">
                                     <label for="installments" class="form-label">Parcelamento</label>
                                     <select class="form-select" id="installments" name="installments">
-                                        @for ($i = 1; $i <= 12; $i++)
-                                            <option value="{{ $i }}">
-                                                {{ $i }}x de R$ {{ number_format($procedimento->valor / $i, 2, ',', '.') }}
-                                            </option>
-                                        @endfor
+                                        <option value="1">
+                                            1x de R$ {{ number_format($procedimento->valor ) }}
+                                        </option>
                                     </select>
                                 </div>
-
+                                    <input type="hidden" name="horario_id" value="{{ $horario->id }}">
                                     <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
+                                    <input type="hidden" name="amount" value="{{ $procedimento->valor }}">
+                                    <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
 
+                                    <div class="mb-3">
+                                        <label for="postalCode" class="form-label">Cep da Cidade</label>
+                                        <input type="text" class="form-control" id="postalCode" name="postalCode">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="addressNumber" class="form-label">Número do endereço</label>
+                                        <input type="text" class="form-control" id="addressNumber" name="addressNumber">
+                                    </div>
                                 <button type="submit" class="btn btn-primary w-100">Finalizar Pagamento</button>
                             </div>
                         </form>
@@ -130,19 +138,7 @@
             input.addEventListener('change', updatePaymentMethod);
         });
 
-        document.getElementById('savedCardSelect').addEventListener('change', function(event) {
-            const selectedOption = event.target.options[event.target.selectedIndex];
-            if (selectedOption.value === 'new') {
-                document.getElementById('cardName').value = '';
-                document.getElementById('cardNumber').value = '';
-                document.getElementById('cardExpiry').value = '';
-            } else {
-                document.getElementById('cardName').value = selectedOption.dataset.name;
-                document.getElementById('cardNumber').value = selectedOption.dataset.number;
-                document.getElementById('cardExpiry').value = selectedOption.dataset.expiry;
-            }
-        });
-
+        
         updatePaymentMethod();
     </script>
 @endsection

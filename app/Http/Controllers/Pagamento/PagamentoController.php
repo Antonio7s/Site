@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Horario;
 use App\Models\Agendamento;
 use App\Models\User;
+use Illuminate\Support\Arr;
 
 
 use Illuminate\Http\Request;
@@ -155,27 +156,124 @@ class PagamentoController extends Controller
     }
 
 
-
-
-
-    // Exemplo de finalização de pagamento com Cartão de Crédito
+    // Método para gerar o pagamento  com o cartão
     public function finalizarCartao(Request $request)
     {
         $request->validate([
-            'cardName'    => 'required|string',
-            'cardNumber'  => 'required|string',
-            'cardExpiry'  => 'required|string',
-            'cardCVV'     => 'required|string',
-            'installments'=> 'required|integer',
+            'cardName'      => 'required|string',
+            'cardNumber'    => 'required|string',
+            'cardExpiry'    => 'required|string', // Exemplo: "12/25"
+            'cardCVV'       => 'required|string',
+           // 'installments'  => 'required|integer',
+            'amount'        => 'required|numeric',  // Valor a ser cobrado
+            'descricao'     => 'required|string',   // Descrição do pagamento
+            'clinica_id'    => 'required|integer',  // Necessário para recuperar os splits
+            // 'horario_id'    => 'required|integer',  // ID do horário
+            // 'postalCode'    => 'required|string',   // CEP
+            // 'addressNumber' => 'required|string',   // Número do endereço
         ]);
 
-        // Aqui você integraria com o serviço de pagamento com cartão.
-        // Esta é apenas uma simulação.
-        return response()->json([
-            'status'  => 'sucesso',
-            'message' => 'Pagamento com cartão finalizado com sucesso.'
-        ]);
+        $user = Auth::user();
+        $horario = Horario::findOrFail($request->horario_id); // Usa o ID do request
+
+        // Verifica se o usuário já possui customer_id; se não, cria um cliente no Asaas
+        if (!$user->customer_id) {
+            $cliente = $this->asaasService->criarCliente(
+                $user->name,
+                $user->cpf,
+                $user->email,
+                $user->telefone
+            );
+            $user->update(['customer_id' => $cliente['id']]);
+            $customerId = $cliente['id'];
+        } else {
+            $customerId = $user->customer_id;
+        }
+
+        // Extrair os dados do cartão (dividindo a validade em mês e ano)
+        $cardExpiry = explode('/', $request->cardExpiry);
+
+        $creditCard = [
+            'number'         => $request->cardNumber,
+            'holderName'     => $request->cardName,
+            'expirationMonth'=> trim($cardExpiry[0]),
+            'expirationYear' => trim($cardExpiry[1]),
+            'cvv'            => $request->cardCVV,
+        ];
+
+        try {
+            // Chama o método para criar a cobrança via cartão, enviando também o clinica_id para os splits
+            $cobranca = $this->asaasService->criarCobrancaCartao(
+                $customerId,
+                $request->amount,
+                $request->descricao,
+                $creditCard,
+                $request->clinica_id,
+
+                $request->postalCode, //cep
+                $request->addressNumber, //numero
+
+                //dados do user
+                $user->name,
+                $user->cpf,
+                $user->email,
+                $user->telefone,
+            );
+
+
+            // 4) Debug: log de status
+            \Log::info('Pagamento recebido no controller', [
+                'id'     => $cobranca['id'] ?? null,
+                'status' => $cobranca['status'] ?? null,
+            ]);
+
+
+            // 5) Verifica status
+            if (
+                isset($cobranca['id'], $cobranca['status'])
+                && strtoupper($cobranca['status']) === 'CONFIRMED'
+            ) {
+
+                \Log::info('Status CONFIRMED detectado, iniciando criação de agendamento.', [
+                    'pagamento_id' => $cobranca['id']
+                ]);
+
+
+                \Log::info('Dados recebidos para salvar agendamento', $request->all());
+
+                // 6) Cria agendamento com status “agendado”
+                $ag = new Agendamento();
+                $ag->user_id      = $user->id;
+                $ag->horario_id = $horario->id;
+                $ag->data         = Carbon::now();
+                $ag->pagamento_id = $cobranca['id'];
+                $ag->status       = 'agendado';
+                $ag->save();
+
+                return redirect()
+                    ->route('pagamento.sucessoCartao', ['payment_id' => $cobranca['id']]);
+            }
+
+            return redirect()
+                ->route('pagamento.falhaCartao')
+                ->with('error', 'Pagamento não confirmado.');
+
+        } catch (\Exception $e) {
+
+            \Log::error('Erro ao processar pagamento com cartão', [
+                'mensagem' => $e->getMessage(),
+                'trace'    => $e->getTraceAsString()
+            ]);
+            
+            return redirect()
+                ->route('pagamento.falhaCartao')
+                ->with('error', 'Erro ao processar pagamento: ' . $e->getMessage());
+        }
+
+
     }
+
+
 
 
     public function pagamentoPix()
@@ -194,6 +292,17 @@ class PagamentoController extends Controller
         return view('pagamento/sucesso-pix');
     }
 
+    public function falhaCartao()
+    {
+        return view('pagamento/falha-cartao');
+    }
+
+
+    public function sucessoCartao()
+    {
+        return view('pagamento/sucesso-cartao');
+    }
+    
 
     public function verificarPagamento()
     {
