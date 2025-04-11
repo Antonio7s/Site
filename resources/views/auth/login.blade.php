@@ -57,32 +57,6 @@
     .login-container button:hover {
       background-color: #0056b3;
     }
-    .social-login {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .social-login button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .social-login button.google {
-      background-color: #db4437;
-      color: #fff;
-    }
-    .social-login button.facebook {
-      background-color: #1877f2;
-      color: #fff;
-    }
-    .social-login button:hover {
-      opacity: 0.9;
-    }
     .forgot-password {
       text-align: right;
       margin-top: 5px;
@@ -138,12 +112,6 @@
       <div class="actions">
         <button type="submit" onclick="checkAdmin(event)">Entrar</button>
       </div>
-
-      <!-- Botões de Login Social (um encima do outro) -->
-      <div class="social-login">
-        <button type="button" class="google">Conectar com Google</button>
-        <button type="button" class="facebook">Conectar com Facebook</button>
-      </div>
     </form>
   </div>
 
@@ -172,5 +140,3 @@
     }
   </script>
 @endsection
-
-

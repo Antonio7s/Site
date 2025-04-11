@@ -1,4 +1,4 @@
-@extends('layouts.layout-index')  
+@extends('layouts.layout-index')   
 
 @section('content')
 <!DOCTYPE html>
@@ -118,6 +118,10 @@
             width: 120px;
             margin: 5px;
         }
+        /* Regra para uniformizar a altura dos títulos dos cards */
+        .servico-item h5 {
+            min-height: 2.5rem;
+        }
     </style>
 
     <!-- CSS DO PARALLAX -->
@@ -221,6 +225,13 @@
             display: block;
         }
     </style>
+
+    <!-- NOVA REGRA PARA GARANTIR QUE OS DROPDOWNS FIQUEM ACIMA -->
+    <style>
+        .dropdown-menu {
+            z-index: 9999 !important;
+        }
+    </style>
 </head>
 <body>
     <!-- Banner Dinâmico -->
@@ -261,16 +272,18 @@
                         <h5 class="mb-0 mt-2">Agendar <br> Vacinas</h5>
                     </div>
                 </a>
+                <!-- Card Odontologia com ajuste mínimo -->
                 <a href="{{ url('Busca') }}?q=Odontologia" style="text-decoration: none; color: inherit;">
                     <div class="servico-item">
                         <i class="fas fa-tooth"></i>
-                        <h5 class="mb-0 mt-2">Odontologia</h5>
+                        <h5 class="mb-0 mt-2">Odontologia<br>&nbsp;</h5>
                     </div>
                 </a>
+                <!-- Card Cirurgias com ajuste mínimo -->
                 <a href="{{ url('Busca') }}?q=Cirurgias" style="text-decoration: none; color: inherit;">
                     <div class="servico-item">
                         <i class="fas fa-procedures"></i>
-                        <h5 class="mb-0 mt-2">Cirurgias</h5>
+                        <h5 class="mb-0 mt-2">Cirurgias<br>&nbsp;</h5>
                     </div>
                 </a>
                 <a href="{{ url('Busca') }}?q=Check-up" style="text-decoration: none; color: inherit;">
@@ -463,6 +476,23 @@
 
     <!-- SCRIPTS: Bootstrap, Contador, Parallax, Typed.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script adicional para forçar os dropdowns a usarem o body como container -->
+    <script>
+        var dropdownTriggerList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+        var dropdownList = dropdownTriggerList.map(function(dropdownTriggerEl) {
+            return new bootstrap.Dropdown(dropdownTriggerEl, {
+                popperConfig: function(defaultBsPopperConfig) {
+                    defaultBsPopperConfig.options.modifiers.push({
+                        name: 'preventOverflow',
+                        options: {
+                            boundary: document.body
+                        }
+                    });
+                    return defaultBsPopperConfig;
+                }
+            });
+        });
+    </script>
     <script>
         function animateCounter(id, target) {
             let start = 0;

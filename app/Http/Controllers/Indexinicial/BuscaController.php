@@ -108,7 +108,7 @@ class BuscaController extends Controller
             ->select(
                 'horarios.id as horario_id',
                 'horarios.horario_inicio',
-                'horarios.data', // A coluna data está na tabela horarios
+                'horarios.data',
                 'procedimentos.nome as especialidade',
                 'procedimentos.valor',
                 'agendamentos.id as agendamento_id'
@@ -152,8 +152,8 @@ class BuscaController extends Controller
             $medico->endereco = '--';
         }
 
-        // Adiciona o campo de foto, se existir
-        $medico->foto = !empty($medico->foto_url) ? $medico->foto_url : null;
+        // CORREÇÃO SOLICITADA: Busca a foto diretamente da coluna foto_url da tabela medicos
+        $medico->foto = $medico->foto_url ? asset('storage/' . $medico->foto_url) : null;
 
         return $medico;
     }
