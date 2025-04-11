@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Indexinicial;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Medico;
-use Illuminate\Support\Facades\DB;
 use App\Models\ServicoDiferenciado;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class BuscaController extends Controller
@@ -16,10 +16,10 @@ class BuscaController extends Controller
         $filter = $request->input('filter', 'todos');
         $searchTerm = $request->input('query', '');
 
-        // Inicia a query com todos os médicos
+        // Query base para médicos
         $medicosQuery = Medico::with('clinica')->select('medicos.*');
 
-        // Aplica o filtro conforme o valor selecionado
+        // Aplicação dos filtros
         if (!empty($searchTerm)) {
             switch ($filter) {
                 case 'especialidade':
@@ -28,11 +28,13 @@ class BuscaController extends Controller
                               ->orWhere('especialidade2', 'like', "%{$searchTerm}%");
                     });
                     break;
+
                 case 'localizacao':
                     $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
                         $query->where('endereco', 'like', "%{$searchTerm}%");
                     });
                     break;
+
                 case 'profissional':
                     $medicosQuery->where(function($query) use ($searchTerm) {
                         $query->where(DB::raw("CONCAT(profissional_nome, ' ', profissional_sobrenome)"), 'like', "%{$searchTerm}%")
@@ -40,11 +42,13 @@ class BuscaController extends Controller
                               ->orWhere('profissional_sobrenome', 'like', "%{$searchTerm}%");
                     });
                     break;
+
                 case 'clinica':
                     $medicosQuery->whereHas('clinica', function ($query) use ($searchTerm) {
                         $query->where('razao_social', 'like', "%{$searchTerm}%");
                     });
                     break;
+
                 default: // 'todos'
                     $medicosQuery->where(function ($q) use ($searchTerm) {
                         $q->where('especialidade', 'like', "%{$searchTerm}%")
@@ -74,15 +78,13 @@ class BuscaController extends Controller
             }
         }
 
-        // Paginação para limitar a 7 médicos por página
+        // Paginação e fallback
         $medicos = $medicosQuery->paginate(7);
-
-        // Se não houver resultados, exibe 22 médicos como fallback
         if ($medicos->isEmpty()) {
             $medicos = Medico::with('clinica')->select('medicos.*')->limit(22)->get();
         }
 
-        // Processa agendamentos (slots) e formata os dados
+        // Processamento dos médicos
         foreach ($medicos as $medico) {
             $this->attachHorarios($medico);
             $this->formatMedico($medico);
@@ -97,10 +99,16 @@ class BuscaController extends Controller
 
     private function attachHorarios($medico)
     {
-        // Busca todos os horários do médico, sem excluir os agendados
+        // Query modificada com serviços diferenciados
         $horarios = DB::table('horarios')
             ->join('agendas', 'agendas.id', '=', 'horarios.agenda_id')
             ->join('procedimentos', 'procedimentos.id', '=', 'horarios.procedimento_id')
+            ->leftJoin('servico_diferenciados', function($join) use ($medico) {
+                $join->on('procedimentos.id', '=', 'servico_diferenciados.procedimento_id')
+                     ->where('servico_diferenciados.clinica_id', '=', optional($medico->clinica)->id)
+                     ->whereDate('servico_diferenciados.data_inicial', '<=', Carbon::today())
+                     ->whereDate('servico_diferenciados.data_final', '>=', Carbon::today());
+            })
             ->leftJoin('agendamentos', function ($join) {
                 $join->on('horarios.id', '=', 'agendamentos.horario_id')
                      ->where('agendamentos.status', 'agendado');
@@ -112,34 +120,32 @@ class BuscaController extends Controller
                 'horarios.horario_inicio',
                 'horarios.data',
                 'procedimentos.nome as especialidade',
-                'procedimentos.valor',
+                DB::raw('COALESCE(servico_diferenciados.preco_customizado, procedimentos.valor) as valor'),
                 'agendamentos.id as agendamento_id'
             )
             ->get();
 
-        // Para cada horário, adiciona a flag 'bloqueado' se existir um agendamento com status "agendado"
+        // Processamento dos horários
         $horarios->transform(function ($horario) {
-            $horario->bloqueado = !is_null($horario->agendamento_id);
-            return $horario;
+            return (object)[
+                'horario_id' => $horario->horario_id,
+                'horario_inicio' => $horario->horario_inicio,
+                'data' => $horario->data,
+                'especialidade' => $horario->especialidade,
+                'valor' => $horario->valor,
+                'bloqueado' => !is_null($horario->agendamento_id)
+            ];
         });
 
-        // Define a especialidade e o valor com base no primeiro slot (se existir)
-        if ($horarios->isNotEmpty()) {
-            $especialidade = $horarios->first()->especialidade;
-            $valor = $horarios->first()->valor;
-        } else {
-            $especialidade = '--';
-            $valor = '--';
-        }
-
-        // Atribui todos os horários (com a flag) ao médico
+        // Atribuição ao médico
         $medico->horarios = $horarios;
-        $medico->especialidade = $especialidade;
-        $medico->valor = $valor;
+        $medico->especialidade = $horarios->isNotEmpty() ? $horarios->first()->especialidade : '--';
+        $medico->valor = $horarios->isNotEmpty() ? $horarios->first()->valor : '--';
     }
 
     private function formatMedico($medico)
     {
+        // Formatação dos dados
         $medico->nome_completo = trim($medico->profissional_nome . ' ' . $medico->profissional_sobrenome);
 
         if ($medico->clinica) {
@@ -154,8 +160,9 @@ class BuscaController extends Controller
             $medico->endereco = '--';
         }
 
-        // CORREÇÃO SOLICITADA: Busca a foto diretamente da coluna foto_url da tabela medicos
-        $medico->foto = $medico->foto_url ? asset('storage/' . $medico->foto_url) : null;
+        $medico->foto = $medico->foto_url 
+            ? asset('storage/' . $medico->foto_url) 
+            : asset('images/default-avatar.png');
 
         return $medico;
     }
