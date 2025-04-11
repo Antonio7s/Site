@@ -70,11 +70,11 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="cardExpiry" class="form-label">Validade</label>
+                                            <label for="cardExpiry" class="form-label">Validade (MM/YYYY)</label>
                                             <input type="text" class="form-control" id="cardExpiry" name="cardExpiry">
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="cardCVV" class="form-label">CVV</label>
+                                            <label for="cardCVV" class="form-label">CVV (3 dígitos)</label>
                                             <input type="text" class="form-control" id="cardCVV" name="cardCVV">
                                         </div>
                                     </div>
@@ -83,24 +83,24 @@
                                     <label for="installments" class="form-label">Parcelamento</label>
                                     <select class="form-select" id="installments" name="installments">
                                         <option value="1">
-                                            1x de R$ {{ number_format($procedimento->valor ) }}
+                                            1x de R$ {{ number_format($procedimento->valor) }}
                                         </option>
                                     </select>
                                 </div>
-                                    <input type="hidden" name="horario_id" value="{{ $horario->id }}">
-                                    <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
-                                    <input type="hidden" name="amount" value="{{ $procedimento->valor }}">
-                                    <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
+                                <input type="hidden" name="horario_id" value="{{ $horario->id }}">
+                                <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
+                                <input type="hidden" name="amount" value="{{ $procedimento->valor }}">
+                                <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
 
-                                    <div class="mb-3">
-                                        <label for="postalCode" class="form-label">Cep da Cidade</label>
-                                        <input type="text" class="form-control" id="postalCode" name="postalCode">
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="postalCode" class="form-label">Cep da Cidade</label>
+                                    <input type="text" class="form-control" id="postalCode" name="postalCode">
+                                </div>
 
-                                    <div class="mb-3">
-                                        <label for="addressNumber" class="form-label">Número do endereço</label>
-                                        <input type="text" class="form-control" id="addressNumber" name="addressNumber">
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="addressNumber" class="form-label">Número do endereço</label>
+                                    <input type="text" class="form-control" id="addressNumber" name="addressNumber">
+                                </div>
                                 <button type="submit" class="btn btn-primary w-100">Finalizar Pagamento</button>
                             </div>
                         </form>
@@ -121,24 +121,40 @@
         </div>
     </div>
 
+    <!-- Inclusão das bibliotecas jQuery e jQuery Mask Plugin -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
-        function updatePaymentMethod() {
-            document.getElementById('creditCardSection').classList.add('hidden');
-            document.getElementById('pixSection').classList.add('hidden');
+      $(document).ready(function(){
+          // Máscara para o número do cartão: 4 grupos de 4 dígitos
+          $('#cardNumber').mask('0000 0000 0000 0000');
 
-            const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            if (selectedMethod === "cartao") {
-                document.getElementById('creditCardSection').classList.remove('hidden');
-            } else if (selectedMethod === "pix") {
-                document.getElementById('pixSection').classList.remove('hidden');
-            }
-        }
+          // Máscara para a validade do cartão: MM/YYYY
+          $('#cardExpiry').mask('00/0000');
 
-        document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
-            input.addEventListener('change', updatePaymentMethod);
-        });
+          // Máscara para o CVV: 3 dígitos
+          $('#cardCVV').mask('000');
 
-        
-        updatePaymentMethod();
+          // Máscara para o CEP (opcional)
+          $('#postalCode').mask('00000-000');
+      });
+
+      // Função para alternar a exibição das seções de pagamento
+      function updatePaymentMethod() {
+          $('#creditCardSection').addClass('hidden');
+          $('#pixSection').addClass('hidden');
+
+          const selectedMethod = $('input[name="paymentMethod"]:checked').val();
+          if (selectedMethod === "cartao") {
+              $('#creditCardSection').removeClass('hidden');
+          } else if (selectedMethod === "pix") {
+              $('#pixSection').removeClass('hidden');
+          }
+      }
+
+      $('input[name="paymentMethod"]').on('change', updatePaymentMethod);
+
+      // Atualiza a exibição ao carregar a página
+      updatePaymentMethod();
     </script>
 @endsection

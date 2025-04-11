@@ -151,7 +151,8 @@ class PagamentoController extends Controller
         // Redireciona para a view de pagamento Pix passando os dados necessários
         return view('pagamento/pagamento-pix', [
             'qrcode' => 'data:image/png;base64,' . $qrCodePix['encodedImage'],
-            'valor'  => $request->valor
+            'valor'  => $request->valor,
+            'agendamento_id' => $agendamento->id,
         ]);
     }
 
@@ -175,6 +176,12 @@ class PagamentoController extends Controller
 
         $user = Auth::user();
         $horario = Horario::findOrFail($request->horario_id); // Usa o ID do request
+
+         // Verifica se já existe um agendamento para esse horário
+        if (Agendamento::where('horario_id', $horario->id)->exists()) {
+            return redirect()->route('pagamento.horarioIndisponivel')
+                ->with('error', 'Já existe um agendamento para esse horário.');
+        }
 
         // Verifica se o usuário já possui customer_id; se não, cria um cliente no Asaas
         if (!$user->customer_id) {
@@ -304,13 +311,26 @@ class PagamentoController extends Controller
     }
     
 
-    public function verificarPagamento()
+    public function horarioIndisponivel()
     {
-        // Obtém o ID do usuário logado
+        return view('pagamento/horario-indisponivel');
+    }
+    
+
+    public function verificarPagamento(Request $request)
+    {
+        // Recupera o id do agendamento enviado na requisição
+        $agendamentoId = $request->input('agendamento_id');
         $userId = Auth::id();
 
-        // Busca um agendamento do usuário com status "agendado"
+        \Log::info('Verificando pagamento para ID:', [
+            'agendamento_id' => $request->input('agendamento_id'),
+            'user_id' => Auth::id(),
+        ]);
+
+        // Busca o agendamento específico do usuário com status "agendado"
         $agendamento = Agendamento::where('user_id', $userId)
+                            ->where('id', $agendamentoId)
                             ->where('status', 'agendado')
                             ->first();
 
@@ -318,6 +338,7 @@ class PagamentoController extends Controller
             'aprovado' => $agendamento ? true : false
         ]);
     }
+
 
 
     public function apikey_edit()

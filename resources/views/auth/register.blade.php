@@ -103,6 +103,16 @@
         @endif
       </div>
 
+      <!-- Telefone -->
+      <div>
+        <label for="telefone">Telefone</label>
+        <input id="telefone" type="text" name="telefone" value="{{ old('telefone') }}" required maxlength="15" placeholder="(00) 00000-0000" oninput="formatTelefone(this)" autocomplete="tel">
+        @if ($errors->has('telefone'))
+          <div class="error">{{ $errors->first('telefone') }}</div>
+        @endif
+      </div>
+
+
 
 
       <!-- Senha -->
@@ -150,6 +160,20 @@
         input.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
       }
     }
+
+      // Formatar Telefone
+    function formatTelefone(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value.length <= 10) {
+        input.value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').trim();
+      } else {
+        input.value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').trim();
+      }
+    }
+
+
   </script>
+
+  
 
 @endsection
