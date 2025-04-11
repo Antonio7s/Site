@@ -1,6 +1,20 @@
 @extends('layouts.layout-index')
 
 @section('content')
+    @php
+        // Ordena os médicos para que aqueles que possuam procedimentos que contenham o termo pesquisado apareçam primeiro
+        if(!empty($searchTerm)) {
+            $medicos = $medicos->sortByDesc(function($medico) use ($searchTerm) {
+                foreach($medico->procedimentos as $procedimento) {
+                    if(stripos($procedimento->nome, $searchTerm) !== false) {
+                        return 1;
+                    }
+                }
+                return 0;
+            });
+        }
+    @endphp
+
     <style>
         /* Estilos CSS (mantidos iguais) */
         body {
@@ -164,6 +178,7 @@
             border-radius: 5px;
             padding: 5px 10px;
             font-size: 14px;
+            background-color: #e9f5f; /* Erro de digitação, se necessário corrigir para #e9f5ff */
             background-color: #e9f5ff;
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease;
@@ -287,6 +302,7 @@
             width: 100%;
             max-width: 400px; /* Largura máxima para 3 dias */
             margin: 0 auto;
+            display: none; /* Inicialmente oculto */
         }
         .horarios-container {
             display: flex;
@@ -318,8 +334,9 @@
             flex-direction: column;
             gap: 5px;
         }
-        /* Estilos para as setas de navegação */
+        /* Estilos para as setas de navegação - inicialmente ocultas */
         .scroll-button {
+            display: none;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -364,7 +381,22 @@
 
         <h1>Resultados da Busca</h1>
         <p>Buscando por: <strong>{{ $searchTerm }}</strong></p>
-        @if(!empty($searchTerm) && $medicos->isEmpty())
+        @php
+            $foundProcedure = false;
+            if(!empty($searchTerm)) {
+                foreach($medicos as $medico) {
+                    if(isset($medico->procedimentos) && $medico->procedimentos->count() > 0) {
+                        foreach($medico->procedimentos as $procedimento) {
+                            if(stripos($procedimento->nome, $searchTerm) !== false) {
+                                $foundProcedure = true;
+                                break 2;
+                            }
+                        }
+                    }
+                }
+            }
+        @endphp
+        @if(!empty($searchTerm) && !$foundProcedure)
             <p>Nenhum médico encontrado para "{{ $searchTerm }}".</p>
         @endif
         <p>Filtro selecionado: <strong>{{ ucfirst($filter ?? 'todos') }}</strong></p>
@@ -384,10 +416,23 @@
                         <p>
                             <strong>Procedimentos:</strong>
                             @if(isset($medico->procedimentos) && $medico->procedimentos->count() > 0)
+                                @php
+                                    // Reordena os procedimentos: os que contêm o termo pesquisado aparecem primeiro
+                                    $sortedProcedimentos = $medico->procedimentos;
+                                    if(!empty($searchTerm)) {
+                                        $matching = $medico->procedimentos->filter(function($proc) use ($searchTerm) {
+                                            return stripos($proc->nome, $searchTerm) !== false;
+                                        });
+                                        $nonMatching = $medico->procedimentos->reject(function($proc) use ($searchTerm) {
+                                            return stripos($proc->nome, $searchTerm) !== false;
+                                        });
+                                        $sortedProcedimentos = $matching->merge($nonMatching);
+                                    }
+                                @endphp
                                 <div class="dropdown-procedimentos">
                                     <button type="button" class="dropdown-toggle" data-medico-id="{{ $medico->id }}">Selecione</button>
                                     <div class="dropdown-menu">
-                                        @foreach($medico->procedimentos as $procedimento)
+                                        @foreach($sortedProcedimentos as $procedimento)
                                             <div class="procedure-item" data-medico-id="{{ $medico->id }}" data-procedimento="{{ $procedimento->nome }}">
                                                 {{ $procedimento->nome }}
                                             </div>
@@ -405,7 +450,8 @@
                     <div class="appointment-info">
                         <button type="button" class="btn-agendamento" data-medico-id="{{ $medico->id }}">Agendar</button>
                         @if(isset($medico->horarios) && $medico->horarios->count() > 0)
-                            <div class="horarios-container-wrapper">
+                            <div class="horarios-container-wrapper" style="display: none;">
+                                <!-- Scroll buttons inicialmente ocultas; serão exibidas somente após clicar em "Agendar" -->
                                 <button class="scroll-button left" onclick="scrollHorarios('left', {{ $medico->id }})">&#10094;</button>
                                 <div class="horarios-container" id="horarios-container-{{ $medico->id }}">
                                     @php
@@ -413,40 +459,45 @@
                                         $horariosAgrupados = $medico->horarios->groupBy('data');
                                     @endphp
                                     @foreach($horariosAgrupados as $data => $horarios)
-                                        <div class="dia-container">
-                                            <div class="dia-header">
-                                                @php
-                                                    $diaSemana = \Carbon\Carbon::parse($data)->isoFormat('ddd');
-                                                    $diaSemanaPt = [
-                                                        'Mon' => 'Seg',
-                                                        'Tue' => 'Ter',
-                                                        'Wed' => 'Qua',
-                                                        'Thu' => 'Qui',
-                                                        'Fri' => 'Sex',
-                                                        'Sat' => 'Sáb',
-                                                        'Sun' => 'Dom'
-                                                    ][$diaSemana];
-                                                @endphp
-                                                {{ $diaSemanaPt }}
+                                        @php
+                                            $date = \Carbon\Carbon::parse($data);
+                                        @endphp
+                                        @if($date->isToday() || $date->isFuture())
+                                            <div class="dia-container">
+                                                <div class="dia-header">
+                                                    @php
+                                                        $diaSemana = $date->isoFormat('ddd');
+                                                        $diaSemanaPt = [
+                                                            'Mon' => 'Seg',
+                                                            'Tue' => 'Ter',
+                                                            'Wed' => 'Qua',
+                                                            'Thu' => 'Qui',
+                                                            'Fri' => 'Sex',
+                                                            'Sat' => 'Sáb',
+                                                            'Sun' => 'Dom'
+                                                        ][$diaSemana];
+                                                    @endphp
+                                                    {{ $diaSemanaPt }}
+                                                </div>
+                                                <div class="dia-data">
+                                                    {{ $date->format('d/m') }}
+                                                </div>
+                                                <div class="horarios-dia">
+                                                    @foreach($horarios as $slot)
+                                                        <button class="hour-box {{ $slot->bloqueado ? 'disabled' : '' }}"
+                                                                data-medico-id="{{ $medico->id }}"
+                                                                data-slot="{{ $slot->horario_inicio }}"
+                                                                data-date="{{ $slot->data }}"
+                                                                data-horario-id="{{ $slot->horario_id }}"
+                                                                data-especialidade="{{ $slot->especialidade }}"
+                                                                data-valor="{{ $slot->valor }}"
+                                                                {{ $slot->bloqueado ? 'disabled' : '' }}>
+                                                            {{ \Carbon\Carbon::parse($slot->horario_inicio)->format('H:i') }}
+                                                        </button>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                            <div class="dia-data">
-                                                {{ \Carbon\Carbon::parse($data)->format('d/m') }}
-                                            </div>
-                                            <div class="horarios-dia">
-                                                @foreach($horarios as $slot)
-                                                    <button class="hour-box {{ $slot->bloqueado ? 'disabled' : '' }}"
-                                                            data-medico-id="{{ $medico->id }}"
-                                                            data-slot="{{ $slot->horario_inicio }}"
-                                                            data-date="{{ $slot->data }}"
-                                                            data-horario-id="{{ $slot->horario_id }}"
-                                                            data-especialidade="{{ $slot->especialidade }}"
-                                                            data-valor="{{ $slot->valor }}"
-                                                            {{ $slot->bloqueado ? 'disabled' : '' }}>
-                                                        {{ \Carbon\Carbon::parse($slot->horario_inicio)->format('H:i') }}
-                                                    </button>
-                                                @endforeach
-                                            </div>
-                                        </div>
+                                        @endif
                                     @endforeach
                                 </div>
                                 <button class="scroll-button right" onclick="scrollHorarios('right', {{ $medico->id }})">&#10095;</button>
@@ -527,46 +578,62 @@
                 });
             });
 
-            // Se houver um termo pesquisado, atualiza os dropdowns automaticamente, se houver correspondência
+            // Se houver um termo pesquisado, atualiza os dropdowns automaticamente, colocando primeiro os procedimentos que contenham o termo
             const searchTerm = "{{ $searchTerm }}".toLowerCase();
             if(searchTerm) {
                 document.querySelectorAll('.dropdown-procedimentos').forEach(dropdown => {
                     const medicoId = dropdown.querySelector('.dropdown-toggle').getAttribute('data-medico-id');
+                    let matching = [];
+                    let nonMatching = [];
                     dropdown.querySelectorAll('.procedure-item').forEach(item => {
                         if(item.innerText.toLowerCase().includes(searchTerm)) {
-                            dropdown.querySelector('.dropdown-toggle').innerText = item.innerText;
+                            matching.push(item.innerHTML);
+                        } else {
+                            nonMatching.push(item.innerHTML);
                         }
                     });
+                    if(matching.length > 0) {
+                        dropdown.querySelector('.dropdown-toggle').innerText = matching[0];
+                    }
                 });
             }
 
-            // Alterna a exibição dos agendamentos
-            const agendamentoButtons = document.querySelectorAll('.btn-agendamento');
-            agendamentoButtons.forEach(button => {
+            // Alterna a exibição dos agendamentos e, ao clicar em "Agendar", exibe os botões de rolagem
+            document.querySelectorAll('.btn-agendamento').forEach(button => {
                 button.addEventListener('click', function () {
                     const agenda = this.nextElementSibling;
-                    agenda.style.display = (!agenda.style.display || agenda.style.display === 'none') ? 'block' : 'none';
+                    const appointmentInfo = this.parentElement;
+                    if (!agenda.style.display || agenda.style.display === 'none') {
+                        agenda.style.display = 'block';
+                        // Exibe os botões de rolagem somente se houver horários
+                        const leftButton = appointmentInfo.querySelector('.scroll-button.left');
+                        const rightButton = appointmentInfo.querySelector('.scroll-button.right');
+                        if(leftButton) leftButton.style.display = 'block';
+                        if(rightButton) rightButton.style.display = 'block';
+                    } else {
+                        agenda.style.display = 'none';
+                        // Oculta os botões de rolagem quando Agendar é fechado
+                        const leftButton = appointmentInfo.querySelector('.scroll-button.left');
+                        const rightButton = appointmentInfo.querySelector('.scroll-button.right');
+                        if(leftButton) leftButton.style.display = 'none';
+                        if(rightButton) rightButton.style.display = 'none';
+                    }
                 });
             });
 
-            // Seleção dos horários e exibição da data, procedimento e valor no detalhe do slot selecionado
-            const hourBoxes = document.querySelectorAll('.hour-box');
-            hourBoxes.forEach(hourBox => {
+            // Seleção dos horários e exibição dos detalhes do slot selecionado
+            document.querySelectorAll('.hour-box').forEach(hourBox => {
                 hourBox.addEventListener('click', function () {
                     const medicoId = this.getAttribute('data-medico-id');
                     const slotDate = this.getAttribute('data-date');
                     const procedimento = this.getAttribute('data-especialidade');
                     const valor = this.getAttribute('data-valor');
 
-                    // Remove a seleção de todos os horários do mesmo médico
                     document.querySelectorAll(`.hour-box[data-medico-id="${medicoId}"]`).forEach(box => {
                         box.classList.remove('selected');
                     });
-
-                    // Adiciona a classe 'selected' ao horário clicado
                     this.classList.add('selected');
 
-                    // Atualiza a exibição dos detalhes do slot selecionado com data, procedimento e valor
                     const selectedDateElement = document.getElementById(`selected-date-${medicoId}`);
                     selectedDateElement.style.display = 'block';
                     selectedDateElement.innerHTML = `
@@ -574,21 +641,17 @@
                         <strong>Procedimento:</strong> ${procedimento} <br>
                         <strong>Valor:</strong> ${valor}
                     `;
-
-                    // Exibe o botão "Confirmar" para o médico correspondente
                     const confirmButton = document.querySelector(`.btn-confirmar[data-medico-id="${medicoId}"]`);
                     confirmButton.style.display = 'inline-block';
                 });
             });
 
             // Lógica para o botão "Confirmar"
-            const confirmButtons = document.querySelectorAll('.btn-confirmar');
-            confirmButtons.forEach(button => {
+            document.querySelectorAll('.btn-confirmar').forEach(button => {
                 button.addEventListener('click', function () {
                     const medicoId = this.getAttribute('data-medico-id');
                     const selectedHour = document.querySelector(`.hour-box.selected[data-medico-id="${medicoId}"]`);
                     if (selectedHour) {
-                        // Obtém o id do horário selecionado
                         const horarioId = selectedHour.getAttribute('data-horario-id');
                         enviarHorario(horarioId);
                     } else {
@@ -598,34 +661,27 @@
             });
 
             function enviarHorario(horarioId) {
-                // Cria um formulário oculto para enviar o id do horário via POST
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '{{ route("compra.index") }}'; // Altere para a rota desejada
-
-                // Campo do token CSRF
+                form.action = '{{ route("compra.index") }}';
                 const tokenInput = document.createElement('input');
                 tokenInput.type = 'hidden';
                 tokenInput.name = '_token';
                 tokenInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                 form.appendChild(tokenInput);
-
-                // Campo com o id do horário
                 const horarioIdInput = document.createElement('input');
                 horarioIdInput.type = 'hidden';
                 horarioIdInput.name = 'horario_id';
                 horarioIdInput.value = horarioId;
                 form.appendChild(horarioIdInput);
-
                 document.body.appendChild(form);
                 form.submit();
             }
         });
 
-        // Função para rolar os horários
         function scrollHorarios(direction, medicoId) {
             const container = document.getElementById(`horarios-container-${medicoId}`);
-            const scrollAmount = 200; // Quantidade de rolagem
+            const scrollAmount = 200;
             if (direction === 'left') {
                 container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             } else {
