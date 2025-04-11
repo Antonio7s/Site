@@ -10,30 +10,38 @@
             <div class="card">
                 <div class="card-header bg-info text-white">QR Code para Pagamento</div>
                 <div class="card-body text-center">
+                    
                     <p>Escaneie o QR Code abaixo com seu aplicativo de pagamento para efetuar o pagamento.</p>
                     <img src="{{ $qrcode }}" alt="QR Code Pix" class="img-fluid mb-3">
                     <p><strong>Valor: </strong>R$ {{ number_format($valor, 2, ',', '.') }}</p>
                     <p>Após o pagamento, aguarde a confirmação.</p>
-                    <a href="#" class="btn btn-primary mt-3">Voltar ao Início</a>
+                    <a href="{{ route('index') }}" class="btn btn-primary mt-3">Voltar ao Início</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
+    // Suponha que o id do agendamento esteja disponível na view
+    //let agendamentoId = {{ $agendamento->id ?? 'null' }};
+    let agendamentoId = {{ $agendamento_id ?? 'null' }};
+
+
     function verificarPagamento() {
-        fetch('/pagamento/verificar-pagamento')
+        if (!agendamentoId) return; // Evita chamadas sem o id
+        
+        fetch(`/pagamento/verificar-pagamento?agendamento_id=${agendamentoId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.aprovado) {
-                    window.location.href = "{{ route('pagamento.sucessoPix') }}"; // Redireciona se houver agendamento aprovado
+                    window.location.href = "{{ route('pagamento.sucessoPix') }}";
                 }
             })
             .catch(error => console.error('Erro ao verificar pagamento:', error));
     }
 
-    // Verifica o pagamento a cada 3 segundos
-    setInterval(verificarPagamento, 15000);
+    setInterval(verificarPagamento, 1500); // Verifica a cada 1.5 segundos
+
 </script>
 
 @endsection

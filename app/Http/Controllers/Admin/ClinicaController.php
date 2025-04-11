@@ -73,6 +73,9 @@ class ClinicaController extends Controller
             'data_emissao' => 'nullable|date',
             'cpf' => 'nullable|string|max:14',
             'estado_civil' => 'nullable|string|max:20',
+            'porcentagem_lucro' => 'nullable|numeric',
+            'valor_fixo_lucro' => 'nullable|numeric',
+            'wallet_id' => 'nullable|string|max:255',
         ]);
             //Informacoes de taxa
             //

@@ -12,8 +12,8 @@
                 <label class="form-label">Status</label>
                 <select class="form-control @error('status') is-invalid @enderror" name="status">
                     <option value="" disabled {{ old('status', $clinica->status) == '' ? 'selected' : '' }}>Selecione o status</option>
-                    <option value="ativo" {{ old('status', $clinica->status) == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
-                    <option value="inativo" {{ old('status', $clinica->status) == 'negado' ? 'selected' : '' }}>Negado</option>
+                    <option value="aprovado" {{ old('status', $clinica->status) == 'aprovado' ? 'selected' : '' }}>Aprovado</option>
+                    <option value="negado" {{ old('status', $clinica->status) == 'negado' ? 'selected' : '' }}>Negado</option>
                     <option value="pendente" {{ old('status', $clinica->status) == 'pendente' ? 'selected' : '' }}>Pendente</option>
                 </select>
                 @error('status')
@@ -286,22 +286,22 @@
                 <h3> Taxa de Serviço da MedExame </h3>
                 <div class="col-md-2">
                             <label class="form-label">Taxa em %</label>
-                            <input type="text" class="form-control" value="{{ $clinica->porcentagem_lucroficar ?? 'Não informado' }}" >
+                            <input type="text" class="form-control" name="porcentagem_lucro" value="{{ $clinica->porcentagem_lucro ?? 'Não informado' }}" >
                 </div>
                 <div class="col-md-2">
-                            <label class="form-label">Taxa fixa EM R$</label>
-                            <input type="text" class="form-control" value="{{ $clinica->valor_fixo_lucro ?? 'Não informado' }}" >
+                            <label class="form-label">Taxa fixa em R$</label>
+                            <input type="text" class="form-control" name="valor_fixo_lucro" value="{{ $clinica->valor_fixo_lucro ?? 'Não informado' }}" >
                 </div>
 
                 <div class="col-md-2">
                             <label class="form-label">Wallet Id da Clínica</label>
-                            <input type="text" class="form-control" value="{{ $clinica->wallet_id ?? 'Não informado' }}" >
+                            <input type="text" class="form-control" name="wallet_id" value="{{ $clinica->wallet_id ?? 'Não informado' }}" >
                 </div>
             </div>
 
             <!-- BOTOES -->
             <div class="d-flex justify-content-end mt-4">
-                <button type="reset" class="btn btn-warning">Cancelar</button>
+                <a href="{{ route('admin.clinicas.index') }}" class="btn btn-warning me-2">Cancelar</a>
                 <button type="submit" class="btn btn-success">Salvar</button>
             </div>
         </form>
