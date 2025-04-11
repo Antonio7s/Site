@@ -12,8 +12,8 @@
                 <div class="card-body text-center">
                     <p>Infelizmente, ocorreu uma falha ao processar o pagamento por Cartão de Crédito.</p>
                     <p>Por favor, tente novamente ou entre em contato com o suporte se o problema persistir.</p>
-                    <a href="#" class="btn btn-primary mt-3">Tentar Novamente</a>
-                    <a href="#" class="btn btn-secondary mt-3">Voltar ao Início</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-primary mt-3">Tentar Novamente</a>
+                    <a href="{{ route('index') }}" class="btn btn-secondary mt-3">Voltar ao Início</a>
                 </div>
             </div>
         </div>

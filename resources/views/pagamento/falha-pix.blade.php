@@ -11,8 +11,8 @@
                 <div class="card-body text-center">
                     <p>Infelizmente, ocorreu uma falha ao processar o pagamento via Pix.</p>
                     <p>Verifique os dados e tente novamente ou escolha outro método de pagamento.</p>
-                    <a href="#" class="btn btn-primary mt-3">Tentar Novamente</a>
-                    <a href="#" class="btn btn-secondary mt-3">Voltar ao Início</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-primary mt-3">Tentar Novamente</a>
+                    <a href="{{ route('index') }}" class="btn btn-secondary mt-3">Voltar ao Início</a>
                 </div>
             </div>
         </div>

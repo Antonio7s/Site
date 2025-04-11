@@ -10,8 +10,8 @@
                 <div class="card-body text-center">
                     <p>O pagamento via Pix foi processado com sucesso.</p>
                     <p>Você pode acompanhar o status do seu pedido a qualquer momento.</p>
-                    <a href="#" class="btn btn-primary mt-3">Ir para Meus Pedidos</a>
-                    <a href="#" class="btn btn-secondary mt-3">Voltar ao Início</a>
+                    <a href="{{ route('perfil.meusPedidos') }}" class="btn btn-primary mt-3">Ir para Meus Pedidos</a>
+                    <a href="{{ route('index') }}" class="btn btn-secondary mt-3">Voltar ao Início</a>
                 </div>
             </div>
         </div>

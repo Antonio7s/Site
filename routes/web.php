@@ -273,12 +273,13 @@ Route::middleware('auth', 'verified')->group(function () {
         
         // Views de falha no pagamento
         Route::get('falha-pix', 'falhaPix')->name('pagamento.falhaPix');
-        //Route::get('falha-boleto', 'falhaBoleto')->name('pagamento.falhaBoleto');
         Route::get('falha-cartao', 'falhaCartao')->name('pagamento.falhaCartao');
 
         //Views de Sucesso
         Route::get('sucesso-pix', 'sucessoPix')->name('pagamento.sucessoPix');
         Route::get('sucesso-cartao', 'sucessoCartao')->name('pagamento.sucessoCartao');
+
+        Route::get('horario-indisponivel', 'horarioIndisponivel')->name('pagamento.horarioIndisponivel');
         //Aguardando pagamento
         Route::get('/verificar-pagamento', 'verificarPagamento');
     });
