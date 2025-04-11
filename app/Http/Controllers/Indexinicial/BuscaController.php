@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Medico;
 use Illuminate\Support\Facades\DB;
+use App\Models\ServicoDiferenciado;
+use Carbon\Carbon;
 
 class BuscaController extends Controller
 {
