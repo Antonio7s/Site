@@ -151,7 +151,8 @@ class PagamentoController extends Controller
         // Redireciona para a view de pagamento Pix passando os dados necessários
         return view('pagamento/pagamento-pix', [
             'qrcode' => 'data:image/png;base64,' . $qrCodePix['encodedImage'],
-            'valor'  => $request->valor
+            'valor'  => $request->valor,
+            'agendamento_id' => $agendamento->id,
         ]);
     }
 
@@ -316,13 +317,20 @@ class PagamentoController extends Controller
     }
     
 
-    public function verificarPagamento()
+    public function verificarPagamento(Request $request)
     {
-        // Obtém o ID do usuário logado
+        // Recupera o id do agendamento enviado na requisição
+        $agendamentoId = $request->input('agendamento_id');
         $userId = Auth::id();
 
-        // Busca um agendamento do usuário com status "agendado"
+        \Log::info('Verificando pagamento para ID:', [
+            'agendamento_id' => $request->input('agendamento_id'),
+            'user_id' => Auth::id(),
+        ]);
+
+        // Busca o agendamento específico do usuário com status "agendado"
         $agendamento = Agendamento::where('user_id', $userId)
+                            ->where('id', $agendamentoId)
                             ->where('status', 'agendado')
                             ->first();
 
@@ -330,6 +338,7 @@ class PagamentoController extends Controller
             'aprovado' => $agendamento ? true : false
         ]);
     }
+
 
 
     public function apikey_edit()
