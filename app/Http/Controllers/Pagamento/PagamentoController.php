@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Pagamento;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\Controller;
 
 use App\Models\Horario;
 use App\Models\Agendamento;
+use App\Models\ServicoDiferenciado;
+
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -42,37 +46,81 @@ class PagamentoController extends Controller
 
     public function index(Request $request)
     {
-        // Obter o ID do horário via POST
-        $horario_id = $request->input('horario_id');
+        Log::debug('Iniciando PagamentoController@index', ['request' => $request->all()]);
 
-        // Busque as informações do horário no banco de dados
+        $horario_id = $request->input('horario_id');
+        Log::info('Buscando horário ID: ' . $horario_id);
+
         $horario = Horario::with(['agenda.medico.clinica', 'procedimento'])
                         ->where('id', $horario_id)
                         ->first();
 
-        // Se o horário não for encontrado, redirecione ou trate o erro
         if (!$horario) {
+            Log::error('Horário não encontrado', ['horario_id' => $horario_id]);
             return redirect()->back()->with('error', 'Horário não encontrado.');
         }
 
-        // Pegue todos os dados do procedimento relacionado ao horário
-        $procedimento = $horario->procedimento;  // Acesso completo ao objeto 'procedimento'
-        
-        
-        // A partir do horário, você pode acessar a agenda e a clínica
-        $agenda = $horario->agenda;         // Agenda associada ao horário
-        $medico = $agenda->medico;
-        $clinica = $medico->clinica;        // Clinica associada à agenda
+        Log::debug('Horário encontrado', ['horario' => $horario->toArray()]);
 
-        // Pegue os dados da agenda e do procedimento relacionados
-        //$agenda_id = $horario->agenda_id;
-        //$procedimento_id = $horario->procedimento_id;
-        $medico_id = $horario->agenda->medico_id; // Supondo que 'agenda' tenha uma relação com 'medico'
-        $data = $horario->data; // Ou qualquer outra informação que você precise
-        $clinica_id = $horario->agenda->clinica_id;
-        // Agora, você pode passar os dados para a view
+        try {
+            $agenda = $horario->agenda;
+            $medico = $agenda->medico;
+            $clinica = $medico->clinica;
+            $procedimento = $horario->procedimento;
 
-        return view('pagamento.checkout', compact('clinica', 'horario', 'medico', 'data', 'procedimento', 'agenda'));
+            Log::debug('Relacionamentos carregados', [
+                'clinica_id' => $clinica->id,
+                'procedimento_id' => $procedimento->id,
+                'valor_procedimento' => $procedimento->valor
+            ]);
+
+            // Verificação do serviço diferenciado
+            Log::info('Verificando serviços diferenciados', [
+                'clinica' => $clinica->id,
+                'procedimento' => $procedimento->id,
+                'data_atual' => Carbon::today()->toDateString()
+            ]);
+
+            $servicoDiferenciado = ServicoDiferenciado::where('clinica_id', $clinica->id)
+                ->where('procedimento_id', $procedimento->id)
+                ->whereDate('data_inicial', '<=', Carbon::today())
+                ->whereDate('data_final', '>=', Carbon::today())
+                ->first();
+
+            if ($servicoDiferenciado) {
+                Log::notice('Serviço diferenciado aplicado', [
+                    'servico_id' => $servicoDiferenciado->id,
+                    'valor_original' => $procedimento->valor,
+                    'preco_customizado' => $servicoDiferenciado->preco_customizado,
+                    'periodo' => $servicoDiferenciado->data_inicial . ' - ' . $servicoDiferenciado->data_final
+                ]);
+            } else {
+                Log::info('Nenhum serviço diferenciado ativo encontrado');
+            }
+
+            $valor = $servicoDiferenciado 
+                ? $servicoDiferenciado->preco_customizado 
+                : $procedimento->valor;
+
+            Log::debug('Valor final calculado', ['valor_final' => $valor]);
+
+            return view('pagamento.checkout', [
+                'clinica' => $clinica,
+                'horario' => $horario,
+                'medico' => $medico,
+                'data' => $horario->data,
+                'procedimento' => $procedimento,
+                'agenda' => $agenda,
+                'valor' => $valor
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Falha no processo de checkout', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->with('error', 'Erro ao processar o pedido');
+        }
     }
 
 
@@ -160,6 +208,9 @@ class PagamentoController extends Controller
     // Método para gerar o pagamento  com o cartão
     public function finalizarCartao(Request $request)
     {
+        // Adicione este log para verificar o valor recebido
+        Log::info('Valor recebido no Cartão', ['amount' => $request->amount]);
+        
         $request->validate([
             'cardName'      => 'required|string',
             'cardNumber'    => 'required|string',

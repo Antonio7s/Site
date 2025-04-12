@@ -23,9 +23,9 @@
                 <div class="card">
                     <div class="card-header bg-info text-white">Resumo do Pagamento</div>
                     <div class="card-body">
-                        <p><strong>Consulta:</strong> {{ $procedimento->valor }}</p>
+                        <p><strong>Consulta:</strong> {{ $valor }}</p>
                         <hr>
-                        <p class="h5 text-end"><strong>Total: {{ $procedimento->valor }}</strong></p>
+                        <p class="h5 text-end"><strong>Total: {{ $valor }}</strong></p>
                     </div>
                 </div>
             </div>
@@ -83,13 +83,13 @@
                                     <label for="installments" class="form-label">Parcelamento</label>
                                     <select class="form-select" id="installments" name="installments">
                                         <option value="1">
-                                            1x de R$ {{ number_format($procedimento->valor) }}
+                                            1x de R$ {{ number_format($valor) }}
                                         </option>
                                     </select>
                                 </div>
                                 <input type="hidden" name="horario_id" value="{{ $horario->id }}">
                                 <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
-                                <input type="hidden" name="amount" value="{{ $procedimento->valor }}">
+                                <input type="hidden" name="amount" value="{{ $valor }}">
                                 <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
 
                                 <div class="mb-3">
@@ -109,7 +109,7 @@
                         <form id="formPix" action="{{ route('pagamento.gerarPix') }}" method="POST">
                             @csrf
                             <input type="hidden" name="horario_id" value="{{ $horario->id }}">
-                            <input type="hidden" name="valor" value="{{ $procedimento->valor }}">
+                            <input type="hidden" name="valor" value="{{ $valor }}">
                             <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
                             <div id="pixSection" class="hidden">
                                 <button type="submit" class="btn btn-secondary w-100">Gerar PIX</button>
