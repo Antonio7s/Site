@@ -115,7 +115,7 @@ class ProfissionaisController extends Controller
             'foto_url'        => 'nullable|image|max:2048',
             'email'           => "required|email|unique:medicos,email,{$id}",
             'telefone'        => 'required|string|max:20',
-            'conselho_nome'   => "required|string|unique:medicos,{$id}",
+            'conselho_nome'   => 'required|string|max:20',
             'conselho_numero' => 'required|string|max:20',
             'especialidades'  => 'required|array',
             'especialidades.*'=> 'exists:especialidades,id',
