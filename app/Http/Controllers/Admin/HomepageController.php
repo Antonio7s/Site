@@ -13,11 +13,11 @@ class HomepageController extends Controller
 {
     public function index()
     {
-        $settings = HomepageSetting::first();
+        $homepageSettings = HomepageSetting::first();
         $categories = Category::all();
         $faqs = Faq::all();
 
-        return view('admin.sub-diretorios.homepage.index', compact('settings', 'categories', 'faqs'));
+        return view('admin.sub-diretorios.homepage.index', compact('homepageSettings', 'categories', 'faqs'));
     }
 
     public function save(Request $request)
