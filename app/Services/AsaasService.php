@@ -43,25 +43,43 @@ class AsaasService
         // Captura o remoteIp, por exemplo:
         $remoteIp = request()->ip(); // ou use $_SERVER['REMOTE_ADDR'] se preferir
 
-        $response = $this->client->post("{$this->baseUrl}payments", [
-            'debug'   => fopen('php://stdout', 'w'),
-            'headers' => [
-                'accept'        => 'application/json',
-                'content-type'  => 'application/json',
-                'access_token'  => $this->apiKey,
-            ],
-            'json' => [
-                'customer'    => $customerId,
-                'billingType' => 'PIX', // Pode ser 'PIX' ou 'BOLETO'
-                'value'       => $valor,
-                'cpfCnpj'   => $cpfCliente, //000.000.000-00
-                'description' => $descricao,
-                'dueDate'     => now()->addDays(5)->format('Y-m-d'),
-                'splits'      => $splits, // Passa o array de splits aqui
-            ],
-        ]);
-
-        return json_decode($response->getBody(), true);
+        try {
+            // Executa a requisição para criar a cobrança via PIX
+            $response = $this->client->post("{$this->baseUrl}payments", [
+                'debug'   => fopen('php://stdout', 'w'),
+                'headers' => [
+                    'accept'       => 'application/json',
+                    'content-type' => 'application/json',
+                    'access_token' => $this->apiKey,
+                ],
+                'json' => [
+                    'customer'    => $customerId,
+                    'billingType' => 'PIX',
+                    'value'       => $valor,
+                    'cpfCnpj'     => $cpfCliente, // Certifique-se de enviar somente dígitos
+                    'description' => $descricao,
+                    'dueDate'     => now()->addDays(5)->format('Y-m-d'),
+                    'splits'      => $splits,
+                    //'remoteIp'    => $remoteIp, // Caso a API exija o envio do IP
+                ],
+            ]);
+    
+            return json_decode($response->getBody(), true);
+        
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            // Log detalhado em caso de erro, incluindo status, headers e corpo da resposta
+            \Log::error('Erro na requisição ao Asaas', [
+                'status_code' => $e->getResponse()->getStatusCode(),
+                'headers'     => $e->getResponse()->getHeaders(),
+                'response'    => (string) $e->getResponse()->getBody(),
+            ]);
+    
+            // Retorna um array com a mensagem de erro para tratamento posterior
+            return [
+                'error'    => 'Erro ao realizar a requisição',
+                'detalhes' => $e->getMessage()
+            ];
+        }
     }
 
     public function criarCobrancaCartao($customerId, $valor, $descricao, array $creditCard, $clinica_id, $postalCode, $addressNumber, $nomeCliente, $cpfCliente, $emailCliente, $telefoneCliente)
