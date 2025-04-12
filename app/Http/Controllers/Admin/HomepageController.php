@@ -59,17 +59,15 @@ class HomepageController extends Controller
                 \Log::info('Logo salvo com sucesso:', ['path' => $settings->logo_path]);
             }
 
-            // Upload do banner
+
+            // Upload do banner utilizando Storage
             if ($request->hasFile('banner')) {
-                if ($settings->banner_path && file_exists(public_path($settings->banner_path))) {
-                    unlink(public_path($settings->banner_path));
+                if ($settings->banner_path && Storage::disk('public')->exists($settings->banner_path)) {
+                    Storage::disk('public')->delete($settings->banner_path);
                 }
-                $bannerFile = $request->file('banner');
-                $destinationPath = public_path('images/');
-                $bannerName = time() . '-' . $bannerFile->getClientOriginalName();
-                $bannerFile->move($destinationPath, $bannerName);
-                $settings->banner_path = 'images/' . $bannerName;
-                \Log::info('Banner salvo com sucesso:', ['path' => $settings->banner_path]);
+                // Armazena o banner
+                $bannerPath = $request->file('banner')->store('images', 'public');
+                $settings->banner_path = $bannerPath;
             }
 
             // Atualiza as demais configurações
