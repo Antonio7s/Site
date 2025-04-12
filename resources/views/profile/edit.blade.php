@@ -5,7 +5,6 @@
     .card {
       margin-bottom: 20px;
     }
-
     /* Estilos para o painel lateral */
     .side-panel {
       position: fixed;
@@ -19,15 +18,12 @@
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
       color: #007bff;
     }
-
     .side-panel.open {
       left: 0;
     }
-
     .side-panel .panel-content {
       padding: 20px;
     }
-
     .side-panel .panel-title {
       font-size: 22px;
       margin-top: 30px;
@@ -35,7 +31,6 @@
       margin-bottom: 20px;
       color: #007bff;
     }
-
     .side-panel a {
       display: block;
       padding: 10px;
@@ -44,11 +39,9 @@
       font-size: 16px;
       margin-bottom: 10px;
     }
-
     .side-panel a:hover {
       background-color: #f0f0f0;
     }
-
     .toggle-btn {
       position: fixed;
       top: 15px;
@@ -64,15 +57,12 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease;
     }
-
     .toggle-btn:hover {
       background-color: #0056b3;
     }
-
     .toggle-btn:focus {
       outline: none;
     }
-
     .side-panel .btn-link {
       color: red !important;
       text-decoration: none;
@@ -85,13 +75,10 @@
       border: none;
       cursor: pointer;
     }
-
     .side-panel .btn-link:hover {
       background-color: #f0f0f0;
     }
-
     /* Centralizando os cards */
-
     .centered-container {
       display: flex;
       flex-direction: column;
@@ -99,25 +86,19 @@
       gap: 20px;
       padding: 20px;
     }
-
     .centered-container .card {
       width: 100%;
       max-width: 600px;
     }
-
-
     /* Estilos para o status */
-
     .status-finalizado {
       color: green;
       font-weight: bold;
     }
-
     .status-andamento {
       color: orange;
       font-weight: bold;
     }
-
     /* Carrossel de Médicos em Destaque */
     .doctor-scroll-container {
       display: flex;
@@ -125,13 +106,11 @@
       gap: 15px;
       padding-bottom: 10px;
     }
-
     .doctor-card {
       flex: 0 0 auto;
       width: 150px;
       text-align: center;
     }
-
     .doctor-card .doctor-image {
       width: 150px;
       height: 150px;
@@ -139,7 +118,6 @@
       overflow: hidden;
       background: #eee;
     }
-
     .doctor-card .doctor-image img {
       width: 100%;
       height: 100%;
@@ -149,13 +127,11 @@
 @endpush
 
 @section('content')
-
   @php
     // Seleciona os 3 últimos agendamentos (ou quantos houver)
     $lastAppointments = $agendamentos->take(3);
-
+    
     // Consulta todos os médicos do banco de dados.
-    // Certifique-se de que o model App\Models\Medico existe e possui os campos necessários.
     $allDoctors = \App\Models\Medico::all();
   @endphp
   <div class="centered-container">
@@ -169,9 +145,7 @@
           <ul class="list-group">
             @foreach($lastAppointments as $agendamento)
               @php
-                // Converte a data do agendamento para objeto Carbon
                 $appointmentDate = \Carbon\Carbon::parse($agendamento->data);
-                // Se a data do agendamento for menor ou igual à data atual, considera finalizado.
                 $statusFinalizado = $appointmentDate->lte(\Carbon\Carbon::now());
                 $statusText = $statusFinalizado ? 'Finalizado' : 'Em andamento';
                 $statusClass = $statusFinalizado ? 'status-finalizado' : 'status-andamento';
@@ -204,7 +178,7 @@
             @foreach($allDoctors as $doctor)
               <div class="doctor-card">
                 <div class="doctor-image">
-                  <img src="{{ $doctor->foto ? $doctor->foto : asset('images/default_male.png') }}" 
+                  <img src="{{ $doctor->foto ? asset('storage/fotos_medicos/' . $doctor->foto) : asset('images/default_male.png') }}" 
                        alt="{{ $doctor->profissional_nome }} {{ $doctor->profissional_sobrenome }}">
                 </div>
                 <h5 style="margin-top: 10px;">
