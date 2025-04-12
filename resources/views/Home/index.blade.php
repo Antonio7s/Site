@@ -236,10 +236,12 @@
 <body>
     <!-- Banner Dinâmico -->
     <div class="banner container text-center p-0" style="min-height: 300px; position: relative;">
-        @if(isset($homepageSettings) && !empty($homepageSettings->banner_path))
-            <img src="{{ Storage::url($homepageSettings->banner_path) }}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;">
+        @if(isset($homepageSettings) && $homepageSettings->banner_path)
+            <img src="{{ asset('storage/' . $homepageSettings->banner_path) }}" alt="Banner" 
+                style="width: 100%; height: 100%; object-fit: cover;">
         @else
-            <img src="{{ asset('images/banners/default-banner.jpg') }}" alt="Banner Padrão" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="{{ asset('images/banners/default-banner.jpg') }}" alt="Banner Padrão" 
+                style="width: 100%; height: 100%; object-fit: cover;">
         @endif
     </div>
 
