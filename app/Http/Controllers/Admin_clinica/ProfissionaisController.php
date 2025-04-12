@@ -115,7 +115,7 @@ class ProfissionaisController extends Controller
             'foto_url'        => 'nullable|image|max:2048',
             'email'           => "required|email|unique:medicos,email,{$id}",
             'telefone'        => 'required|string|max:20',
-            'conselho_nome'   => "required|string|unique:medicos,crm,{$id}",
+            'conselho_nome'   => "required|string|unique:medicos,{$id}",
             'conselho_numero' => 'required|string|max:20',
             'especialidades'  => 'required|array',
             'especialidades.*'=> 'exists:especialidades,id',
@@ -124,7 +124,7 @@ class ProfissionaisController extends Controller
         ]);
 
         // Atualiza os dados do médico
-        $dados = $request->only(['profissional_nome', 'profissional_sobrenome', 'email', 'telefone', 'crm','clinica_id']);
+        $dados = $request->only(['profissional_nome', 'profissional_sobrenome', 'email', 'telefone','clinica_id']);
 
         if ($request->hasFile('foto_url')) {
             $dados['foto_url'] = $request->file('foto_url')->store('fotos_medicos', 'public');
