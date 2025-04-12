@@ -24,6 +24,6 @@ class IndexInicialController extends Controller
         $categories = Category::all();
 
         // Passa os dados para a view
-        return view('home.index', compact('homepageSettings', 'faqs', 'categories'));
+        return view('Home.index', compact('homepageSettings', 'faqs', 'categories'));
     }
 }
