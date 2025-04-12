@@ -65,10 +65,10 @@ class HomepageController extends Controller
                     unlink(public_path($settings->banner_path));
                 }
                 $bannerFile = $request->file('banner');
-                $destinationPath = public_path('images/banners');
+                $destinationPath = public_path('images/');
                 $bannerName = time() . '-' . $bannerFile->getClientOriginalName();
                 $bannerFile->move($destinationPath, $bannerName);
-                $settings->banner_path = 'images/banners/' . $bannerName;
+                $settings->banner_path = 'images/' . $bannerName;
                 \Log::info('Banner salvo com sucesso:', ['path' => $settings->banner_path]);
             }
 

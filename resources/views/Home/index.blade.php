@@ -238,7 +238,7 @@
     <div class="banner container text-center p-0" style="min-height: 300px; position: relative;">
         <img src="{{ asset('images/banners/default-banner.jpg') }}" alt="Banner Padrão" style="width: 100%; height: 100%; object-fit: cover;">
         @if(isset($homepageSettings) && !empty($homepageSettings->banner_path))
-            <img src="{{ asset($homepageSettings->banner_path) }}?v={{ time() }}" alt="Banner" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+            <img src="{{ asset($homepageSettings->banner_path) }}" alt="Banner" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
         @endif
     </div>
 
