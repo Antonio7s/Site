@@ -9,7 +9,5 @@ class MedicoProcedimento extends Pivot
     protected $table = 'medico_procedimento';
 
     protected $fillable = ['medico_id', 'procedimento_id'];
-
-    // Adicione outros campos extras, se necessário
 }
 
