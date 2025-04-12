@@ -39,7 +39,7 @@ class ProfileController extends Controller
 
     public function show(Request $request): View
     {
-        return view('minhasinformacoes', [
+        return view('Minhasinformacoes', [
             'user' => $request->user(),
         ]);
     }
@@ -122,7 +122,7 @@ class ProfileController extends Controller
 
     public function minhasInformacoes(): View
     {
-        return view('profile.minhasInformacoes');
+        return view('profile.MinhasInformacoes');
     }
 
     public function meusPedidos(): View
