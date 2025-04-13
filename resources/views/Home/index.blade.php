@@ -203,7 +203,7 @@
         >
         @if(!empty($homepageSettings->banner_path))
             <img
-                src="{{ asset($homepageSettings->banner_path) }}"
+                src="{{ Storage::url($homepageSettings->banner_path) }}"
                 alt="Banner"
                 class="position-absolute top-0 start-0 w-100 h-100"
                 style="object-fit:cover;"
