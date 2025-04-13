@@ -71,7 +71,7 @@ class HomepageController extends Controller
                 $bannerPath = $request->file('banner')->store('banners', 'public');
 
                 // Salva o caminho acessível publicamente
-                $settings->banner_path = 'storage/' . $bannerPath;
+                $settings->banner_path = $bannerPath;
                 \Log::info('Banner salvo com sucesso:', ['path' => $settings->banner_path]);
             }
             
