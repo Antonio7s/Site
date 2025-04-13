@@ -196,7 +196,7 @@
     <!-- Banner Dinâmico -->
     <div class="banner container text-center p-0" style="min-height: 300px; position: relative;">
         <img
-            src="{{ asset('images/banners/default-banner.jpg') }}"
+            src="{{ asset('images/default-banner.jpg') }}"
             alt="Banner Padrão"
             class="img-fluid w-100"
             style="min-height:300px; object-fit:cover;"
