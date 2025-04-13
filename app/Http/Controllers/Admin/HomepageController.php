@@ -62,15 +62,17 @@ class HomepageController extends Controller
 
             // Upload do banner utilizando Storage
             if ($request->hasFile('banner')) {
-                // Remove banner antigo, se existir
-                if ($settings->banner_path && file_exists(public_path($settings->banner_path))) {
-                    unlink(public_path($settings->banner_path));
+                // Remove o banner antigo, se existir
+                if ($settings->banner_path && Storage::disk('public')->exists(str_replace('storage/', '', $settings->banner_path))) {
+                    Storage::disk('public')->delete(str_replace('storage/', '', $settings->banner_path));
                 }
-                $bannerFile = $request->file('banner');
-                $destinationPath = public_path('images/');
-                $bannerName = time() . '-' . $bannerFile->getClientOriginalName();
-                $bannerFile->move($destinationPath, $bannerName);
-                $settings->banner_path = 'images/' . $bannerName;
+
+                // Armazena novo banner em storage/app/public/banners
+                $bannerPath = $request->file('banner')->store('banners', 'public');
+
+                // Salva o caminho acessível publicamente
+                $settings->banner_path = 'storage/' . $bannerPath;
+                \Log::info('Banner salvo com sucesso:', ['path' => $settings->banner_path]);
             }
             
 
