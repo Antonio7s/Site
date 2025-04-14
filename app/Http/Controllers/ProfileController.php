@@ -122,7 +122,7 @@ class ProfileController extends Controller
 
     public function minhasInformacoes(): View
     {
-        return view('profile.MinhasInformacoes');
+        return view('profile.Minhasinformacoes');
     }
 
     public function meusPedidos(): View
