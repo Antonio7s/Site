@@ -5,7 +5,7 @@
 <form>
     <div class="mb-3">
         <label for="nome" class="form-label">Especialidade</label>
-        <input type="text" name="nome" class="form-control" id="nome" readonly value="{{ $pr->nome }}">
+        <input type="text" name="nome" class="form-control" id="nome" readonly value="{{ $procedimento->nome }}">
     </div>
     <div class="mb-3">
         <label for="valor" class="form-label" name="valor" >Valor</label>

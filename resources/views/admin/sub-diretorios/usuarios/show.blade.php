@@ -44,7 +44,7 @@
         </form>
         <hr class="my-4">
         <div class="d-flex justify-content-end mt-4">
-            <button class="btn btn-success">Voltar</button>
+            <a href="{{ route('admin.usuarios.index') }}" class="btn btn-success">Voltar</a>
         </div>
     </div>
 @endsection
