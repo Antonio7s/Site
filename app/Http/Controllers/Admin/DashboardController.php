@@ -27,7 +27,6 @@ class DashboardController extends Controller
         
         // Dados para os cards extras
         $totalClasses = Classe::count() ?? 0;
-        
         $totalProcedimentos = Procedimento::count() ?? 0;
         $totalHorarios      = Horario::count() ?? 0;
         $totalAgendamentos  = Agendamento::count() ?? 0;
@@ -78,12 +77,21 @@ class DashboardController extends Controller
             ->orderBy('data', 'asc')
             ->get();
 
-        // Consulta para Últimas Vendas
+        // Consulta para Últimas Vendas (com os novos campos)
         $ultimasVendas = DB::table('classes as c')
             ->join('procedimentos as p', 'c.id', '=', 'p.classe_id')
             ->join('horarios as h', 'p.id', '=', 'h.procedimento_id')
             ->join('agendamentos as ag', 'h.id', '=', 'ag.horario_id')
-            ->select('c.id as classe_id', 'c.nome as classe_nome', 'p.id as procedimento_id', 'h.id as horario_id', 'ag.id as agendamento_id', 'ag.created_at as data_agendamento')
+            ->select(
+                'c.id as classe_id', 
+                'c.nome as classe_nome', 
+                'p.id as procedimento_id', 
+                'p.nome as nome_procedimento',  // Exibe o nome do procedimento
+                'h.id as horario_id', 
+                'ag.id as agendamento_id', 
+                'ag.created_at as data_agendamento',
+                'ag.status as status'           // Exibe o status do agendamento
+            )
             ->orderBy('ag.created_at', 'desc')
             ->limit(10)
             ->get();
