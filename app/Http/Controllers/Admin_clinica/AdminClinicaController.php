@@ -14,6 +14,12 @@ class AdminClinicaController extends Controller
     public function edit()
     {
         $clinica = auth('clinic')->user();
+
+        // Formatar data_emissao para o formato BR (d/m/Y)
+        if ($clinica->data_emissao) {
+            $clinica->data_emissao = Carbon::parse($clinica->data_emissao)->format('d/m/Y');
+        }
+
         return view('/admin-clinica/sobre/index', compact('clinica'));
     }
 
@@ -104,7 +110,7 @@ class AdminClinicaController extends Controller
             
             //Wallet Id
             'wallet_id' => 'nullable|string|max:255',
-            
+
             // Documentos e Segurança
             'documentos' => 'nullable|file|mimes:pdf|max:2048',
             'password' => 'nullable|string|min:8|confirmed'
@@ -140,12 +146,12 @@ class AdminClinicaController extends Controller
         ]);
 
         // // Formatar data de emissão
-        // if ($request->data_emissao) {
-        //     $data['data_emissao'] = Carbon::createFromFormat(
-        //         'd/m/Y', 
-        //         $request->data_emissao
-        //     )->format('Y-m-d');
-        // }
+         if ($request->data_emissao) {
+             $data['data_emissao'] = Carbon::createFromFormat(
+                 'd/m/Y', 
+                 $request->data_emissao
+             )->format('Y-m-d');
+         }
 
         // Manter documento atual se não for alterado
         if (!$request->hasFile('documentos') && $clinica->documentos) {
