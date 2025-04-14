@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('data'); // Ou $table->datetime('data'); se precisar incluir a hora
 
             $table->enum('status', ['pendente', 'cancelado', 'agendado', 'concluido' ]);
-            $table->string('pagamento_id')->nullable()->unique()->change();
+            $table->string('pagamento_id')->nullable()->unique();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('horario_id')->unique(); // Garante que cada horário tenha no máximo um agendamento
             
