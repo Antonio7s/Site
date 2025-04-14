@@ -175,7 +175,7 @@ Route::middleware('auth', 'verified', 'can:access')->prefix('admin')->group(func
 Route::middleware(['auth:clinic', 'verified', 'check.clinica.status'])->prefix('admin-clinica')->group(function () {
     
     //Dashboard
-    Route::get('/dashboard', [DashboardClinicaController::class, 'index'])->name('admin-clinica.dashboard.index'); // DASHBOARD - EM BRANCO
+    //Route::get('/dashboard', [DashboardClinicaController::class, 'index'])->name('admin-clinica.dashboard.index'); // DASHBOARD - EM BRANCO
     
     //Servicos
     Route::get('/servicos', [ServicosController::class,'index'])->name('admin-clinica.servicos.index'); // Listagem de serviços
@@ -336,3 +336,4 @@ Route::get('/Busca', [BuscaController::class, 'Busca'])->name('index.inicial');
 Route::get('/', [\App\Http\Controllers\Indexinicial\IndexInicialController::class, 'index'])->name('index');
 
 
+Route::get('/servicos', [ServicoController::class, 'index'])->name('servicos');

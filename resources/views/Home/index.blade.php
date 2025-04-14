@@ -246,7 +246,6 @@
     <div class="info-section container mt-4">
         <h2>Informações Básicas</h2>
         <p>
-            Aqui você pode adicionar informações sobre o site, descrição de serviços ou qualquer outro conteúdo relevante.
             @if(isset($homepageSettings) && !empty($homepageSettings->info_basicas))
                 {!! $homepageSettings->info_basicas !!}
             @endif
