@@ -5,6 +5,17 @@
     <div class="card shadow-sm p-4 text-center" style="width: 380px; border-radius: 10px;">
         <h4 class="fw-bold text-primary mb-3">Login</h4>
 
+        <!-- Bloco de exibição de erros -->
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Formulário de Login -->
         <form method="POST" action="{{ route('login2') }}">
             @csrf
@@ -21,7 +32,7 @@
                 <input type="password" name="password" id="password" class="form-control py-2" placeholder="Digite sua senha" required>
                 <!-- Link "Esqueci a senha" -->
                 <div class="text-end mt-2">
-                    <a href="{{route('password.request2')}}" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
+                    <a href="{{ route('password.request2') }}" class="text-decoration-none text-muted" style="font-size: 0.85rem;">Esqueci a senha</a>
                 </div>
             </div>
 
@@ -51,4 +62,17 @@
 
 <!-- Script do reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+<!-- Validação do reCAPTCHA antes de enviar o formulário -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $('form').submit(function(e){
+      if(grecaptcha.getResponse() === ''){
+        e.preventDefault();
+        alert('Por favor, confirme o reCAPTCHA.');
+      }
+    });
+  });
+</script>
 @endsection
