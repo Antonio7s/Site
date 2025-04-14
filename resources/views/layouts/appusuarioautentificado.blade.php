@@ -156,18 +156,17 @@
         <div class="col-md-4">
           <h5>Informações</h5>
           <ul class="list-unstyled">
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Termos de Uso</a></li>
-            <li><a href="#">Suporte</a></li>
+            <li>Telefone: 44 – 998453216</li>
+            <li>Instagram: @med.exame</li>
+            <li>CNPJ: 53.270.181/0001-32</li>
           </ul>
         </div>
         <div class="col-md-4">
           <h5>Redes Sociais</h5>
           <ul class="list-unstyled d-flex">
-            <li class="me-3"><a href="#"><i class="fab fa-facebook fa-2x" style="color: #0D47A1;"></i></a></li>
-            <li class="me-3"><a href="#"><i class="fab fa-instagram fa-2x" style="color: #E1306C;"></i></a></li>
-            <li class="me-3"><a href="#"><i class="fab fa-twitter fa-2x" style="color: black;"></i></a></li>
-            <li class="me-3"><a href="#"><i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i></a></li>
+            <li class="me-3"><a href="https://www.facebook.com/profile.php?id=100081021690578"><i class="fab fa-facebook fa-2x" style="color: #0D47A1;"></i></a></li>
+            <li class="me-3"><a href="https://instagram.com/med.exame"><i class="fab fa-instagram fa-2x" style="color: #E1306C;"></i></a></li>
+            <li class="me-3"><a href="https://wa.me/5544998453216"><i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i></a></li>
           </ul>
         </div>
       </div>

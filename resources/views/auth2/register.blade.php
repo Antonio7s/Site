@@ -4,19 +4,30 @@
 <!-- Script do reCAPTCHA -->
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-<!-- Script para máscaras de telefone e CPF -->
+<!-- Script para máscaras de telefone, CPF, CEP e Data de Emissão -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script>
   $(document).ready(function(){
-    // Máscara para Telefone do Local (formato: (00) 0000-0000)
+    // Máscaras para telefones e CPF
     $('#telefone_local').mask('(00) 0000-0000');
-    // Máscara para Telefone Financeiro (formato: (00) 0000-0000)
     $('#telefone_financeiro').mask('(00) 0000-0000');
-    // Máscara para Celular (formato: (00) 00000-0000)
     $('#celular').mask('(00) 00000-0000');
-    // Máscara para CPF (formato: 000.000.000-00)
     $('#cpf').mask('000.000.000-00');
+
+    // Máscara para CEP: formato "00000-000" (9 caracteres, contando o hífen)
+    $('#cep').mask('00000-000');
+
+    // Máscara para Data de Emissão: insere automaticamente as barras (formato "dd/mm/aaaa")
+    $('#data_emissao').mask('00/00/0000');
+
+    // Validação do reCAPTCHA ao submeter o formulário
+    $('form').submit(function(e){
+      if(grecaptcha.getResponse() == ''){
+        e.preventDefault();
+        alert('Por favor, clique no reCAPTCHA.');
+      }
+    });
   });
 </script>
 
@@ -272,7 +283,7 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="modalDocumentosLabel">Documentos Necessários</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
                     <ul>
