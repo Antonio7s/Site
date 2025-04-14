@@ -21,9 +21,9 @@
         </div>
     </div>
 </div>
+
 <script>
     // Suponha que o id do agendamento esteja disponível na view
-    //let agendamentoId = {{ $agendamento->id ?? 'null' }};
     let agendamentoId = {{ $agendamento_id ?? 'null' }};
 
 
@@ -40,7 +40,7 @@
             .catch(error => console.error('Erro ao verificar pagamento:', error));
     }
 
-    setInterval(verificarPagamento, 1500); // Verifica a cada 1.5 segundos
+    setInterval(verificarPagamento, 2000); // Verifica a cada 2 segundos
 
 </script>
 

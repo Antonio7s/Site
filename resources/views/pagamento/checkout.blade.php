@@ -89,8 +89,8 @@
                                 </div>
                                 <input type="hidden" name="horario_id" value="{{ $horario->id }}">
                                 <input type="hidden" name="clinica_id" value="{{ $clinica->id }}">
-                                <input type="hidden" name="amount" value="{{ $valor }}">
                                 <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
+                                <input type="hidden" name="valor_token" value="{{ $valorToken }}">
 
                                 <div class="mb-3">
                                     <label for="postalCode" class="form-label">Cep da Cidade</label>
@@ -109,7 +109,7 @@
                         <form id="formPix" action="{{ route('pagamento.gerarPix') }}" method="POST">
                             @csrf
                             <input type="hidden" name="horario_id" value="{{ $horario->id }}">
-                            <input type="hidden" name="valor" value="{{ $valor }}">
+                            <input type="hidden" name="valor_token" value="{{ $valorToken }}">
                             <input type="hidden" name="descricao" value="Consulta com {{ $medico->profissional_nome ?? 'médico' }}">
                             <div id="pixSection" class="hidden">
                                 <button type="submit" class="btn btn-secondary w-100">Gerar PIX</button>

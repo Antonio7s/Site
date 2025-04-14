@@ -101,7 +101,7 @@ class RegisteredUserController2 extends Controller
                 'responsavel_nome'     => $request->responsavel_nome,
                 'rg'                   => $request->rg,
                 'orgao_emissor'        => $request->orgao_emissor,
-                'data_emissao'         => $dataEmissao,
+                'data_emissao'         => $request->data_emissao,
                 'responsavel_cpf'      => $request->cpf,
                 'estado_civil'         => $request->estado_civil,
                 'porcentagem_lucro'    => 0,   // Valor padrão
