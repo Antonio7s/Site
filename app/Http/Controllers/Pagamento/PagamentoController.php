@@ -146,7 +146,8 @@ class PagamentoController extends Controller
     public function gerarPix(Request $request)
     {
         $request->validate([
-            'descricao' => 'required|string'
+            'descricao' => 'required|string',
+            'clinica_id'    => 'required|integer',  // Necessário para recuperar os splits
         ]);
 
         $user = Auth::user();
