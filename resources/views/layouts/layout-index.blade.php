@@ -1,4 +1,4 @@
-<!DOCTYPE html>    
+<!DOCTYPE html>     
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -337,28 +337,28 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <h4 class="fw-bold">Medexame</h4>
-                <p>CNPJ:</p>
-                <p>Medexame</p>
-                <p>Informações úteis sobre a Medexame podem ser adicionadas aqui.</p>
+                <h4 class="fw-bold">MedExame</h4>
+                <p>CNPJ: 53.270.181/0001-32</p>
+                <p>Telefone para contato no WhatsApp: 44 – 998453216</p>
+                <p>Agendamento de Serviços de Saúde com facilidade e os melhores preços!</p>
             </div>
             <div class="col-md-4 mb-4">
-                <h4 class="fw-bold">Informações</h4>
-                <p>Espaço em branco para preenchimento futuro.</p>
-                <p>Espaço em branco.</p>
+                <h4 class="fw-bold">Redes Sociais</h4>
+                <p>Facebook: <a href="https://www.facebook.com/profile.php?id=100081021690578" style="color: white;">facebook.com/medexame</a></p>
+                <p>Instagram: @med.exame</p>
+                <p>MedExame: a nova forma de cuidar da sua saúde.</p>
             </div>
             <div class="col-md-4 mb-4 text-center">
-                <h4 class="fw-bold">Siga a gente nas Redes Sociais:</h4>
+                <h4 class="fw-bold">Siga-nos nas Redes Sociais:</h4>
                 <div class="d-flex justify-content-center flex-wrap social-icons">
-                    <a href="#" class="mx-2 facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100081021690578" class="mx-2 facebook"><i class="fab fa-facebook"></i></a>
                     <a href="#" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="mx-2 twitter"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
         <hr>
-        <p>© 2025 Medexame. Todos os direitos reservados.</p>
+        <p>© 2025 MedExame. Todos os direitos reservados.</p>
     </div>
 </footer>
 

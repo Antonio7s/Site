@@ -260,6 +260,7 @@
                 {!! $homepageSettings->info_basicas !!}
             @endif
         </p>
+        <p>Conectamos você a uma rede completa de serviços de saúde, com consultas, exames, vacinas, odontologia, cirurgias e check-ups. Agende com rapidez, segurança e melhores preços.</p>
         <div class="container servicos-clinica mt-5">
             <div class="scroll-horizontal">
                 <!-- Cards de serviços/Agendamentos agora como links para pesquisa -->
