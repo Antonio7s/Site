@@ -102,6 +102,9 @@ class AdminClinicaController extends Controller
             ],
             'estado_civil' => 'required|string|max:20',
             
+            //Wallet Id
+            'wallet_id' => 'nullable|string|max:255',
+            
             // Documentos e Segurança
             'documentos' => 'nullable|file|mimes:pdf|max:2048',
             'password' => 'nullable|string|min:8|confirmed'
