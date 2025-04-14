@@ -336,4 +336,3 @@ Route::get('/Busca', [BuscaController::class, 'Busca'])->name('index.inicial');
 Route::get('/', [\App\Http\Controllers\Indexinicial\IndexInicialController::class, 'index'])->name('index');
 
 
-Route::get('/servicos', [ServicoController::class, 'index'])->name('servicos');
