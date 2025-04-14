@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Pagamento;
 
+use App\Helpers\ValorSeguroHelper;
+
 use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\Controller;
@@ -104,6 +106,9 @@ class PagamentoController extends Controller
 
             Log::debug('Valor final calculado', ['valor_final' => $valor]);
 
+            // Gera o token criptografado com o valor e o horário
+            $valorToken = ValorSeguroHelper::assinar($valor, $horario->id);
+
             return view('pagamento.checkout', [
                 'clinica' => $clinica,
                 'horario' => $horario,
@@ -111,7 +116,8 @@ class PagamentoController extends Controller
                 'data' => $horario->data,
                 'procedimento' => $procedimento,
                 'agenda' => $agenda,
-                'valor' => $valor
+                'valorToken'   => $valorToken,
+                'valor' => $valor,
             ]);
 
         } catch (\Exception $e) {
@@ -140,7 +146,6 @@ class PagamentoController extends Controller
     public function gerarPix(Request $request)
     {
         $request->validate([
-            'valor' => 'required|numeric',
             'descricao' => 'required|string'
         ]);
 
@@ -161,12 +166,29 @@ class PagamentoController extends Controller
             $customerId = $user->customer_id;
         }
 
+        // Verifica e extrai o valor do token
+        $dadosValor = ValorSeguroHelper::verificar($request->valor_token);
+
+        // Confirma que o horário bate com o token
+        if ((int)$dadosValor['horario_id'] !== (int)$request->horario_id) {
+            \Log::warning('Tentativa de manipulação detectada no valor_token', [
+                'esperado_horario_id' => $dadosValor['horario_id'],
+                'recebido_horario_id' => $request->horario_id,
+            ]);
+
+            return redirect()->route('pagamento.falhaCartao')
+                ->with('error', 'Informações inválidas detectadas. Tente novamente.');
+        }
+
+        $valorFinal = $dadosValor['valor'];
+
+
         $clinica_id = $request->input('clinica_id');
 
         // Cria a cobrança PIX
         $cobranca = $this->asaasService->criarCobrancaPix(
             $customerId,
-            $request->valor,
+            $valorFinal,
             $request->descricao,
             $clinica_id,
             $user->cpf
@@ -199,7 +221,7 @@ class PagamentoController extends Controller
         // Redireciona para a view de pagamento Pix passando os dados necessários
         return view('pagamento/pagamento-pix', [
             'qrcode' => 'data:image/png;base64,' . $qrCodePix['encodedImage'],
-            'valor'  => $request->valor,
+            'valor'  => $valorFinal,
             'agendamento_id' => $agendamento->id,
         ]);
     }
@@ -208,7 +230,6 @@ class PagamentoController extends Controller
     // Método para gerar o pagamento  com o cartão
     public function finalizarCartao(Request $request)
     {
-        // Adicione este log para verificar o valor recebido
         Log::info('Valor recebido no Cartão', ['amount' => $request->amount]);
         
         $request->validate([
@@ -217,7 +238,7 @@ class PagamentoController extends Controller
             'cardExpiry'    => 'required|string', // Exemplo: "12/25"
             'cardCVV'       => 'required|string',
            // 'installments'  => 'required|integer',
-            'amount'        => 'required|numeric',  // Valor a ser cobrado
+            //'amount'        => 'required|numeric',  // Valor a ser cobrado
             'descricao'     => 'required|string',   // Descrição do pagamento
             'clinica_id'    => 'required|integer',  // Necessário para recuperar os splits
             // 'horario_id'    => 'required|integer',  // ID do horário
@@ -248,6 +269,23 @@ class PagamentoController extends Controller
             $customerId = $user->customer_id;
         }
 
+
+        // Verifica e extrai o valor do token
+        $dadosValor = ValorSeguroHelper::verificar($request->valor_token);
+
+        // Confirma que o horário bate com o token
+        if ((int)$dadosValor['horario_id'] !== (int)$request->horario_id) {
+            \Log::warning('Tentativa de manipulação detectada no valor_token', [
+                'esperado_horario_id' => $dadosValor['horario_id'],
+                'recebido_horario_id' => $request->horario_id,
+            ]);
+
+            return redirect()->route('pagamento.falhaCartao')
+                ->with('error', 'Informações inválidas detectadas. Tente novamente.');
+        }
+
+        $valorFinal = $dadosValor['valor'];
+
         // Extrair os dados do cartão (dividindo a validade em mês e ano)
         $cardExpiry = explode('/', $request->cardExpiry);
 
@@ -263,7 +301,7 @@ class PagamentoController extends Controller
             // Chama o método para criar a cobrança via cartão, enviando também o clinica_id para os splits
             $cobranca = $this->asaasService->criarCobrancaCartao(
                 $customerId,
-                $request->amount,
+                $valorFinal,
                 $request->descricao,
                 $creditCard,
                 $request->clinica_id,
