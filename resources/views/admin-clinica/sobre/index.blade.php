@@ -252,6 +252,36 @@
           </div>
         </div>
 
+        <!-- Seção: Asaas -->
+        <h3 class="section-title">Asaas</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="wallet_id" class="form-label">Wallet ID <span class="required-asterisk">*</span></label>
+                <input type="text" id="wallet_id" class="form-control" name="wallet_id" 
+                      value="{{ old('wallet_id', $clinica->wallet_id) }}" required>
+                @error('wallet_id')<div class="text-danger">{{ $message }}</div>@enderror
+            </div>
+            <!-- Exibição da Porcentagem de Lucro -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="porcentagem_lucro" class="form-label">Porcentagem de Lucro</label>
+                <input type="text" id="porcentagem_lucro" class="form-control" 
+                      value="{{ old('porcentagem_lucro', $clinica->porcentagem_lucro) }}" disabled>
+              </div>
+            </div>
+            <!-- Exibição do Valor Fixo de Lucro -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="valor_fixo_lucro" class="form-label">Valor Fixo de Lucro</label>
+                <input type="text" id="valor_fixo_lucro" class="form-control" 
+                      value="{{ old('valor_fixo_lucro', $clinica->valor_fixo_lucro) }}" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
         <!-- Seção: Segurança -->
         <h3 class="section-title">Segurança</h3>
         <div class="row">
