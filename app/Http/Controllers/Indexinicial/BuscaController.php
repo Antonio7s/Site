@@ -23,9 +23,13 @@ class BuscaController extends Controller
         if (!empty($searchTerm)) {
             switch ($filter) {
                 case 'especialidade':
-                    $medicosQuery->where(function($query) use ($searchTerm) {
-                        $query->where('especialidade', 'like', "%{$searchTerm}%")
-                              ->orWhere('especialidade2', 'like', "%{$searchTerm}%");
+                    $medicosQuery->whereExists(function ($query) use ($searchTerm) {
+                        $query->select(DB::raw(1))
+                              ->from('agendas')
+                              ->join('horarios', 'horarios.agenda_id', '=', 'agendas.id')
+                              ->join('procedimentos', 'procedimentos.id', '=', 'horarios.procedimento_id')
+                              ->whereRaw('agendas.medico_id = medicos.id')
+                              ->where('procedimentos.nome', 'like', "%{$searchTerm}%");
                     });
                     break;
 
@@ -51,14 +55,11 @@ class BuscaController extends Controller
 
                 default: // 'todos'
                     $medicosQuery->where(function ($q) use ($searchTerm) {
-                        $q->where('especialidade', 'like', "%{$searchTerm}%")
-                          ->orWhere('especialidade2', 'like', "%{$searchTerm}%")
-                          ->orWhereExists(function ($query) use ($searchTerm) {
+                        $q->whereExists(function ($query) use ($searchTerm) {
                               $query->select(DB::raw(1))
-                                    ->from('agendamentos')
-                                    ->join('horarios', 'horarios.id', '=', 'agendamentos.horario_id')
+                                    ->from('agendas')
+                                    ->join('horarios', 'horarios.agenda_id', '=', 'agendas.id')
                                     ->join('procedimentos', 'procedimentos.id', '=', 'horarios.procedimento_id')
-                                    ->join('agendas', 'agendas.id', '=', 'horarios.agenda_id')
                                     ->whereRaw('agendas.medico_id = medicos.id')
                                     ->where('procedimentos.nome', 'like', "%{$searchTerm}%");
                           })
