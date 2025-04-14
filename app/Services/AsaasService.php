@@ -24,11 +24,14 @@ class AsaasService
     public function criarCobrancaPix($customerId, $valor, $descricao,  $clinica_id, $cpfCliente)
     {
         // Buscar os splits no banco de dados (ajuste conforme o nome da sua tabela e os campos)
-        //$splitsData = Clinica::where('customer_id', $customerId)->get();
         $splitsData = Clinica::where('id',  $clinica_id)->get();
+
+        // Loga os dados da clínica retornados do banco
+        \Log::debug('Clinica retornada para split PIX:', $splitsData->toArray());
 
         // Prepara o array de splits com base nos dados do banco de dados.
         $splits = [];
+
 
         foreach ($splitsData as $split) {
             $splits[] = [
