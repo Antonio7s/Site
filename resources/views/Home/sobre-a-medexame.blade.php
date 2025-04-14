@@ -44,10 +44,10 @@
 
 <div class="container" id="container1">
     <h1>{{ $titulo }}</h1>
-    <p>A <span class="highlight">{{ $empresa }}</span> é uma plataforma inovadora que conecta pacientes a diversos consultórios parceiros, oferecendo uma ampla variedade de consultas e exames médicos de forma acessível e prática.</p>
-    <p>Nossa missão é proporcionar saúde e bem-estar por meio de um serviço confiável, com preços acessíveis e com a <span class="highlight">comodidade</span> que você merece. Com poucos cliques, você pode agendar consultas e exames com profissionais qualificados e em locais de confiança.</p>
-    <p>Trabalhamos com um modelo que valoriza a sua <span class="highlight">praticidade</span>, garantindo que todo o processo seja rápido, intuitivo e seguro. Além disso, nossos parceiros foram cuidadosamente selecionados para oferecer o melhor atendimento.</p>
-    <p>Escolha a <span class="highlight">{{ $empresa }}</span> e tenha acesso a cuidados médicos de qualidade, com transparência, eficiência e a melhor experiência para o paciente.</p>
+    <p>A MedExame foi criada para facilitar o acesso à saúde de qualidade. Nossa plataforma conecta você a uma rede de consultórios parceiros, oferecendo consultas, exames, vacinas e procedimentos cirúrgicos com agendamento rápido e preços justos.</p>
+    <p>Acreditamos que cuidar da saúde deve ser simples. Por isso, desenvolvemos um sistema intuitivo, seguro e acessível, que permite marcar atendimentos com poucos cliques, no local e horário que melhor se encaixam na sua rotina.</p>
+    <p>Todos os nossos parceiros são selecionados com rigor, garantindo atendimento humanizado, estrutura de confiança e profissionais experientes.</p>
+    <p>Com a MedExame, você tem mais praticidade, transparência e qualidade no cuidado com a sua saúde — do jeito que você merece.</p>
 </div>
 
 @endsection
