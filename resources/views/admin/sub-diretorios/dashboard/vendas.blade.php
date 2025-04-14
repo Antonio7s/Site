@@ -1,4 +1,4 @@
-@extends('layouts.painel-admin') 
+@extends('layouts.painel-admin')  
 
 @section('header_title', 'Dashboard')
 
@@ -66,7 +66,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Horários</h5>
-
                                 <p class="card-text">{{ $totalHorarios ?? 0 }}</p>
                             </div>
                         </div>
@@ -75,7 +74,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Agendamentos</h5>
-
                                 <p class="card-text">{{ $totalAgendamentos ?? 0 }}</p>
                             </div>
                         </div>
@@ -121,16 +119,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                             @if(isset($ultimasVendas) && $ultimasVendas->count() > 0)
                                                 @foreach ($ultimasVendas as $venda)
-
                                                     <tr>
                                                         <td>{{ $venda->agendamento_id ?? 'N/A' }}</td>
                                                         <td>{{ $venda->classe_nome ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->procedimento_id ?? 'N/A' }}</td>
+                                                        <td>{{ $venda->nome_procedimento ?? 'N/A' }}</td> <!-- Alterado para exibir o nome do procedimento -->
                                                         <td>{{ \Carbon\Carbon::parse($venda->data_agendamento)->format('d/m/Y') ?? 'N/A' }}</td>
-                                                        <td>{{ $venda->status ?? 'N/A' }}</td>
+                                                        <td>{{ $venda->status ?? 'N/A' }}</td> <!-- Exibe o status do agendamento -->
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -169,7 +165,6 @@
                                                         <td>{{ $usuario->name ?? 'N/A' }}</td>
                                                         <td>{{ $usuario->email ?? 'N/A' }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($usuario->created_at)->format('d/m/Y') ?? 'N/A' }}</td>
-
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -272,7 +267,6 @@
                     datasets: [{
                         label: 'Distribuição de Vendas por Categoria',
                         data: categoryData,
-
                         backgroundColor: [
                             'rgba(0, 123, 255, 0.6)',
                             'rgba(40, 167, 69, 0.6)',
@@ -307,7 +301,6 @@
                     datasets: [{
                         label: 'Vendas',
                         data: growthData,
-
                         borderColor: 'rgba(0, 123, 255, 1)',
                         borderWidth: 2
                     }]
