@@ -59,7 +59,7 @@ class AsaasService
                     'cpfCnpj'     => $cpfCliente, // Certifique-se de enviar somente dígitos
                     'description' => $descricao,
                     'dueDate'     => now()->addDays(5)->format('Y-m-d'),
-                    'splits'      => $splits,
+                    'split'      => $splits,
                     //'remoteIp'    => $remoteIp, // Caso a API exija o envio do IP
                 ],
             ]);
