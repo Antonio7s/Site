@@ -329,7 +329,6 @@
             <li><a href="{{ route('admin.procedimentos.index') }}"><i class="bi bi-clipboard-pulse"></i> Procedimentos</a></li>
             <li><a href="{{ route('admin.servicos-diferenciados.index') }}"><i class="bi bi-cash-coin"></i> Servicos diferenciados</a></li>
             <!-- <li><a href="{{ route('admin.relatorios.index') }}"><i class="bi bi-file-earmark-bar-graph"></i> Relatórios</a></li> -->
-            <li><a href="{{ route('admin.contatos.index') }}"><i class="bi bi-envelope"></i> Contatos</a></li>
             <li><a href="{{ route('admin.homepage.index') }}"><i class="bi bi-globe"></i> Homepage</a></li>
             <!-- <li><a href="{{ route('admin.mensagens.index') }}"><i class="bi bi-chat-dots"></i> Mensagens</a></li> -->
           </ul>

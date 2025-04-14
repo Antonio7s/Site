@@ -82,6 +82,13 @@
             </div>
           @endif
 
+          <!-- Aviso específico para senha incorreta -->
+          @if ($errors->has('senha_atual'))
+            <div class="alert alert-danger">
+              A senha atual está incorreta.
+            </div>
+          @endif
+
           <h3>Alterar Senha</h3>
           
           <form action="{{ route('user.atualizar.senha') }}" method="POST">
