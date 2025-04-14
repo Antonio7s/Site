@@ -1,4 +1,4 @@
-@extends('layouts.layout-index')
+@extends('layouts.layout-index') 
 
 @section('content')
   <style>
@@ -93,8 +93,7 @@
         @endif
       </div>
 
-      
-      <!-- cpf -->
+      <!-- CPF -->
       <div>
         <label for="cpf">CPF</label>
         <input id="cpf" type="text" name="cpf" value="{{ old('cpf') }}" required maxlength="14" pattern="\d{3}.\d{3}.\d{3}-\d{2}" placeholder="000.000.000-00" autocomplete="off" oninput="formatCPF(this)">
@@ -111,9 +110,6 @@
           <div class="error">{{ $errors->first('telefone') }}</div>
         @endif
       </div>
-
-
-
 
       <!-- Senha -->
       <div>
@@ -147,7 +143,7 @@
   </div>
 
   <script>
-    // Formatar CPF
+    // Função para formatar CPF
     function formatCPF(input) {
       let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
       if (value.length <= 3) {
@@ -161,7 +157,7 @@
       }
     }
 
-      // Formatar Telefone
+    // Função para formatar Telefone
     function formatTelefone(input) {
       let value = input.value.replace(/\D/g, '');
       if (value.length <= 10) {
@@ -171,9 +167,15 @@
       }
     }
 
-
+    // Validação do reCAPTCHA antes de enviar o formulário
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function(event) {
+        if (grecaptcha.getResponse() === '') {
+          event.preventDefault();
+          alert('Por favor, marque o reCAPTCHA antes de enviar o formulário.');
+        }
+      });
+    });
   </script>
-
-  
-
 @endsection
