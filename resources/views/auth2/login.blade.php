@@ -10,7 +10,19 @@
             <div class="alert alert-danger">
                 <ul class="mb-0">
                     @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                        <li>
+                            @if($error == 'The email field is required.')
+                                O campo e-mail é obrigatório.
+                            @elseif($error == 'The password field is required.')
+                                O campo senha é obrigatório.
+                            @elseif($error == 'The email must be a valid email address.')
+                                Por favor, insira um e-mail válido.
+                            @elseif($error == 'These credentials do not match our records.')
+                                E-mail ou senha incorretos.
+                            @else
+                                {{ $error }}
+                            @endif
+                        </li>
                     @endforeach
                 </ul>
             </div>

@@ -249,7 +249,7 @@
             <div class="collapse navbar-collapse w-100" id="navbarNav">
                 <div class="nav-item dropdown">
                     <a href="javascript:void(0)" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sou Paciente
+                        Sou Cliente
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuCliente">
                         <li><a class="dropdown-item" href="{{ route('register') }}">Fazer Login</a></li>
@@ -261,7 +261,7 @@
                 </div>
                 <div class="nav-item dropdown">
                     <a href="javascript:void(0)" class="nav-link dropdown-toggle" id="menuProfissional" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sou Profissional de saúde
+                        Sou Profissional de Saúde
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuProfissional">
                         <li><a class="dropdown-item" href="{{ route('login2') }}">Fazer Login</a></li>
@@ -270,7 +270,7 @@
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
                 </div>
-                <a href="politicas-de-privacidade" class="nav-link">Política de Privacidade</a>
+                <a href="politicas-de-privacidade" class="nav-link">Aviso de Privacidade</a>
                 <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
             </div>
         </nav>
