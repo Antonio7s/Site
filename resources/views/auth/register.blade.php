@@ -1,4 +1,4 @@
-@extends('layouts.layout-index')
+@extends('layouts.layout-index') 
 
 @section('content')
   <style>
@@ -75,7 +75,7 @@
     <form method="POST" action="{{ route('register') }}">
       @csrf
 
-      <!-- Campo Nome -->
+      <!-- Nome -->
       <div>
         <label for="name">Nome</label>
         <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name">
@@ -84,7 +84,7 @@
         @endif
       </div>
 
-      <!-- Campo Email -->
+      <!-- Email -->
       <div>
         <label for="email">Email</label>
         <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username">
@@ -93,16 +93,16 @@
         @endif
       </div>
 
-      <!-- Campo CPF -->
+      <!-- CPF -->
       <div>
         <label for="cpf">CPF</label>
-        <input id="cpf" type="text" name="cpf" value="{{ old('cpf') }}" required maxlength="14" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" autocomplete="off" oninput="formatCPF(this)">
+        <input id="cpf" type="text" name="cpf" value="{{ old('cpf') }}" required maxlength="14" pattern="\d{3}.\d{3}.\d{3}-\d{2}" placeholder="000.000.000-00" autocomplete="off" oninput="formatCPF(this)">
         @if ($errors->has('cpf'))
           <div class="error">{{ $errors->first('cpf') }}</div>
         @endif
       </div>
 
-      <!-- Campo Telefone -->
+      <!-- Telefone -->
       <div>
         <label for="telefone">Telefone</label>
         <input id="telefone" type="text" name="telefone" value="{{ old('telefone') }}" required maxlength="15" placeholder="(00) 00000-0000" oninput="formatTelefone(this)" autocomplete="tel">
@@ -111,7 +111,7 @@
         @endif
       </div>
 
-      <!-- Campo Senha -->
+      <!-- Senha -->
       <div>
         <label for="password">Senha</label>
         <input id="password" type="password" name="password" required autocomplete="new-password">
@@ -120,7 +120,7 @@
         @endif
       </div>
 
-      <!-- Campo Confirmar Senha -->
+      <!-- Confirmar Senha -->
       <div>
         <label for="password_confirmation">Confirmar Senha</label>
         <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
@@ -132,7 +132,7 @@
       <!-- Widget do reCAPTCHA -->
       <div class="g-recaptcha mt-3" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
       @if ($errors->has('g-recaptcha-response'))
-        <div class="error">{{ $errors->first('g-recaptcha-response') }}</div>
+          <div class="error">{{ $errors->first('g-recaptcha-response') }}</div>
       @endif
 
       <div class="actions">
@@ -143,9 +143,9 @@
   </div>
 
   <script>
-    // Função para formatar o CPF
+    // Função para formatar CPF
     function formatCPF(input) {
-      let value = input.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+      let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
       if (value.length <= 3) {
         input.value = value;
       } else if (value.length <= 6) {
@@ -157,7 +157,7 @@
       }
     }
 
-    // Função para formatar o Telefone
+    // Função para formatar Telefone
     function formatTelefone(input) {
       let value = input.value.replace(/\D/g, '');
       if (value.length <= 10) {
@@ -166,5 +166,16 @@
         input.value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').trim();
       }
     }
+
+    // Validação do reCAPTCHA antes de enviar o formulário
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function(event) {
+        if (grecaptcha.getResponse() === '') {
+          event.preventDefault();
+          alert('Por favor, marque o reCAPTCHA antes de enviar o formulário.');
+        }
+      });
+    });
   </script>
 @endsection
