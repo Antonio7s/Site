@@ -43,6 +43,21 @@ class AsaasService
         // Captura o remoteIp, por exemplo:
         $remoteIp = request()->ip(); // ou use $_SERVER['REMOTE_ADDR'] se preferir
 
+        // Monta o payload da requisição
+        $payload = [
+            'customer'    => $customerId,
+            'billingType' => 'PIX',
+            'value'       => $valor,
+            'cpfCnpj'     => $cpfCliente, // Certifique-se de enviar somente dígitos
+            'description' => $descricao,
+            'dueDate'     => now()->addDays(5)->format('Y-m-d'),
+            'splits'      => $splits,
+            //'remoteIp'    => $remoteIp, // Caso a API exija o envio do IP
+        ];
+
+        // Loga o payload enviado no arquivo de log
+        \Log::info('=== PAYLOAD PIX ENVIADO AO ASAAS ===', $payload);
+
         try {
             // Executa a requisição para criar a cobrança via PIX
             $response = $this->client->post("{$this->baseUrl}payments", [
@@ -52,19 +67,15 @@ class AsaasService
                     'content-type' => 'application/json',
                     'access_token' => $this->apiKey,
                 ],
-                'json' => [
-                    'customer'    => $customerId,
-                    'billingType' => 'PIX',
-                    'value'       => $valor,
-                    'cpfCnpj'     => $cpfCliente, // Certifique-se de enviar somente dígitos
-                    'description' => $descricao,
-                    'dueDate'     => now()->addDays(5)->format('Y-m-d'),
-                    'split'      => $splits,
-                    //'remoteIp'    => $remoteIp, // Caso a API exija o envio do IP
-                ],
+                'json' => $payload,  // Envia o payload
             ]);
-    
-            return json_decode($response->getBody(), true);
+            
+            $responseBody = json_decode($response->getBody(), true);
+            
+            // Loga a resposta do Asaas no arquivo de log
+            \Log::info('=== RESPOSTA DO ASAAS - SERVIÇO ===', $responseBody);
+
+            return $responseBody;
         
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // Log detalhado em caso de erro, incluindo status, headers e corpo da resposta
