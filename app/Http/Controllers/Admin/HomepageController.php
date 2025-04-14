@@ -13,11 +13,11 @@ class HomepageController extends Controller
 {
     public function index()
     {
-        $settings = HomepageSetting::first();
+        $homepageSettings = HomepageSetting::first();
         $categories = Category::all();
         $faqs = Faq::all();
 
-        return view('admin.sub-diretorios.homepage.index', compact('settings', 'categories', 'faqs'));
+        return view('admin.sub-diretorios.homepage.index', compact('homepageSettings', 'categories', 'faqs'));
     }
 
     public function save(Request $request)
@@ -59,18 +59,22 @@ class HomepageController extends Controller
                 \Log::info('Logo salvo com sucesso:', ['path' => $settings->logo_path]);
             }
 
-            // Upload do banner
+
+            // Upload do banner utilizando Storage
             if ($request->hasFile('banner')) {
-                if ($settings->banner_path && file_exists(public_path($settings->banner_path))) {
-                    unlink(public_path($settings->banner_path));
+                // Remove o banner antigo, se existir
+                if ($settings->banner_path && Storage::disk('public')->exists(str_replace('storage/', '', $settings->banner_path))) {
+                    Storage::disk('public')->delete(str_replace('storage/', '', $settings->banner_path));
                 }
-                $bannerFile = $request->file('banner');
-                $destinationPath = public_path('images/banners');
-                $bannerName = time() . '-' . $bannerFile->getClientOriginalName();
-                $bannerFile->move($destinationPath, $bannerName);
-                $settings->banner_path = 'images/banners/' . $bannerName;
+
+                // Armazena novo banner em storage/app/public/banners
+                $bannerPath = $request->file('banner')->store('banners', 'public');
+
+                // Salva o caminho acessível publicamente
+                $settings->banner_path = $bannerPath;
                 \Log::info('Banner salvo com sucesso:', ['path' => $settings->banner_path]);
             }
+            
 
             // Atualiza as demais configurações
             $settings->info_basicas    = $request->input('infoBasicas');
