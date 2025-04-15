@@ -1,4 +1,4 @@
-<!DOCTYPE html>      
+<!DOCTYPE html>       
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -123,11 +123,21 @@
         #userDropdown a:hover, #clinicDropdown a:hover {
             background-color: #f8f9fa;
         }
+        /* Responsividade da barra de estados */
         .estado-container {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+        @media (max-width: 576px) {
+            .estado-container {
+                margin-bottom: 10px;
+            }
+            #estadoSelecionado {
+                font-size: 16px;
+            }
+        }
+
         .user-container {
             display: flex;
             align-items: center;
@@ -188,12 +198,16 @@
             .user-container {
                 align-items: center;
             }
-            /* Novo ajuste: exibição da barra de estados em telas pequenas */
-            #estadoSelecionado {
-                display: block;
-                width: 100%;
-                text-align: center;
-                margin-bottom: 5px;
+        }
+        
+        /* Nova regra: Centralizar o modal em dispositivos móveis */
+        @media (max-width: 576px) {
+            #estadoModal .modal-dialog {
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
         }
     </style>
@@ -213,7 +227,9 @@
 
         <!-- Estado e Informações do Usuário/Clínica -->
         <div class="user-container">
-            <span id="estadoSelecionado" class="badge bg-info" style="cursor: pointer;" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
+            <div class="estado-container">
+                <span id="estadoSelecionado" class="badge bg-info" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
+            </div>
 
             @if(auth()->guard('clinic')->check())
                 {{-- Usuário autenticado como clínica --}}
