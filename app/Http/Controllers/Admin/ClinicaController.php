@@ -156,10 +156,10 @@ class ClinicaController extends Controller
         $clinica = Clinica::findOrFail($id);
         $documentoPath = $clinica->documentos;
 
-        if (!Storage::exists($documentoPath)) {
+        if (!Storage::disk('private')->exists($documentoPath)) {
             return response()->json(['message' => 'Arquivo não encontrado'], 404);
         }
-
-        return Storage::download($documentoPath);
+        
+        return Storage::disk('private')->download($documentoPath);
     }
 }
