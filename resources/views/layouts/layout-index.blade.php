@@ -1,4 +1,4 @@
-<!DOCTYPE html>     
+<!DOCTYPE html>      
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -187,6 +187,13 @@
             }
             .user-container {
                 align-items: center;
+            }
+            /* Novo ajuste: exibição da barra de estados em telas pequenas */
+            #estadoSelecionado {
+                display: block;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 5px;
             }
         }
     </style>
