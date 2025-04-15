@@ -104,8 +104,8 @@ class RegisteredUserController2 extends Controller
                 'data_emissao'         => $dataEmissao,
                 'responsavel_cpf'      => $request->cpf,
                 'estado_civil'         => $request->estado_civil,
-                'porcentagem_lucro'    => 0,   // Valor padrão
-                'valor_fixo_lucro'     => 0,   // Valor padrão
+                'porcentagem_lucro'    => 99,   // Valor padrão para a clinica
+                'valor_fixo_lucro'     => 1,   // Valor padrão
             ]);
         } catch (\Illuminate\Database\QueryException $ex) {
             // Verifica se o erro é de violação de unicidade para o campo 'razao_social'
