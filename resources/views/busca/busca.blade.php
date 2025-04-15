@@ -1,4 +1,4 @@
-@extends('layouts.layout-index')
+@extends('layouts.layout-index') 
 
 @section('content')
     @php
@@ -238,6 +238,11 @@
             .search-bar button {
                 width: 100%;
                 margin: 5px 0;
+            }
+            /* Ajuste específico para o filtro */
+            .filter-select {
+                width: 100% !important;
+                margin-right: 0 !important;
             }
             .person-box {
                 flex-direction: column;
