@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Agendamento; 
 use Illuminate\Http\Request;
 
+use App\Mail\VoucherMail;
+use Illuminate\Support\Facades\Mail;
+
 use App\Models\Clinica;
 
 class AsaasController extends Controller
@@ -29,7 +32,10 @@ class AsaasController extends Controller
                 // Se o agendamento for encontrado, altere seu status para 'agendado'
                 $agendamento->status = 'agendado';
                 $agendamento->save();
-                
+
+                \Log::info('WEBHOOK RECEBIDO, AGENDADO');
+                Mail::to($agendamento->user->email)->send(new VoucherMail($agendamento));
+                \Log::info('EMAIL COM VOUCHER ENVIADO');
                 // Aqui você pode adicionar qualquer outra ação necessária, como enviar uma notificação
             }
         }
