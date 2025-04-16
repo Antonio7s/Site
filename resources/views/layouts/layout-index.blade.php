@@ -270,6 +270,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse w-100" id="navbarNav">
+                <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
+                <a href="politicas-de-privacidade" class="nav-link">Aviso de Privacidade</a>
                 <div class="nav-item dropdown">
                     <a href="javascript:void(0)" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
                         Sou Cliente
@@ -293,8 +295,6 @@
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
                 </div>
-                <a href="politicas-de-privacidade" class="nav-link">Aviso de Privacidade</a>
-                <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
             </div>
         </nav>
     </div>
