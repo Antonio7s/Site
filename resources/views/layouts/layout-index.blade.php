@@ -1,4 +1,4 @@
-<!DOCTYPE html>       
+<!DOCTYPE html>        
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -278,9 +278,6 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="menuCliente">
                         <li><a class="dropdown-item" href="{{ route('register') }}">Fazer Login</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Consulta</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Exames</a></li>
-                        <li><a class="dropdown-item" href="em-construcao">Médicos</a></li>
                         <li><a class="dropdown-item" href="{{ route('public.fale-conosco') }}">Fale Conosco</a></li>
                     </ul>
                 </div>
