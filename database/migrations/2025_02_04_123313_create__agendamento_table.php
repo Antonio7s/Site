@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('pagamento_id')->nullable()->unique();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('horario_id')->unique(); // Garante que cada horário tenha no máximo um agendamento
-            
+            $table->string('voucher', 5)->unique();
 
             $table->timestamps();
 
