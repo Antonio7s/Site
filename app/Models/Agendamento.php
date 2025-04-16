@@ -19,8 +19,26 @@ class Agendamento extends Model
         'user_id',
         'status',
         'pagamento_id',
+        'voucher',
     ];
 
+
+    protected static function booted()
+    {
+        static::creating(function ($agendamento) {
+            $agendamento->voucher = self::generateUniqueVoucher();
+        });
+    }
+
+    private static function generateUniqueVoucher(): string
+    {
+        do {
+            // Gera um código aleatório de 5 dígitos numéricos
+            $voucher = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
+        } while (self::where('voucher', $voucher)->exists());
+
+        return $voucher;
+    }
 
 
     // Um agendamento está relacionado a um horário disponível
