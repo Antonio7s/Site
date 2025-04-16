@@ -1,4 +1,4 @@
-<!DOCTYPE html>     
+<!DOCTYPE html>       
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -123,11 +123,21 @@
         #userDropdown a:hover, #clinicDropdown a:hover {
             background-color: #f8f9fa;
         }
+        /* Responsividade da barra de estados */
         .estado-container {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+        @media (max-width: 576px) {
+            .estado-container {
+                margin-bottom: 10px;
+            }
+            #estadoSelecionado {
+                font-size: 16px;
+            }
+        }
+
         .user-container {
             display: flex;
             align-items: center;
@@ -189,6 +199,17 @@
                 align-items: center;
             }
         }
+        
+        /* Nova regra: Centralizar o modal em dispositivos móveis */
+        @media (max-width: 576px) {
+            #estadoModal .modal-dialog {
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -206,7 +227,9 @@
 
         <!-- Estado e Informações do Usuário/Clínica -->
         <div class="user-container">
-            <span id="estadoSelecionado" class="badge bg-info" style="cursor: pointer;" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
+            <div class="estado-container">
+                <span id="estadoSelecionado" class="badge bg-info" onclick="abrirModalEstado()">Estado: Não Selecionado</span>
+            </div>
 
             @if(auth()->guard('clinic')->check())
                 {{-- Usuário autenticado como clínica --}}
@@ -247,6 +270,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse w-100" id="navbarNav">
+                <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
+                <a href="politicas-de-privacidade" class="nav-link">Aviso de Privacidade</a>
                 <div class="nav-item dropdown">
                     <a href="javascript:void(0)" class="nav-link dropdown-toggle" id="menuCliente" data-bs-toggle="dropdown" aria-expanded="false">
                         Sou Cliente
@@ -270,8 +295,6 @@
                         <li><a class="dropdown-item" href="fale-conosco">Fale Conosco</a></li>
                     </ul>
                 </div>
-                <a href="politicas-de-privacidade" class="nav-link">Aviso de Privacidade</a>
-                <a href="sobre-a-medexame" class="nav-link">Sobre a Medexame</a>
             </div>
         </nav>
     </div>
