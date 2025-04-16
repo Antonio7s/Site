@@ -1,5 +1,5 @@
-@extends('layouts.layout-index')   
-
+@extends('layouts.layout-index')
+   
 @section('content')
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -306,6 +306,13 @@
                     <div class="servico-item">
                         <i class="fas fa-video"></i>
                         <h5 class="mb-0 mt-2">Atendimento <br> Online</h5>
+                    </div>
+                </a>
+                <!-- Novo Card: Pronto Atendimento com Cruz Vermelha -->
+                <a href="{{ url('Busca') }}?q=Pronto Atendimento" style="text-decoration: none; color: inherit;">
+                    <div class="servico-item">
+                        <i class="fas fa-plus fa-3x" style="color: red;"></i>
+                        <h5 class="mb-0 mt-2">Pronto <br> Atendimento</h5>
                     </div>
                 </a>
             </div>
