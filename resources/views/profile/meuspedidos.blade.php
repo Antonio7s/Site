@@ -178,7 +178,6 @@
         </div>
     @endif
 
-    <!-- Envolvendo a tabela com um container responsivo -->
     <div class="table-responsive">
         <table class="table table-bordered table-custom">
             <thead>
@@ -197,7 +196,13 @@
             <tbody>
                 @forelse($agendamentos as $agendamento)
                     <tr>
-                        <td>{{ $agendamento->voucher ?? '--' }}</td>
+                        <td>
+                            @if(strtolower($agendamento->status) === 'agendado')
+                                {{ $agendamento->voucher ?? '--' }}
+                            @else
+                                --
+                            @endif
+                        </td>
                         <td>{{ $agendamento->medico_nome ?? '--' }}</td>
                         <td>{{ $agendamento->clinica_nome ?? '--' }}</td>
                         <td>{{ $agendamento->procedimento_nome ?? '--' }}</td>
@@ -216,7 +221,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8">
+                        <td colspan="9">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span>Nenhum agendamento disponível.</span>
                                 <a href="https://api.whatsapp.com/send?phone=554188322656&text=Olá, tenho uma dúvida sobre meu agendamento" 
@@ -232,10 +237,8 @@
     </div>
 </div>
 
-<!-- Botão para abrir o painel lateral -->
 <button class="toggle-btn" onclick="togglePanel()">&#9776; Menu</button>
 
-<!-- Painel lateral -->
 <div class="side-panel" id="sidePanel">
     <div class="panel-content">
         <div class="panel-title">Painel</div>
@@ -243,7 +246,6 @@
         <a href="{{ route('perfil.minhasInformacoes') }}">Minhas Informações</a>
         <a href="{{ url('perfil/meus-pedidos') }}">Meus Pedidos</a>
         
-        <!-- Botão Sair -->
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="btn btn-link">Sair</button>
