@@ -183,6 +183,7 @@
         <table class="table table-bordered table-custom">
             <thead>
                 <tr>
+                    <th>Voucher</th>
                     <th>Médico</th>
                     <th>Clínica</th>
                     <th>Procedimento</th>
@@ -196,6 +197,7 @@
             <tbody>
                 @forelse($agendamentos as $agendamento)
                     <tr>
+                        <td>{{ $agendamento->voucher ?? '--' }}</td>
                         <td>{{ $agendamento->medico_nome ?? '--' }}</td>
                         <td>{{ $agendamento->clinica_nome ?? '--' }}</td>
                         <td>{{ $agendamento->procedimento_nome ?? '--' }}</td>
