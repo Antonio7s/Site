@@ -252,9 +252,9 @@
         @endif
     </div>
 
-    <!-- Informações Básicas -->
+    <!-- Agendamentos -->
     <div class="info-section container mt-4">
-        <h2>Informações Básicas</h2>
+        <h2>Agendamentos</h2>
         <p>
             @if(isset($homepageSettings) && !empty($homepageSettings->info_basicas))
                 {!! $homepageSettings->info_basicas !!}
