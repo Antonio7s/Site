@@ -1,4 +1,4 @@
-<!DOCTYPE html>        
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -309,32 +309,7 @@
             <div class="modal-body">
                 <select id="estado" class="form-select">
                     <option value="" disabled selected>Selecione um Estado</option>
-                    <option value="AC">Acre</option>
-                    <option value="AL">Alagoas</option>
-                    <option value="AM">Amazonas</option>
-                    <option value="BA">Bahia</option>
-                    <option value="CE">Ceará</option>
-                    <option value="DF">Distrito Federal</option>
-                    <option value="ES">Espírito Santo</option>
-                    <option value="GO">Goiás</option>
-                    <option value="MA">Maranhão</option>
-                    <option value="MG">Minas Gerais</option>
-                    <option value="MS">Mato Grosso do Sul</option>
-                    <option value="MT">Mato Grosso</option>
-                    <option value="PA">Pará</option>
-                    <option value="PB">Paraíba</option>
-                    <option value="PE">Pernambuco</option>
-                    <option value="PI">Piauí</option>
-                    <option value="PR">Paraná</option>
-                    <option value="RJ">Rio de Janeiro</option>
-                    <option value="RN">Rio Grande do Norte</option>
-                    <option value="RO">Rondônia</option>
-                    <option value="RR">Roraima</option>
-                    <option value="RS">Rio Grande do Sul</option>
-                    <option value="SC">Santa Catarina</option>
-                    <option value="SE">Sergipe</option>
-                    <option value="SP">São Paulo</option>
-                    <option value="TO">Tocantins</option>
+                    ...
                 </select>
             </div>
             <div class="modal-footer">
@@ -363,17 +338,24 @@
                 <p>Agendamento de Serviços de Saúde com facilidade e os melhores preços!</p>
             </div>
             <div class="col-md-4 mb-4">
-                <h4 class="fw-bold">Redes Sociais</h4>
-                <p>Facebook: <a href="https://www.facebook.com/profile.php?id=100081021690578" style="color: white;">facebook.com/medexame</a></p>
-                <p>Instagram: @med.exame</p>
-                <p>MedExame: a nova forma de cuidar da sua saúde.</p>
+                <h4 class="fw-bold">Informações</h4>
+                <p>Na MedExame, você acessa uma rede de serviços de saúde com os melhores preços e atendimento de qualidade.</p>
+                <p>Veja como é simples:</p>
+                <ol>
+                    <li>Acesse nosso site ou aplicativo</li>
+                    <li>Escolha o serviço que precisa (consulta, exame, vacina, odontologia, cirurgia ou check-up)</li>
+                    <li>Compare preços, locais e datas disponíveis</li>
+                    <li>Selecione o profissional e agende com poucos cliques</li>
+                    <li>Receba a confirmação e vá até o local escolhido no dia marcado</li>
+                    <li>Tudo rápido, seguro e sem burocracia.</li>
+                </ol>
             </div>
             <div class="col-md-4 mb-4 text-center">
                 <h4 class="fw-bold">Siga-nos nas Redes Sociais:</h4>
                 <div class="d-flex justify-content-center flex-wrap social-icons">
                     <a href="https://www.facebook.com/profile.php?id=100081021690578" class="mx-2 facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/med.exame/" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/554188322656" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
