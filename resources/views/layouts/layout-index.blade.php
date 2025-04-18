@@ -162,7 +162,7 @@
                 padding: 15px;
             }
             footer .social-icons a {
-                font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
+                font-size: 20px; /* Reduz os ícones em telas menores */
             }
             .user-container {
                 flex-direction: column;
@@ -171,7 +171,7 @@
             #userInfo, #clinicInfo {
                 margin-top: 10px;
             }
-            /* Aumentando o tamanho da fonte dos menus específicos */
+            /* Fonte maior para menus */
             .nav-link, 
             .dropdown-toggle {
                 font-size: 17px; /* Aumentado para 17px */
@@ -193,14 +193,13 @@
                 padding: 10px;
             }
             footer .social-icons a {
-                font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
+                font-size: 18px;
             }
             .user-container {
                 align-items: center;
             }
         }
-        
-        /* Nova regra: Centralizar o modal em dispositivos móveis */
+        /* Centraliza o modal em dispositivos móveis */
         @media (max-width: 576px) {
             #estadoModal .modal-dialog {
                 margin: 0;
@@ -309,7 +308,32 @@
             <div class="modal-body">
                 <select id="estado" class="form-select">
                     <option value="" disabled selected>Selecione um Estado</option>
-                    ...
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="PR">Paraná</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="TO">Tocantins</option>
                 </select>
             </div>
             <div class="modal-footer">
@@ -380,7 +404,7 @@
         const estadoBadge = document.getElementById('estadoSelecionado');
         if (estadoSelecionado) {
             estadoBadge.textContent = `Estado: ${estadoSelecionado}`;
-            localStorage.setItem('estadoSelecionado', estadoSelecionado); // Salva o estado no localStorage
+            localStorage.setItem('estadoSelecionado', estadoSelecionado); // Salva no localStorage
         } else {
             estadoBadge.textContent = 'Estado: Não Selecionado';
         }
