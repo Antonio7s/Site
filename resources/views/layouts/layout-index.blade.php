@@ -1,4 +1,4 @@
-<!DOCTYPE html>        
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -162,7 +162,7 @@
                 padding: 15px;
             }
             footer .social-icons a {
-                font-size: 20px; /* Reduz o tamanho dos ícones em telas menores */
+                font-size: 20px; /* Reduz os ícones em telas menores */
             }
             .user-container {
                 flex-direction: column;
@@ -171,7 +171,7 @@
             #userInfo, #clinicInfo {
                 margin-top: 10px;
             }
-            /* Aumentando o tamanho da fonte dos menus específicos */
+            /* Fonte maior para menus */
             .nav-link, 
             .dropdown-toggle {
                 font-size: 17px; /* Aumentado para 17px */
@@ -193,14 +193,13 @@
                 padding: 10px;
             }
             footer .social-icons a {
-                font-size: 18px; /* Reduz ainda mais o tamanho dos ícones */
+                font-size: 18px;
             }
             .user-container {
                 align-items: center;
             }
         }
-        
-        /* Nova regra: Centralizar o modal em dispositivos móveis */
+        /* Centraliza o modal em dispositivos móveis */
         @media (max-width: 576px) {
             #estadoModal .modal-dialog {
                 margin: 0;
@@ -363,17 +362,24 @@
                 <p>Agendamento de Serviços de Saúde com facilidade e os melhores preços!</p>
             </div>
             <div class="col-md-4 mb-4">
-                <h4 class="fw-bold">Redes Sociais</h4>
-                <p>Facebook: <a href="https://www.facebook.com/profile.php?id=100081021690578" style="color: white;">facebook.com/medexame</a></p>
-                <p>Instagram: @med.exame</p>
-                <p>MedExame: a nova forma de cuidar da sua saúde.</p>
+                <h4 class="fw-bold">Informações</h4>
+                <p>Na MedExame, você acessa uma rede de serviços de saúde com os melhores preços e atendimento de qualidade.</p>
+                <p>Veja como é simples:</p>
+                <ol>
+                    <li>Acesse nosso site ou aplicativo</li>
+                    <li>Escolha o serviço que precisa (consulta, exame, vacina, odontologia, cirurgia ou check-up)</li>
+                    <li>Compare preços, locais e datas disponíveis</li>
+                    <li>Selecione o profissional e agende com poucos cliques</li>
+                    <li>Receba a confirmação e vá até o local escolhido no dia marcado</li>
+                    <li>Tudo rápido, seguro e sem burocracia.</li>
+                </ol>
             </div>
             <div class="col-md-4 mb-4 text-center">
                 <h4 class="fw-bold">Siga-nos nas Redes Sociais:</h4>
                 <div class="d-flex justify-content-center flex-wrap social-icons">
                     <a href="https://www.facebook.com/profile.php?id=100081021690578" class="mx-2 facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/med.exame/" class="mx-2 instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/554188322656" class="mx-2 whatsapp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
@@ -398,7 +404,7 @@
         const estadoBadge = document.getElementById('estadoSelecionado');
         if (estadoSelecionado) {
             estadoBadge.textContent = `Estado: ${estadoSelecionado}`;
-            localStorage.setItem('estadoSelecionado', estadoSelecionado); // Salva o estado no localStorage
+            localStorage.setItem('estadoSelecionado', estadoSelecionado); // Salva no localStorage
         } else {
             estadoBadge.textContent = 'Estado: Não Selecionado';
         }
